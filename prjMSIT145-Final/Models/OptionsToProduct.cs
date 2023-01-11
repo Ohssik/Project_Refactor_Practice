@@ -7,5 +7,6 @@ namespace prjMSIT145_Final.Models
     {
         public int? ProductFid { get; set; }
         public int? OptionGroupFid { get; set; }
+        public int Fid { get; set; }
     }
 }

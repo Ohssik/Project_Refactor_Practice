@@ -5,7 +5,7 @@ namespace prjMSIT145_Final.Models
 {
     public partial class ViewOrderDetailList
     {
-        public string? Itemid { get; set; }
+        public int? ItemFid { get; set; }
         public int? ProductFId { get; set; }
         public string? ProductName { get; set; }
         public decimal? UnitPrice { get; set; }

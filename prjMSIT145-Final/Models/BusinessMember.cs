@@ -21,5 +21,6 @@ namespace prjMSIT145_Final.Models
         public int? IsSuspensed { get; set; }
         public int? EmailCertified { get; set; }
         public string? Gps { get; set; }
+        public int? IsOpened { get; set; }
     }
 }

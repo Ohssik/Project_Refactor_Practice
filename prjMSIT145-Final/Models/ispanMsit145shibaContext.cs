@@ -23,23 +23,25 @@ namespace prjMSIT145_Final.Models
         public virtual DbSet<Coupon> Coupons { get; set; } = null!;
         public virtual DbSet<Coupon2NormalMember> Coupon2NormalMembers { get; set; } = null!;
         public virtual DbSet<NormalMember> NormalMembers { get; set; } = null!;
+        public virtual DbSet<Options2OrderItem> Options2OrderItems { get; set; } = null!;
         public virtual DbSet<OptionsToProduct> OptionsToProducts { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
-        public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
         public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
         public virtual DbSet<OrderSerialNumber> OrderSerialNumbers { get; set; } = null!;
         public virtual DbSet<PaymentTerm2BusiMember> PaymentTerm2BusiMembers { get; set; } = null!;
         public virtual DbSet<PaymentTermCategory> PaymentTermCategories { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<Product2OrderItem> Product2OrderItems { get; set; } = null!;
         public virtual DbSet<ProductCategory> ProductCategories { get; set; } = null!;
-        public virtual DbSet<ProductImg> ProductImgs { get; set; } = null!;
+        
         public virtual DbSet<ProductOption> ProductOptions { get; set; } = null!;
         public virtual DbSet<ProductOptionGroup> ProductOptionGroups { get; set; } = null!;
         public virtual DbSet<Sysdiagram> Sysdiagrams { get; set; } = null!;
         public virtual DbSet<ViewOptionsToGroup> ViewOptionsToGroups { get; set; } = null!;
+        public virtual DbSet<ViewOrderDetail> ViewOrderDetails { get; set; } = null!;
         public virtual DbSet<ViewOrderDetailList> ViewOrderDetailLists { get; set; } = null!;
         public virtual DbSet<ViewOrderDetailNonOptionGroupName> ViewOrderDetailNonOptionGroupNames { get; set; } = null!;
-        public virtual DbSet<ViewOrderDetailWithOptionGroupName> ViewOrderDetailWithOptionGroupNames { get; set; } = null!;
+        public virtual DbSet<ViewShowFullOrder> ViewShowFullOrders { get; set; } = null!;
         public virtual DbSet<ViewShowProductList> ViewShowProductLists { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -84,15 +86,13 @@ namespace prjMSIT145_Final.Models
 
             modelBuilder.Entity<AdminMember>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Fid);
 
                 entity.ToTable("AdminMember");
 
-                entity.Property(e => e.Account).HasMaxLength(50);
+                entity.Property(e => e.Fid).HasColumnName("fid");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("ID");
+                entity.Property(e => e.Account).HasMaxLength(50);
 
                 entity.Property(e => e.Password).HasMaxLength(50);
 
@@ -154,6 +154,10 @@ namespace prjMSIT145_Final.Models
                     .HasMaxLength(300)
                     .HasColumnName("GPS");
 
+                entity.Property(e => e.IsOpened)
+                    .HasColumnName("isOpened")
+                    .HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.IsSuspensed)
                     .HasColumnName("isSuspensed")
                     .HasDefaultValueSql("((0))");
@@ -175,7 +179,9 @@ namespace prjMSIT145_Final.Models
 
             modelBuilder.Entity<Coupon>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.HasKey(e => e.Fid);
+
+                entity.Property(e => e.Fid).HasColumnName("fid");
 
                 entity.Property(e => e.CouponCode)
                     .HasMaxLength(100)
@@ -194,9 +200,11 @@ namespace prjMSIT145_Final.Models
 
             modelBuilder.Entity<Coupon2NormalMember>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Fid);
 
                 entity.ToTable("Coupon2NormalMember");
+
+                entity.Property(e => e.Fid).HasColumnName("fid");
 
                 entity.Property(e => e.CouponId).HasColumnName("couponId");
 
@@ -246,9 +254,28 @@ namespace prjMSIT145_Final.Models
                     .HasDefaultValueSql("(getdate())");
             });
 
+            modelBuilder.Entity<Options2OrderItem>(entity =>
+            {
+                entity.HasKey(e => e.Fid);
+
+                entity.ToTable("Options2OrderItem");
+
+                entity.Property(e => e.Fid).HasColumnName("fid");
+
+                entity.Property(e => e.ItemFid).HasColumnName("Item_fid");
+
+                entity.Property(e => e.OpGroupFid).HasColumnName("OpGroup_fid");
+
+                entity.Property(e => e.OptionFid).HasColumnName("Option_fid");
+
+                entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 2)");
+            });
+
             modelBuilder.Entity<OptionsToProduct>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Fid);
+
+                entity.Property(e => e.Fid).HasColumnName("fid");
 
                 entity.Property(e => e.OptionGroupFid).HasColumnName("OptionGroup_fid");
 
@@ -297,8 +324,6 @@ namespace prjMSIT145_Final.Models
 
                 entity.Property(e => e.PickUpType).HasMaxLength(20);
 
-                entity.Property(e => e.PlasticBag).HasMaxLength(5);
-
                 entity.Property(e => e.TaxIdnum)
                     .HasMaxLength(10)
                     .HasColumnName("TaxIDNum");
@@ -306,32 +331,11 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
             });
 
-            modelBuilder.Entity<OrderDetail>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("OrderDetail");
-
-                entity.Property(e => e.ItemId).HasMaxLength(10);
-
-                entity.Property(e => e.OptionFid).HasColumnName("Option_fid");
-
-                entity.Property(e => e.OptionGroupFid).HasColumnName("OptionGroup_fid");
-
-                entity.Property(e => e.ProductFid).HasColumnName("Product_fid");
-
-                entity.Property(e => e.ProductName).HasMaxLength(50);
-
-                entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 0)");
-            });
-
             modelBuilder.Entity<OrderItem>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Fid);
 
-                entity.Property(e => e.ItemId)
-                    .HasMaxLength(10)
-                    .HasColumnName("itemID");
+                entity.Property(e => e.Fid).HasColumnName("fid");
 
                 entity.Property(e => e.OrderFid).HasColumnName("Order_fid");
             });
@@ -350,9 +354,11 @@ namespace prjMSIT145_Final.Models
 
             modelBuilder.Entity<PaymentTerm2BusiMember>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Fid);
 
                 entity.ToTable("PaymentTerm2BusiMember");
+
+                entity.Property(e => e.Fid).HasColumnName("fid");
 
                 entity.Property(e => e.BFid).HasColumnName("B_fid");
 
@@ -365,9 +371,11 @@ namespace prjMSIT145_Final.Models
 
             modelBuilder.Entity<PaymentTermCategory>(entity =>
             {
+                entity.HasKey(e => e.Fid);
+
                 entity.ToTable("PaymentTermCategory");
 
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.Fid).HasColumnName("fid");
 
                 entity.Property(e => e.PaymentType).HasMaxLength(50);
             });
@@ -382,11 +390,28 @@ namespace prjMSIT145_Final.Models
 
                 entity.Property(e => e.CategoryFid).HasColumnName("Category_fid");
 
-                entity.Property(e => e.IsForSale).HasMaxLength(1);
+                entity.Property(e => e.IsForSale).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Memo).HasMaxLength(100);
 
+                entity.Property(e => e.Photo).HasMaxLength(50);
+
                 entity.Property(e => e.ProductName).HasMaxLength(50);
+
+                entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 2)");
+            });
+
+            modelBuilder.Entity<Product2OrderItem>(entity =>
+            {
+                entity.HasKey(e => e.Fid);
+
+                entity.ToTable("Product2OrderItem");
+
+                entity.Property(e => e.Fid).HasColumnName("fid");
+
+                entity.Property(e => e.ItemFid).HasColumnName("item_fid");
+
+                entity.Property(e => e.ProductFid).HasColumnName("Product_fid");
 
                 entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 2)");
             });
@@ -442,6 +467,10 @@ namespace prjMSIT145_Final.Models
 
                 entity.Property(e => e.BFid).HasColumnName("B_fid");
 
+                entity.Property(e => e.IsMultiple)
+                    .HasColumnName("isMultiple")
+                    .HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.Memo).HasMaxLength(50);
 
                 entity.Property(e => e.OptionGroupName).HasMaxLength(50);
@@ -487,15 +516,44 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 2)");
             });
 
+            modelBuilder.Entity<ViewOrderDetail>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("View_OrderDetail");
+
+                entity.Property(e => e.ItemFid).HasColumnName("item_fid");
+
+                entity.Property(e => e.OUp)
+                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnName("O_UP");
+
+                entity.Property(e => e.OpGroupFid).HasColumnName("OpGroup_fid");
+
+                entity.Property(e => e.OptionFid).HasColumnName("Option_fid");
+
+                entity.Property(e => e.OptionGroupName).HasMaxLength(50);
+
+                entity.Property(e => e.OptionName).HasMaxLength(50);
+
+                entity.Property(e => e.OrderFid).HasColumnName("Order_fid");
+
+                entity.Property(e => e.PUnitPrice)
+                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnName("P_UnitPrice");
+
+                entity.Property(e => e.ProductFid).HasColumnName("Product_fid");
+
+                entity.Property(e => e.ProductName).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<ViewOrderDetailList>(entity =>
             {
                 entity.HasNoKey();
 
                 entity.ToView("View_OrderDetailList");
 
-                entity.Property(e => e.Itemid)
-                    .HasMaxLength(10)
-                    .HasColumnName("itemid");
+                entity.Property(e => e.ItemFid).HasColumnName("item_fid");
 
                 entity.Property(e => e.ProductFId).HasColumnName("Product_fID");
 
@@ -514,9 +572,7 @@ namespace prjMSIT145_Final.Models
 
                 entity.ToView("View_OrderDetail_NonOptionGroupName");
 
-                entity.Property(e => e.Itemid)
-                    .HasMaxLength(10)
-                    .HasColumnName("itemid");
+                entity.Property(e => e.ItemFid).HasColumnName("item_fid");
 
                 entity.Property(e => e.OptionUp)
                     .HasColumnType("decimal(38, 2)")
@@ -527,35 +583,70 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.ProductName).HasMaxLength(50);
 
                 entity.Property(e => e.ProductUp)
-                    .HasColumnType("decimal(18, 0)")
+                    .HasColumnType("decimal(18, 2)")
                     .HasColumnName("ProductUP");
             });
 
-            modelBuilder.Entity<ViewOrderDetailWithOptionGroupName>(entity =>
+            modelBuilder.Entity<ViewShowFullOrder>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("View_OrderDetail_with_OptionGroupName");
+                entity.ToView("View_ShowFullOrder");
 
-                entity.Property(e => e.ItemId).HasMaxLength(10);
+                entity.Property(e => e.BFid).HasColumnName("B_fid");
 
-                entity.Property(e => e.OUp)
-                    .HasColumnType("decimal(18, 2)")
-                    .HasColumnName("O_UP");
+                entity.Property(e => e.BMemberName)
+                    .HasMaxLength(50)
+                    .HasColumnName("B_MemberName");
 
-                entity.Property(e => e.OptionGroupName).HasMaxLength(50);
+                entity.Property(e => e.BMemberPhone)
+                    .HasMaxLength(50)
+                    .HasColumnName("B_MemberPhone");
 
-                entity.Property(e => e.OptionName).HasMaxLength(50);
+                entity.Property(e => e.ItemFid).HasColumnName("item_fid");
 
-                entity.Property(e => e.OrderFid).HasColumnName("Order_fid");
+                entity.Property(e => e.Memo).HasMaxLength(100);
 
-                entity.Property(e => e.PUnitPrice)
-                    .HasColumnType("decimal(18, 0)")
-                    .HasColumnName("P_UnitPrice");
+                entity.Property(e => e.NFid).HasColumnName("N_fid");
 
-                entity.Property(e => e.ProductFid).HasColumnName("Product_fid");
+                entity.Property(e => e.OrderFid).HasColumnName("order_fid");
+
+                entity.Property(e => e.OrderISerialId)
+                    .HasMaxLength(10)
+                    .HasColumnName("OrderI_SerialID")
+                    .IsFixedLength();
+
+                entity.Property(e => e.OrderState).HasMaxLength(20);
+
+                entity.Property(e => e.OrderTime).HasColumnType("datetime");
+
+                entity.Property(e => e.PayTermCatId).HasColumnName("PayTermCatID");
+
+                entity.Property(e => e.PickUpDate).HasColumnType("date");
+
+                entity.Property(e => e.PickUpPerson).HasMaxLength(50);
+
+                entity.Property(e => e.PickUpPersonPhone)
+                    .HasMaxLength(50)
+                    .HasColumnName("PickUpPerson_Phone");
+
+                entity.Property(e => e.PickUpType).HasMaxLength(20);
+
+                entity.Property(e => e.ProductFId).HasColumnName("Product_fID");
 
                 entity.Property(e => e.ProductName).HasMaxLength(50);
+
+                entity.Property(e => e.SubTotal)
+                    .HasColumnType("decimal(38, 2)")
+                    .HasColumnName("subTotal");
+
+                entity.Property(e => e.TaxIdnum)
+                    .HasMaxLength(10)
+                    .HasColumnName("TaxIDNum");
+
+                entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.UnitPrice).HasColumnType("decimal(38, 2)");
             });
 
             modelBuilder.Entity<ViewShowProductList>(entity =>

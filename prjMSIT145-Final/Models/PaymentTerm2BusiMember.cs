@@ -8,5 +8,6 @@ namespace prjMSIT145_Final.Models
         public int? BFid { get; set; }
         public int? PayTermCatId { get; set; }
         public decimal? PayAmountLimit { get; set; }
+        public int Fid { get; set; }
     }
 }

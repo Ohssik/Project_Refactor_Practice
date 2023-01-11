@@ -7,5 +7,6 @@ namespace prjMSIT145_Final.Models
     {
         public int? CouponId { get; set; }
         public int? MemberId { get; set; }
+        public int Fid { get; set; }
     }
 }

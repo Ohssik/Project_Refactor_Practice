@@ -9,5 +9,6 @@ namespace prjMSIT145_Final.Models
         public string? OptionGroupName { get; set; }
         public int? BFid { get; set; }
         public string? Memo { get; set; }
+        public int? IsMultiple { get; set; }
     }
 }

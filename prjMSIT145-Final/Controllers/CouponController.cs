@@ -11,7 +11,7 @@ namespace prjMSIT145_Final.Controllers
             _context = context;
         }
         public IActionResult Index()
-        {
+        {           
             return View();
         }
     }
