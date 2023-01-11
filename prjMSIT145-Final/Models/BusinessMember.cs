@@ -15,7 +15,6 @@ namespace prjMSIT145_Final.Models
         public string? Address { get; set; }
         public string? ShopType { get; set; }
         public string? Email { get; set; }
-        public decimal? DeliveryAmount { get; set; }
         public DateTime? RegisterTime { get; set; }
         public string? ContactPerson { get; set; }
         public string? MemberAccount { get; set; }

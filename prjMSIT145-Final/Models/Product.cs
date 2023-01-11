@@ -12,7 +12,6 @@ namespace prjMSIT145_Final.Models
         public int? Qty { get; set; }
         public int? CategoryFid { get; set; }
         public string? Memo { get; set; }
-        public string? MenuFid { get; set; }
         public string? IsForSale { get; set; }
     }
 }
