@@ -8,6 +8,9 @@
         form{
             margin:100px 20px;
         }
+        #checkResult{
+            margin:10px 20px 10px 0
+        }
     </style>
 }
 
@@ -25,6 +28,46 @@
     </div>
     <hr />
     <div class="form-group">
-        <input type="submit" value="Enter" class="btn btn-primary" />
+        <input id="btnSubmit" type="submit" value="Enter" class="btn btn-primary" />
+            
     </div>
+    <h4 id="checkResult"></h4>
+    
 </form>
+
+@section Scripts{
+    <script>
+        $('#btnSubmit').click(function(event){
+
+            let checkResult = $('#checkResult');
+            let account=$('input[name=Account]').val();
+            let pwd=$('input[name=Password]').val();
+            
+            if(account.trim() == '' || pwd.trim() == '')
+            {
+                checkResult.text('請輸入完整的帳號和密碼');
+                checkResult.css('color', 'red');
+                return false;
+            }
+            let result='';
+            $.ajax({
+                url: `@Url.Content("~/AdminMembers/checkPwd")`,               
+                type: "post",
+                data: {
+                    "account": $('input[name=Account]').val(),
+                    "pwd": $('input[name=Password]').val()
+                },
+                dataType: "html",
+                success: function (msg) {
+                    result=msg;                                        
+                }
+            });
+            if (result != '1') {
+                checkResult.text('帳號或密碼有誤');
+                checkResult.css('color','red');
+                
+                return false;
+            }
+        });
+    </script>
+}

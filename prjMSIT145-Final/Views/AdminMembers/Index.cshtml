@@ -2,11 +2,13 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/Admin/_AdminLogin.cshtml";
+    //Layout = "~/Views/Shared/Admin/_AdminLogin.cshtml";
+    Layout = "_Layout";
 }
 
 <h1>Index</h1>
 
+<h3>@ViewBag.AdminAcc</h3>
 <p>
     <a asp-action="Create">Create New</a>
 </p>

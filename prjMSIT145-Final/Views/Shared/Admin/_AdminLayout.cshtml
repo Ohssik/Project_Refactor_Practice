@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using prjMSIT145_Final.Models
+@{
+
+    if (!Context.Session.Keys.Contains(CDictionary.SK_LOGINED_ADMIN)){
+        Context.Response.Redirect(Url.Content("~/AdminMembers/ALogin"));
+    }
+            
+}
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -370,6 +378,24 @@
 
     <!-- Page level custom scripts -->
     <script src="~/js/demo/datatables-demo.js"></script>
+    @*<script>
+        $.ajax({
+                url: `@Url.Content("~/AdminMembers/checkIsLogined")`,
+                type:"post",
+                data:{
+                    "city": "彰化縣"
+                },
+                dataType: "json",
+                success: function (datas) {
+                    let docFrag = document.createDocumentFragment();
+                    $(datas).each(function (i, site) {
+                        let s = $('<p></p>').text(site);
+                        $(docFrag).append(s);
+                    });
+                    $('#divAlert').append(docFrag);
+                }
+            });
+    </script>*@
     @RenderSection("Scripts",required:false)
 </body>
 </html>

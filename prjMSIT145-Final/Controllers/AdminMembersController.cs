@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Converters;
 using prjMSIT145_Final.Models;
 
 namespace prjMSIT145_Final.Controllers
@@ -17,16 +21,54 @@ namespace prjMSIT145_Final.Controllers
         {
             _context = context;
         }
+        public IActionResult checkPwd(string account, string pwd)
+        {
+            if (string.IsNullOrEmpty(account) || string.IsNullOrEmpty(pwd))
+                return Content("請輸入完整的帳號和密碼");
+            else
+            {
+                string result = "0";
+                AdminMember member = _context.AdminMembers.FirstOrDefault(u => u.Account == account && u.Password == pwd);
+                if (member != null)
+                    result = "1";
 
+                return Content(result);
+
+            }
+        }
         public IActionResult ALogin()
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult ALogin(AdminMember admin)
+        {
+            AdminMember member = _context.AdminMembers.FirstOrDefault(u => u.Account == admin.Account && u.Password == admin.Password);
+            if (member == null)
+                return RedirectToAction("ALogin");
+
+            string json = JsonSerializer.Serialize(member);
+            HttpContext.Session.SetString(CDictionary.SK_LOGINED_ADMIN, json);
+            //return RedirectToAction("ANormalMemberList");
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult ANormalMemberList()
+        {
+            return View();
+        }
+
 
         // GET: AdminMembers
         public async Task<IActionResult> Index()
         {
-              return View(await _context.AdminMembers.ToListAsync());
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_ADMIN))
+            {
+                string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_ADMIN);
+                AdminMember admin = JsonSerializer.Deserialize<AdminMember>(json);
+                ViewBag.AdminAcc = admin.Account;
+            }
+            return View(await _context.AdminMembers.ToListAsync());
         }
 
         // GET: AdminMembers/Details/5
