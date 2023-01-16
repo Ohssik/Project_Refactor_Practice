@@ -23,35 +23,23 @@ namespace prjMSIT145_Final.Models
         public virtual DbSet<Coupon> Coupons { get; set; } = null!;
         public virtual DbSet<Coupon2NormalMember> Coupon2NormalMembers { get; set; } = null!;
         public virtual DbSet<NormalMember> NormalMembers { get; set; } = null!;
-        public virtual DbSet<Options2OrderItem> Options2OrderItems { get; set; } = null!;
         public virtual DbSet<OptionsToProduct> OptionsToProducts { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
+        public virtual DbSet<OrderOptionsDetail> OrderOptionsDetails { get; set; } = null!;
         public virtual DbSet<OrderSerialNumber> OrderSerialNumbers { get; set; } = null!;
         public virtual DbSet<PaymentTerm2BusiMember> PaymentTerm2BusiMembers { get; set; } = null!;
         public virtual DbSet<PaymentTermCategory> PaymentTermCategories { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
-        public virtual DbSet<Product2OrderItem> Product2OrderItems { get; set; } = null!;
         public virtual DbSet<ProductCategory> ProductCategories { get; set; } = null!;
-        
         public virtual DbSet<ProductOption> ProductOptions { get; set; } = null!;
         public virtual DbSet<ProductOptionGroup> ProductOptionGroups { get; set; } = null!;
-        public virtual DbSet<Sysdiagram> Sysdiagrams { get; set; } = null!;
         public virtual DbSet<ViewOptionsToGroup> ViewOptionsToGroups { get; set; } = null!;
         public virtual DbSet<ViewOrderDetail> ViewOrderDetails { get; set; } = null!;
         public virtual DbSet<ViewOrderDetailList> ViewOrderDetailLists { get; set; } = null!;
         public virtual DbSet<ViewOrderDetailNonOptionGroupName> ViewOrderDetailNonOptionGroupNames { get; set; } = null!;
         public virtual DbSet<ViewShowFullOrder> ViewShowFullOrders { get; set; } = null!;
         public virtual DbSet<ViewShowProductList> ViewShowProductLists { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=tcp:ispan-msit145-shiba2.database.windows.net,1433;Initial Catalog=ispanMsit145shiba;Persist Security Info=False;User ID=msit145Shiba;Password=sh1baMsite45;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -254,23 +242,6 @@ namespace prjMSIT145_Final.Models
                     .HasDefaultValueSql("(getdate())");
             });
 
-            modelBuilder.Entity<Options2OrderItem>(entity =>
-            {
-                entity.HasKey(e => e.Fid);
-
-                entity.ToTable("Options2OrderItem");
-
-                entity.Property(e => e.Fid).HasColumnName("fid");
-
-                entity.Property(e => e.ItemFid).HasColumnName("Item_fid");
-
-                entity.Property(e => e.OpGroupFid).HasColumnName("OpGroup_fid");
-
-                entity.Property(e => e.OptionFid).HasColumnName("Option_fid");
-
-                entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 2)");
-            });
-
             modelBuilder.Entity<OptionsToProduct>(entity =>
             {
                 entity.HasKey(e => e.Fid);
@@ -289,14 +260,6 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.Fid).HasColumnName("fid");
 
                 entity.Property(e => e.BFid).HasColumnName("B_fid");
-
-                entity.Property(e => e.BMemberName)
-                    .HasMaxLength(50)
-                    .HasColumnName("B_MemberName");
-
-                entity.Property(e => e.BMemberPhone)
-                    .HasMaxLength(50)
-                    .HasColumnName("B_MemberPhone");
 
                 entity.Property(e => e.Memo).HasMaxLength(100);
 
@@ -338,6 +301,21 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.Fid).HasColumnName("fid");
 
                 entity.Property(e => e.OrderFid).HasColumnName("Order_fid");
+
+                entity.Property(e => e.ProductFid).HasColumnName("Product_fid");
+            });
+
+            modelBuilder.Entity<OrderOptionsDetail>(entity =>
+            {
+                entity.HasKey(e => e.Fid);
+
+                entity.ToTable("OrderOptionsDetail");
+
+                entity.Property(e => e.Fid).HasColumnName("fid");
+
+                entity.Property(e => e.ItemFid).HasColumnName("item_fid");
+
+                entity.Property(e => e.OptionFid).HasColumnName("Option_fid");
             });
 
             modelBuilder.Entity<OrderSerialNumber>(entity =>
@@ -401,21 +379,6 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 2)");
             });
 
-            modelBuilder.Entity<Product2OrderItem>(entity =>
-            {
-                entity.HasKey(e => e.Fid);
-
-                entity.ToTable("Product2OrderItem");
-
-                entity.Property(e => e.Fid).HasColumnName("fid");
-
-                entity.Property(e => e.ItemFid).HasColumnName("item_fid");
-
-                entity.Property(e => e.ProductFid).HasColumnName("Product_fid");
-
-                entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 2)");
-            });
-
             modelBuilder.Entity<ProductCategory>(entity =>
             {
                 entity.HasKey(e => e.Fid);
@@ -427,19 +390,6 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.BFid).HasColumnName("B_fid");
 
                 entity.Property(e => e.CategoryName).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<ProductImg>(entity =>
-            {
-                entity.HasKey(e => e.Fid);
-
-                entity.ToTable("ProductImg");
-
-                entity.Property(e => e.Fid).HasColumnName("fid");
-
-                entity.Property(e => e.ImgPath).HasMaxLength(50);
-
-                entity.Property(e => e.ProductFid).HasColumnName("Product_fid");
             });
 
             modelBuilder.Entity<ProductOption>(entity =>
@@ -474,25 +424,6 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.Memo).HasMaxLength(50);
 
                 entity.Property(e => e.OptionGroupName).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<Sysdiagram>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("sysdiagrams");
-
-                entity.Property(e => e.Definition).HasColumnName("definition");
-
-                entity.Property(e => e.DiagramId).HasColumnName("diagram_id");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(128)
-                    .HasColumnName("name");
-
-                entity.Property(e => e.PrincipalId).HasColumnName("principal_id");
-
-                entity.Property(e => e.Version).HasColumnName("version");
             });
 
             modelBuilder.Entity<ViewOptionsToGroup>(entity =>

@@ -1,7 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using prjMSIT145_Final.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ispanMsit145shibaContext>(
+ options => options.UseSqlServer(
+ builder.Configuration.GetConnectionString("ispanMsit145shibaConnection")
+));
 
 var app = builder.Build();
 
