@@ -12,6 +12,7 @@ namespace prjMSIT145_Final.Controllers
         }
         public IActionResult Index()
         {
+            var o = _context.Orders.FirstOrDefault();
             return View();
         }
     }
