@@ -8,8 +8,6 @@ namespace prjMSIT145_Final.Models
         public int Fid { get; set; }
         public int? NFid { get; set; }
         public int? BFid { get; set; }
-        public string? BMemberName { get; set; }
-        public string? BMemberPhone { get; set; }
         public DateTime? PickUpDate { get; set; }
         public TimeSpan? PickUpTime { get; set; }
         public string? PickUpType { get; set; }
