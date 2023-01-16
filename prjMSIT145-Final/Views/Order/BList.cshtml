@@ -1,0 +1,119 @@
+﻿@model IEnumerable<prjMSIT145_Final.Models.Order>
+
+@{
+    ViewData["Title"] = "BList";
+}
+
+<h1>BList</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Fid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NFid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BFid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PickUpDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PickUpTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PickUpType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PickUpPerson)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PickUpPersonPhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PayTermCatId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TaxIdnum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderState)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Memo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderISerialId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NFid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BFid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PickUpDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PickUpTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PickUpType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PickUpPerson)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PickUpPersonPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PayTermCatId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TaxIdnum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderState)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Memo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderISerialId)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
