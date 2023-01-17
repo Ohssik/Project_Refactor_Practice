@@ -3,11 +3,11 @@ using System.ComponentModel;
 
 namespace prjMSIT145_Final.ViewModels
 {
-    public class CNormalMemberViewModel
+    public class CANormalMemberViewModel
     {
         private NormalMember _normalMember;
         private IEnumerable<Order> _orders;
-        public CNormalMemberViewModel()
+        public CANormalMemberViewModel()
         {
             _normalMember = new NormalMember();
             _orders = new List<Order>();

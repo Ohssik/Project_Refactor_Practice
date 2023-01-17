@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
+using System.Collections.Generic;
 using System.Text.Json;
 
 namespace prjMSIT145_Final.Controllers
@@ -53,7 +54,7 @@ namespace prjMSIT145_Final.Controllers
 
         public IActionResult ANormalMemberList()
         {
-            List<CNormalMemberViewModel> list = new List<CNormalMemberViewModel>();
+            List<CANormalMemberViewModel> list = new List<CANormalMemberViewModel>();
             //if (k == null)
             //{
             
@@ -64,7 +65,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 foreach(NormalMember n in normalMembers)
                 {
-                    CNormalMemberViewModel cvm = new CNormalMemberViewModel();
+                    CANormalMemberViewModel cvm = new CANormalMemberViewModel();
                     cvm.normalMember = n;
                     list.Add(cvm);
                 }
@@ -75,9 +76,53 @@ namespace prjMSIT145_Final.Controllers
             
         }
 
+        public IActionResult ANormalMemberDetails(int? id)
+        {
+
+            if (id == null)
+                return RedirectToAction("ANormalMemberList");
+            
+            var personalDatas = _context.NormalMembers.FirstOrDefault(c => c.Fid == (int)id);
+            IEnumerable<Order> orderDatas = from order in _context.Orders
+                                            where order.NFid == (int)id
+                                            select order;
+            
+            if (personalDatas != null)
+            {
+                CANormalMemberViewModel n = new CANormalMemberViewModel();
+                n.normalMember = personalDatas;
+                if (orderDatas != null)
+                {
+                    n.orders = orderDatas;
+                }
+                return View(n);
+            }
+
+            return RedirectToAction("ANormalMemberList");
+        }
+        [HttpPost]
+        public IActionResult ANormalMemberDetails(CANormalMemberViewModel n)
+        {
+            if (n != null)
+            {
+                var user = _context.NormalMembers.FirstOrDefault(t => t.Fid == n.Fid);
+                if (!string.IsNullOrEmpty(n.txtPassword) && (n.txtPassword.Trim() == n.txtConfirmPwd))
+                {                    
+                    if (user != null)
+                    {
+                        user.Password = n.txtPassword;                        
+                    }
+                }
+                user.IsSuspensed = (int)n.IsSuspensed;
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("ANormalMemberList");
+        }
+
         public IActionResult ABusinessMemberList()
         {
-            List<CBusinessMemberViewModel> list = new List<CBusinessMemberViewModel>();
+            List<CABusinessMemberViewModel> list = new List<CABusinessMemberViewModel>();
             //if (k == null)
             //{
 
@@ -88,7 +133,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 foreach (BusinessMember b in businessMembers)
                 {
-                    CBusinessMemberViewModel cvm = new CBusinessMemberViewModel();
+                    CABusinessMemberViewModel cvm = new CABusinessMemberViewModel();
                     cvm.businessMember = b;
                     list.Add(cvm);
                 }
@@ -96,6 +141,48 @@ namespace prjMSIT145_Final.Controllers
             }
 
             return View(list);
+        }
+
+        public IActionResult ANormalMemberOrder(int? id)
+        {
+            if (id == null)
+                return RedirectToAction("ANormalMemberDetails");
+
+            //var personalDatas = _context.ViewShowFullOrders.FirstOrDefault(c => c.OrderFid == (int)id);
+            IEnumerable<ViewShowFullOrder> orderDatas = from order in _context.ViewShowFullOrders
+                                                        join bm in _context.BusinessImgs on order.BFid equals bm.BFid
+                                                        join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
+                                                        where order.OrderFid == (int)id
+                                                        select order;
+
+            if (orderDatas != null)
+            {
+                CANormalMemberOrderViewModel n = new CANormalMemberOrderViewModel();
+                List<CANormalMemberOrderDetailViewModel> items = new List<CANormalMemberOrderDetailViewModel>();
+                foreach(ViewShowFullOrder vsf in orderDatas)
+                {
+                    CANormalMemberOrderDetailViewModel detail = new CANormalMemberOrderDetailViewModel();
+                    detail.productName=vsf.ProductName;
+                    detail.Options = vsf.Options + "/" + "$" + vsf.SubTotal + "/" + vsf.Qty + "份";
+                    items.Add(detail);
+                }
+                n.details = items;
+                n.BMemberName = orderDatas.ToList()[0].BMemberName;
+                n.BMemberPhone = orderDatas.ToList()[0].BMemberPhone;
+                n.OrderISerialId = orderDatas.ToList()[0].OrderISerialId;
+                n.PickUpDate = orderDatas.ToList()[0].PickUpDate;
+                n.PickUpTime = orderDatas.ToList()[0].PickUpTime;
+                n.TotalAmount = orderDatas.ToList()[0].TotalAmount;
+                n.PayTermCatId = orderDatas.ToList()[0].PayTermCatId;
+                n.PickUpType = orderDatas.ToList()[0].PickUpType;
+                n.PickUpPerson = orderDatas.ToList()[0].PickUpPerson;
+                n.PickUpPersonPhone = orderDatas.ToList()[0].PickUpPersonPhone;
+                n.Memo = orderDatas.ToList()[0].Memo;
+
+                return View(n);
+            }
+
+            return RedirectToAction("ANormalMemberDetails");
         }
     }
 }

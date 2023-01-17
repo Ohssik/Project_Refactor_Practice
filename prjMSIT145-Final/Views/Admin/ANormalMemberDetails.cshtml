@@ -1,0 +1,366 @@
+﻿@model prjMSIT145_Final.ViewModels.CANormalMemberViewModel
+@{
+    ViewData["Title"] = "ANormalMemberDetails";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<!-- Begin Page Content -->
+<form asp-action="ANormalMemberDetails">
+    <div class="container-fluid">
+
+        <div>
+            <div class="card shadow mb-4" id="norMemPhotoDiv">
+                <div>
+                    <figure id="norMemPhoto">
+                        <img src="~/NormalMemberPhoto/@Model.MemberPhotoFile" alt="">
+                    </figure>
+
+                </div>
+                <div id="btnBar">
+                    <div class="conBtn">個人資訊</div>
+                    <div class="conBtn">權限與密碼</div>
+                </div>
+                <div class="table-responsive" name="infoDiv">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.Fid)</td>
+                            <td>
+                                @Model.Fid
+                                <input type="hidden" value=@Model.Fid name="Fid" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.MemberName)</td>
+                            <td>
+                                @Model.MemberName
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.Phone)</td>
+                            <td>
+                                @Model.Phone
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.Gender)</td>
+                            <td>                                
+                                @{
+                                    if (Model.Gender == "1")
+                                    {
+                                        @:男                                            
+                                    }
+                                    else if (Model.Gender == "0")
+                                    {                                            
+                                        @:女
+                                    }
+                                }                                
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.Phone)</td>
+                            <td>
+                                @Model.Phone
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.Email)</td>
+                            <td>
+                                @Model.Email
+                            </td>
+                        </tr>
+                        
+                       
+                        <tr>
+                            <td>@Html.DisplayNameFor(model => model.RegisterTime)</td>
+                            <td>
+                                @Model.RegisterTime
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>居住地</td>
+                            <td>
+                                @Model.Address
+                            </td>
+                        </tr>
+
+                    </table>
+
+
+                </div>
+
+                <div class="table-responsive" name="infoDiv">
+                    <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+                        <tr>
+                            <td>Email認證</td>
+                            <td>
+                                @Model._EmailCertified
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>是否停權</td>
+                            <td>
+                                <div id="stopAuthBar">
+                                    @{
+                                        if(Model.IsSuspensed>0){
+                                            <button class="authBtn clicked2" disabled>是</button>
+                                            <button class="authBtn">否</button>
+                                        }else{
+                                            <button class="authBtn">是</button>
+                                            <button class="authBtn clicked2" disabled>否</button>
+                                        }
+                                    }
+                                    <input type="hidden" value=@Model.IsSuspensed name="IsSuspensed" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>修改密碼</td>
+                            <td>
+                                <input type="text" name="txtPassword" value=@Model.txtPassword>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>確認新密碼</td>
+                            <td>
+                                <input type="text" name="txtConfirmPwd" value=@Model.txtConfirmPwd>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+
+            </div>
+            <div id="divSave">
+               
+                <button id="btnSave" class="btn btn-secondary btn-icon-split" type="submit">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-arrow-right"></i>
+                    </span>
+                    <span class="text">儲存</span>
+                </button>
+                
+                <span id="pwdInvalid"></span>
+            </div>
+            
+        </div>
+
+        <div>
+            <!-- Basic Card Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">訂單紀錄</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable3" width="100%" cellspacing="0">
+                            <thead>
+                            <th>訂單編號</th>
+                            <th>日期</th>
+                            <th>金額</th>
+                            <th>商品數</th>
+                            <th>購買店家</th>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (Order od in Model.orders)
+                                    {
+                                            <tr>
+                                                <td>
+                                                @Html.ActionLink(od.OrderISerialId, "ANormalMemberOrder", new { id=od.Fid })
+                                                </td>
+                                                <td>@od.OrderTime</td>
+                                                <td>@od.TotalAmount</td>
+                                                <td></td>
+                                                <td>@od.BFid</td>
+                                            </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+</form>
+
+
+@section Scripts {
+    
+    
+    <script>
+        $('[name=infoDiv]').eq(1).hide();
+        $('.conBtn').eq(0).addClass('clicked');
+        //$('.authBtn').eq(1).addClass('clicked2');
+        $('.conBtn').on({
+            click: function () {
+                $(this).addClass('clicked').siblings().removeClass('clicked');
+                $(this).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked'); } });
+                $(this).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked'); } });
+
+                let i = $(this).index();
+                // console.log(i);
+                $('[name=infoDiv]').eq(i).show().siblings('[name=infoDiv]').hide();
+
+
+            },
+            mouseenter: function () {
+                $(this).addClass('clicked');
+            },
+            mouseleave: function () {
+                $(this).removeClass('clicked');
+            }
+        });
+        $('.authBtn').on({
+            click: function (event) {
+                event.preventDefault();
+
+                if($(this).text()=='是')
+                {
+                    if(confirm('確定要停權該會員帳號嗎?')){
+                        $('input[name=IsSuspensed]').val(1);
+                        $(this).addClass('clicked').siblings().removeClass('clicked2');
+                        $(this).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked2'); } });
+                        $(this).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked2'); } });
+                        $(this).attr('disabled', 'disabled').siblings().removeAttr('disabled');
+                    }
+                    else
+                        return false;
+                }else{
+
+                    if(confirm('確定要復權該會員帳號嗎?')){
+                        $('input[name=IsSuspensed]').val(0);
+                        $(this).addClass('clicked').siblings().removeClass('clicked2');
+                        $(this).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked2'); } });
+                        $(this).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked2'); } });
+                        $(this).attr('disabled', 'disabled').siblings().removeAttr('disabled');
+                    }else
+                        return false;                    
+                }
+            },
+            mouseenter: function () {
+                $(this).addClass('clicked2');
+            },
+            mouseleave: function () {
+                $(this).removeClass('clicked2');
+            }
+        });
+
+        $('#btnSave').click(function(){
+
+            let pwdInvalid = $('#pwdInvalid');
+            pwdInvalid.text('');
+            let txtPwd = $('input[name=txtPassword]').val();
+            let txtConPwd = $('input[name=txtConfirmPwd]').val();
+            if( (txtPwd != '' || txtConPwd !='') && txtPwd != txtConPwd){
+                pwdInvalid.text('兩次輸入的密碼不符');
+                return false;
+            }
+
+        });
+    </script>
+}
+    @section Styles{
+    <link href="~/css/NornalMember/DetailsStyle.css" rel="stylesheet">
+    <style>
+        #pwdInvalid{
+            color:red;
+            margin-left:10px;
+        }
+        .memberImg {
+            width: 50px;
+        }
+
+        .searchImg {
+            width: 30px;
+        }
+
+        .container-fluid {
+            display: flex;
+            padding: 10px 20px;
+        }
+
+        .container-fluid .card.shadow.mb-4 {
+            margin: 10px;
+        }
+
+        #norMemPhoto {
+            padding: 15px;
+            height: 20vh;
+            margin: 0;
+        }
+
+        #norMemPhotoDiv img {
+            /* height: 10vh; */
+            object-fit: cover;
+            height: 100%;
+        }
+
+        .container-fluid > div:first-child {
+            width: 30%;
+        }
+
+        .container-fluid > div:last-child {
+            width: 70%;
+        }
+
+        #dataTable td:first-child {
+            width: 30%;
+        }
+
+        #btnBar {
+            width: 90%;
+            margin: auto;
+            display: flex;
+        }
+
+        .conBtn {
+            width: 50%;
+            height: 30px;
+            margin: 5px;
+            /*background-color: rgb(175, 174, 240);*/
+            background-color: #eb9f57;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+        }
+
+        .clicked {
+            /*background-color: rgb(65, 62, 245);*/
+            background-color: #93580e;
+        }
+
+        #stopAuthBar {
+            width: 90%;
+            display: flex;
+        }
+
+        .authBtn {
+            width: 40%;
+            margin: 0 10px;
+            height: 30px;
+            background-color: rgb(222, 240, 174);
+            text-align: center;
+            padding: 5px;
+            border-radius: 5px;
+            border:0;
+        }
+
+        .clicked2 {
+            background-color: rgb(103, 119, 57);
+            color: white;
+        }
+
+        #divSave {
+            margin-left: 10px;
+        }
+    </style>
+}

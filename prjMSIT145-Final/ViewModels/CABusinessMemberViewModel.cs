@@ -3,11 +3,11 @@ using System.ComponentModel;
 
 namespace prjMSIT145_Final.ViewModels
 {
-    public class CBusinessMemberViewModel
+    public class CABusinessMemberViewModel
     {
         private BusinessMember _businessMember;
         private IEnumerable<Order> _orders;
-        public CBusinessMemberViewModel()
+        public CABusinessMemberViewModel()
         {
             _businessMember = new BusinessMember();
             _orders = new List<Order>();
