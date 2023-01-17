@@ -3,117 +3,163 @@
 @{
     ViewData["Title"] = "BList";
 }
+<table  class=" table table-dark table-striped text-center">
+     <table class="table table-dark table-striped  text-center">
+        <thead>
+          <tr>
+            <th class="col align-middle">編號</th>
+            <td class="col-4 align-middle">訂單號</td>
+            <td class="col-2 align-middle">顧客名</td>
+            <td class="col-2 align-middle">總價</td>
+                <td class="col-3 align-middle"></td>
+            
+          </tr>
+        </thead>
+    <tbody class="text-center">
+        @{
+            int count = 0;
+            foreach (var item in Model)
+            {
+                count++;
 
-<h1>BList</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Fid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NFid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BFid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PickUpDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PickUpTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PickUpType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PickUpPerson)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PickUpPersonPhone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PayTermCatId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TaxIdnum)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrderState)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Memo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrderTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrderISerialId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NFid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BFid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PickUpDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PickUpTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PickUpType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PickUpPerson)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PickUpPersonPhone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PayTermCatId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TaxIdnum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderState)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Memo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderISerialId)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+             <tr id="ListBar" data-bs-toggle="modal" data-bs-target="#detailModal" class="container">
+             <td id="Fid" hidden>@Html.DisplayFor(modelItem => item.Fid)</td>
+             <th class=" col-1 align-middle">#@count</th>
+            <td class="col-4 align-middle">@Html.DisplayFor(modelItem => item.OrderISerialId)</td>
+            <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.BFid)</td>
+            <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.TotalAmount)</td>
+            <td class="col-3 align-middle">
+                 <button class="btn btn-success" style="margin-left: 20px">@Html.ActionLink("接受", "接受", new { /* id=item.PrimaryKey */ }) </button>
+                 <button class="btn btn-danger" style="margin-left: 20px">@Html.ActionLink("取消", "取消", new { /* id=item.PrimaryKey */ })</button>
             </td>
         </tr>
-}
+    }
+    }
+  
+
+ 
+  
     </tbody>
-</table>
+    </table>  <!-- Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content" id="Adiv">
+
+                <div class="modal-header" id="AdivHeader">
+                   @* <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-2 text-nowrap">
+                                <p class="p-0 m-0">客戶名稱</p>
+                                <p class="p-0 m-0">訂單編號</p>
+                            </div>
+                            <div class="col-8"></div>
+                            <div class="col-2">
+                                <p class="p-0 m-0">取餐時間: 10:00</p>
+                                <p class="p-0 m-0">餐點數量3</p>
+                            </div>
+                        </div>
+                    </div>*@
+                </div>
+                <div class="modal-body">
+                    <table class=" table table-striped"id="AdivBody">
+                        @*<tr id="ListdetailBar container">
+                            <th class="col-1 align-middle">2份</th>
+                            <td class="col-7 align-middle">套餐A</td>
+                            <td class="col-2 align-middle"></td>
+                            <td class="col-2 align-middle">200TWD</td>
+                        </tr>
+                        <tr id="ListdetailBar container">
+                            <th class="col-1 align-middle">1份</th>
+                            <td class="col-7 align-middle">套餐B</td>
+                            <td class="col-2 align-middle"></td>
+                            <td class="col-2 align-middle">120TWD</td>
+                        </tr>
+                        <TFoot class="text-right">
+                        <td class="col-11"></td>
+                        <td class="col-2 text-end text-nowrap">一共3份</td>
+                        <td class="col-1 text-end text-nowrap">小記:320TWD</td>
+                        </TFoot>*@
+                    </table>
+                </div>
+                <div class="modal-footer" id="AdivFooter">
+                    <button type="button" class="btn btn-primary">確認訂單</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @section Scripts{
+        <script>
+            const selHeader = document.getElementById("AdivHeader");
+            const selBody = document.getElementById("AdivBody");
+            const selFooter = document.getElementById("AdivFooter");
+            const selBar = document.getElementById("ListBar");
+
+            selBar.addEventListener("click", function () {
+                selHeader.innerHTML = "";
+                selBody.innerHTML = "";
+                loadDetail(this.children[0].innerHTML) 
+            })
+            async function  loadDetail(orderid){
+                const response = await fetch(`@Url.Content("~/Order/BListDetailApi/?orderid=${orderid}")`)
+                const datas = await response.json();
+                datas.forEach( function (item, index) {
+                    console.log(item);
+                    //console.log(item.items);
+                    const option= item.items;
+                    selHeader.innerHTML = ` <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-2 text-nowrap">
+                                        <p class="p-0 m-0">客戶名稱:${item.mbName}</p>
+                                        <p class="p-0 m-0">訂單編號:${item.orderISerialId}</p>
+                                        </div>
+                                        <div class="col-8"></div>
+                                        <div class="col-2">
+                                        <p class="p-0 m-0">取餐時間:${item.pickUpTime}</p>
+                                                        <p class="p-0 m-0">餐點數量:${item.totalQty}</p>
+                                        </div>
+                                    </div>
+                                </div>`;
+                   
+                    option.forEach(function (optionitem, index) {
+                        let optionitemName="";
+                        const optionDetail = optionitem.optionName;
+                        optionDetail.forEach(function (optionDetailName, index){
+                             console.log(optionDetailName);
+                            if (optionitemName=="")
+                            {
+                                optionitemName += optionDetailName;
+                            }
+                            else{
+                                optionitemName += "/"+optionDetailName;
+                                }
+                        });
+                        //console.log(optionitem);
+                        selBody.innerHTML += ` <tr id="ListdetailBar container">
+                            <th class="col-1 align-middle">${optionitem.qty}份</th>
+                            <td class="col-2 align-middle">${optionitem.productName}</td>
+                                        <td class="col-7 align-middle">${optionitemName}</td>
+                            <td class="col-2 align-middle">${optionitem.optionAmount}TWD</td>
+                        </tr>`;
+                    });
+                    selBody.innerHTML += `<TFoot class="text-right">
+                                    <th class="col-1 align-middle"></th>
+                                    <td class="col-2 align-middle"></td>
+                                    <td class="col-7 align-middle"></td>
+                                    <td class="col-2 align-middle">一共${item.totalQty}份 小記:${item.totalAmount}</td>
+                                    </TFoot>`;
+                });
+
+            }
+
+
+
+
+
+
+
+
+
+
+        </script>
+    }

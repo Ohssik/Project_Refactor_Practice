@@ -1,7 +1,11 @@
-﻿namespace prjMSIT145_Final.ViewModel
+﻿using Microsoft.EntityFrameworkCore;
+using prjMSIT145_Final.Models;
+
+namespace prjMSIT145_Final.ViewModel
 {
     public class COrderListViewModel
     {
+   
         public int Fid { get; set; }
         public int? NFid { get; set; }        
         public string? MbName { get; set; }
@@ -19,13 +23,11 @@
         public decimal? TotalAmount { get; set; }
         public string? OrderISerialId { get; set; }
         //item
-        //public int? ProductFid { get; set; }
-        public string? ProductName { get; set; }
-        public int? Qty { get; set; }
-        //detail
-        //public int? OptionFid { get; set; }
-        public List<string> OptionName { get; set; }
-        public decimal? OptionPrice { get; set;}
+        public List<COrderItemViewModel> items { get; set; }
+
+        public int?  totalQty{ get; set; }
+       
+
 
     }
 }

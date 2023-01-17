@@ -24,131 +24,7 @@ namespace prjMSIT145_Final.Controllers
         [HttpPost]
         public IActionResult BList(int? orderid)
         {
-            var order = _context.Orders.Where(o => o.Fid == orderid);
-            //合併items
-            var ordertoitems = order.Join(_context.OrderItems, o => o.Fid, i => i.OrderFid, (o, i) => new
-            {
-                Fid = o.Fid,
-                NFid = o.NFid,
-                BFid = o.BFid,
-                PickUpDate = o.PickUpDate,
-                PickUpTime = o.PickUpTime,
-                PickUpType = o.PickUpType,
-                PickUpPerson = o.PickUpPerson,
-                PickUpPersonPhone = o.PickUpPersonPhone,
-                PayTermCatId = o.PayTermCatId,
-                TaxIdnum = o.TaxIdnum,
-                OrderState = o.OrderState,
-                Memo = o.Memo,
-                OrderTime = o.OrderTime,
-                TotalAmount = o.TotalAmount,
-                OrderISerialId = o.OrderISerialId,
-                OrderItemfid = i.Fid,
-                ProductFid = i.ProductFid,
-                Qty = i.Qty
-            });
-            //合併細節
-            var orderTodeital = ordertoitems.Join(_context.OrderOptionsDetails, o => o.OrderItemfid, d => d.ItemFid, (o, d) => new
-            {
-                Fid = o.Fid,
-                NFid = o.NFid,
-                BFid = o.BFid,
-                PickUpDate = o.PickUpDate,
-                PickUpTime = o.PickUpTime,
-                PickUpType = o.PickUpType,
-                PickUpPerson = o.PickUpPerson,
-                PickUpPersonPhone = o.PickUpPersonPhone,
-                PayTermCatId = o.PayTermCatId,//還須合併付款方法
-                TaxIdnum = o.TaxIdnum,
-                OrderState = o.OrderState,
-                Memo = o.Memo,
-                OrderTime = o.OrderTime,
-                TotalAmount = o.TotalAmount,
-                OrderISerialId = o.OrderISerialId,
-                ProductFid = o.ProductFid,//還須合併產品名稱
-                Qty = o.Qty,
-                OptionFid = d.OptionFid//還須合併配料名稱
-            });
-            //合併客戶名稱
-            var orderdeitaltoMbName = orderTodeital.Join(_context.NormalMembers, o => o.NFid, N => N.Fid, (o, N) => new
-            {
-                Fid = o.Fid,
-                NFid = o.NFid,
-                BFid = o.BFid,
-                MbName = N.MemberName,
-                PickUpDate = o.PickUpDate,
-                PickUpTime = o.PickUpTime,
-                PickUpType = o.PickUpType,
-                PickUpPerson = o.PickUpPerson,
-                PickUpPersonPhone = o.PickUpPersonPhone,
-                PayTermCatId = o.PayTermCatId,//還須合併付款方法?
-                TaxIdnum = o.TaxIdnum,
-                OrderState = o.OrderState,
-                Memo = o.Memo,
-                OrderTime = o.OrderTime,
-                TotalAmount = o.TotalAmount,
-                OrderISerialId = o.OrderISerialId,
-                ProductFid = o.ProductFid,//還須合併產品名稱
-                Qty = o.Qty,
-                OptionFid = o.OptionFid//還須合併配料名稱
-            });
-            //合併產品名
-            var orderdeital = orderdeitaltoMbName.Join(_context.Products, o => o.ProductFid, p => p.Fid, (o, p) => new
-            {
-                Fid = o.Fid,
-                NFid = o.NFid,
-                BFid = o.BFid,
-                MbName = o.MbName,
-                PickUpDate = o.PickUpDate,
-                PickUpTime = o.PickUpTime,
-                PickUpType = o.PickUpType,
-                PickUpPerson = o.PickUpPerson,
-                PickUpPersonPhone = o.PickUpPersonPhone,
-                PayTermCatId = o.PayTermCatId,//還須合併付款方法?
-                TaxIdnum = o.TaxIdnum,
-                OrderState = o.OrderState,
-                Memo = o.Memo,
-                OrderTime = o.OrderTime,
-                TotalAmount = o.TotalAmount,
-                OrderISerialId = o.OrderISerialId,
-                //ProductFid = o.ProductFid,
-                ProductName = p.ProductName,
-                Qty = o.Qty,
-                OptionFid = o.OptionFid//還須合併配料名稱
-            });
            
-
-            List<COrderListViewModel> list = new List<COrderListViewModel>();
-            foreach(var datas in orderdeital)
-            {
-                COrderListViewModel vm= new COrderListViewModel();
-                vm.Fid = datas.Fid;
-                vm.BFid = datas.BFid;
-                vm.NFid= datas.NFid;
-                vm.MbName= datas.MbName;
-                vm.PickUpDate = datas.PickUpDate;
-                vm.PickUpTime = datas.PickUpTime;
-                vm.PickUpType = datas.PickUpType;
-                vm.PickUpPerson= datas.PickUpPerson;
-                vm.PickUpPersonPhone= datas.PickUpPersonPhone;
-                vm.PayTermCatId= datas.PayTermCatId;
-                vm.TaxIdnum= datas.TaxIdnum;
-                vm.OrderState= datas.OrderState;
-                vm.Memo= datas.Memo;
-                vm.OrderTime = datas.OrderTime;
-                vm.TotalAmount = datas.TotalAmount;
-                vm.OrderISerialId= datas.OrderISerialId;
-                vm.ProductName = datas.ProductName;
-                vm.Qty = datas.Qty;
-                //合併配料
-                var orderitem = _context.ProductOptions.Where(P => P.Fid == datas.OptionFid);
-                foreach(var item in orderitem)
-                {
-                    vm.OptionName.Add(item.OptionName);
-                    vm.OptionPrice += item.UnitPrice;
-                }
-                list.Add(vm);
-            }
 
             return View();
         }
@@ -170,6 +46,101 @@ namespace prjMSIT145_Final.Controllers
         {
             return View();
         }
-        
+        public IActionResult BListDetailApi(int? orderid)
+        {
+            var order = _context.Orders.Where(o => o.Fid == orderid);
+            //合併items
+           
+            //合併客戶名稱
+            var orderdMbName = order.Join(_context.NormalMembers, o => o.NFid, N => N.Fid, (o, N) => new
+            {
+                Fid = o.Fid,
+                NFid = o.NFid,
+                BFid = o.BFid,
+                MbName = N.MemberName,
+                PickUpDate = o.PickUpDate,
+                PickUpTime = o.PickUpTime,
+                PickUpType = o.PickUpType,
+                PickUpPerson = o.PickUpPerson,
+                PickUpPersonPhone = o.PickUpPersonPhone,
+                PayTermCatId = o.PayTermCatId,//還須合併付款方法?
+                TaxIdnum = o.TaxIdnum,
+                OrderState = o.OrderState,
+                Memo = o.Memo,
+                OrderTime = o.OrderTime,
+                TotalAmount = o.TotalAmount,
+                OrderISerialId = o.OrderISerialId,
+            });
+            //合併產品名
+            var orderitemToProduct = _context.OrderItems.Join(_context.Products, o => o.ProductFid, p => p.Fid, (o, p) => new
+            {
+                //ProductFid = o.ProductFid,
+                fid=o.Fid,
+                ProductName = p.ProductName,
+                ProductQty = o.Qty,
+                Productprice = p.UnitPrice,
+                OrderFid = o.OrderFid
+            }); 
+            var ItemToName = _context.OrderOptionsDetails.Join(_context.ProductOptions, i => i.OptionFid, p => p.Fid, (i, p) => new
+            {
+                Fid = i.Fid,
+                ItemId=i.ItemFid,
+                OptionName = p.OptionName,
+                ItemPrice = p.UnitPrice,
+            });
+
+
+            List<COrderListViewModel> list = new List<COrderListViewModel>();
+            foreach (var datas in orderdMbName)
+            {
+                COrderListViewModel vm = new COrderListViewModel();
+                vm.Fid = datas.Fid;
+                vm.BFid = datas.BFid;
+                vm.NFid = datas.NFid;
+                vm.MbName = datas.MbName;
+                vm.PickUpDate = datas.PickUpDate;
+                vm.PickUpTime = datas.PickUpTime;
+                vm.PickUpType = datas.PickUpType;
+                vm.PickUpPerson = datas.PickUpPerson;
+                vm.PickUpPersonPhone = datas.PickUpPersonPhone;
+                vm.PayTermCatId = datas.PayTermCatId;
+                vm.TaxIdnum = datas.TaxIdnum;
+                vm.OrderState = datas.OrderState;
+                vm.Memo = datas.Memo;
+                vm.OrderTime = datas.OrderTime;
+                vm.TotalAmount = datas.TotalAmount;
+                vm.OrderISerialId = datas.OrderISerialId;
+                vm.totalQty = 0;
+                vm.items = new List<COrderItemViewModel>();
+                //合併配料
+                
+                var orderitem = orderitemToProduct.Where(i => i.OrderFid == datas.Fid);
+                foreach (var items in orderitem)
+                {
+                    COrderItemViewModel itemVm= new COrderItemViewModel();
+                    itemVm.ProductName= items.ProductName;
+                    itemVm.Productprice = items.Productprice;
+                    itemVm.Qty = items.ProductQty;
+                    vm.totalQty += items.ProductQty;
+                    itemVm.OptionName = new List<string>();
+                    itemVm.OptionPrice = 0;
+                var itemOption = ItemToName.Where(o => o.ItemId == items.fid);
+                    foreach(var Option in itemOption)
+                    {
+                        itemVm.OptionName.Add(Option.OptionName);
+                        itemVm.OptionPrice += Option.ItemPrice;
+                    }
+                    vm.items.Add(itemVm);
+
+
+                }
+                
+
+                list.Add(vm);
+            }
+
+            return Json(list);
+        }
+
     }
 }
