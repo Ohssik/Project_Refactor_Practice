@@ -50,6 +50,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=AdminMembers}/{action=ALogin}/{id?}");
+    pattern: "{controller=Admin}/{action=ALogin}/{id?}");
 
 app.Run();

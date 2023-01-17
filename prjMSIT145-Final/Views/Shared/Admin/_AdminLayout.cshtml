@@ -2,7 +2,7 @@
 @{
 
     if (!Context.Session.Keys.Contains(CDictionary.SK_LOGINED_ADMIN)){
-        Context.Response.Redirect(Url.Content("~/AdminMembers/ALogin"));
+        Context.Response.Redirect(Url.Content("~/Admin/ALogin"));
     }
             
 }
@@ -22,7 +22,7 @@
 
     <!-- Custom styles for this page -->
     <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
+    
     @RenderSection("Styles",required:false)
 </head>
 <body id="page-top">
@@ -38,7 +38,7 @@
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                     <div class="sidebar-brand-icon">
                         @*<i class="fas fa-laugh-wink"></i>*@
-                        <img src="~/img/logo2.png" style="width:80%" />
+                        <img src="~/adminImg/logo2.png" style="width:80%" />
                     </div>
                     <div class="sidebar-brand-text mx-3">Admin <sup>Console</sup></div>
                 </a>
@@ -56,14 +56,14 @@
 
 
                 <li class="nav-item">
-                    <a class="nav-link" href="norMemberManage.html">
+                    <a class="nav-link" href='@Url.Content("~/Admin/ANormalMemberList")'>
                         <i class="fas fa-fw fa-table"></i>
                         <span>一般會員</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="busiMemberManage.html">
+                    <a class="nav-link" href='@Url.Content("~/Admin/ABusinessMemberList")'>
                         <i class="fas fa-fw fa-table"></i>
                         <span>商家會員</span>
                     </a>
