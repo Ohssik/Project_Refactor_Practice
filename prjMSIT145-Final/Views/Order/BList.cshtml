@@ -1,4 +1,4 @@
-﻿@model IEnumerable<prjMSIT145_Final.Models.Order>
+﻿@model List<prjMSIT145_Final.ViewModel.COrderViewModel>
 
 @{
     ViewData["Title"] = "BList";
@@ -29,8 +29,8 @@
             <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.BFid)</td>
             <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.TotalAmount)</td>
             <td class="col-3 align-middle">
-                 <button class="btn btn-secondary" style="margin-left: 20px">@Html.ActionLink("點單完成", "點單完成", new { /* id=item.PrimaryKey */ }) </button>
-                 <button class="btn btn-secondary" style="margin-left: 20px">@Html.ActionLink("顧購取餐", "顧購取餐", new { /* id=item.PrimaryKey */ })</button>
+                            @Html.ActionLink("餐點完成", "BEditStateApi", new {State=item.OrderState,nextState="3",orderid=item.Fid  },new{@class="btn btn-success"})
+                            @Html.ActionLink("完成訂單", "BEditStateApi",  new {State=item.OrderState,nextState="4",orderid=item.Fid  },new{@class="btn btn-danger"})
             </td>
         </tr>
     }
@@ -78,9 +78,9 @@
                     </table>
                 </div>
                 <div class="modal-footer" id="AdivFooter">
-                    <button type="button" class="btn btn-primary">完成訂單</button>
+                   @* <button type="button" class="btn btn-primary">完成訂單</button>
                     <button type="button" class="btn btn-primary">顧客取餐</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>*@
                 </div>
             </div>
         </div>
@@ -90,9 +90,9 @@
             const selHeader = document.getElementById("AdivHeader");
             const selBody = document.getElementById("AdivBody");
             const selFooter = document.getElementById("AdivFooter");
-            const selBar = document.getElementById("ListBar");
-
-            selBar.addEventListener("click", function () {
+            const selBar = document.getElementsByName("baritem");
+            selBar.forEach(function (selBaritem) {
+            selBaritem.addEventListener("click", function () {
                 selHeader.innerHTML = "";
                 selBody.innerHTML = "";
                 loadDetail(this.children[0].innerHTML) 
@@ -117,6 +117,10 @@
                                         </div>
                                     </div>
                                 </div>`;
+                                     selFooter.innerHTML = `
+                                             <a  class="btn btn-primary" href="BEditStateApi/?State=2&&nextState=3&&orderid=${orderid}">接受</a>
+                                              <a  class="btn btn-primary" href="BEditStateApi/?State=2&&nextState=4&&orderid=${orderid}">接受</a>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>`;
                    
                     option.forEach(function (optionitem, index) {
                         let optionitemName="";
@@ -148,6 +152,7 @@
                 });
 
             }
+            });
 
 
 

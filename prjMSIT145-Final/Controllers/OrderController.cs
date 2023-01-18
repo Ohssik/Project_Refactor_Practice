@@ -38,7 +38,7 @@ namespace prjMSIT145_Final.Controllers
             {
                json= HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-              var order = _context.Orders.Where(o => o.Fid == member.Fid && o.OrderState == state);
+              var order = _context.Orders.Where(o => o.BFid == member.Fid && o.OrderState == state);
                 var Datas = order.Join(_context.NormalMembers, o => o.NFid, n => n.Fid, (o, n) => new
                 {
                     Fid = o.Fid,
@@ -95,8 +95,50 @@ namespace prjMSIT145_Final.Controllers
             {
                 json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                 BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-                List<Order> order = _context.Orders.Where(o => o.Fid == member.Fid && o.OrderState == state).ToList();
-                return View(order);
+                var order = _context.Orders.Where(o => o.BFid == member.Fid && (o.OrderState == state || o.OrderState == "3"));
+                var Datas = order.Join(_context.NormalMembers, o => o.NFid, n => n.Fid, (o, n) => new
+                {
+                    Fid = o.Fid,
+                    NFid = o.NFid,
+                    BFid = o.BFid,
+                    PickUpDate = o.PickUpDate,
+                    PickUpTime = o.PickUpTime,
+                    PickUpType = o.PickUpType,
+                    PickUpPerson = o.PickUpPerson,
+                    PickUpPersonPhone = o.PickUpPersonPhone,
+                    PayTermCatId = o.PayTermCatId,
+                    TaxIdnum = o.TaxIdnum,
+                    OrderState = o.OrderState,
+                    Memo = o.Memo,
+                    OrderTime = o.OrderTime,
+                    TotalAmount = o.TotalAmount,
+                    OrderISerialId = o.OrderISerialId,
+                    NmbName = n.MemberName
+
+                });
+                List<COrderViewModel> vm = new List<COrderViewModel>();
+                foreach (var o in Datas)
+                {
+                    COrderViewModel model = new COrderViewModel();
+                    model.Fid = o.Fid;
+                    model.NFid = o.NFid;
+                    model.BFid = o.BFid;
+                    model.PickUpDate = o.PickUpDate;
+                    model.PickUpTime = o.PickUpTime;
+                    model.PickUpType = o.PickUpType;
+                    model.PickUpPerson = o.PickUpPerson;
+                    model.PickUpPersonPhone = o.PickUpPersonPhone;
+                    model.PayTermCatId = o.PayTermCatId;
+                    model.TaxIdnum = o.TaxIdnum;
+                    model.OrderState = o.OrderState;
+                    model.Memo = o.Memo;
+                    model.OrderTime = o.OrderTime;
+                    model.TotalAmount = o.TotalAmount;
+                    model.OrderISerialId = o.OrderISerialId;
+                    model.NmbName = o.NmbName;
+                    vm.Add(model);
+                }
+                return View(vm);
             }
             return RedirectToAction("Blogin", "BusinessMember");
 
@@ -104,13 +146,13 @@ namespace prjMSIT145_Final.Controllers
         //舊訂單
         public IActionResult BOldList()
         {
-            string state = "3";
+            string state = "4";
             string json = "";
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
                 json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
                 BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-                var order = _context.Orders.Where(o => o.Fid == member.Fid && o.OrderState == state);
+                var order = _context.Orders.Where(o => o.BFid == member.Fid &&( o.OrderState == state ||o.OrderState =="5" || o.OrderState == "6") );
                 var Datas = order.Join(_context.NormalMembers, o => o.NFid, n => n.Fid, (o, n) => new
                 {
                     Fid = o.Fid,
@@ -158,9 +200,29 @@ namespace prjMSIT145_Final.Controllers
             return RedirectToAction("Blogin", "BusinessMember");
 
         }
-        public IActionResult BDelete()
+        //改訂單狀態
+        public IActionResult BEditStateApi(int? State,int?nextState,int?orderid)
         {
-            return View();
+            string _Action = "";
+            if (State == 1)
+            {
+                _Action = "BNewList";
+            }
+            else if (State == 2|| State == 3)
+            {
+                _Action = "BList";
+            }
+            else 
+            {
+                _Action = "BOldList";
+            }
+
+            var order = _context.Orders.FirstOrDefault(o => o.Fid == orderid);
+            if (order == null)
+            return RedirectToAction($"${_Action}");
+            order.OrderState = nextState.ToString();
+            _context.SaveChanges();
+            return RedirectToAction($"{_Action}");
         }
         public IActionResult BListDetailApi(int? orderid)
         {

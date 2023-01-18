@@ -29,8 +29,7 @@
                         <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.NmbName)</td>
                         <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.TotalAmount)</td>
                         <td class="col-3 align-middle">
-                            <button class="btn btn-success" style="margin-left: 20px">@Html.ActionLink("接受", "接受", new { /* id=item.PrimaryKey */ }) </button>
-                            <button class="btn btn-danger" style="margin-left: 20px">@Html.ActionLink("取消", "取消", new { /* id=item.PrimaryKey */ })</button>
+                         
                         </td>
                     </tr>
                 }
@@ -78,8 +77,8 @@
                     </table>
                 </div>
                 <div class="modal-footer" id="AdivFooter">
-                    <button type="button" class="btn btn-primary">確認訂單</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  @*  <button type="button" class="btn btn-primary">確認訂單</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>*@
                 </div>
             </div>
         </div>
@@ -89,9 +88,9 @@
             const selHeader = document.getElementById("AdivHeader");
             const selBody = document.getElementById("AdivBody");
             const selFooter = document.getElementById("AdivFooter");
-            const selBar = document.getElementById("ListBar");
-
-            selBar.addEventListener("click", function () {
+            const selBar = document.getElementsByName("baritem");
+            selBar.forEach(function (selBaritem) {
+                selBaritem.addEventListener("click", function () {
                 selHeader.innerHTML = "";
                 selBody.innerHTML = "";
                 loadDetail(this.children[0].innerHTML)
@@ -145,5 +144,6 @@
                                                             </TFoot>`;
                 });
             }
+            });
         </script>
     }

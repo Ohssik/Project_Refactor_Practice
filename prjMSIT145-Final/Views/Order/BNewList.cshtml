@@ -22,15 +22,15 @@
                 {
                     count++;
 
-                    <tr id="ListBar" data-bs-toggle="modal" data-bs-target="#detailModal" class="container">
+                    <tr id="ListBar" data-bs-toggle="modal" data-bs-target="#detailModal" class="container" name="baritem">
                         <td id="Fid" hidden>@Html.DisplayFor(modelItem => item.Fid)</td>
                         <th class=" col-1 align-middle">#@count</th>
                         <td class="col-4 align-middle">@Html.DisplayFor(modelItem => item.OrderISerialId)</td>
                         <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.NmbName)</td>
                         <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.TotalAmount)</td>
                         <td class="col-3 align-middle">
-                            <button class="btn btn-success" style="margin-left: 20px">@Html.ActionLink("接受", "接受", new { /* id=item.PrimaryKey */ }) </button>
-                            <button class="btn btn-danger" style="margin-left: 20px">@Html.ActionLink("取消", "取消", new { /* id=item.PrimaryKey */ })</button>
+                            @Html.ActionLink("接受", "BEditStateApi", new {State=item.OrderState,nextState="2",orderid=item.Fid  },new{@class="btn btn-success"})
+                            @Html.ActionLink("取消", "BEditStateApi",  new {State=item.OrderState,nextState="5",orderid=item.Fid  },new{@class="btn btn-danger"})
                         </td>
                     </tr>
                 }
@@ -78,8 +78,9 @@
                     </table>
                 </div>
                 <div class="modal-footer" id="AdivFooter">
-                    <button type="button" class="btn btn-primary">確認訂單</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="Order/BEditStateApi/?State="></a>
+                     @*<button type="button" class="btn btn-primary">接受</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>*@
                 </div>
             </div>
         </div>
@@ -89,11 +90,15 @@
             const selHeader = document.getElementById("AdivHeader");
             const selBody = document.getElementById("AdivBody");
             const selFooter = document.getElementById("AdivFooter");
-            const selBar = document.getElementById("ListBar");
-
-            selBar.addEventListener("click", function () {
+            const selBar = document.getElementsByName("baritem");
+            console.log(selBar);
+            selBar.forEach(function (selBaritem) {
+                
+           
+                selBaritem.addEventListener("click", function () {
                 selHeader.innerHTML = "";
                 selBody.innerHTML = "";
+                selFooter.innerHTML="";
                 loadDetail(this.children[0].innerHTML)
             })
             async function loadDetail(orderid) {
@@ -116,6 +121,10 @@
                                                     </div>
                                                 </div>
                                             </div>`;
+
+                    selFooter.innerHTML = `
+                                             <a  class="btn btn-primary" href="BEditStateApi/?State=1&&nextState=2&&orderid=${orderid}">接受</a>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>`;
 
                     option.forEach(function (optionitem, index) {
                         let optionitemName = "";
@@ -145,5 +154,6 @@
                                                 </TFoot>`;
                 });
             }
+            });
         </script>
     }
