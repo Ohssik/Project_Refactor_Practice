@@ -1,0 +1,21 @@
+﻿.Copyright {
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #9F4E27;
+    box-shadow: 0px -3px 5px #5a5555;
+    margin: 15px 0px 0px 0px;
+}
+
+    .Copyright a {
+        color: #FFFFFF;
+        font-size: 20px;
+        font-weight: 400;
+        text-decoration: none;
+    }
+
+.Footer_Logo {
+    width: 175px;
+    height: 70px;
+}
