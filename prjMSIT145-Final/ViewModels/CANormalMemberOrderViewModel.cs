@@ -13,37 +13,10 @@ namespace prjMSIT145_Final.ViewModels
             details=new List<CANormalMemberOrderDetailViewModel>();
             
         }
+        public string? businessImgFile { get; set; }
+        public string? normalImgFile { get; set; }
+        public string? businessAddress { get; set; }
         
-        public string? businessImgFile
-        {
-            get
-            {
-                ispanMsit145shibaContext db = new ispanMsit145shibaContext();
-                BusinessImg bi = db.BusinessImgs.FirstOrDefault(i => i.BFid == BFid);
-
-                string imgFileName = "";
-                if (bi != null)
-                    imgFileName = string.IsNullOrEmpty(bi.LogoImgFileName) ? "" : bi.LogoImgFileName.ToString();
-
-                return imgFileName;
-            }
-        }
-        
-        public string? businessAddress
-        {
-            get
-            {
-                ispanMsit145shibaContext db = new ispanMsit145shibaContext();
-                BusinessMember b = db.BusinessMembers.FirstOrDefault(b => b.Fid == BFid);
-
-                string address = "";
-                if (b != null)
-                    address = string.IsNullOrEmpty(b.Address) ? "" : b.Address.ToString();
-
-                return address;
-            }
-        }
-
         public int OrderFid { get; set; }                
         public int? BFid { get; set; }
         [DisplayName("商家名稱")]
@@ -58,12 +31,13 @@ namespace prjMSIT145_Final.ViewModels
         {
             get
             {
+                string now = DateTime.Now.ToString("yyyyMMdd");
                 string result = "";
 
                 if (PickUpDate != null)
-                    result += PickUpDate.ToString() +" ";
+                    result += Convert.ToDateTime(PickUpDate).ToString("yyyy/MM/dd") +" ";
                 if (PickUpTime != null)
-                    result += PickUpTime.ToString();
+                    result += ((TimeSpan)PickUpTime).Hours.ToString()+":"+((TimeSpan)PickUpTime).Minutes.ToString();
 
                 return result;
             }
@@ -75,22 +49,9 @@ namespace prjMSIT145_Final.ViewModels
         public string? PickUpPerson { get; set; }
         [DisplayName("取餐人電話")]
         public string? PickUpPersonPhone { get; set; }
-        public int? PayTermCatId { get; set; }
+        
         [DisplayName("付款方式")]
-        public string? PayTermCatName { 
-            get
-            {
-                string payTerm = "";
-                
-                if (PayTermCatId != null)
-                {
-                    ispanMsit145shibaContext db = new ispanMsit145shibaContext();
-                    var p = db.PaymentTermCategories.FirstOrDefault(p => p.Fid == (int)PayTermCatId);
-                    payTerm = p.PaymentType;
-                }
-                return payTerm;
-            }
-        }
+        public string? PayTermCatName{get; set;}
         
         public string? OrderState { get; set; }
         [DisplayName("訂單狀態")]

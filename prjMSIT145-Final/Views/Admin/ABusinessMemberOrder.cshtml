@@ -1,6 +1,6 @@
 ﻿@model prjMSIT145_Final.ViewModels.CANormalMemberOrderViewModel
 @{
-    ViewData["Title"] = "ANormalMemberOrder";
+    ViewData["Title"] = "ABusinessMemberOrder";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
 
@@ -11,15 +11,15 @@
             <div id="shopInfo">
                 <div>
                     <figure id="norMemPhoto">
-                        <img src="~/NormalMemberPhoto/@Model.businessImgFile" alt="">
+                        <img src="~/NormalMemberPhoto/@Model.normalImgFile" alt="">
                     </figure>
                 </div>
 
                 <div id="btnBar">
-                    <div class="conBtn"><h5>@Model.BMemberName</h5></div>
+                    <div class="conBtn"><h5></h5></div>
                     <div>
-                        <p class="pInfo">@Model.BMemberPhone</p>
-                        <p class="pInfo">@Model.businessAddress</p>
+                        <p class="pInfo"></p>
+                        <p class="pInfo"></p>
 
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                             @Model.PayTermCatName
                         </td>
                     </tr>
-                    
+
                     <tr>
                         <td>@Html.DisplayNameFor(model => model.PickUpType)</td>
                         <td>
@@ -96,7 +96,8 @@
     <div>
 
         @{
-            foreach(var item in Model.details){
+            foreach (var item in Model.details)
+            {
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h5 class="m-0 font-weight-bold text-primary">@item.productName</h5>
@@ -107,7 +108,7 @@
                 </div>
             }
         }
-        
+
     </div>
 
 
@@ -119,7 +120,7 @@
     </script>
 
 }
-@section Styles{
+    @section Styles{
     <style>
         .memberImg {
             width: 50px;

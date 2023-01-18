@@ -62,9 +62,10 @@
                                 @Html.DisplayFor(modelItem => item._IsSuspensed)
                             </td>
                             <td>
-                
-                                 @Html.ActionLink("Details", "ANormalMemberDetails", new { id=item.Fid }) |
-               
+                                    <a href='@Url.Action("ANormalMemberDetails","Admin",new { id=item.Fid })' class="btn btn-info btn-circle">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                 
                             </td>
                         </tr>
                 }

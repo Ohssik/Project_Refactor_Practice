@@ -78,7 +78,6 @@ namespace prjMSIT145_Final.Controllers
 
         public IActionResult ANormalMemberDetails(int? id)
         {
-
             if (id == null)
                 return RedirectToAction("ANormalMemberList");
             
@@ -120,6 +119,71 @@ namespace prjMSIT145_Final.Controllers
             return RedirectToAction("ANormalMemberList");
         }
 
+        public IActionResult ANormalMemberOrder(int? id)
+        {
+            if (id == null)
+                return RedirectToAction("ANormalMemberDetails");
+
+            var orderDatas = from order in _context.ViewShowFullOrders
+                             join bm in _context.BusinessImgs on order.BFid equals bm.BFid
+                             join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
+                             join payTerm in _context.PaymentTermCategories on order.PayTermCatId equals payTerm.Fid
+                             where order.OrderFid == (int)id
+                             select new
+                             {
+                                 order.BMemberName,
+                                 order.BMemberPhone,
+                                 order.OrderISerialId,
+                                 order.PickUpDate,
+                                 order.PickUpPerson,
+                                 order.PickUpPersonPhone,
+                                 order.PickUpTime,
+                                 order.PickUpType,
+                                 order.PayTermCatId,
+                                 order.Memo,
+                                 order.TotalAmount,
+                                 order.ProductName,
+                                 order.Options,
+                                 order.SubTotal,
+                                 order.Qty,
+                                 order.OrderState,
+                                 bm.LogoImgFileName,
+                                 bAdd.Address,
+                                 payTerm.PaymentType
+                             };
+
+            if (orderDatas != null)
+            {
+                CANormalMemberOrderViewModel n = new CANormalMemberOrderViewModel();
+                List<CANormalMemberOrderDetailViewModel> items = new List<CANormalMemberOrderDetailViewModel>();
+                foreach (var vsf in orderDatas)
+                {
+                    CANormalMemberOrderDetailViewModel detail = new CANormalMemberOrderDetailViewModel();
+                    detail.productName=vsf.ProductName;
+                    detail.Options = vsf.Options + "/" + "$" + vsf.SubTotal + "/" + vsf.Qty + "份";
+                    items.Add(detail);
+                }
+                n.details = items;
+                n.BMemberName = orderDatas.ToList()[0].BMemberName;
+                n.BMemberPhone = orderDatas.ToList()[0].BMemberPhone;
+                n.OrderISerialId = orderDatas.ToList()[0].OrderISerialId;
+                n.PickUpDate = orderDatas.ToList()[0].PickUpDate;
+                n.PickUpTime = orderDatas.ToList()[0].PickUpTime;
+                n.TotalAmount = orderDatas.ToList()[0].TotalAmount;
+                n.PickUpType = orderDatas.ToList()[0].PickUpType;
+                n.PickUpPerson = orderDatas.ToList()[0].PickUpPerson;
+                n.PickUpPersonPhone = orderDatas.ToList()[0].PickUpPersonPhone;
+                n.Memo = orderDatas.ToList()[0].Memo;
+                n.businessImgFile = orderDatas.ToList()[0].LogoImgFileName;
+                n.businessAddress = orderDatas.ToList()[0].Address;
+                n.PayTermCatName = orderDatas.ToList()[0].PaymentType;
+                n.OrderState = orderDatas.ToList()[0].OrderState;
+
+                return View(n);
+            }
+
+            return RedirectToAction("ANormalMemberDetails");
+        }
         public IActionResult ABusinessMemberList()
         {
             List<CABusinessMemberViewModel> list = new List<CABusinessMemberViewModel>();
@@ -143,23 +207,90 @@ namespace prjMSIT145_Final.Controllers
             return View(list);
         }
 
-        public IActionResult ANormalMemberOrder(int? id)
+        public IActionResult ABusinessMemberDetails(int? id)
         {
             if (id == null)
-                return RedirectToAction("ANormalMemberDetails");
+                return RedirectToAction("ABusinessMemberList");
 
-            //var personalDatas = _context.ViewShowFullOrders.FirstOrDefault(c => c.OrderFid == (int)id);
-            IEnumerable<ViewShowFullOrder> orderDatas = from order in _context.ViewShowFullOrders
-                                                        join bm in _context.BusinessImgs on order.BFid equals bm.BFid
-                                                        join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
-                                                        where order.OrderFid == (int)id
-                                                        select order;
+            var businessDatas = _context.BusinessMembers.FirstOrDefault(c => c.Fid == (int)id);
+            IEnumerable<Order> orderDatas = from order in _context.Orders
+                                            where order.BFid == (int)id
+                                            select order;
+
+            if (businessDatas != null)
+            {
+                CABusinessMemberViewModel b = new CABusinessMemberViewModel();
+                b.businessMember = businessDatas;
+                if (orderDatas != null)
+                {
+                    b.orders = orderDatas;
+                }
+                return View(b);
+            }
+
+            return RedirectToAction("ABusinessMemberList");
+            
+        }
+        [HttpPost]
+        public IActionResult ABusinessMemberDetails(CABusinessMemberViewModel b)
+        {
+            if (b != null)
+            {
+                var user = _context.BusinessMembers.FirstOrDefault(t => t.Fid == b.Fid);
+                if (!string.IsNullOrEmpty(b.txtPassword) && (b.txtPassword.Trim() == b.txtConfirmPwd))
+                {
+                    if (user != null)
+                    {
+                        user.Password = b.txtPassword;
+                    }
+                }
+                user.IsSuspensed = (int)b.IsSuspensed;
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("ABusinessMemberList");
+            
+        }
+        public IActionResult ABusinessMemberOrder(int? id)
+        {
+            if (id == null)
+                return RedirectToAction("ABusinessMemberDetails");
+
+            var orderDatas = from order in _context.ViewShowFullOrders
+                             join bm in _context.BusinessImgs on order.BFid equals bm.BFid
+                             join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
+                             join payTerm in _context.PaymentTermCategories on order.PayTermCatId equals payTerm.Fid
+                             join nm in _context.NormalMembers on order.NFid equals nm.Fid
+                             where order.OrderFid == (int)id
+                             select new
+                             {
+                                 order.BMemberName,
+                                 order.BMemberPhone,
+                                 order.OrderISerialId,
+                                 order.PickUpDate,
+                                 order.PickUpPerson,
+                                 order.PickUpPersonPhone,
+                                 order.PickUpTime,
+                                 order.PickUpType,
+                                 order.PayTermCatId,
+                                 order.Memo,
+                                 order.TotalAmount,
+                                 order.ProductName,
+                                 order.Options,
+                                 order.SubTotal,
+                                 order.Qty,
+                                 order.OrderState,
+                                 bm.LogoImgFileName,
+                                 bAdd.Address,
+                                 payTerm.PaymentType,
+                                 nm.MemberPhotoFile
+                             };
 
             if (orderDatas != null)
             {
                 CANormalMemberOrderViewModel n = new CANormalMemberOrderViewModel();
                 List<CANormalMemberOrderDetailViewModel> items = new List<CANormalMemberOrderDetailViewModel>();
-                foreach(ViewShowFullOrder vsf in orderDatas)
+                foreach (var vsf in orderDatas)
                 {
                     CANormalMemberOrderDetailViewModel detail = new CANormalMemberOrderDetailViewModel();
                     detail.productName=vsf.ProductName;
@@ -173,16 +304,20 @@ namespace prjMSIT145_Final.Controllers
                 n.PickUpDate = orderDatas.ToList()[0].PickUpDate;
                 n.PickUpTime = orderDatas.ToList()[0].PickUpTime;
                 n.TotalAmount = orderDatas.ToList()[0].TotalAmount;
-                n.PayTermCatId = orderDatas.ToList()[0].PayTermCatId;
                 n.PickUpType = orderDatas.ToList()[0].PickUpType;
                 n.PickUpPerson = orderDatas.ToList()[0].PickUpPerson;
                 n.PickUpPersonPhone = orderDatas.ToList()[0].PickUpPersonPhone;
                 n.Memo = orderDatas.ToList()[0].Memo;
+                n.businessImgFile = orderDatas.ToList()[0].LogoImgFileName;
+                n.businessAddress = orderDatas.ToList()[0].Address;
+                n.PayTermCatName = orderDatas.ToList()[0].PaymentType;
+                n.OrderState = orderDatas.ToList()[0].OrderState;
+                n.normalImgFile= orderDatas.ToList()[0].MemberPhotoFile;
 
                 return View(n);
             }
 
-            return RedirectToAction("ANormalMemberDetails");
+            return RedirectToAction("ABusinessMemberDetails");
         }
     }
 }

@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace prjMSIT145_Final.ViewModels
 {
+    
     public class CABusinessMemberViewModel
     {
         private BusinessMember _businessMember;
@@ -41,12 +42,26 @@ namespace prjMSIT145_Final.ViewModels
             set { _businessMember.Phone = value; }
         }
         [DisplayName("開店時間")]
+        public string? sOpenTime
+        {
+            get 
+            {
+                string openT = "";
+                
+                if(_businessMember.OpenTime!=null)
+                    openT += ((TimeSpan)_businessMember.OpenTime).Hours+":"+((TimeSpan)_businessMember.OpenTime).Minutes+" - ";
+                if (_businessMember.CloseTime!=null)
+                    openT += ((TimeSpan)_businessMember.CloseTime).Hours+":"+((TimeSpan)_businessMember.CloseTime).Minutes;
+
+                return openT;
+            }
+        }
         public TimeSpan? OpenTime
         {
             get { return _businessMember.OpenTime; }
             set { _businessMember.OpenTime = value; }
         }
-        [DisplayName("打烊時間")]
+        
         public TimeSpan? CloseTime
         {
             get { return _businessMember.CloseTime; }
@@ -109,15 +124,7 @@ namespace prjMSIT145_Final.ViewModels
             get { return _businessMember.IsSuspensed; }
             set { _businessMember.IsSuspensed = value; }
         }
-        [DisplayName("Email認證")]
-        public string? _EmailCertified
-        {
-            get
-            {
-                string showValue = _businessMember.EmailCertified>0 ? "O" : "X";
-                return showValue;
-            }
-        }
+        [DisplayName("Email認證")]        
         public int? EmailCertified
         {
             get { return _businessMember.EmailCertified; }

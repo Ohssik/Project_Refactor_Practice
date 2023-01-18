@@ -31,7 +31,7 @@
 
                             
                             <th>
-                                @Html.DisplayNameFor(model => model._EmailCertified)
+                                @Html.DisplayNameFor(model => model.EmailCertified)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model._IsSuspensed)
@@ -58,14 +58,21 @@
 
                                 
                                 <td>
-                                    @Html.DisplayFor(modelItem => item._EmailCertified)
+                                    @*@Html.DisplayFor(modelItem => item.EmailCertified)*@
+                                    @{
+                                        if(item.EmailCertified > 0){
+                                            @:V
+                                        }
+                                    }
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item._IsSuspensed)
                                 </td>
                                 <td>
-
-                                    @Html.ActionLink("Details", "Details", new { id=item.Fid }) |
+                                    <a href='@Url.Action("ABusinessMemberDetails","Admin",new { id=item.Fid })' class="btn btn-info btn-circle">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                    @*@Html.ActionLink("Details", "Details", new { id=item.Fid })*@
 
                                 </td>
                             </tr>
