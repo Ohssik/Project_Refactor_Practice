@@ -1,0 +1,77 @@
+.outerlayer{
+    width: 500px;
+    margin: 0 auto;
+   
+}
+.topdiv{
+    
+    /* position: fixed; */
+    width: 500px;
+    height: 100px;
+    margin-bottom: 10px;
+    margin-top: 50px;
+    border-bottom: 1px gray solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    
+}
+.inputtext{
+    
+    border-width: 0;
+    font-size: 20px;
+  
+}
+.back{
+    width: 40px;
+    height: 40px;
+    margin-right: 80px;
+    margin-top: -120px;
+}
+.butt{
+    border-radius: 20px;
+    margin-left: 35px;
+    width: 50px;
+    background-color:black;
+    color: white;
+}
+#h6{
+    font-weight: bold;
+    font-size: 20px;
+    
+  
+}
+.inputimage{
+    width: 60px;
+}
+.divimage{
+    display: flex;
+    justify-content:space-around;
+}
+p{
+    font-weight: bold;
+}
+.divinputimagebutton {
+    display: flex;
+    justify-content: space-between;
+    
+}
+.inputimagebutton{
+    background-color:black;
+    color: white;
+    border-radius: 20px;
+}
+textarea{
+    width: 500px;
+    height: 150px;
+    background-color: gainsboro;
+    border-radius: 15px;
+}
+select{
+    width: 200px;
+    border-radius: 20px;
+}
+
+
+
