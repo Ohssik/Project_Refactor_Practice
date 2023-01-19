@@ -66,12 +66,14 @@
 			result = "";
 			datas.forEach(function (item,index) {
 				//console.log(item.categoryName);
+				if(item.photo == null)
+				item.photo = "uparrow.png";
 				result += `<tr>
 								<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
 								<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
 						<input type="hidden" name="${item.categoryFid}" value="${item.categoryFid}"/>
-
-						<td><input type="image" src="../images/uparrow.png"></td>
+						
+						<td><input style='width:30px; height:20px;' type="image" src="../images/${item.photo}"></td>
 								<td>${item.productName}</td>
 						<td>${item.unitPrice}</td>
 						<td>${item.categoryName}</td>

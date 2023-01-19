@@ -76,10 +76,10 @@ namespace prjMSIT145_Final.Controllers
 		[HttpPost]
 		public ActionResult BCreate(CProductsViewModel vm, IFormFile file,string CategoryName)
 		{
-			if (vm.Photo != null)
+			if (file != null)
 			{
-				string fileName = file.FileName;
-				string uploadFile = Path.Combine(_host.WebRootPath, "upload", fileName);
+				string fileName = Guid.NewGuid().ToString()+".jpg";
+				string uploadFile = Path.Combine(_host.WebRootPath, "images", fileName);
 				using (var fileStream = new FileStream(uploadFile, FileMode.Create))
 				{
 					file.CopyTo(fileStream);
