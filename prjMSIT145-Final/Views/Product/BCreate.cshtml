@@ -1,0 +1,95 @@
+﻿@model prjMSIT145_Final.ViewModel.CProductsViewModel
+@{
+    ViewData["Title"] = "BCreate";
+}
+@section Styles{
+    <link rel="stylesheet" href="../css/ProductCreate.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+}
+
+ <div class="outerlayer ">
+        <form method="post" enctype="multipart/form-data" >
+        <input type="hidden" name="BFid" value="@Model.BFid"></input>
+        <div class="topdiv">
+            <a href="@Url.Content("~/Product/BList")"><img class="back" src="../images/backarrow.png" value=""></a>
+            <input id="txtProductName" name="ProductName" class="inputtext" type="text" placeholder=" 輸入餐點名稱....." />   @*產品名稱*@
+           
+      
+            <input id="btnSubmit" class="butt"type="submit" value="儲存"/>
+        </div>
+        <h6 id="h6" >相片</h6>
+        <div class="divimage">
+            <div>
+                <input id="" class="inputimage"type="image" src="../images/photo.png"> 
+               
+            </div>
+            <div>
+                <p>餐點照片可協助顧客訂購那些美食,<br>進而提供銷售量.</p>
+                <div class="divinputimagebutton">   @*產品照片*@
+                <label class="inputimagebutton" style="width:80px; padding: 5px;"><input name="file" type="file" style="display: none;" />上傳檔案</label>
+
+                 @*<input id="btnImgCreate" class="inputimagebutton"type="button" value="新增照片">*@
+                 @*<input id="btnImgDownload" class="inputimagebutton" type="button" value="下載">*@
+                 <input id="btnImgDelete" class="inputimagebutton" type="submit"  value="刪除">
+                </div>
+            </div>
+        </div>
+    
+        @*暫時將不使用單獨販售功能,新增產品與新增配料為同一個畫面不同View*@
+        @*<hr style="border:1px dashed #000; height:1px">
+         <h6 id="h6">是否單獨販賣餐點?</h6>
+        <label><input class="form-check-input" type="radio" name="IsForSale" value="yes" />是</label>   @*點選單獨販售與否
+        <label><input class="form-check-input" type="radio" name="IsForSale" value="no" />否</label>
+        <hr style="border:1px dashed #000; height:1px">
+        <h6 id="h6">類別</h6>*@
+
+        <select id="selType" name="categoryName"><option>請選擇商品類別</option></select>  @*選擇類別*@
+
+        <hr style="border:1px dashed #000; height:1px">
+        <h6 id="h6">價格及販售方式</h6>
+        <span>透過自取</span><br>
+        <label for="">預設價格</label>
+        <input type="text" value="100" id="txtPrice" name="UnitPrice" />   @*產品價格*@
+        <hr style="border:1px dashed #000; height:1px">
+        @*<h6 id="h6">餐點已售完</h6>
+        <div class="form-check form-switch">
+            @*新增商品時不可選擇餐點已售完
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" disabled>  @*餐點售完與否
+            <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+          </div>*@
+          <hr style="border:1px dashed #000; height:1px">
+          <h6 id="h6">說明(選項)</h6>
+        <textarea placeholder=" 輸入說明.....例如豬肉產地" id="txtMemo" name="Memo"></textarea>   @*產品備註*@
+	</form>
+</div>
+
+@section Scripts{
+    <script>
+        const btnImgCreate = document.querySelector("#btnImgCreate"); //新增照片
+        const btnImgDownload = document.querySelector("#btnImgDownload"); //下載照片
+        const btnImgDelete = document.querySelector("#btnImgDelete"); //刪除照片
+        const selType = document.querySelector("#selType"); //選擇的類別
+
+        //載入所有商品類別
+        window.addEventListener("load",async function(){
+            const request = await fetch(`@Url.Content("~/Product/BCategoryList")`);
+            const data =await request.json();
+            console.log(data);
+            let frag = document.createDocumentFragment();
+            frag = "";
+            data.forEach(function(item,index){
+                frag += `<option value='${item.categoryName}'><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
+            })
+            selType.innerHTML+= frag;
+        })
+
+        selType.addEventListener("change", function(){
+            console.log(selType.value);
+            const submit = document.querySelector("#btnSubmit");
+            submit.addEventListener("click",async function () {
+                const request = await fetch(`@Url.Content("~/Product/BCreate?CategoryName=${selType.value}")`);
+                console.log("送出")
+            })
+        })
+    </script>
+}
