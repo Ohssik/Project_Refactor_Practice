@@ -74,7 +74,7 @@ namespace prjMSIT145_Final.Controllers
 			return View(vm);
 		}
 		[HttpPost]
-		public ActionResult BCreate(CProductsViewModel vm, IFormFile file,string CategoryName)
+		public ActionResult BCreate(CProductsViewModel vm, IFormFile file)
 		{
 			if (file != null)
 			{
@@ -86,7 +86,7 @@ namespace prjMSIT145_Final.Controllers
 				}
 				vm.product.Photo = fileName;
 			}
-			var proCFid = _context.ProductCategories.FirstOrDefault(o => o.CategoryName == CategoryName);
+			var proCFid = _context.ProductCategories.FirstOrDefault(o => o.CategoryName == vm.CategoryName);
 			vm.product.CategoryFid = proCFid.Fid;
 			vm.product.BFid = vm.BFid;
 			_context.Products.Add(vm.product);
@@ -109,6 +109,28 @@ namespace prjMSIT145_Final.Controllers
 				}
 			}
 			return Json(list);
+		}
+		public ActionResult BEdit(int? id)
+		{
+			Product data = _context.Products.FirstOrDefault(p => p.Fid == id);
+			CProductsViewModel vm = new CProductsViewModel();
+			vm.product = data;
+			return View(vm);
+		}
+
+		[HttpPost]
+		public ActionResult BEdit(CProductsViewModel vm)
+		{
+			Product pro = _context.Products.FirstOrDefault(p => p.Fid == vm.Fid);
+			if (pro != null)
+			{
+				pro.ProductName = vm.ProductName;
+				pro.UnitPrice = vm.UnitPrice;
+				pro.Memo = vm.Memo;
+				pro.IsForSale = Convert.ToInt32(vm.IsForSale);
+				_context.SaveChanges();
+			}
+			return RedirectToAction("List");
 		}
 	}
 }

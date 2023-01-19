@@ -79,7 +79,7 @@
 						<td>${item.categoryName}</td>
 						<td>-</td>
 						<td>
-							<button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button>
+							<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
 							<button class="buteditgar" name='btnDelete'><img src="../images/edit.png">刪除</button>
 						</td>
 					</tr>`
@@ -89,7 +89,7 @@
 			//編輯
 			btnEdit.forEach(function (btnClick) {
 			btnClick.addEventListener("click", function () {
-				console.log("編輯");
+
 			})
 		})
 
@@ -100,6 +100,17 @@
 			})
 		})
 		}
-		
+		//新增類別
+		btnCreateType.addEventListener("click",function(){
+			alert(`<div class="outerlayer ">
+				<form>
+				<div class="topdiv">
+					<img class="back" src="../images/backarrow.png" value="">
+					<input  class="inputtext" type="text" placeholder=" 輸入類別名稱....." />
+					<input class="butt"type="submit" value="儲存"/>
+				</div>
+				</form>
+				</div>`)
+		})
 	</script>
 }
