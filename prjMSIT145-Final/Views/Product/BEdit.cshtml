@@ -1,110 +1,118 @@
 ﻿@model prjMSIT145_Final.ViewModel.CProductsViewModel
 @{
-    ViewData["Title"] = "BEdit";
+	ViewData["Title"] = "BEdit";
 }
 
 @section Styles{
 	<link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 }
 <div class="outerlayer">
-        <form method="post" enctype="multipart/form-data" >
-        <input type="hidden" name="BFid" value="@Model.product.BFid" />
-        <input type="hidden" name="Fid" value="@Model.product.Fid" />
-        <div class="topdiv">
-            <a href="@Url.Content("~/Product/BList")"><img class="back" src="@Url.Content("~/images/backarrow.png")"></a>
-         <input id="txtProductName" name="ProductName" class="inputtext" type="text" value="@Model.product.ProductName"/>   @*產品名稱*@
-           
-        <input id="btnSubmit" class="butt" type="submit" value="儲存"/>
+	<form method="post" enctype="multipart/form-data">
+		<input type="hidden" name="BFid" value="@Model.product.BFid" />
+		<input type="hidden" name="Fid" value="@Model.product.Fid" />
+		<div class="topdiv">
+			<a href="@Url.Content("~/Product/BList")"><img class="back" src="@Url.Content("~/images/backarrow.png")"></a>
+			<input id="txtProductName" name="ProductName" class="inputtext" type="text" value="@Model.product.ProductName" required />   @*產品名稱*@
+
+		<input id="btnSubmit" class="butt" type="submit" value="儲存" />
 		</div>
-        
-        @*產品照片*@
-        <h6 id="h6" >相片</h6>
-        <div class="divimage">
-            <div>
-                <input style="width:110px; height:70px;" id="imgShow" class="inputimage" type="image" src="~/images/@Model.Photo"/>
-            </div>
-            <div>
-                <p>餐點照片可協助顧客訂購那些美食,<br>進而提供銷售量.</p>
+
+		@*產品照片*@
+		<h6 id="h6">相片</h6>
+		<div class="divimage">
+			<div>
+				<input style="width:110px; height:70px;" id="imgShow" class="inputimage" type="image" src="~/images/@Model.Photo" />
+			</div>
+			<div>
+				<p>餐點照片可協助顧客訂購那些美食,<br>進而提供銷售量.</p>
 				<div class="divinputimagebutton">
-                    <label class="inputimagebutton" for="file" style="width:80px; padding: 5px;"><input id="file" name="file" type="file" style="display:none;"/>上傳檔案</label>
-                 <input id="btnImgDelete" class="inputimagebutton" type="button"  value="刪除">
-                </div>
-            </div>
-        </div>
-    
-        @*暫時將不使用單獨販售功能,新增產品與新增配料為同一個畫面不同View*@
-        @*<hr style="border:1px dashed #000; height:1px">
-         <h6 id="h6">是否單獨販賣餐點?</h6>
-        <label><input class="form-check-input" type="radio" name="IsForSale" value="yes" />是</label>   @*點選單獨販售與否
-        <label><input class="form-check-input" type="radio" name="IsForSale" value="no" />否</label>
-        <hr style="border:1px dashed #000; height:1px">
-        <h6 id="h6">類別</h6>*@
+					<label class="inputimagebutton" for="file" style="width:80px; padding: 5px;"><input id="file" name="file" type="file" style="display:none;" />上傳檔案</label>
+					<input id="btnImgDelete" class="inputimagebutton" type="button" value="刪除">
+				</div>
+			</div>
+		</div>
 
-        <select id="selType" name="categoryName" value="@Model.CategoryName"><option>請選擇商品類別</option></select>  @*選擇類別*@
+		@*暫時將不使用單獨販售功能,新增產品與新增配料為同一個畫面不同View*@
+		@*<hr style="border:1px dashed #000; height:1px">
+		<h6 id="h6">是否單獨販賣餐點?</h6>
+		<label><input class="form-check-input" type="radio" name="IsForSale" value="yes" />是</label>   @*點選單獨販售與否
+		<label><input class="form-check-input" type="radio" name="IsForSale" value="no" />否</label>
+		<hr style="border:1px dashed #000; height:1px">
+		<h6 id="h6">類別</h6>*@
 
-        <hr style="border:1px dashed #000; height:1px">
-        <h6 id="h6">價格及販售方式</h6>
-        <span>透過自取</span><br>
-        <label for="">預設價格</label>
-        <input type="text" value="@Model.product.UnitPrice" id="txtPrice" name="UnitPrice" />   @*產品價格*@
-        <hr style="border:1px dashed #000; height:1px">
-        <h6 id="h6">餐點已售完</h6>
-		<div class="">
+		<select id="selType" name="categoryName" value="@Model.CategoryName"><option>請選擇商品類別</option></select>  @*選擇類別*@
+
+		<hr style="border:1px dashed #000; height:1px">
+		<h6 id="h6">價格及販售方式</h6>
+		<span>透過自取</span><br>
+		<label for="">預設價格</label>
+		<input type="text" value="@Model.product.UnitPrice" id="txtPrice" name="UnitPrice" required />   @*產品價格*@
+		<hr style="border:1px dashed #000; height:1px">
+		<h6 id="h6">餐點已售完</h6>
+		<div>
 			@*餐點狀態*@
-            <label for="IsForSale0" class="me-3"><input name="IsForSale" class="form-check-label me-1" type="radio" id="IsForSale0" value="0" />未上架</label>
-            <label for="IsForSale1" class="me-3"><input name="IsForSale" class="form-check-label me-1" type="radio" id="IsForSale1" value="1" />已上架</label>
-            <label for="IsForSale2" class="me-3"><input name="IsForSale" class="form-check-label me-1" type="radio" id="IsForSale2" value="2" />停售</label>
-        </div>
-          <hr style="border:1px dashed #000; height:1px">
-          <h6 id="h6">說明(選項)</h6>
-        <textarea placeholder=" 輸入說明.....例如豬肉產地" id="txtMemo" name="Memo">@Model.product.Memo</textarea>   @*產品備註*@
+			<label for="IsForSale0" class="me-3"><input name="IsForSale" class="form-check-label me-1" type="radio" id="IsForSale0" value="0" />未上架</label>
+			<label for="IsForSale1" class="me-3"><input name="IsForSale" class="form-check-label me-1" type="radio" id="IsForSale1" value="1" />已上架</label>
+			<label for="IsForSale2" class="me-3"><input name="IsForSale" class="form-check-label me-1" type="radio" id="IsForSale2" value="2" />停售</label>
+		</div>
+		<hr style="border:1px dashed #000; height:1px">
+		<h6 id="h6">說明(選項)</h6>
+		<textarea placeholder=" 輸入說明.....例如豬肉產地" id="txtMemo" name="Memo">@Model.product.Memo</textarea>   @*產品備註*@
 	</form>
 </div>
 
 @section Scripts{
-    <script>
-        const imgShow = document.querySelector("#imgShow"); //照片
-        const file = document.querySelector("#file"); //新增照片
-        const btnImgDelete = document.querySelector("#btnImgDelete"); //刪除照片
-        const selType = document.querySelector("#selType"); //選擇的類別
-        const IsForSale = document.getElementsByName("IsForSale"); //選擇商品狀態
-        const btnSubmit = document.querySelector("#btnSubmit");
+	<script>
+		const imgShow = document.querySelector("#imgShow"); //照片
+		const file = document.querySelector("#file"); //新增照片
+		const btnImgDelete = document.querySelector("#btnImgDelete"); //刪除照片
+		const selType = document.querySelector("#selType"); //選擇的類別
+		const IsForSale = document.getElementsByName("IsForSale"); //選擇商品狀態
+		const btnSubmit = document.querySelector("#btnSubmit");
 
-        //載入所有商品類別
-        window.addEventListener("load", async function () {
-            const request = await fetch(`@Url.Content("~/Product/BCategoryList")`);
-            const data = await request.json();
-            let frag = document.createDocumentFragment();
-            frag = "";
-            data.forEach(function (item, index) {
-                frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
-            })
-            selType.innerHTML += frag;
-            //imgShow.setAttribute("src", );
-            console.log(imgShow)
-        })
-        //上傳照片
-        file.addEventListener("change", function () {
-            const file = this.files[0];
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                imgShow.setAttribute("src", e.target.result);
-            };
-            reader.readAsDataURL(file);
-            //console.log(file);
-        })
-        //移除照片
-        btnImgDelete.addEventListener("click", function () {
-            file.outerHTML = file.outerHTML;
-            imgShow.setAttribute("src", "../images/photo.png");
-        })
-        btnSubmit.addEventListener("click",function(){
-            if (selType.value == "請選擇商品類別") {
-                event.preventDefault();
-                alert("請選擇商品類別!");
+		//載入所有商品類別
+		window.addEventListener("load", async function () {
+			const request = await fetch(`@Url.Content("~/Product/BCategoryList")`);
+			const data = await request.json();
+			let frag = document.createDocumentFragment();
+			frag = "";
+			data.forEach(function (item, index) {
+				frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
+			})
+			selType.innerHTML += frag;
+			//imgShow.setAttribute("src", );
+			console.log(imgShow)
 
-            }
-        })
-    </script>
+		})
+
+		//上傳照片
+		file.addEventListener("change", function () {
+			const file = this.files[0];
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				imgShow.setAttribute("src", e.target.result);
+			};
+			reader.readAsDataURL(file);
+			//console.log(file);
+		})
+		//移除照片
+		btnImgDelete.addEventListener("click", function () {
+			file.outerHTML = file.outerHTML;
+			imgShow.setAttribute("src", "../images/photo.png");
+		})
+		btnSubmit.addEventListener("click", function () {
+			if (selType.value == "請選擇商品類別" || !IsForSale.checked) {
+				event.preventDefault();
+				alert("請確認商品類別/商品狀態是否選取!")
+			}
+		})
+		//IsForSale.forEach(function (radio) {
+		//	radio.addEventListener("change", function () {
+		//		if (radio.checked){
+					
+		//	})
+		//})
+
+	</script>
 }

@@ -156,7 +156,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 if (file != null)
                 {
-                    string oldPath = Path.GetFullPath("../../images") + pro.Photo;
+                    string oldPath = _host.WebRootPath + pro.Photo;
                     if (System.IO.File.Exists(oldPath))
                     {
                         System.IO.File.Delete(oldPath);
