@@ -112,10 +112,11 @@ namespace prjMSIT145_Final.Controllers
 		}
 		public ActionResult BEdit(int? id)
 		{
-			Product data = _context.Products.FirstOrDefault(p => p.Fid == id);
+			ViewShowProductList datas = _context.ViewShowProductLists.FirstOrDefault(p => p.Fid == id);
+			//Product data = _context.Products.FirstOrDefault(p => p.Fid == id);
 			CProductsViewModel vm = new CProductsViewModel();
-			vm.product = data;
-			return View(vm);
+			//vm.product = datas;
+			return View(datas);
 		}
 
 		[HttpPost]
