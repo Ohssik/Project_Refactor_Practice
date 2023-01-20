@@ -77,7 +77,7 @@
 			let frag = document.createDocumentFragment();
 			frag = "";
 			data.forEach(function (item, index) {
-				frag += `<option value='${item.categoryName}'><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
+				frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
 			})
 			selType.innerHTML += frag;
 			console.log(file)

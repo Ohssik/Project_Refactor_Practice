@@ -10,11 +10,11 @@
 <div>
 	<div class="top">
 		<div>
-			<h2 id="h2">餐點</h2>
+			<h2 id="h2">配料</h2>
 		</div>
 		<div class="topbutton">
-			<a href="@Url.Content("~/Product/BCreate")"><input class="insertbutton" type="button" value="+新增餐點" id="btnCreateProduct" /></a>
-			<input class="insertbutton" type="button" value="+新增類別" id="btnCreateType" />
+			<a href="@Url.Content("~/Product/BCreate")"><input class="insertbutton" type="button" value="+新增配料" id="btnCreateProduct" /></a>
+			<input style="width:150px;" class="insertbutton" type="button" value="新增/編輯類別" id="btnCreateType" />
 		</div>
 	</div>
 	<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />
@@ -25,8 +25,8 @@
 		@*<th>相片</th>*@
 		<th>配料名稱</th>
 		<th>配料價格</th>
-		@*<th>配料類別</th>*@
-		<th>備註</th>
+		<th>配料類別</th>
+		@*<th>類別備註</th>*@
 		<th>選項</th>
 		</thead>
 		<tbody id="tbody">
@@ -50,6 +50,8 @@
 	<script>
 		const tbody = document.querySelector("#tbody");
 		const txt = document.querySelector("#txtKeyword");  //關鍵字
+		const btnCreateProduct = document.querySelector("#btnCreateProduct"); //新增配料
+		const btnCreateType = document.querySelector("#btnCreateType"); //新增類別
 
 		//關鍵字查詢(類別與商品)
 		txt.addEventListener("keyup", () => list());
@@ -64,53 +66,43 @@
 			data.forEach(function(item,index){
 				console.log(data[index].optionGroupFid)
 				console.log(data[index-1])
-				if(index === 0)
-				result += `
-				<tr>
-						<input type='hidden'  id='${item.optionGroupFid}' name='${item.optionGroupFid}' value='${item.optionGroupFid}'/>
-								<td style='text-align:center;' colspan='2' id='${item.optionGroupName}' name="OptionGroupName">${item.optionGroupName}</td>
-								<td id='${item.memo}' name='${item.memo}'>${item.memo}</td>
-										<td>
-								<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
-								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
-							</td>
-				</tr>`
-				else if(data[index].optionGroupFid === data[index-1].optionGroupFid)
-						result+=`
-						<tr>
-							<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
-							<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
-							<input type="hidden" name="${item.fid}" value="${item.fid}"/>
-
+				//if(index === 0)
+				//result += `
+				//<tr>
+				//	<input type='hidden'  id='${item.optionGroupFid}' name='${item.optionGroupFid}' value='${item.optionGroupFid}'/>
+				//	<td style='text-align:center;' colspan='2' id='${item.optionGroupName}' name="OptionGroupName">${item.optionGroupName}</td>
+				//	<td id='${item.memo}' name='${item.memo}'>${item.memo}</td>
+				//	<td>
+				//		<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
+				//		<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
+				//	</td>
+				//</tr>`
+				//else if(data[index].optionGroupFid === data[index-1].optionGroupFid)
+				//		result+=`
+				//		<tr>
+				//			<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
+				//			<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
+				//			<input type="hidden" name="${item.fid}" value="${item.fid}"/>
 							
-							<td>${item.optionName}</td>
-							<td>${item.unitPrice}</td>
-							<td>${item.optionGroupName}</td>
-							<td>
-								<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
-								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
-							</td>
-							</tr>`
+				//			<td colspan='2'>${item.optionName}</td>
+				//			<td>$${item.unitPrice}</td>
+				//			<td>
+				//				<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
+				//				<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
+				//			</td>
+				//		</tr>`
 
-					else
+				//	else
 							result +=`
-							<tr>
-						<input type='hidden'  id='${item.optionGroupFid}' name='${item.optionGroupFid}' value='${item.optionGroupFid}'/>
-								<td style='text-align:center;' colspan='2' id='${item.optionGroupName}' name="OptionGroupName">${item.optionGroupName}</td>
-								<td id='${item.memo}' name='${item.memo}'>${item.memo}</td>
-										<td>
-								<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
-								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
-							</td>
-				</tr>
-				<tr>
+				            <tr>
 							<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
 							<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
-							<input type="hidden" name="${item.fid}" value="${item.fid}"/>
+							<input type='hidden'  id='${item.optionGroupFid}' name='${item.optionGroupFid}' value='${item.optionGroupFid}'/>
 
-							<td>${item.optionName}</td>
-							<td>${item.unitPrice}</td>
-							<td>${item.optionGroupName}</td>
+							<td >${item.optionName}</td>
+							<td>$${item.unitPrice}</td>
+							<td id='${item.optionGroupName}' name="OptionGroupName">${item.optionGroupName}</td>
+
 							<td>
 								<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
 								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
@@ -119,5 +111,10 @@
 			})
 			tbody.innerHTML = result;
 		}
+		//新增配料
+		btnCreateProduct.addEventListener("click",async function(){
+			const request = await fetch("@Url.Content("~/AddMaterial/BCreate")");
+
+		})
 	</script>
 }

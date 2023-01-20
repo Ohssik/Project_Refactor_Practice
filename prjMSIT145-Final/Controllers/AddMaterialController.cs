@@ -41,7 +41,7 @@ namespace prjMSIT145_Final.Controllers
 			//			 }).Where(p => p.BFid == member.Fid).OrderBy(b => b.CategoryFid);
 			var datas = _context.ViewOptionsToGroups.Where(p => p.BFid == member.Fid).OrderBy(o => o.OptionGroupName);
 			if (keyword != null)
-				datas = datas.Where(k => k.OptionGroupName.Contains(keyword) || k.OptionGroupName.Contains(keyword)).OrderBy(o => o.OptionGroupName);
+				datas = datas.Where(k => k.OptionName.Contains(keyword) || k.OptionGroupName.Contains(keyword)).OrderBy(o => o.OptionGroupName);
 
 			//List<CProductOptionViewModel> materialList = new List<CProductOptionViewModel>();
 			//foreach (var data in datas)
@@ -56,6 +56,21 @@ namespace prjMSIT145_Final.Controllers
 			//	materialList.Add(vm);
 			//}
 			return Json(datas);
+		}
+		public ActionResult BCreate()
+		{
+			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+			BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+			CProductOptionViewModel vm = new CProductOptionViewModel();
+			vm.BFid = member.Fid;
+			return View(vm);
+		}
+		[HttpPost]
+		public ActionResult BCreate(CProductOptionViewModel vm)
+		{
+			_context.ProductOptions.Add(vm.options);
+			_context.SaveChanges();
+			return RedirectToAction("BList");
 		}
 	}
 }
