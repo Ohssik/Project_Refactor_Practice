@@ -1,0 +1,65 @@
+.outerlayer{
+    position: relative;
+    
+    
+}
+.top{
+   
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  
+}
+
+div{
+    width: 800px;
+    margin: 0 auto;
+}
+#h2{
+    margin-top: 40px;
+    margin-left:30px;
+    font-weight: bold;
+    
+}
+
+.inserselecttext
+{
+    margin-left:30px;
+    margin-bottom: 30px;
+    margin-right: 100px;
+    border-radius: 20px;
+    background-color: gainsboro;
+    outline: none;
+}
+.insertbutton{
+position: absolute;
+   background-color: black;
+   color: whitesmoke;
+   font-weight: bold;
+   margin-top: 40px;
+   border-radius: 30px;
+   width: 60px;
+   
+  
+}
+table{
+    font-size: 18px;
+    font-weight: bold;
+    font-weight: bold;
+}
+
+select{
+    width: 200px;
+    border-radius: 18px;
+}
+.divtwobutton{
+    position: absolute;
+    right: -600px;
+    bottom: -100px;
+   
+}
+.store{
+    margin-left: 100px;
+    margin-right: 100px;
+}
