@@ -5,20 +5,20 @@ using System.Text.Json;
 
 namespace prjMSIT145_Final.Controllers
 {
-    public class AddMaterialController : Controller
-    {
-        ispanMsit145shibaContext _context;
-        IWebHostEnvironment _host;
-        public AddMaterialController(ispanMsit145shibaContext context,IWebHostEnvironment host)
-        {
-            _context = context;
-            _host = host;
-        }
+	public class AddMaterialController : Controller
+	{
+		ispanMsit145shibaContext _context;
+		IWebHostEnvironment _host;
+		public AddMaterialController(ispanMsit145shibaContext context, IWebHostEnvironment host)
+		{
+			_context = context;
+			_host = host;
+		}
 
-        public IActionResult BList()
-        {
-            return View();
-        }
+		public IActionResult BList()
+		{
+			return View();
+		}
 		public ActionResult BSearch(string keyword)
 		{
 			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
@@ -68,8 +68,58 @@ namespace prjMSIT145_Final.Controllers
 		[HttpPost]
 		public ActionResult BCreate(CProductOptionViewModel vm)
 		{
+			var optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName);
+			vm.options.OptionGroupFid = optGp.Fid;
 			_context.ProductOptions.Add(vm.options);
 			_context.SaveChanges();
+			return RedirectToAction("BList");
+		}
+		public ActionResult BOptionGroup()
+		{
+			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+			BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+			var data = (_context.ProductOptionGroups.Where(b => b.BFid == member.Fid)).OrderBy(o=>o.OptionGroupName);
+			return Json(data);
+		}
+		public ActionResult BEdit(int? id)
+		{
+			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+			BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+			var datas = _context.ViewOptionsToGroups.Where(o => o.Fid == id);
+			CProductOptionViewModel vm = new CProductOptionViewModel();
+			foreach (var d in datas)
+			{
+				vm.Fid = d.Fid;
+				vm.BFid = member.Fid;
+				vm.UnitPrice = d.UnitPrice;
+				vm.OptionGroupFid = d.OptionGroupFid;
+				vm.OptionName = d.OptionName;
+				vm.OptionGroupName = d.OptionGroupName;
+			}
+			return View(vm);
+		}
+		[HttpPost]
+		public ActionResult BEdit(CProductOptionViewModel vm)
+		{
+			ProductOptionGroup optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName);
+			ProductOption opt = _context.ProductOptions.FirstOrDefault(o => o.Fid == vm.Fid);
+			if (optGp != null && opt != null)
+			{
+				opt = vm.options;
+				opt.OptionGroupFid = optGp.Fid;
+				_context.SaveChanges();
+			}
+			return RedirectToAction("BList");
+		}
+		public ActionResult BDelete(ProductOption opt, int? id)
+		{
+
+			opt = _context.ProductOptions.FirstOrDefault(o => o.Fid == id);
+			if (opt != null)
+			{
+				_context.ProductOptions.Remove(opt);
+				_context.SaveChanges();
+			}
 			return RedirectToAction("BList");
 		}
 	}

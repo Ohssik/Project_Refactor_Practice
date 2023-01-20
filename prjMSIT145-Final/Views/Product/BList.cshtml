@@ -38,7 +38,7 @@
 			</div>
 			<div class="modal-footer" style="width:100%">
 				<button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
-				<a id="linkDelete"><button style ="width:70px;" class="btnDeleteCheck">刪除</button></a>
+				<a id="linkDelete"><button style="width:70px;" class="btnDeleteCheck" data-bs-dismiss="modal">刪除</button></a>
 			</div>
 		</div>
 	</div>
@@ -91,6 +91,7 @@
 		const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
 		const btnDelete = document.getElementsByName("btnDelete"); //刪除按鈕
 		const btnDeleteCheck = document.querySelector("#linkDelete")//確認刪除按鈕
+		const modal = document.querySelector("#exampleModal"); // 隱藏model
 
 		//關鍵字查詢(類別與商品)
 		txt.addEventListener("keyup", () => search());
@@ -123,7 +124,7 @@
 					</tr>
 						`
 			});
-			tbody.innerHTML = result
+			tbody.innerHTML = result;
             //刪除
 			btnDelete.forEach(function (click) {
 			click.addEventListener("click", function () {
