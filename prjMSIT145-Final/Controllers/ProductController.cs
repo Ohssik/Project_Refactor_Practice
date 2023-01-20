@@ -187,7 +187,7 @@ namespace prjMSIT145_Final.Controllers
 				if (pro != null)
 				{
 					_context.Products.Remove(pro);
-					//_context.SaveChanges();
+					_context.SaveChanges();
 				}
 			}
 			return RedirectToAction("BList");
