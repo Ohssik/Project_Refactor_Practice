@@ -27,7 +27,7 @@
 	</style>
 }
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header" style="width:100%">
 				<h5 class="modal-title" id="exampleModalLabel">提醒</h5>
@@ -38,7 +38,7 @@
 			</div>
 			<div class="modal-footer" style="width:100%">
 				<button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
-				<a id="linkDelete"><button type="button" class="btnDeleteCheck">刪除</button></a>
+				<a id="linkDelete"><button style ="width:70px;" class="btnDeleteCheck">刪除</button></a>
 			</div>
 		</div>
 	</div>
@@ -59,11 +59,11 @@
 	<table id="table" class="table table-hover stripe">
 		<thead>
 		<th>相片</th>
-		<th>名稱</th>
-		<th>價格</th>
-		<th>類別</th>
+		<th>產品名稱</th>
+		<th>產品價格</th>
+		<th>產品類別</th>
 		<th>備註</th>
-		<th>刪除編輯</th>
+		<th>選項</th>
 		</thead>
 		<tbody id="tbody">
 			@*<tr>
@@ -90,8 +90,7 @@
 		const btnCreateType = document.querySelector("#btnCreateType"); //新增類別
 		const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
 		const btnDelete = document.getElementsByName("btnDelete"); //刪除按鈕
-		const myInput = document.getElementById('myInput');
-		const btnDeleteCheck = $(".btnDeleteCheck");//確認刪除按鈕
+		const btnDeleteCheck = document.querySelector("#linkDelete")//確認刪除按鈕
 
 		//關鍵字查詢(類別與商品)
 		txt.addEventListener("keyup", () => search());
@@ -103,7 +102,7 @@
 			let result = document.createDocumentFragment();
 			result = "";
 			datas.forEach(function (item, index) {
-				console.log(item.fid);
+				//console.log(item.fid);
 				if (item.photo == null)
 					item.photo = "uparrow.png";
 				result += `
@@ -125,20 +124,19 @@
 						`
 			});
 			tbody.innerHTML = result
+            //刪除
+			btnDelete.forEach(function (click) {
+			click.addEventListener("click", function () {
+					//console.log(this.parentElement.parentElement.firstElementChild);
+					const id = this.parentElement.parentElement.firstElementChild;
 
-		}
-
-		//刪除(未完成)
-			btnDelete.forEach(function (btnClick) {
-				console.log(btnClick);
-				//btnClick.addEventListener('shown.bs.modal', function () {
-				//	myInput.focus()
-				//})
-				btnClick.addEventListener("click",function(){
-					console.log(this);
+					btnDeleteCheck.addEventListener("click",function(){
+						btnDeleteCheck.setAttribute("href",`@Url.Content("~/Product/BDelete/${id.value}")`);
+					})
 				})
 			})
-		//新增類別
+		}
+		//新增類別(未完成)
 		btnCreateType.addEventListener("click", function () {
 			alert(`<div class="outerlayer ">
 					<form>
