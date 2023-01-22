@@ -93,23 +93,7 @@ namespace prjMSIT145_Final.Controllers
 			_context.SaveChanges();
 			return RedirectToAction("BList");
 		}
-		public ActionResult BCategoryList()
-		{
-			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-			BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-			var proC = _context.ProductCategories.Where(o => o.BFid == member.Fid);
-			List<CProductsViewModel> list = new List<CProductsViewModel>();
-			foreach (var d in proC)
-			{
-				if (d.CategoryName != null)
-				{
-					CProductsViewModel vm = new CProductsViewModel();
-					vm.proCategory = d;
-					list.Add(vm);
-				}
-			}
-			return Json(list);
-		}
+		
 		public ActionResult BEdit(int? id)
 		{
 			var datas = (from pro in _context.Products

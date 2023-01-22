@@ -60,7 +60,7 @@
 
 		//載入所有配料類別
 		window.addEventListener("load",async function(){
-			const response = await fetch(`@Url.Content("~/AddMaterial/BOptionGroup")`);
+			const response = await fetch(`@Url.Content("~/Type/BOptionGroup")`);
 			const data =await response.json();
 			let result = document.createDocumentFragment();
 			data.forEach(function(item,index){

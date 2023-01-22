@@ -78,13 +78,7 @@ namespace prjMSIT145_Final.Controllers
 			_context.SaveChanges();
 			return RedirectToAction("BList");
 		}
-		public ActionResult BOptionGroup()
-		{
-			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-			BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-			var data = (_context.ProductOptionGroups.Where(b => b.BFid == member.Fid)).OrderBy(o=>o.OptionGroupName);
-			return Json(data);
-		}
+		
 		public ActionResult BEdit(int? id)
 		{
 			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);

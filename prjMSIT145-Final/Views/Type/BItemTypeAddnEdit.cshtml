@@ -1,0 +1,62 @@
+﻿@model prjMSIT145_Final.Models.ProductCategory;
+@section Styles{
+	<link rel="stylesheet" href="../css/ProductCategoryCreate.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+}
+@{
+	ViewData["Title"] = "BItemTypeAddnEdit";
+}
+<div class="outerlayer ">
+	<form>
+		<div class="topdiv">
+			<></>
+			<img class="back" src="../images/backarrow.png" value="">
+			<input class="inputtext" type="text" placeholder=" 輸入類別名稱....." name="CategoryName" />
+			<input id="btnSubmit" type="submit" value="儲存" />
+			<input type="button" value="刪除" id="btnDelete"/>
+		</div>
+	</form>
+</div>
+<div>
+	<table id="table" class="table table-hover stripe">
+		<thead>
+		<th>類別名稱</th>
+		<th>備註</th>
+		<th>是否可多選</th>
+		</thead>
+		<tbody id="tbody">
+		</tbody>
+	</table>
+</div>
+@section Scripts{
+	<script>
+		const inputtext = document.querySelector(".inputtext"); //類別名稱
+		const tbody = document.querySelector("#tbody"); //表格資料
+		const CategoryName = document.getElementsByName("CategoryName"); //資料行
+
+		list();
+		async function list(){
+			const response = await fetch("@Url.Content("~/Type/BCategoryList)");
+			const datas = await response.json();
+			let result = document.createDocumentFragment();
+			result = "";
+			datas.forEach(function(item,index){
+				result += `<tr name='CategoryName'>
+							<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
+							<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
+
+							<td>${item.categoryName}</td>
+							</tr>`
+			})
+			tbody.innerHTML = result;
+
+			CategoryName.forEach(function(data){
+				data.addEventListener("click",function(){
+					const id = this.children[2].value;
+					console.log(id);
+				})
+			})
+		}
+
+	</script>
+}

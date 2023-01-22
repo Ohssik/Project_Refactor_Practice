@@ -73,7 +73,7 @@
 
 		//載入所有商品類別
 		window.addEventListener("load", async function () {
-			const request = await fetch(`@Url.Content("~/Product/BCategoryList")`);
+			const request = await fetch(`@Url.Content("~/Type/BCategoryList")`);
 			const data = await request.json();
 			let frag = document.createDocumentFragment();
 			frag = "";

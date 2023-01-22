@@ -60,7 +60,7 @@
 		const btnSubmit = document.querySelector("#btnSubmit"); //儲存按鈕
 
 		window.addEventListener("load", async function () {
-			const response = await fetch(`@Url.Content("~/AddMaterial/BOptionGroup")`);
+			const response = await fetch(`@Url.Content("~/Type/BOptionGroup")`);
 			const data =await response.json();
 			let result = document.createDocumentFragment();
 			result += "<option>請選擇配料類別</option>";

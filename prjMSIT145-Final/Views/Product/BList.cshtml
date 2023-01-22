@@ -50,7 +50,7 @@
 		</div>
 		<div class="topbutton">
 			<a href="@Url.Content("~/Product/BCreate")"><input class="insertbutton" type="button" value="+新增餐點" id="btnCreateProduct" /></a>
-			<input class="insertbutton" type="button" value="+新增類別" id="btnCreateType" />
+			<a href="@Url.Content("~/Type/BItemTypeAddnEdit")"><input class="insertbutton" type="button" value="+新增類別"/></a>
 		</div>
 	</div>
 	<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />
@@ -137,17 +137,9 @@
 				})
 			})
 		}
-		//新增類別(未完成)
-		btnCreateType.addEventListener("click", function () {
-			alert(`<div class="outerlayer ">
-					<form>
-					<div class="topdiv">
-					  <img class="back" src="../images/backarrow.png" value="">
-					  <input  class="inputtext" type="text" placeholder=" 輸入類別名稱....." />
-					  <input class="butt"type="submit" value="儲存"/>
-					</div>
-					</form>
-					</div>`)
-		})
+		////新增類別(未完成)
+		//btnCreateType.addEventListener("click", function () {
+		//	const response = await fetch
+		//})
 	</script>
 }
