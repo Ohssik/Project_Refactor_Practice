@@ -35,8 +35,8 @@ namespace prjMSIT145_Final.ViewModel
         }
         public int BFid
         {
-            get { return _product.BFid; }
-            set { _product.BFid = value; }
+            get;
+            set;
         }
         [DisplayName("產品名稱")]
         public string ProductName
