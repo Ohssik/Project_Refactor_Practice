@@ -70,7 +70,7 @@ namespace prjMSIT145_Final.ViewModel
             get { return _product.Photo; }
             set { _product.Photo = value; }
         }
-        public IFormFile ImgPath { get; set; }
+        public IFormFile file { get; set; }
 
         public int? CategoryFid
         {

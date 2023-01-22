@@ -130,27 +130,29 @@
 				//	else
 				result += `
 							<tr>
-											<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
-											<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
-											<input type='hidden'  id='${item.optionGroupFid}' name='${item.optionGroupFid}' value='${item.optionGroupFid}'/>
+							<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
+							<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
+							<input type='hidden'  id='${item.optionGroupFid}' name='${item.optionGroupFid}' value='${item.optionGroupFid}'/>
 
-											<td >${item.optionName}</td>
-											<td>$${item.unitPrice}</td>
-											<td id='${item.optionGroupName}' name="OptionGroupName">${item.optionGroupName}</td>
+								<td >${item.optionName}</td>
+								<td>$${item.unitPrice}</td>
+								<td id='${item.optionGroupName}' name="OptionGroupName">${item.optionGroupName}</td>
 
-											<td>
-												<a href='@Url.Content("~/AddMaterial/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
-												<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
-											</td>
-										</tr>`
+								<td>
+									<a href='@Url.Content("~/AddMaterial/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
+									<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
+								</td>
+							</tr>`
 			})
 			tbody.innerHTML = result;
 			//確定刪除配料
 			btnDelete.forEach(function (click) {
 				click.addEventListener("click",function(){
 					const id = this.parentElement.parentElement.firstElementChild;
+					//console.log(id.value);
+
 					linkDelete.addEventListener("click",async function(){
-						const request = await fetch(`@Url.Content("~/AddMaterial/BDelete/${id.value}")`);
+						linkDelete.setAttribute("href",`@Url.Content("~/AddMaterial/BDelete/${id.value}")`);
 					})
 				})
 

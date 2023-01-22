@@ -59,10 +59,10 @@ namespace prjMSIT145_Final.ViewModel
             set { _options.OptionName = value; }
         }
         [DisplayName("配料價格")]
-        public decimal? UnitPrice
+        public double? UnitPrice
         {
-            get { return _options.UnitPrice; }
-            set { _options.UnitPrice = value; }
+            get { return Convert.ToDouble(_options.UnitPrice); }
+            set { _options.UnitPrice = Convert.ToDecimal(value); }
         }
     }
 }

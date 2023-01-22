@@ -11,7 +11,7 @@
 <div class="outerlayer ">
 	<form method="post" enctype="multipart/form-data">
 		<input type="hidden" name="BFid" value="@Model.BFid" />
-		<input type="hidden" name="BFid" value="@Model.Fid" />
+		<input type="hidden" name="Fid" value="@Model.Fid" />
 		<div class="topdiv">
 			<a href="@Url.Content("~/AddMaterial/BList")"><img class="back" src="@Url.Content("~/images/backarrow.png")" value=""></a>
 			<input id="txtOptionGroupName" name="OptionName" class="inputtext" type="text" placeholder=" 輸入配料名稱....." value="@Model.OptionName"/>   @*配料名稱*@
@@ -57,6 +57,7 @@
 @section Scripts{
 	<script>
 		const selType = document.querySelector("#selType"); //選擇的類別
+		const btnSubmit = document.querySelector("#btnSubmit"); //儲存按鈕
 
 		window.addEventListener("load", async function () {
 			const response = await fetch(`@Url.Content("~/AddMaterial/BOptionGroup")`);
@@ -64,7 +65,7 @@
 			let result = document.createDocumentFragment();
 			result += "<option>請選擇配料類別</option>";
 			data.forEach(function (item,index) {
-				console.log(data)
+				//console.log(data)
 
 				if(index === 0)
 				result +=`<option>${item.optionGroupName}</option>`
@@ -73,6 +74,9 @@
 			})
 			selType.innerHTML += result;
 		})
-
+		btnSubmit.addEventListener("click",function(){
+			if (selType.value == "請選擇配料類別")
+			alert("請確認配料類別是否選取!");
+		})
 	</script>
 	}

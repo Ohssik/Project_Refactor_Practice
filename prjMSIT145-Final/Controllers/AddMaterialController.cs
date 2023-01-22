@@ -24,38 +24,41 @@ namespace prjMSIT145_Final.Controllers
 			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
 			BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
 			//_context.ProductCategories.Where(p => p.BFid == login.Business_fId).Join(_context.Products, proC => proC.Fid, pro => pro.CategoryFid, (proC, pro) => new
-			//var datas = (from pro in _context.Products
-			//			 join proC in _context.ProductCategories
-			//			 on pro.CategoryFid equals proC.Fid
-			//			 select new
-			//			 {
-			//				 pro.Fid,
-			//				 pro.BFid,
-			//				 pro.UnitPrice,
-			//				 pro.IsForSale,
-			//				 pro.Memo,
-			//				 pro.Photo,
-			//				 pro.ProductName,
-			//				 pro.CategoryFid,
-			//				 proC.CategoryName
-			//			 }).Where(p => p.BFid == member.Fid).OrderBy(b => b.CategoryFid);
-			var datas = _context.ViewOptionsToGroups.Where(p => p.BFid == member.Fid).OrderBy(o => o.OptionGroupName);
-			if (keyword != null)
-				datas = datas.Where(k => k.OptionName.Contains(keyword) || k.OptionGroupName.Contains(keyword)).OrderBy(o => o.OptionGroupName);
+			if (member != null)
+			{
+				var datas = (from pro in _context.ProductOptions
+							 join proC in _context.ProductOptionGroups
+							 on pro.OptionGroupFid equals proC.Fid
+							 select new
+							 {
+								 pro.Fid,
+								 pro.BFid,
+								 pro.UnitPrice,
+								 pro.OptionName,
+								 pro.OptionGroupFid,
+								 proC.OptionGroupName,
+								 proC.Memo
+							 }).Where(p => p.BFid == member.Fid).OrderBy(b => b.OptionGroupName);
+				//var datas = _context.ViewOptionsToGroups.Where(p => p.BFid == member.Fid).OrderBy(o => o.OptionGroupName);
+				if (keyword != null)
+					datas = datas.Where(k => k.OptionName.Contains(keyword) || k.OptionGroupName.Contains(keyword)).OrderBy(o => o.OptionGroupName);
 
-			//List<CProductOptionViewModel> materialList = new List<CProductOptionViewModel>();
-			//foreach (var data in datas)
-			//{
-			//	CProductOptionViewModel vm = new CProductOptionViewModel();
-			//	vm.Fid = data.Fid;
-			//	vm.BFid = data.BFid;
-			//	vm.OptionGroupFid = data.OptionGroupFid;
-			//	vm.UnitPrice = data.UnitPrice;
-			//	vm.OptionGroupName = data.OptionGroupName;
-			//	vm.OptionName = data.OptionName;
-			//	materialList.Add(vm);
-			//}
-			return Json(datas);
+				List<CProductOptionViewModel> materialList = new List<CProductOptionViewModel>();
+				foreach (var data in datas)
+				{
+					CProductOptionViewModel vm = new CProductOptionViewModel();
+					vm.Fid = data.Fid;
+					vm.BFid = data.BFid;
+					vm.OptionGroupFid = data.OptionGroupFid;
+					vm.UnitPrice = Math.Round(Convert.ToDouble(data.UnitPrice));
+					vm.OptionGroupName = data.OptionGroupName;
+					vm.OptionName = data.OptionName;
+
+					materialList.Add(vm);
+				}
+				return Json(materialList);
+			}
+			return RedirectToAction("BLogin", "BusinessMember");
 		}
 		public ActionResult BCreate()
 		{
@@ -70,6 +73,7 @@ namespace prjMSIT145_Final.Controllers
 		{
 			var optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName);
 			vm.options.OptionGroupFid = optGp.Fid;
+			
 			_context.ProductOptions.Add(vm.options);
 			_context.SaveChanges();
 			return RedirectToAction("BList");
@@ -91,7 +95,7 @@ namespace prjMSIT145_Final.Controllers
 			{
 				vm.Fid = d.Fid;
 				vm.BFid = member.Fid;
-				vm.UnitPrice = d.UnitPrice;
+				vm.UnitPrice = Math.Round(Convert.ToDouble(d.UnitPrice));
 				vm.OptionGroupFid = d.OptionGroupFid;
 				vm.OptionName = d.OptionName;
 				vm.OptionGroupName = d.OptionGroupName;
@@ -105,7 +109,8 @@ namespace prjMSIT145_Final.Controllers
 			ProductOption opt = _context.ProductOptions.FirstOrDefault(o => o.Fid == vm.Fid);
 			if (optGp != null && opt != null)
 			{
-				opt = vm.options;
+				opt.UnitPrice = Convert.ToDecimal(vm.UnitPrice);
+				opt.OptionName = vm.OptionName;
 				opt.OptionGroupFid = optGp.Fid;
 				_context.SaveChanges();
 			}
@@ -113,12 +118,14 @@ namespace prjMSIT145_Final.Controllers
 		}
 		public ActionResult BDelete(ProductOption opt, int? id)
 		{
-
-			opt = _context.ProductOptions.FirstOrDefault(o => o.Fid == id);
-			if (opt != null)
+			if (id != null)
 			{
-				_context.ProductOptions.Remove(opt);
-				_context.SaveChanges();
+				opt = _context.ProductOptions.FirstOrDefault(o => o.Fid == id);
+				if (opt != null)
+				{
+					_context.ProductOptions.Remove(opt);
+					_context.SaveChanges();
+				}
 			}
 			return RedirectToAction("BList");
 		}

@@ -42,7 +42,7 @@
 		<hr style="border:1px dashed #000; height:1px">
 		<h6 id="h6">類別</h6>*@
 
-		<select id="selType" name="categoryName"><option>請選擇商品類別</option></select>  @*選擇類別*@
+		<select id="selType"><option>請選擇商品類別</option></select>  @*選擇類別*@
 
 		<hr style="border:1px dashed #000; height:1px">
 		<h6 id="h6">價格及販售方式</h6>
@@ -68,7 +68,8 @@
 		const file = document.querySelector("#file"); //新增照片
 		const btnImgDelete = document.querySelector("#btnImgDelete"); //刪除照片
 		const selType = document.querySelector("#selType"); //選擇的類別
-		const IsForSale = document.querySelector("#IsForSale") //選擇是否上架
+		const IsForSale = document.querySelector("#IsForSale"); //選擇是否上架
+		const btnSubmit = document.querySelector("#btnSubmit"); //儲存按鈕
 
 		//載入所有商品類別
 		window.addEventListener("load", async function () {
@@ -78,15 +79,17 @@
 			frag = "";
 			data.forEach(function (item, index) {
 				 //console.log(data[index].categoryName)}
-
-			 {frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
+				 if(index === 0)
+				 frag+=`<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`;
+				else if (data[index].categoryName !== data[index-1].categoryName)
+			     frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
+			});
 			selType.innerHTML += frag;
 			console.log(file)
 		})
+
 		//上傳照片
 		file.addEventListener("change", function () {
-
-
 			const file = this.files[0];
 			const reader = new FileReader();
 			reader.onload = function (e) {
@@ -95,11 +98,13 @@
 			reader.readAsDataURL(file);
 			console.log(file);
 		})
+
 		//移除照片
 		btnImgDelete.addEventListener("click", function () {
 			file.outerHTML = file.outerHTML;
 			imgShow.setAttribute("src", "../images/photo.png");
 		})
+		//商品是否上架
 		IsForSale.addEventListener("click", function () {
 
 			if (IsForSale.checked) {
@@ -109,6 +114,12 @@
 			else {
 				IsForSale.value = "0";
 			}
+
+		})
+		//是否選擇了商品類別
+		btnSubmit.addEventListener("click",function(){
+			if(selType.value === "請選擇商品類別")
+			alert("請確認商品類別是否選取!");
 
 		})
 	</script>

@@ -12,7 +12,7 @@
 		<input type="hidden" name="BFid" value="@Model.BFid"></input>
 		<div class="topdiv">
 			<a href="@Url.Content("~/AddMaterial/BList")"><img class="back" src="../images/backarrow.png" value=""></a>
-			<input id="txtOptionGroupName" name="OptionName" class="inputtext" type="text" placeholder=" 輸入配料名稱....." />   @*配料名稱*@
+			<input id="txtOptionName" name="OptionName" class="inputtext" type="text" placeholder=" 輸入配料名稱....." required/>   @*配料名稱*@
 
 			<input id="btnSubmit" class="" type="submit" value="儲存" />
 		</div>
@@ -37,8 +37,8 @@
 
 		<hr style="border:1px dashed #000; height:1px">
 		<h6 id="h6">價格</h6>
-		<label for="">預設價格</label>
-		<input type="text" value="0" id="txtPrice" name="UnitPrice" />   @*配料價格*@
+		<label for="UnitPrice">預設價格</label>
+		<input type="text" value="0" id="txtPrice" name="UnitPrice" required />   @*配料價格*@
 		@*<hr style="border:1px dashed #000; height:1px">
 		<h6 id="h6">配料</h6>
 		<div class="form-check form-switch">
@@ -55,6 +55,8 @@
 @section Scripts{
 	<script>
 		const selType = document.querySelector("#selType"); //選擇的類別
+		const btnSubmit = document.querySelector("#btnSubmit"); //點擊儲存按鈕
+		const txtOptionName = document.querySelector("#txtOptionName"); //配料名稱
 
 		//載入所有配料類別
 		window.addEventListener("load",async function(){
@@ -70,6 +72,11 @@
 				}
 			})
 			selType.innerHTML += result;
+		})
+		btnSubmit.addEventListener("click",function(){
+			if(selType.value == null){
+				alert("請確認配料類別是否選取!");
+			}
 		})
 
 	</script>	

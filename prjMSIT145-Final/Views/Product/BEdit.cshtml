@@ -102,17 +102,22 @@
 			imgShow.setAttribute("src", "../images/photo.png");
 		})
 		btnSubmit.addEventListener("click", function () {
-			if (selType.value == "請選擇商品類別" || !IsForSale.checked) {
+			if (selType.value == "請選擇商品類別") {
 				event.preventDefault();
-				alert("請確認商品類別/商品狀態是否選取!")
+				alert("請確認商品類別是否選取!")
+				console.log(selType.value);
 			}
+			IsForSale.forEach(function (radio) {
+			radio.addEventListener("change", function () {
+				if (!radio.checked){
+					alert("請確認商品狀態是否選取!");
+						console.log(IsForSale.value);
+				}
+
+			})
 		})
-		//IsForSale.forEach(function (radio) {
-		//	radio.addEventListener("change", function () {
-		//		if (radio.checked){
-					
-		//	})
-		//})
+		})
+		
 
 	</script>
 }
