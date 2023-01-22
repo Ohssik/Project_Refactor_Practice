@@ -120,7 +120,7 @@ namespace prjMSIT145_Final.Controllers
         }
 
         public IActionResult ANormalMemberOrder(int? id)
-        {
+        {//todo 停權前發送email通知
             if (id == null)
                 return RedirectToAction("ANormalMemberDetails");
 
@@ -319,5 +319,87 @@ namespace prjMSIT145_Final.Controllers
 
             return RedirectToAction("ABusinessMemberDetails");
         }
+
+        public IActionResult ADisplayImgManage()
+        {
+            var datas = from img in _context.AdImgs
+                        select img;
+            List<CAAdImg> list=new List<CAAdImg>();
+            foreach(var data in datas)
+            {
+                CAAdImg cAAd = new CAAdImg();
+                cAAd.adImg = data;
+                list.Add(cAAd);
+            }
+            if (list.Count>0)
+            {
+                var ader = _context.BusinessMembers.FirstOrDefault(a => a.Fid==list[0].BFid);
+                if (ader!=null)
+                    list[0].ImgBelongTo=ader.MemberName;
+            }
+            
+            return View(list.AsEnumerable());
+        }
+        public IActionResult loadImgInfo(string fid)
+        {
+            CAAdImg cAAdImg = new CAAdImg();
+            AdImg img = _context.AdImgs.FirstOrDefault(i => i.Fid==Convert.ToInt32(fid));
+            if (img!=null)
+            {
+                var ader=_context.BusinessMembers.FirstOrDefault(i => i.Fid==Convert.ToInt32(img.BFid));
+                if (ader!=null)
+                    cAAdImg.ImgBelongTo=ader.MemberName;
+                cAAdImg.adImg=img;
+            }            
+            
+            return Json(cAAdImg);            
+        }
+        
+        public IActionResult changeAdOrderBy(string data)
+        {
+            string result = "0";
+            List<AdImg> ads = null;
+            if (!string.IsNullOrEmpty(data))
+            {                
+                ads=JsonSerializer.Deserialize<List<AdImg>>(data);
+                
+                _context.AdImgs.RemoveRange(ads);
+                foreach (AdImg ad in ads)
+                {
+                    AdImg removeItem = _context.AdImgs.FirstOrDefault(a => a.Fid==ad.Fid);
+                    _context.AdImgs.Remove(removeItem);
+                }
+                //todo 刪除再新增_context.AdImgs的資料
+                _context.SaveChanges();
+                result="1";
+            }
+            
+            
+            return Content(result);
+        }
+        //public IActionResult checkFormData(Member member, IFormFile file)
+        //{
+        //    string filePath = Path.Combine(_host.WebRootPath, "img", file.FileName);
+        //    using (var fileStream = new FileStream(filePath, FileMode.Create))
+        //    {
+        //        file.CopyTo(fileStream);
+        //    }
+        //    //return Content($"Hello,{member.Name}.You are {member.Age} and email is {member.Email}", "text/plain", Encoding.UTF8);
+
+
+        //    byte[]? imgByte = null;
+        //    using (var memoryStream = new MemoryStream())
+        //    {
+        //        imgByte = memoryStream.ToArray();
+        //        member.FileData = imgByte;
+        //    }
+
+        //    member.FileName = file.FileName;
+
+        //    _db.Members.Add(member);
+        //    _db.SaveChanges();
+
+        //    return Content($"{filePath}");
+        //}
     }
 }

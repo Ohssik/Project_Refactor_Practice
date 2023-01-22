@@ -7,10 +7,12 @@ namespace prjMSIT145_Final.ViewModels
     {
         private NormalMember _normalMember;
         private IEnumerable<Order> _orders;
+        //todo 購買人姓名
         public CANormalMemberViewModel()
         {
             _normalMember = new NormalMember();
             _orders = new List<Order>();
+            
         }
         public NormalMember normalMember
         {
