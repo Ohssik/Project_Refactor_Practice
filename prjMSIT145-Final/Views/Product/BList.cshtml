@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
 	ViewData["Title"] = "BList";
 }
 @section Styles{
@@ -50,7 +49,7 @@
 		</div>
 		<div class="topbutton">
 			<a href="@Url.Content("~/Product/BCreate")"><input class="insertbutton" type="button" value="+新增餐點" id="btnCreateProduct" /></a>
-			<a href="@Url.Content("~/Type/BItemTypeAddnEdit")"><input class="insertbutton" type="button" value="+新增類別"/></a>
+			<a href="@Url.Content("~/Type/BItemTypeAddnEdit")"><input class="insertbutton" type="button" value="+新增類別" /></a>
 		</div>
 	</div>
 	<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />
@@ -62,6 +61,7 @@
 		<th>產品名稱</th>
 		<th>產品價格</th>
 		<th>產品類別</th>
+		<th>產品狀態</th>
 		<th>備註</th>
 		<th>選項</th>
 		</thead>
@@ -106,40 +106,47 @@
 				//console.log(item.fid);
 				if (item.photo == null)
 					item.photo = "uparrow.png";
+				if (item.isForSale == 0)
+					item.isForSale = "未上架"
+				else if(item.isForSale == 1)
+					item.isForSale = "已上架"
+					else
+                    item.isForSale = "停售"
 				result += `
-					<tr>
-					<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
-					<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
-					<input type="hidden" name="${item.categoryFid}" value="${item.categoryFid}"/>
-                    
-					<td><input style='width:30px; height:20px;' type="image" src="../images/${item.photo}"></td>
-					<td>${item.productName}</td>
-					<td>${item.unitPrice}</td>
-					<td>${item.categoryName}</td>
-					<td>${item.memo}</td>
-					<td>
-						<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
-						<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
-					</td>
-					</tr>
-						`
+									<tr>
+									<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
+									<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
+									<input type="hidden" name="${item.categoryFid}" value="${item.categoryFid}"/>
+
+									<td><input style='width:30px; height:20px;' type="image" src="../images/${item.photo}"></td>
+									<td>${item.productName}</td>
+									<td>${item.unitPrice}</td>
+									<td>${item.categoryName}</td>
+									<td>${item.isForSale}</td>
+									<td>${item.memo}</td>
+									<td>
+										<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
+										<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
+									</td>
+									</tr>
+										`
 			});
 			tbody.innerHTML = result;
-            //刪除
+			//刪除
 			btnDelete.forEach(function (click) {
-			click.addEventListener("click", function () {
+				click.addEventListener("click", function () {
 					//console.log(this.parentElement.parentElement.firstElementChild);
 					const id = this.parentElement.parentElement.firstElementChild;
 
-					btnDeleteCheck.addEventListener("click",function(){
-						btnDeleteCheck.setAttribute("href",`@Url.Content("~/Product/BDelete/${id.value}")`);
+					btnDeleteCheck.addEventListener("click", function () {
+						btnDeleteCheck.setAttribute("href", `@Url.Content("~/Product/BDelete/${id.value}")`);
 					})
 				})
 			})
 		}
-		////新增類別(未完成)
-		//btnCreateType.addEventListener("click", function () {
-		//	const response = await fetch
-		//})
+						////新增類別(未完成)
+						//btnCreateType.addEventListener("click", function () {
+						//	const response = await fetch
+						//})
 	</script>
 }

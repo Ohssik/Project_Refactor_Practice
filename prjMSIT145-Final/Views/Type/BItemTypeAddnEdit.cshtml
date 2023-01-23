@@ -68,9 +68,9 @@
 		const txt = document.querySelector(".inputtext"); //類別名稱
 		const tbody = document.querySelector("#tbody"); //表格資料
 		const CategoryName = document.getElementsByName("categoryName"); //資料行
-		const btnSubmit = document.querySelector("#btnSubmit");  //點擊儲存
 		const btnDelete = document.querySelector("#btnDelete"); //點擊刪除
 		const linkDelete = document.querySelector("#linkDelete"); //確認刪除
+		const modalBody = document.querySelector(".modal-body"); //未選擇刪除的類別,更改警告內容
 		const CategoryFid = document.querySelector("#CategoryFid"); //已存在的類別id;
 
 
@@ -87,7 +87,7 @@
 							<input type="hidden" name="BFid" value="${item.bFid}"/>
 
 							<td>${item.categoryName}</td>
-									</tr>`
+							</tr>`
 			})
 			tbody.innerHTML = result;
 
@@ -102,10 +102,15 @@
 				})
 			})
 		}
+
+		//刪除類別
 		btnDelete.addEventListener("click", async function () {
-			console.log(CategoryFid.value);
-			if (CategoryFid.value === 0) {
-				alert("請選擇要刪除的類別!");
+			//console.log(CategoryFid.value);
+
+			if (CategoryFid.value == 0) {
+				modalBody.innerHTML = "請選擇要刪除的類別!";
+				linkDelete.firstElementChild.innerHTML = "確定";
+				//console.log(modalBody.value)
 			}
 			else {
 				linkDelete.addEventListener("click", function () {

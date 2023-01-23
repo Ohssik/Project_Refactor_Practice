@@ -25,7 +25,8 @@ namespace prjMSIT145_Final.Controllers
 				{
 					ProductCategory vm = new ProductCategory();
 					vm = d;
-					list.Add(vm);
+					if (!list.Any(o => o.CategoryName == vm.CategoryName))
+						list.Add(vm);
 				}
 			}
 			return Json(list);
@@ -36,7 +37,15 @@ namespace prjMSIT145_Final.Controllers
 			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
 			BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
 			var data = (_context.ProductOptionGroups.Where(b => b.BFid == member.Fid)).OrderBy(o => o.OptionGroupName);
-			return Json(data);
+			List<ProductOptionGroup> list = new List<ProductOptionGroup>();
+			foreach (var d in data)
+			{
+				ProductOptionGroup gp = new ProductOptionGroup();
+				gp = d;
+				if (!list.Any(o => o.OptionGroupName == gp.OptionGroupName))
+					list.Add(gp);
+			}
+			return Json(list);
 		}
 		//商品類別新修
 		public IActionResult BItemTypeAddnEdit()
@@ -53,17 +62,17 @@ namespace prjMSIT145_Final.Controllers
 			return RedirectToAction("BLogin", "BusinessMember");
 		}
 		//按下submit
-		public ActionResult BItemTypeSubmit(ProductCategory vm)
+		public ActionResult BItemTypeSubmit(ProductCategory proC)
 		{
-			if (vm != null)
+			if (proC != null)
 			{
-				var data = _context.ProductCategories.FirstOrDefault(o => o.Fid == vm.Fid);
+				var data = _context.ProductCategories.FirstOrDefault(o => o.Fid == proC.Fid);
 				if (data != null)
 				{
-					data.CategoryName = vm.CategoryName;
+					data.CategoryName = proC.CategoryName;
 				}
 				else
-					_context.ProductCategories.Add(vm);
+					_context.ProductCategories.Add(proC);
 
 				_context.SaveChanges();
 			}
@@ -78,7 +87,7 @@ namespace prjMSIT145_Final.Controllers
 				if (proC != null)
 				{
 					_context.ProductCategories.Remove(proC);
-					//_context.SaveChanges();
+					_context.SaveChanges();
 				}
 			}
 			return RedirectToAction("BItemTypeAddnEdit");
@@ -104,11 +113,26 @@ namespace prjMSIT145_Final.Controllers
 			{
 				var data = _context.ProductOptionGroups.FirstOrDefault(o => o.Fid == optGp.Fid);
 				if (data != null)
-		{
-			return View();
+				{
+					data.OptionGroupName = optGp.OptionGroupName;
+					data.IsMultiple = optGp.IsMultiple;
+					data.Memo = optGp.Memo;
+				}
+				else
+					_context.ProductOptionGroups.Add(optGp);
+
+				_context.SaveChanges();
+			}
+			return RedirectToAction("BMaterialTypeAddnEdit");
 		}
 		public ActionResult BMaterialTypeDelete(int? id)
 		{
+			if (id != null)
+			{
+				var data = _context.ProductOptionGroups.FirstOrDefault(o => o.Fid == id);
+				_context.ProductOptionGroups.Remove(data);
+				_context.SaveChanges();
+			}
 			return RedirectToAction("BMaterialTypeAddnEdit");
 		}
 	}

@@ -65,11 +65,11 @@
 			let result = document.createDocumentFragment();
 			data.forEach(function(item,index){
 
-				if(index === 0)
-				result =  `<option>${item.optionGroupName}</option>`;
-				else if (data[index].optionGroupName !== data[index - 1].optionGroupName) {
+				//if(index === 0)
+				//result =  `<option>${item.optionGroupName}</option>`;
+				//else if (data[index].optionGroupName !== data[index - 1].optionGroupName) {
 					result += `<option>${item.optionGroupName}</option>`;
-				}
+				//}
 			})
 			selType.innerHTML += result;
 		})

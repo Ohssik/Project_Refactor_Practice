@@ -46,8 +46,8 @@
 			<h2 id="h2">配料</h2>
 		</div>
 		<div class="topbutton">
-			<a href="@Url.Content("~/AddMaterial/BCreate")"><input class="insertbutton" type="button" value="+新增配料" id="btnCreateProduct" /></a>
-			<input style="width:150px;" class="insertbutton" type="button" value="新增/編輯類別" id="btnCreateType" />
+			<a href="@Url.Content("~/AddMaterial/BCreate")"><input class="insertbutton" type="button" value="+新增配料"/></a>
+			<a href="@Url.Content("~/Type/BMaterialTypeAddnEdit")"><input style="width:150px;" class="insertbutton" type="button" value="新增/編輯類別"/></a>
 		</div>
 	</div>
 	<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />
@@ -83,8 +83,6 @@
 	<script>
 		const tbody = document.querySelector("#tbody");
 		const txt = document.querySelector("#txtKeyword");  //關鍵字
-		const btnCreateProduct = document.querySelector("#btnCreateProduct"); //新增配料
-		const btnCreateType = document.querySelector("#btnCreateType"); //新增類別
 		const btnDelete = document.getElementsByName("btnDelete") //點擊刪除配料
 		const linkDelete = document.querySelector("#linkDelete"); //確定刪除配料
 
@@ -159,10 +157,5 @@
 			})
 
 		}
-		//新增配料
-		btnCreateProduct.addEventListener("click", async function () {
-			const request = await fetch("@Url.Content("~/AddMaterial/BCreate")");
-
-		})
 	</script>
 }
