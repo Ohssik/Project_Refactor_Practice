@@ -323,6 +323,7 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult ADisplayImgManage()
         {
             var datas = from img in _context.AdImgs
+                        orderby img.OrderBy
                         select img;
             List<CAAdImg> list=new List<CAAdImg>();
             foreach(var data in datas)
@@ -336,6 +337,7 @@ namespace prjMSIT145_Final.Controllers
                 var ader = _context.BusinessMembers.FirstOrDefault(a => a.Fid==list[0].BFid);
                 if (ader!=null)
                     list[0].ImgBelongTo=ader.MemberName;
+                
             }
             
             return View(list.AsEnumerable());
@@ -358,18 +360,22 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult changeAdOrderBy(string data)
         {
             string result = "0";
-            List<AdImg> ads = null;
+            List<CAAdImg> ads = null;
             if (!string.IsNullOrEmpty(data))
             {                
-                ads=JsonSerializer.Deserialize<List<AdImg>>(data);
+                ads=JsonSerializer.Deserialize<List<CAAdImg>>(data);
                 
-                _context.AdImgs.RemoveRange(ads);
-                foreach (AdImg ad in ads)
+                //_context.AdImgs.RemoveRange(ads);
+                foreach (CAAdImg ad in ads)
                 {
-                    AdImg removeItem = _context.AdImgs.FirstOrDefault(a => a.Fid==ad.Fid);
-                    _context.AdImgs.Remove(removeItem);
+                    AdImg updateItem = _context.AdImgs.FirstOrDefault(a => a.Fid==Convert.ToInt32(ad.sFid));
+                    updateItem.StartTime=ad.StartTime;
+                    updateItem.EndTime=ad.EndTime;
+                    updateItem.OrderBy=ad.OrderBy;
+                    updateItem.Hyperlink=ad.Hyperlink;
+                    //_context.AdImgs.Remove(removeItem);
                 }
-                //todo 刪除再新增_context.AdImgs的資料
+                
                 _context.SaveChanges();
                 result="1";
             }

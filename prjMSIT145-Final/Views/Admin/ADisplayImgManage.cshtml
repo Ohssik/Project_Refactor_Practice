@@ -21,31 +21,37 @@
                     foreach(var item in Model){
                         if (item.OrderBy > 0)
                         {
-                                                                                                        <div class="divAds" id="@item.Fid" data-id="@item.Fid" data-name="@item.ImgName" data-st="@item.StartTime" data-et="@item.EndTime" data-link="@item.Hyperlink">
-                                                                                                            <img class="adthumbs" src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
-                                                                                                        </div>
+                                                <div class="divAds" id="@item.Fid" data-id="@item.Fid" data-name="@item.ImgName" data-st="@item.st" data-et="@item.et" data-link="@item.Hyperlink" data-blt="@item.ImgBelongTo">
+                                                    <img class="adthumbs" src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
+                                                </div>
                         }
                     }
                 }
-               
+
             </div>
-            
             <div>
-                <button id="btnPlayAdSave" class="btn btn-primary btn-icon-split" type="submit">
+                <button id="btnSave" class="btn btn-success btn-icon-split">
                     <span class="icon text-white-50">
-                        <i class="fas fa-arrow-right"></i>
+                        <i class="fas fa-check"></i>
                     </span>
                     <span class="text">儲存</span>
                 </button>
             </div>
-            
         </div>
     </div>
     <div class="card shadow mb-4">
         <!-- <div class="card-header py-3"></div> -->
         <div class="card-body">
             <div class="showAdImg">
-                <img src="@Url.Content("~/adminImg/adDisplay/"+Model.ToList()[0].ImgName)" alt="">
+                @{
+                    var nModel = Model.ToList();
+                    foreach(var item in Model.ToList()){
+                        if(item.OrderBy==0){
+                            nModel.Remove(item);
+                        }
+                    }
+                }
+                <img src="@Url.Content("~/adminImg/adDisplay/"+nModel[0].ImgName)" alt="">
 
             </div>
             <div class="adInfo">
@@ -58,33 +64,33 @@
                             <tr>
                                 <td>@Html.DisplayNameFor(model=>model.ImgName)</td>
                                 <td id="tdImgName">
-                                    @Model.ToList()[0].ImgName
+                                    @nModel[0].ImgName
                                 </td>
 
                             </tr>
                             <tr>
                                 <td>@Html.DisplayNameFor(model=>model.ImgBelongTo)</td>
                                 <td id="tdImgBelongTo">
-                                    @Model.ToList()[0].ImgBelongTo
+                                    @nModel[0].ImgBelongTo
                                 </td>
 
                             </tr>
                             <tr>
-                                <td>@Html.DisplayNameFor(model=>model.StartTime)</td>
-                                <td id="tdStartTime">
-                                    <input type="date" value="@Model.ToList()[0].StartTime">
+                                <td>@Html.DisplayNameFor(model=>model.st)</td>
+                                <td id="tdStartTime">                                    
+                                    <input type="date" value="@nModel[0].st">
                                 </td>
                             </tr>
                             <tr>
-                                <td>@Html.DisplayNameFor(model=>model.EndTime)</td>
+                                <td>@Html.DisplayNameFor(model=>model.et)</td>
                                 <td id="tdEndTime">
-                                    <input type="date" value="@Model.ToList()[0].EndTime">
+                                    <input type="date" value="@nModel[0].et">
                                 </td>
                             </tr>
                             <tr>
                                 <td>@Html.DisplayNameFor(model=>model.Hyperlink)</td>
                                 <td id="tdHyperlink">
-                                    <input type="text" value="@Model.ToList()[0].Hyperlink">
+                                    <input type="text" value="@nModel[0].Hyperlink">
                                 </td>
                             </tr>
                         </tbody>
@@ -115,9 +121,9 @@
                 foreach (var item in Model)
                 {
                     if (item.OrderBy == 0){
-                                                                                                                                                                                            <div class="homeSmallAd">
-                                                                                                                                                                                                <img src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
-                                                                                                                                                                                            </div>
+                                                                            <div class="homeSmallAd">
+                                                                                <img src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
+                                                                            </div>
                     }
                 }
             }
@@ -129,40 +135,40 @@
                 foreach (var item in Model)
                 {
                     if (item.OrderBy == 0){
-                                                                                                                                                                                                                        <div class="table-responsive smallAdTable">
-                                                                                                                                                                                                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                                                                                                                                                                                                <tbody>
+                                                                        <div class="table-responsive smallAdTable">
+                                                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                                                <tbody>
 
-                                                                                                                                                                                                                                    <tr>
-                                                                                                                                                                                                                                        <td>@Html.DisplayNameFor(model=>model.Fid)</td>
-                                                                                                                                                                                                                                        <td>@item.Fid</td>
-                                                                                                                                                                                                                                    </tr>
-                                                                                                                                                                                                                                    <tr>
-                                                                                                                                                                                                                                        <td>@Html.DisplayNameFor(model=>model.ImgName)</td>
-                                                                                                                                                                                                                                        <td>@item.ImgName</td>
-                                                                                                                                                                                                                                    </tr>
-                                                                                                                                                                                                                                    <tr>
-                                                                                                                                                                                                                                        <td>@Html.DisplayNameFor(model=>model.Hyperlink)</td>
-                                                                                                                                                                                                                                        <td><input type="text" value="@item.Hyperlink"> </td>
-                                                                                                                                                                                                                                    </tr>
-                                                                                                                                                                                                                                    <tr>
-                                                                                                                                                                                                                                        <td colspan="2">
-                                                                                                                                                                                                                                            <div id="">
+                                                                                    <tr>
+                                                                                        <td>@Html.DisplayNameFor(model=>model.Fid)</td>
+                                                                                        <td>@item.Fid</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>@Html.DisplayNameFor(model=>model.ImgName)</td>
+                                                                                        <td>@item.ImgName</td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>@Html.DisplayNameFor(model=>model.Hyperlink)</td>
+                                                                                        <td><input type="text" value="@item.Hyperlink"> </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td colspan="2">
+                                                                                            <div id="">
 
-                                                                                                                                                                                                                                                <button id="btnSave" class="btn btn-secondary btn-icon-split" type="submit">
-                                                                                                                                                                                                                                                    <span class="icon text-white-50">
-                                                                                                                                                                                                                                                        <i class="fas fa-arrow-right"></i>
-                                                                                                                                                                                                                                                    </span>
-                                                                                                                                                                                                                                                    <span class="text">瀏覽..</span>
-                                                                                                                                                                                                                                                </button>
+                                                                                                <button id="btnSave" class="btn btn-secondary btn-icon-split" type="submit">
+                                                                                                    <span class="icon text-white-50">
+                                                                                                        <i class="fas fa-arrow-right"></i>
+                                                                                                    </span>
+                                                                                                    <span class="text">瀏覽..</span>
+                                                                                                </button>
 
-                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                        </td>
+                                                                                            </div>
+                                                                                        </td>
 
-                                                                                                                                                                                                                                    </tr>
-                                                                                                                                                                                                                                </tbody>
-                                                                                                                                                                                                                            </table>
-                                                                                                                                                                                                                        </div>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
                     }
                 }
             }
@@ -191,9 +197,10 @@
                         $(sortablePositions).each(function (i,value) {
                             
                             let ad = {
-                                fid: value,                                
-                                StartTime: $(`[data-id=${value}]`).data('st'),
-                                EndTime: $(`[data-id=${value}]`).data('et'),
+                                sFid: value,
+                                ImgName:$(`[data-id=${value}]`).data('name'),
+                                StartTime: $(`[data-id=${value}]`).data('st')/*"2019-07-26T00:00:00"*/,
+                                EndTime: $(`[data-id=${value}]`).data('et')/*"2019-07-31T00:00:00"*/,
                                 Hyperlink: $(`[data-id=${value}]`).data('link'),
                                 OrderBy: i + 1,
                             };
@@ -209,17 +216,18 @@
                             data:{ data:JSON.stringify(ads)},
                             dataType: "json",
                             success: function (msg) {
+                                console.log(msg);
 
-                                $(msg).each(function (key, value) {
-                                    //console.log(value);
-                                    $('#tdFid').text(value.fid);
-                                    $('#tdImgName').text(value.imgName);
-                                    $('#tdImgBelongTo').text(value.imgBelongTo);
-                                    $('#tdStartTime>input').val(value.starttime);
-                                    $('#tdEndTime>input').val(value.Endtime);
-                                    $('#tdHyperlink>input').val(value.hyperlink);
-                                    $('.showAdImg>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${value.imgName}`);
-                                });
+                                //$(msg).each(function (key, value) {
+                                //    //console.log(value);
+                                //    $('#tdFid').text(value.fid);
+                                //    $('#tdImgName').text(value.imgName);
+                                //    $('#tdImgBelongTo').text(value.imgBelongTo);
+                                //    $('#tdStartTime>input').val(value.starttime);
+                                //    $('#tdEndTime>input').val(value.Endtime);
+                                //    $('#tdHyperlink>input').val(value.hyperlink);
+                                //    $('.showAdImg>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${value.imgName}`);
+                                //});
 
                             }
                         });
@@ -231,90 +239,64 @@
                 
             });
 
+            let clickedTarget = $('.divAds').eq(0).data('id');
             $('#sortable>div').mousedown(function(){
+                clickedTarget=$(this).data('id');
+                
                 $(this).css('border','7px solid red').siblings().css('border','0');
                 
-                $.ajax({
-                    url: `@Url.Content("~/Admin/loadImgInfo")`,
-                    type: "post",
-                    data: {
-                        "fid": $(this).attr('data-id')
-                        
-                    },
-                    dataType: "json",
-                    success: function (msg) {
-                        
-                        $(msg).each(function(key,value){
-                            //console.log(value);
-                            $('#tdFid').text(value.fid);
-                            $('#tdImgName').text(value.imgName);
-                            $('#tdImgBelongTo').text(value.imgBelongTo);
-                            $('#tdStartTime>input').val(value.starttime);
-                            $('#tdEndTime>input').val(value.Endtime);
-                            $('#tdHyperlink>input').val(value.hyperlink);
-                            $('.showAdImg>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${value.imgName}`);
-                        });
-                        
-                    }
-                });
-            });
-
-            
-            //let ads;
-            let indexMouseDown, indexMouseUp;
-            //$('.divAds').each(function(){
-            $('.divAds').mousedown(function(){
-                //ads = new Array();
-                indexMouseDown=$(this).index();
-                //console.log(`indexMouseDown:${indexMouseDown}`);
-            });
-            $('.divAds').mouseup(function () {
-                indexMouseUp = $(this).index();
-                //console.log(`indexMouseUp:${indexMouseUp}`);
-
-                //if (indexMouseDown!=indexMouseUp)
-                //{
-                    $('.divAds').each(function () {
-                        let ad = {
-                            fid: $(this).data('id'),
-                            //imgName: $(this).data('name'),
-                            StartTime: $(this).data('st'),
-                            EndTime: $(this).data('et'),
-                            Hyperlink: $(this).data('link'),
-                            OrderBy: $(this).index()+1,
-                        };
-                        //ads.push(ad);
-                    });
-
-                    //console.log(JSON.stringify(ads));
-                //}
-
                 //$.ajax({
-                //    url: `@Url.Content("~/Admin/changeAdOrderBy")`,
+                //    url: `@Url.Content("~/Admin/loadImgInfo")`,
                 //    type: "post",
-                //    data:{ data:JSON.stringify(ads)},
+                //    data: {
+                //        "fid": $(this).attr('data-id')
+                        
+                //    },
                 //    dataType: "json",
                 //    success: function (msg) {
-
-                //        $(msg).each(function (key, value) {
+                        
+                //        $(msg).each(function(key,value){
                 //            //console.log(value);
                 //            $('#tdFid').text(value.fid);
                 //            $('#tdImgName').text(value.imgName);
                 //            $('#tdImgBelongTo').text(value.imgBelongTo);
-                //            $('#tdStartTime>input').val(value.starttime);
-                //            $('#tdEndTime>input').val(value.Endtime);
+                //            $('#tdStartTime>input').val(value.st);
+                //            $('#tdEndTime>input').val(value.et);
                 //            $('#tdHyperlink>input').val(value.hyperlink);
                 //            $('.showAdImg>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${value.imgName}`);
                 //        });
-
+                        
                 //    }
                 //});
-            });
-                    
-            
-                
 
-            
+                $('#tdFid').text($(this).data('id'));
+                $('#tdImgName').text($(this).data('name'));
+                $('#tdImgBelongTo').text($(this).data('blt'));
+                $('#tdStartTime>input').val($(this).data('st'));                
+                $('#tdEndTime>input').val($(this).data('et'));
+                $('#tdHyperlink>input').val($(this).data('link'));
+                $('.showAdImg>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${$(this).data('name')}`);
+            });
+
+            $('#tdStartTime>input').change(function(){                
+                let st=$(this).val();
+                //console.log(st);
+                //console.log(clickedTarget);
+                $(`[data-id=${clickedTarget}]`).attr('data-st',st);
+            });
+            $('#tdEndTime>input').change(function(){                
+                let et=$(this).val();                
+                $(`[data-id=${clickedTarget}]`).attr('data-et',et);
+            });
+            $('#tdHyperlink>input').change(function () {
+                let link = $(this).val();                
+                $(`[data-id=${clickedTarget}]`).attr('data-link', link);
+            });
+
+            $('#btnSave').click(function(event){
+                event.preventDefault();
+                //todo adImg存檔
+            });
         });
     </script>
 }
