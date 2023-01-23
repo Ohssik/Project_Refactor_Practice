@@ -41,7 +41,7 @@
 		<hr style="border:1px dashed #000; height:1px">
 		<h6 id="h6">類別</h6>*@
 
-		<select id="selType" name="categoryName" value="@Model.CategoryName"><option>請選擇商品類別</option></select>  @*選擇類別*@
+		<select id="selType" name="categoryName"><option>@Model.CategoryName</option></select>  @*選擇類別*@
 
 		<hr style="border:1px dashed #000; height:1px">
 		<h6 id="h6">價格及販售方式</h6>
@@ -76,7 +76,7 @@
 			const request = await fetch(`@Url.Content("~/Type/BCategoryList")`);
 			const data = await request.json();
 			let frag = document.createDocumentFragment();
-			frag = "";
+			frag = "<option>請選擇商品類別</option>";
 			data.forEach(function (item, index) {
 				frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
 			})
@@ -101,19 +101,19 @@
 			file.outerHTML = file.outerHTML;
 			imgShow.setAttribute("src", "../images/photo.png");
 		})
+		//送出時確認商品類別及狀態是否選取
 		btnSubmit.addEventListener("click", function () {
 			if (selType.value == "請選擇商品類別") {
 				event.preventDefault();
 				alert("請確認商品類別是否選取!")
-				console.log(selType.value);
+				//console.log(selType.value);
 			}
 			IsForSale.forEach(function (radio) {
 			radio.addEventListener("change", function () {
 				if (!radio.checked){
 					alert("請確認商品狀態是否選取!");
-						console.log(IsForSale.value);
+						//console.log(IsForSale.value);
 				}
-
 			})
 		})
 		})

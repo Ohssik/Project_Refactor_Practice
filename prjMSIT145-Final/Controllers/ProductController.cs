@@ -93,7 +93,6 @@ namespace prjMSIT145_Final.Controllers
 			_context.SaveChanges();
 			return RedirectToAction("BList");
 		}
-		
 		public ActionResult BEdit(int? id)
 		{
 			var datas = (from pro in _context.Products

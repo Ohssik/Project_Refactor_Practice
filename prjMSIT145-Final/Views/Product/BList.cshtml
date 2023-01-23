@@ -66,18 +66,6 @@
 		<th>選項</th>
 		</thead>
 		<tbody id="tbody">
-			@*<tr>
-			<td><input type="image" src="../images/uparrow.png"></td>
-			<td>花枝排</td>
-			<td>70.00</td>
-			<td>小菜類</td>
-			<td>-</td>
-			<td>
-			<button class="buteditgar"><img src="../images/garbage.png"></button>
-			<button class="buteditgar"><img src="../images/edit.png"></button>
-			</td>
-			</tr>
-			*@
 		</tbody>
 	</table>
 </div>
@@ -86,12 +74,9 @@
 	<script>
 		const txt = document.querySelector("#txtKeyword");
 		const tbody = document.querySelector("#tbody");
-		const btnCreateProduct = document.querySelector("#btnCreateProduct"); //新增產品
-		const btnCreateType = document.querySelector("#btnCreateType"); //新增類別
 		const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
 		const btnDelete = document.getElementsByName("btnDelete"); //刪除按鈕
 		const btnDeleteCheck = document.querySelector("#linkDelete")//確認刪除按鈕
-		const modal = document.querySelector("#exampleModal"); // 隱藏model
 
 		//關鍵字查詢(類別與商品)
 		txt.addEventListener("keyup", () => search());
@@ -104,14 +89,16 @@
 			result = "";
 			datas.forEach(function (item, index) {
 				//console.log(item.fid);
-				if (item.photo == null)
+				if (item.photo == null)  //沒有產品圖片就使用預設圖片
 					item.photo = "uparrow.png";
+
 				if (item.isForSale == 0)
 					item.isForSale = "未上架"
 				else if(item.isForSale == 1)
 					item.isForSale = "已上架"
-					else
+				else
                     item.isForSale = "停售"
+
 				result += `
 									<tr>
 									<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
@@ -144,9 +131,5 @@
 				})
 			})
 		}
-						////新增類別(未完成)
-						//btnCreateType.addEventListener("click", function () {
-						//	const response = await fetch
-						//})
 	</script>
 }
