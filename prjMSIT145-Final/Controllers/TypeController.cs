@@ -84,7 +84,26 @@ namespace prjMSIT145_Final.Controllers
 			return RedirectToAction("BItemTypeAddnEdit");
 		}
 		//配料類別新刪修
-		public IActionResult BMaterialTypeAddnEdit(int? id)
+		public IActionResult BMaterialTypeAddnEdit()
+		{
+			string json = "";
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+			{
+				json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+				BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+				ProductOptionGroup optGp = new ProductOptionGroup();
+				optGp.BFid = member.Fid;
+				return View(optGp);
+			}
+			return RedirectToAction("BLogin", "BusinessMember");
+		}
+
+		public ActionResult BMaterialTypeSubmit(ProductOptionGroup optGp)
+		{
+			if (optGp != null)
+			{
+				var data = _context.ProductOptionGroups.FirstOrDefault(o => o.Fid == optGp.Fid);
+				if (data != null)
 		{
 			return View();
 		}
