@@ -31,7 +31,7 @@
     margin-top: -120px;
 }
 .butt{
-    border-radius: 20px;
+    border-radius: 10px;
     margin-left: 35px;
     width: 50px;
     background-color:black;
@@ -39,13 +39,13 @@
 }
 select{
     width: 200px;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 .selectbutton{
     background-color: black;
     color: white;
     font-weight: bold;
-    border-radius: 20px;
+    border-radius: 10px;
     margin-left: 30px;
 }
 #h6{

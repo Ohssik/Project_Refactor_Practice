@@ -14,7 +14,7 @@
 			<a href="@Url.Content("~/AddMaterial/BList")"><img class="back" src="../images/backarrow.png" value=""></a>
 			<input id="txtOptionName" name="OptionName" class="inputtext" type="text" placeholder=" 輸入配料名稱....." required/>   @*配料名稱*@
 
-			<input id="btnSubmit" class="" type="submit" value="儲存" />
+			<input id="btnSubmit" class="butt" type="submit" value="儲存" />
 		</div>
 
 		@*配料照片*@
@@ -74,7 +74,8 @@
 			selType.innerHTML += result;
 		})
 		btnSubmit.addEventListener("click",function(){
-			if(selType.value == null){
+			if (selType.value == "請選擇配料類別") {
+				event.preventDefault();
 				alert("請確認配料類別是否選取!");
 			}
 		})

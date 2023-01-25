@@ -30,7 +30,7 @@
     margin-top: -120px;
 }
 .butt{
-    border-radius: 20px;
+    border-radius: 10px;
     margin-left: 35px;
     width: 50px;
     background-color:black;
@@ -60,7 +60,7 @@ p{
 .inputimagebutton{
     background-color:black;
     color: white;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 textarea{
     width: 500px;
@@ -70,7 +70,7 @@ textarea{
 }
 select{
     width: 200px;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
 
