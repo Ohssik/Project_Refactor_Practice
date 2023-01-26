@@ -1,9 +1,9 @@
 ﻿@model prjMSIT145_Final.ViewModels.CABusinessMemberViewModel
 @{
-    ViewData["Title"] = "ABusinessMemberDetails";
+    ViewData["Title"] = "商家會員管理";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
-
+<form asp-action="ABusinessMemberDetails">
 <div class="container-fluid">
 
     <div>
@@ -137,7 +137,7 @@
         </div>
         <div id="divSave">
 
-            <button id="btnSave" class="btn btn-primary btn-icon-split" type="submit">
+                <button id="btnSave" class="btn btn-success btn-icon-split" type="submit">
                 <span class="icon text-white-50">
                     <i class="fas fa-arrow-right"></i>
                 </span>
@@ -221,9 +221,10 @@
     </div>
 
 </div>
+</form>
 @section Scripts{
 <script>
-    $('.nav-item').eq(0).addClass('active').siblings().removeClass('active');
+    $('.nav-item').eq(1).addClass('active').siblings().removeClass('active');
     $('[name=infoDiv]').eq(1).hide();
     $('.conBtn').eq(0).addClass('clicked');
     //$('.authBtn').eq(1).addClass('clicked2');

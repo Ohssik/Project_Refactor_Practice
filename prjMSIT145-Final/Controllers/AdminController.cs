@@ -1,17 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Drawing;
 using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace prjMSIT145_Final.Controllers
 {
     public class AdminController : Controller
     {
         private readonly ispanMsit145shibaContext _context;
-        public AdminController(ispanMsit145shibaContext context)
+        private readonly IWebHostEnvironment _host;
+        public AdminController(ispanMsit145shibaContext context, IWebHostEnvironment host)
         {
             _context = context;
+            _host=host;
         }
         public IActionResult Index()
         {
@@ -46,7 +53,7 @@ namespace prjMSIT145_Final.Controllers
                 return View();
             }
 
-            string json = JsonSerializer.Serialize(member);
+            string json = System.Text.Json.JsonSerializer.Serialize(member);
             HttpContext.Session.SetString(CDictionary.SK_LOGINED_ADMIN, json);
             //return RedirectToAction("ANormalMemberList");
             return RedirectToAction("ANormalMemberList");
@@ -244,7 +251,7 @@ namespace prjMSIT145_Final.Controllers
                         user.Password = b.txtPassword;
                     }
                 }
-                user.IsSuspensed = (int)b.IsSuspensed;
+                user.IsSuspensed = (int)b.IsSuspensed;//todo 商家停權
                 _context.SaveChanges();
             }
 
@@ -342,6 +349,7 @@ namespace prjMSIT145_Final.Controllers
             
             return View(list.AsEnumerable());
         }
+        
         public IActionResult loadImgInfo(string fid)
         {
             CAAdImg cAAdImg = new CAAdImg();
@@ -363,16 +371,16 @@ namespace prjMSIT145_Final.Controllers
             List<CAAdImg> ads = null;
             if (!string.IsNullOrEmpty(data))
             {                
-                ads=JsonSerializer.Deserialize<List<CAAdImg>>(data);
+                ads=JsonConvert.DeserializeObject<List<CAAdImg>>(data);
                 
                 //_context.AdImgs.RemoveRange(ads);
                 foreach (CAAdImg ad in ads)
                 {
                     AdImg updateItem = _context.AdImgs.FirstOrDefault(a => a.Fid==Convert.ToInt32(ad.sFid));
-                    updateItem.StartTime=ad.StartTime;
-                    updateItem.EndTime=ad.EndTime;
+                    //updateItem.StartTime=ad.StartTime;
+                    //updateItem.EndTime=ad.EndTime;
                     updateItem.OrderBy=ad.OrderBy;
-                    updateItem.Hyperlink=ad.Hyperlink;
+                    //updateItem.Hyperlink=ad.Hyperlink;
                     //_context.AdImgs.Remove(removeItem);
                 }
                 
@@ -383,29 +391,123 @@ namespace prjMSIT145_Final.Controllers
             
             return Content(result);
         }
-        //public IActionResult checkFormData(Member member, IFormFile file)
-        //{
-        //    string filePath = Path.Combine(_host.WebRootPath, "img", file.FileName);
-        //    using (var fileStream = new FileStream(filePath, FileMode.Create))
-        //    {
-        //        file.CopyTo(fileStream);
-        //    }
-        //    //return Content($"Hello,{member.Name}.You are {member.Age} and email is {member.Email}", "text/plain", Encoding.UTF8);
+        public IActionResult saveAdInfo(string data)
+        {
+            string result = "0";
+            CAAdImg ad = null;
+            if (!string.IsNullOrEmpty(data))
+            {
+                //ad=System.Text.Json.JsonSerializer.Deserialize<CAAdImg>(data);               
+                ad=JsonConvert.DeserializeObject<CAAdImg>(data);
 
+                AdImg updateItem = _context.AdImgs.FirstOrDefault(a => a.Fid==Convert.ToInt32(ad.sFid));
+                updateItem.StartTime=ad.StartTime;
+                updateItem.EndTime=ad.EndTime;
+                //updateItem.OrderBy=ad.OrderBy;
+                updateItem.Hyperlink=ad.Hyperlink;
+                //_context.AdImgs.Remove(removeItem);
+                
+                _context.SaveChanges();
+                result="1";
+            }
 
-        //    byte[]? imgByte = null;
-        //    using (var memoryStream = new MemoryStream())
-        //    {
-        //        imgByte = memoryStream.ToArray();
-        //        member.FileData = imgByte;
-        //    }
+            return Content(result);
+        }
+        public IActionResult deleteAd(string data)
+        {
+            string result = "0";
+            //CAAdImg ad = null;
+            if (!string.IsNullOrEmpty(data))
+            {
+                //ad=JsonSerializer.Deserialize<CAAdImg>(data);
 
-        //    member.FileName = file.FileName;
+                AdImg deleteItem = _context.AdImgs.FirstOrDefault(a => a.Fid==Convert.ToInt32(data));
+                _context.AdImgs.Remove(deleteItem);
 
-        //    _db.Members.Add(member);
-        //    _db.SaveChanges();
+                _context.SaveChanges();
+                result="1";
+            }
 
-        //    return Content($"{filePath}");
-        //}
+            return Content(result);
+        }
+        public IActionResult AaddAdImg(string data)
+        {
+            //string result = "0";
+            //List<CAAdImg> ads = null;
+            CAAdImg ad = null;
+            AdImg returnAd = null;
+            if (!string.IsNullOrEmpty(data))
+            {
+
+                ad=JsonConvert.DeserializeObject<CAAdImg>(data);
+                byte[] imageBytes = ad.icon;
+                string[] fileTypeArr = ad.fileType.Split('/');
+                string fileType = "."+fileTypeArr[1];
+
+                string fName = Guid.NewGuid().ToString()+fileType;
+                MemoryStream buf = new MemoryStream(imageBytes);
+                string filePath = Path.Combine(_host.WebRootPath, "adminImg/adDisplay", fName);                                
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    buf.WriteTo(fileStream);
+                   
+                }
+                
+                buf.Close();
+                buf.Dispose();
+
+                ad.ImgName=fName;
+                var lastAd = _context.AdImgs.OrderBy(a => a.OrderBy).LastOrDefault();
+                int orderBy = 1;
+                if (lastAd!=null)
+                    orderBy = (int)lastAd.OrderBy+1;
+                ad.OrderBy=orderBy;
+                _context.AdImgs.Add(ad.adImg);
+
+                _context.SaveChanges();
+                //result ="1";
+
+                returnAd = _context.AdImgs.FirstOrDefault(a => a.OrderBy==orderBy);
+            }
+
+            return Json(returnAd);
+        }
+        public IActionResult saveSmallImgData(string data)
+        {
+            CAAdImg ad = null;
+            AdImg returnAd = null;
+            if (!string.IsNullOrEmpty(data))
+            {
+                ad=JsonConvert.DeserializeObject<CAAdImg>(data);
+                byte[] imageBytes = ad.icon;
+                string[] fileTypeArr = ad.fileType.Split('/');
+                string fileType = "."+fileTypeArr[1];
+
+                string fName = Guid.NewGuid().ToString()+fileType;
+                MemoryStream buf = new MemoryStream(imageBytes);
+                string filePath = Path.Combine(_host.WebRootPath, "adminImg/adDisplay", fName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    buf.WriteTo(fileStream);
+                }
+                buf.Close();
+                buf.Dispose();
+
+                ad.ImgName=fName;
+                var lastAd = _context.AdImgs.FirstOrDefault(a=>a.Fid==ad.Fid);
+                
+                if (lastAd!=null)
+                {
+                    lastAd.Hyperlink=ad.Hyperlink;
+                    lastAd.ImgName=ad.ImgName;                    
+                    _context.SaveChanges();
+                }
+              
+                returnAd = lastAd;
+            }
+
+            return Json(returnAd);
+            
+        }
     }
 }

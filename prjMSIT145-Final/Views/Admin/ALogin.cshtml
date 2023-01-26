@@ -1,6 +1,6 @@
 ﻿@model prjMSIT145_Final.Models.AdminMember
 @{
-    ViewData["Title"] = "ALogin";
+    ViewData["Title"] = "登入";
     Layout = "~/Views/Shared/Admin/_AdminLogin.cshtml";
 }
 @section Styles{
@@ -18,7 +18,7 @@
 
 <form asp-action="ALogin" id="loginForm">
     <div class="form-group">
-        <label asp-for="Account" class="control-label">帳號</label>
+        <label asp-for="Account" class="control-label">管理者帳號</label>
         <input asp-for="Account" class="form-control" />
     
     </div>

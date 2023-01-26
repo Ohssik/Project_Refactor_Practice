@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<prjMSIT145_Final.ViewModels.CAAdImg>
 @{
-    ViewData["Title"] = "ADisplayImgManage";
+    ViewData["Title"] = "首頁圖片管理";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
 
@@ -14,29 +14,26 @@
         <div class="card-body">
 
             <div class="addAdImg">
-                <h5>+</h5>
+                <label type="file">+</label>
+                <input type="file" name="addAd" id="addAd" accept=".png, .jpg, .jpeg" data-target="file-uploader" />
             </div>
+           @* <div class="addAdImg">
+                <img data-target="image-preview" />
+            </div>*@
             <div id="sortable" style="display: flex; padding-top: 0;" class="card-body">
                 @{
                     foreach(var item in Model){
                         if (item.OrderBy > 0)
                         {
-                                                <div class="divAds" id="@item.Fid" data-id="@item.Fid" data-name="@item.ImgName" data-st="@item.st" data-et="@item.et" data-link="@item.Hyperlink" data-blt="@item.ImgBelongTo">
-                                                    <img class="adthumbs" src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
-                                                </div>
+                                                                                                    <div class="divAds" id="@item.Fid" data-id="@item.Fid" data-name="@item.ImgName" data-st="@item.st" data-et="@item.et" data-link="@item.Hyperlink" data-blt="@item.ImgBelongTo">
+                                                                                                        <img class="adthumbs" src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
+                                                                                                    </div>
                         }
                     }
                 }
-
+               
             </div>
-            <div>
-                <button id="btnSave" class="btn btn-success btn-icon-split">
-                    <span class="icon text-white-50">
-                        <i class="fas fa-check"></i>
-                    </span>
-                    <span class="text">儲存</span>
-                </button>
-            </div>
+            
         </div>
     </div>
     <div class="card shadow mb-4">
@@ -65,16 +62,11 @@
                                 <td>@Html.DisplayNameFor(model=>model.ImgName)</td>
                                 <td id="tdImgName">
                                     @nModel[0].ImgName
+                                    @*<input type="hidden" value="@nModel[0].Fid" name="Fid" />*@
                                 </td>
 
                             </tr>
-                            <tr>
-                                <td>@Html.DisplayNameFor(model=>model.ImgBelongTo)</td>
-                                <td id="tdImgBelongTo">
-                                    @nModel[0].ImgBelongTo
-                                </td>
-
-                            </tr>
+                            
                             <tr>
                                 <td>@Html.DisplayNameFor(model=>model.st)</td>
                                 <td id="tdStartTime">                                    
@@ -93,18 +85,31 @@
                                     <input type="text" value="@nModel[0].Hyperlink">
                                 </td>
                             </tr>
+                            <tr>
+                                <td>@Html.DisplayNameFor(model=>model.ImgBelongTo)</td>
+                                <td id="tdImgBelongTo">
+                                    @nModel[0].ImgBelongTo
+                                </td>
+
+                            </tr>
                         </tbody>
                     </table>
                     <div id="">
 
-                        <button id="btnSave" class="btn btn-danger btn-icon-split" type="submit">
+                        <button id="btnDelete" class="btn btn-danger btn-icon-split">
                             <span class="icon text-white-50">
                                 <i class="fas fa-arrow-right"></i>
                             </span>
                             <span class="text">刪除此張</span>
                         </button>
-
+                        <button id="btnSave1" class="btn btn-success btn-icon-split">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span class="text">儲存</span>
+                        </button>
                     </div>
+                    
                 </div>
 
             </div>
@@ -121,9 +126,9 @@
                 foreach (var item in Model)
                 {
                     if (item.OrderBy == 0){
-                                                                            <div class="homeSmallAd">
-                                                                                <img src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
-                                                                            </div>
+                                <div class="homeSmallAd" data-id="@item.Fid" data-name="@item.ImgName" >
+                                    <img src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
+                                </div>
                     }
                 }
             }
@@ -135,40 +140,32 @@
                 foreach (var item in Model)
                 {
                     if (item.OrderBy == 0){
-                                                                        <div class="table-responsive smallAdTable">
-                                                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                                                <tbody>
+                                <div class="table-responsive smallAdTable">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <tbody>
 
-                                                                                    <tr>
-                                                                                        <td>@Html.DisplayNameFor(model=>model.Fid)</td>
-                                                                                        <td>@item.Fid</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>@Html.DisplayNameFor(model=>model.ImgName)</td>
-                                                                                        <td>@item.ImgName</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>@Html.DisplayNameFor(model=>model.Hyperlink)</td>
-                                                                                        <td><input type="text" value="@item.Hyperlink"> </td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td colspan="2">
-                                                                                            <div id="">
+                                        <tr>
+                                            <td>@Html.DisplayNameFor(model=>model.Hyperlink)</td>
+                                            <td><input name="smallAdLink" data-id="@item.Fid" type="text" value="@item.Hyperlink"> </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <div id="">
+                                                        <input id="file" data-file="smallFile" data-id="@item.Fid" name="file" class="form-control" type="file" />
 
-                                                                                                <button id="btnSave" class="btn btn-secondary btn-icon-split" type="submit">
-                                                                                                    <span class="icon text-white-50">
-                                                                                                        <i class="fas fa-arrow-right"></i>
-                                                                                                    </span>
-                                                                                                    <span class="text">瀏覽..</span>
-                                                                                                </button>
+                                                <button name="btnSaveImg" class="btn btn-success btn-icon-split">
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-check"></i>
+                                                        </span>
+                                                        <span class="text">儲存</span>
+                                                    </button>
+                                                </div>
+                                            </td>
 
-                                                                                            </div>
-                                                                                        </td>
-
-                                                                                    </tr>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                </div>
                     }
                 }
             }
@@ -180,6 +177,8 @@
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script>
         $(function () {
+            $('.nav-item').eq(2).addClass('active').siblings().removeClass('active');
+
             let sortablePositions;
             let ads;
             $('#sortable>div:first').css('border', '7px solid red');
@@ -217,92 +216,356 @@
                             dataType: "json",
                             success: function (msg) {
                                 console.log(msg);
-
-                                //$(msg).each(function (key, value) {
-                                //    //console.log(value);
-                                //    $('#tdFid').text(value.fid);
-                                //    $('#tdImgName').text(value.imgName);
-                                //    $('#tdImgBelongTo').text(value.imgBelongTo);
-                                //    $('#tdStartTime>input').val(value.starttime);
-                                //    $('#tdEndTime>input').val(value.Endtime);
-                                //    $('#tdHyperlink>input').val(value.hyperlink);
-                                //    $('.showAdImg>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${value.imgName}`);
-                                //});
-
+                                
                             }
                         });
-                    }
-                        
-                    //console.log("New position(update): " + ui.item.index());
-                    
+                    }                        
+                    //console.log("New position(update): " + ui.item.index());                    
                 }
                 
             });
 
             let clickedTarget = $('.divAds').eq(0).data('id');
-            $('#sortable>div').mousedown(function(){
-                clickedTarget=$(this).data('id');
+            $('#sortable').on('mousedown', '.divAds', function () {
+                clickedTarget = $(this).data('id');
+
+                $(this).css('border', '7px solid red').siblings().css('border', '0');
+
+                $.ajax({
+                    url: `@Url.Content("~/Admin/loadImgInfo")`,
+                    type: "post",
+                    data: {
+                        "fid": $(this).attr('data-id')
+
+                    },
+                    dataType: "json",
+                    success: function (msg) {
+
+                        $(msg).each(function (key, value) {
+                            //console.log(value);
+                            $('#tdFid').text(value.fid);
+                            $('#tdImgName').text(value.imgName);
+                            $('#tdImgBelongTo').text(value.imgBelongTo);
+                            $('#tdStartTime>input').val(value.st);
+                            $('#tdEndTime>input').val(value.et);
+                            $('#tdHyperlink>input').val(value.hyperlink);
+                            $('.showAdImg>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${value.imgName}`);
+                        });
+
+                    }
+                });
+
+            });
+            
+            $('#btnSave1').click(function(event){
+               
+                let ad = {
+                    sFid: `${clickedTarget}`,
+                    ImgName: $(`[data-id=${clickedTarget}]`).data('name'),
+                    StartTime: $(`#tdStartTime>input`).val().replace('/','-')/*"2019-07-26T00:00:00"*/,
+                    EndTime: $(`#tdEndTime>input`).val().replace('/', '-')/*"2019-07-31T00:00:00"*/,
+                    Hyperlink: $(`#tdHyperlink>input`).val(),
+                    OrderBy: 1,
+                };
                 
-                $(this).css('border','7px solid red').siblings().css('border','0');
+
+                $.ajax({
+                    url: `@Url.Content("~/Admin/saveAdInfo")`,
+                    type: "post",
+                    data: { data: JSON.stringify(ad) },
+                    dataType: "json",
+                    success: function (msg) {
+                        console.log(msg);
+
+                        if(msg==1){
+                            alert('儲存成功');
+                        }
+
+                    }
+                });
+            });
+            
+
+            
+
+            $('#btnDelete').click(function(){
                 
-                //$.ajax({
-                //    url: `@Url.Content("~/Admin/loadImgInfo")`,
-                //    type: "post",
-                //    data: {
-                //        "fid": $(this).attr('data-id')
-                        
+                $.ajax({
+                    url: `@Url.Content("~/Admin/deleteAd")`,
+                    type: "post",
+                    data: { data: `${clickedTarget}` },
+                    dataType: "json",
+                    success: function (msg) {
+                        console.log(msg);
+
+                        if (msg == 1) {
+                            alert('刪除成功');
+                            location.reload(true);
+                        }
+
+                    }
+                });
+            });
+
+            
+            // STEP 1: select element and register change event
+            let newAdSrc;
+            const imagePreview = document.querySelector('[data-target="image-preview"]');
+            //const spinner = document.querySelector('[data-target="spinner"]');
+            const fileUploader = document.querySelector('[data-target="file-uploader"]');
+            fileUploader.addEventListener("change", handleFileUpload);
+
+            async function handleFileUpload(e) {
+                try {
+                    let count=$('#sortable').children('.divAds').length;
+                    if(count>=8)
+                    {
+                        alert('輪播圖數量已達上限，請刪除圖片後再新增');
+                        return false;
+                    }
+                    const file = e.target.files[0];
+                    //setUploading(true);
+                    if (!file) return;
+
+                    const beforeUploadCheck = await beforeUpload(file);
+                    if (!beforeUploadCheck.isValid) throw beforeUploadCheck.errorMessages;
+
+                    const arrayBuffer = await getArrayBuffer(file);
+                    const response = await uploadFileAJAX(arrayBuffer,file.type);
+
+                    //alert("上傳成功");
+                    showPreviewImage(file);
+                } catch (error) {
+                    alert(error);
+                    console.log("Catch Error: ", error);
+                } finally {
+                    e.target.value = '';  // reset input file
+                    //setUploading(false);
+                }
+            }
+
+            // STEP 2: showPreviewImage with createObjectURL
+            // If you prefer Base64 image, use "FileReader.readAsDataURL"
+            function showPreviewImage(fileObj) {
+                const image = URL.createObjectURL(fileObj);
+                //imagePreview.src = image;
+                newAdSrc=image;
+            }
+
+            // STEP 3: change file object into ArrayBuffer
+            function getArrayBuffer(fileObj) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    // Get ArrayBuffer when FileReader on load
+                    reader.addEventListener("load", () => {
+                        resolve(reader.result);
+                    });
+
+                    // Get Error when FileReader on error
+                    reader.addEventListener("error", () => {
+                        reject("error occurred in getArrayBuffer");
+                    });
+
+                    // read the blob object as ArrayBuffer
+                    // if you nedd Base64, use reader.readAsDataURL
+                    reader.readAsArrayBuffer(fileObj);
+                });
+            }
+
+            // STEP 4: upload file throguth AJAX
+            // - use "new Uint8Array()"" to change ArrayBuffer into TypedArray
+            // - TypedArray is not a truely Array,
+            //   use "Array.from()" to change it into Array
+            function uploadFileAJAX(arrayBuffer,filetype) {
+                // correct it to your own API endpoint
+                $.ajax({
+                    url: `@Url.Content("~/Admin/AaddAdImg")`,
+                    type: "post",
+                    data: {
+                        data: JSON.stringify({
+                            
+                            fileType: filetype,
+                            icon: Array.from(new Uint8Array(arrayBuffer))
+                        })
+                    },
+                    dataType: "json",
+                    success: function (msg) {
+                        console.log(msg);
+
+                        if (msg != null) {
+                            alert("上傳成功");
+                            let docFrag=document.createDocumentFragment();
+                            docFrag = `<div id='${msg.fid}' data-id='${msg.fid}' data-name='${msg.imgName}' class="divAds">
+                            <img class="adthumbs" src='${newAdSrc}' data-target="image-preview"/>
+                            </div>`;
+                            $('#sortable').append(docFrag);
+                            $('.showAdImg>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${msg.imgName}`);
+                            $('#tdImgName').text(msg.imgName);
+                            $('#tdStartTime>input').val('');
+                            $('#tdEndTime>input').val('');
+                            $('#tdHyperlink>input').val('');
+                            $('.divAds:last').css('border', '7px solid red').siblings().css('border', '0');
+                            
+                        }
+
+                    }
+                });
+
+
+                //return fetch(`@Url.Content("~/Admin/AaddAdImg")`, {
+                //    headers: {
+                //        version: 1,
+                //        "content-type": "application/json"
                 //    },
-                //    dataType: "json",
-                //    success: function (msg) {
-                        
-                //        $(msg).each(function(key,value){
-                //            //console.log(value);
-                //            $('#tdFid').text(value.fid);
-                //            $('#tdImgName').text(value.imgName);
-                //            $('#tdImgBelongTo').text(value.imgBelongTo);
-                //            $('#tdStartTime>input').val(value.st);
-                //            $('#tdEndTime>input').val(value.et);
-                //            $('#tdHyperlink>input').val(value.hyperlink);
-                //            $('.showAdImg>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${value.imgName}`);
-                //        });
-                        
-                //    }
-                //});
+                //    method: "POST",
+                //    body: JSON.stringify({
+                //        //imageId: 1,
+                //        fileType:filetype,
+                //        icon: Array.from(new Uint8Array(arrayBuffer))
+                //    })
+                //})
+                //    .then(res => {
+                //        if (!res.ok) {
+                //            throw res.statusText;
+                //        }
+                //        return res.json();
+                //    })
+                //    .then(data => data)
+                //    .catch(err => console.log("err", err));
+            }
 
-                $('#tdFid').text($(this).data('id'));
-                $('#tdImgName').text($(this).data('name'));
-                $('#tdImgBelongTo').text($(this).data('blt'));
-                $('#tdStartTime>input').val($(this).data('st'));                
-                $('#tdEndTime>input').val($(this).data('et'));
-                $('#tdHyperlink>input').val($(this).data('link'));
-                $('.showAdImg>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${$(this).data('name')}`);
+            // STEP 5: Create before upload checker if needed
+            function beforeUpload(fileObject) {
+                return new Promise(resolve => {
+                    const validFileTypes = ["image/jpeg", "image/png"];
+                    const isValidFileType = validFileTypes.includes(fileObject.type);
+                    let errorMessages = [];
+
+                    if (!isValidFileType) {
+                        errorMessages.push("圖檔限制為 JPG or PNG !");
+                    }
+
+                    const isValidFileSize = fileObject.size / 1024 / 1024 < 2;
+                    if (!isValidFileSize) {
+                        errorMessages.push("圖檔必須小於2MB!");
+                    }
+
+                    resolve({
+                        isValid: isValidFileType && isValidFileSize,
+                        errorMessages: errorMessages.join("\n")
+                    });
+                });
+            }
+
+            function setUploading(isUploading) {
+                if (isUploading === true) {
+                    //spinner.classList.add("opacity-1");
+                } else {
+                    //spinner.classList.remove("opacity-1");
+                }
+            }
+
+            //todo
+            //async function handleFileUpload(e) {
+            //    try {
+            //        let count=$('#sortable').children('.divAds').length;
+            //        if(count>=8)
+            //        {
+            //            alert('輪播圖數量已達上限，請刪除圖片後再新增');
+            //            return false;
+            //        }
+            //        const file = e.target.files[0];
+            //        //setUploading(true);
+            //        if (!file) return;
+
+            //        const beforeUploadCheck = await beforeUpload(file);
+            //        if (!beforeUploadCheck.isValid) throw beforeUploadCheck.errorMessages;
+
+            //        const arrayBuffer = await getArrayBuffer(file);
+            //        const response = await uploadFileAJAX(arrayBuffer,file.type);
+
+            //        //alert("上傳成功");
+            //        showPreviewImage(file);
+            //    } catch (error) {
+            //        alert(error);
+            //        console.log("Catch Error: ", error);
+            //    } finally {
+            //        e.target.value = '';  // reset input file
+            //        //setUploading(false);
+            //    }
+            //}
+
+
+            let fileData;
+            $('[data-file="smallFile"]').change(async function (e) {               
+                try {                    
+                    
+                    let i = $(this).data('id');
+                    console.log(`i=${i}`);
+                    const file = e.target.files[0];
+                    //setUploading(true);
+                    if (!file) return;
+
+                    const beforeUploadCheck = await beforeUpload(file);
+                    if (!beforeUploadCheck.isValid) throw beforeUploadCheck.errorMessages;
+
+                    const arrayBuffer = await getArrayBuffer(file);
+                    //const response = await uploadFileAJAX(arrayBuffer, file.type);
+                    fileData = {
+                        fileType: file.type,
+                        icon: Array.from(new Uint8Array(arrayBuffer))
+                    };                    
+
+                    showPreviewImage(file);
+                    
+                    $(`.homeSmallAd[data-id=${i}]>img`).attr('src',newAdSrc);
+
+                } catch (error) {
+                    alert(error);
+                    console.log("Catch Error: ", error);
+                } finally {
+                    e.target.value = '';  // reset input file
+                    //setUploading(false);
+                }
             });
 
-            $('#tdStartTime>input').change(function(){                
-                let st=$(this).val();
-                //console.log(st);
-                //console.log(clickedTarget);
-                $(`[data-id=${clickedTarget}]`).attr('data-st',st);
-            });
-            $('#tdEndTime>input').change(function(){                
-                let et=$(this).val();                
-                $(`[data-id=${clickedTarget}]`).attr('data-et',et);
-            });
-            $('#tdHyperlink>input').change(function () {
-                let link = $(this).val();                
-                $(`[data-id=${clickedTarget}]`).attr('data-link', link);
-            });
+            $('[name=btnSaveImg]').click(async function () {
+                let i = $(this).siblings('#file').data('id');
+                console.log(`i=${i}`);
+                $.ajax({
+                    url: `@Url.Content("~/Admin/saveSmallImgData")`,
+                    type: "post",                    
+                    data: {
+                        data:JSON.stringify({
+                            Fid: i,
+                            Hyperlink: $(`[name=smallAdLink][data-id=${i}]`).val(),
+                            fileType: fileData.fileType,
+                            icon: fileData.icon
+                        })
+                    },
+                    
+                    dataType: "json",
+                    success: function (msg) {
+                        console.log(msg);
 
-            $('#btnSave').click(function(event){
-                event.preventDefault();
-                //todo adImg存檔
+                        if (msg != null) {
+                            //$('.homeSmallAd').eq(i).attr('data-id',msg.Fid);
+                            $('[name=smallAdLink]').eq(i).val(msg.hyperlink);
+                            alert('儲存成功');
+                        }
+
+                    }
+                });
             });
         });
     </script>
 }
 @section Styles{
     <style>
-
+        
+        #file{
+            margin-bottom:10px;
+        }
         .memberImg {
             width: 50px;
             /* background-color: #9e4e27; */
@@ -333,15 +596,39 @@
             padding-left: 10px;
         }
 
+        #addAd {
+            /*font-size:70px;*/
+            line-height: 70px;
+            opacity: 0.0;
+            
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+
+            
+        }
         .addAdImg {
             width: 100px;
             height: 70px;
             border: 3px dotted gray;
             text-align: center;
+            cursor: pointer;
+            position: relative;
         }
 
-        .addAdImg h5 {
+        .addAdImg label {
             line-height: 70px;
+            font-size:2em;
+            
+        }
+
+        .addAdImg:nth-child(2)>img{
+            /*width:100%;*/
+            height:100%
         }
 
         .div1 {
