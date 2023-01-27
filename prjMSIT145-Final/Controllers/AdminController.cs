@@ -251,7 +251,7 @@ namespace prjMSIT145_Final.Controllers
                         user.Password = b.txtPassword;
                     }
                 }
-                user.IsSuspensed = (int)b.IsSuspensed;//todo 商家停權
+                user.IsSuspensed = (int)b.IsSuspensed;
                 _context.SaveChanges();
             }
 
@@ -376,18 +376,14 @@ namespace prjMSIT145_Final.Controllers
                 //_context.AdImgs.RemoveRange(ads);
                 foreach (CAAdImg ad in ads)
                 {
-                    AdImg updateItem = _context.AdImgs.FirstOrDefault(a => a.Fid==Convert.ToInt32(ad.sFid));
-                    //updateItem.StartTime=ad.StartTime;
-                    //updateItem.EndTime=ad.EndTime;
+                    AdImg updateItem = _context.AdImgs.FirstOrDefault(a => a.Fid==Convert.ToInt32(ad.sFid));                    
                     updateItem.OrderBy=ad.OrderBy;
-                    //updateItem.Hyperlink=ad.Hyperlink;
-                    //_context.AdImgs.Remove(removeItem);
+                    
                 }
                 
                 _context.SaveChanges();
                 result="1";
             }
-            
             
             return Content(result);
         }
@@ -397,15 +393,12 @@ namespace prjMSIT145_Final.Controllers
             CAAdImg ad = null;
             if (!string.IsNullOrEmpty(data))
             {
-                //ad=System.Text.Json.JsonSerializer.Deserialize<CAAdImg>(data);               
                 ad=JsonConvert.DeserializeObject<CAAdImg>(data);
 
                 AdImg updateItem = _context.AdImgs.FirstOrDefault(a => a.Fid==Convert.ToInt32(ad.sFid));
                 updateItem.StartTime=ad.StartTime;
-                updateItem.EndTime=ad.EndTime;
-                //updateItem.OrderBy=ad.OrderBy;
-                updateItem.Hyperlink=ad.Hyperlink;
-                //_context.AdImgs.Remove(removeItem);
+                updateItem.EndTime=ad.EndTime;                
+                updateItem.Hyperlink=ad.Hyperlink;                
                 
                 _context.SaveChanges();
                 result="1";
@@ -419,8 +412,6 @@ namespace prjMSIT145_Final.Controllers
             //CAAdImg ad = null;
             if (!string.IsNullOrEmpty(data))
             {
-                //ad=JsonSerializer.Deserialize<CAAdImg>(data);
-
                 AdImg deleteItem = _context.AdImgs.FirstOrDefault(a => a.Fid==Convert.ToInt32(data));
                 _context.AdImgs.Remove(deleteItem);
 
@@ -431,14 +422,11 @@ namespace prjMSIT145_Final.Controllers
             return Content(result);
         }
         public IActionResult AaddAdImg(string data)
-        {
-            //string result = "0";
-            //List<CAAdImg> ads = null;
+        {            
             CAAdImg ad = null;
             AdImg returnAd = null;
             if (!string.IsNullOrEmpty(data))
             {
-
                 ad=JsonConvert.DeserializeObject<CAAdImg>(data);
                 byte[] imageBytes = ad.icon;
                 string[] fileTypeArr = ad.fileType.Split('/');
@@ -449,8 +437,7 @@ namespace prjMSIT145_Final.Controllers
                 string filePath = Path.Combine(_host.WebRootPath, "adminImg/adDisplay", fName);                                
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    buf.WriteTo(fileStream);
-                   
+                    buf.WriteTo(fileStream);                   
                 }
                 
                 buf.Close();
@@ -465,8 +452,7 @@ namespace prjMSIT145_Final.Controllers
                 _context.AdImgs.Add(ad.adImg);
 
                 _context.SaveChanges();
-                //result ="1";
-
+                
                 returnAd = _context.AdImgs.FirstOrDefault(a => a.OrderBy==orderBy);
             }
 
@@ -479,27 +465,32 @@ namespace prjMSIT145_Final.Controllers
             if (!string.IsNullOrEmpty(data))
             {
                 ad=JsonConvert.DeserializeObject<CAAdImg>(data);
-                byte[] imageBytes = ad.icon;
-                string[] fileTypeArr = ad.fileType.Split('/');
-                string fileType = "."+fileTypeArr[1];
-
-                string fName = Guid.NewGuid().ToString()+fileType;
-                MemoryStream buf = new MemoryStream(imageBytes);
-                string filePath = Path.Combine(_host.WebRootPath, "adminImg/adDisplay", fName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                if (!string.IsNullOrEmpty(ad.fileType))
                 {
-                    buf.WriteTo(fileStream);
-                }
-                buf.Close();
-                buf.Dispose();
+                    byte[] imageBytes = ad.icon;
+                    string[] fileTypeArr = ad.fileType.Split('/');
+                    string fileType = "."+fileTypeArr[1];
 
-                ad.ImgName=fName;
+                    string fName = Guid.NewGuid().ToString()+fileType;
+                    MemoryStream buf = new MemoryStream(imageBytes);
+                    string filePath = Path.Combine(_host.WebRootPath, "adminImg/adDisplay", fName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        buf.WriteTo(fileStream);
+                    }
+                    buf.Close();
+                    buf.Dispose();
+
+                    ad.ImgName=fName;
+                }
+                
                 var lastAd = _context.AdImgs.FirstOrDefault(a=>a.Fid==ad.Fid);
                 
                 if (lastAd!=null)
                 {
                     lastAd.Hyperlink=ad.Hyperlink;
-                    lastAd.ImgName=ad.ImgName;                    
+                    if (!string.IsNullOrEmpty(ad.fileType))
+                        lastAd.ImgName=ad.ImgName;                    
                     _context.SaveChanges();
                 }
               
@@ -509,5 +500,7 @@ namespace prjMSIT145_Final.Controllers
             return Json(returnAd);
             
         }
+
+
     }
 }

@@ -1,0 +1,84 @@
+﻿@model IEnumerable<prjMSIT145_Final.ViewModels.CACouponViewModel>
+@{
+    ViewData["Title"] = "優惠券管理";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800">優惠券管理</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">優惠券一覽表</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Fid)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CouponCode)
+                            </th>
+                            
+                            <th>
+                                @Html.DisplayNameFor(model => model.Price)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.IsUsed)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Memo)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Fid)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CouponCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Price)
+                                </td>
+                                
+
+                                <td>                                    
+                                    @{
+                                        if (item.IsUsed > 0)
+                                        {
+                                            @:V
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Memo)
+                                </td>
+                                <td>
+                                    <a href='@Url.Action("ACouponDetails","Admin",new { id=item.Fid })' class="btn btn-info btn-circle">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                    
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>        
+            $('.nav-item').eq(3).addClass('active').siblings().removeClass('active');
+    </script>
+
+}
+
