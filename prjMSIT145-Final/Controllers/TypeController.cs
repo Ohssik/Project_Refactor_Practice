@@ -86,6 +86,12 @@ namespace prjMSIT145_Final.Controllers
 				proC = _context.ProductCategories.FirstOrDefault(o => o.Fid == id);
 				if (proC != null)
 				{
+
+					if (_context.Products.Any(p => p.CategoryFid == proC.Fid))
+					{
+						var pro = _context.Products.Where(p => p.CategoryFid == proC.Fid);
+						_context.Products.RemoveRange(pro);
+					}
 					_context.ProductCategories.Remove(proC);
 					_context.SaveChanges();
 				}

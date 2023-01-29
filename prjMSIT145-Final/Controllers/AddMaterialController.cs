@@ -21,42 +21,43 @@ namespace prjMSIT145_Final.Controllers
 		}
 		public ActionResult BSearch(string keyword)
 		{
-			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-			BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-			//_context.ProductCategories.Where(p => p.BFid == login.Business_fId).Join(_context.Products, proC => proC.Fid, pro => pro.CategoryFid, (proC, pro) => new
-			if (member != null)
+			string json = "";
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
 			{
-				var datas = (from pro in _context.ProductOptions
-							 join proC in _context.ProductOptionGroups
-							 on pro.OptionGroupFid equals proC.Fid
-							 select new
-							 {
-								 pro.Fid,
-								 pro.BFid,
-								 pro.UnitPrice,
-								 pro.OptionName,
-								 pro.OptionGroupFid,
-								 proC.OptionGroupName,
-								 proC.Memo
-							 }).Where(p => p.BFid == member.Fid).OrderBy(b => b.OptionGroupName);
-				//var datas = _context.ViewOptionsToGroups.Where(p => p.BFid == member.Fid).OrderBy(o => o.OptionGroupName);
-				if (keyword != null)
-					datas = datas.Where(k => k.OptionName.Contains(keyword) || k.OptionGroupName.Contains(keyword)).OrderBy(o => o.OptionGroupName);
+				json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+				BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+				
+					var datas = (from pro in _context.ProductOptions
+								 join proC in _context.ProductOptionGroups
+								 on pro.OptionGroupFid equals proC.Fid
+								 select new
+								 {
+									 pro.Fid,
+									 pro.BFid,
+									 pro.UnitPrice,
+									 pro.OptionName,
+									 pro.OptionGroupFid,
+									 proC.OptionGroupName,
+									 proC.Memo
+								 }).Where(p => p.BFid == member.Fid).OrderBy(b => b.OptionGroupName);
+					//var datas = _context.ViewOptionsToGroups.Where(p => p.BFid == member.Fid).OrderBy(o => o.OptionGroupName);
+					if (keyword != null)
+						datas = datas.Where(k => k.OptionName.Contains(keyword) || k.OptionGroupName.Contains(keyword)).OrderBy(o => o.OptionGroupName);
 
-				List<CProductOptionViewModel> materialList = new List<CProductOptionViewModel>();
-				foreach (var data in datas)
-				{
-					CProductOptionViewModel vm = new CProductOptionViewModel();
-					vm.Fid = data.Fid;
-					vm.BFid = data.BFid;
-					vm.OptionGroupFid = data.OptionGroupFid;
-					vm.UnitPrice = Math.Round(Convert.ToDouble(data.UnitPrice));
-					vm.OptionGroupName = data.OptionGroupName;
-					vm.OptionName = data.OptionName;
+					List<CProductOptionViewModel> materialList = new List<CProductOptionViewModel>();
+					foreach (var data in datas)
+					{
+						CProductOptionViewModel vm = new CProductOptionViewModel();
+						vm.Fid = data.Fid;
+						vm.BFid = data.BFid;
+						vm.OptionGroupFid = data.OptionGroupFid;
+						vm.UnitPrice = Math.Round(Convert.ToDouble(data.UnitPrice));
+						vm.OptionGroupName = data.OptionGroupName;
+						vm.OptionName = data.OptionName;
 
-					materialList.Add(vm);
-				}
-				return Json(materialList);
+						materialList.Add(vm);
+					}
+					return Json(materialList);
 			}
 			return RedirectToAction("BLogin", "BusinessMember");
 		}

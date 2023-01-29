@@ -97,35 +97,7 @@
 			let result = document.createDocumentFragment();
 			result = "";
 			data.forEach(function (item, index) {
-				//console.log(data[index].optionGroupFid)
-				//console.log(data[index - 1])
-				//if(index === 0)
-				//result += `
-				//<tr>
-				//	<input type='hidden'  id='${item.optionGroupFid}' name='${item.optionGroupFid}' value='${item.optionGroupFid}'/>
-				//	<td style='text-align:center;' colspan='2' id='${item.optionGroupName}' name="OptionGroupName">${item.optionGroupName}</td>
-				//	<td id='${item.memo}' name='${item.memo}'>${item.memo}</td>
-				//	<td>
-				//		<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
-				//		<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
-				//	</td>
-				//</tr>`
-				//else if(data[index].optionGroupFid === data[index-1].optionGroupFid)
-				//		result+=`
-				//		<tr>
-				//			<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
-				//			<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
-				//			<input type="hidden" name="${item.fid}" value="${item.fid}"/>
-
-				//			<td colspan='2'>${item.optionName}</td>
-				//			<td>$${item.unitPrice}</td>
-				//			<td>
-				//				<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/garbage.png">編輯</button></a>
-				//				<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
-				//			</td>
-				//		</tr>`
-
-				//	else
+				
 				result += `
 							<tr>
 							<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
@@ -141,7 +113,7 @@
 									<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/edit.png">刪除</button>
 								</td>
 							</tr>`
-			})
+			});
 			tbody.innerHTML = result;
 			//確定刪除配料
 			btnDelete.forEach(function (click) {
