@@ -89,10 +89,10 @@
                         <td>
                             @{
                                 if(Model.EmailCertified>0){
-                                            @:已認證
+                                    @:已認證
                                 }
                                 else{
-                                            @:未認證
+                                    @:未認證
                                 }
                             }
                         </td>
@@ -104,13 +104,13 @@
                                 @{
                                     if (Model.IsSuspensed>0)
                                     {
-                                                <button class="authBtn clicked2" disabled>是</button>
-                                                <button class="authBtn">否</button>
+                                        <button class="authBtn clicked2" data-bs-target="#sendMail" disabled>是</button>
+                                        <button class="authBtn" data-bs-target="#sendMail">否</button>
                                     }
                                     else
                                     {
-                                                <button class="authBtn">是</button>
-                                                <button class="authBtn clicked2" disabled>否</button>
+                                        <button class="authBtn" data-bs-target="#sendMail">是</button>
+                                        <button class="authBtn clicked2" data-bs-target="#sendMail" disabled>否</button>
                                     }
                                 }
                                 <input type="hidden" value=@Model.IsSuspensed name="IsSuspensed" />
@@ -163,52 +163,52 @@
                         <th>日期</th>
                         <th>金額</th>
                         <th>訂單狀態</th>
-                        <th>購買人</th>
+                        <th>購買人ID</th>
                         </thead>
                         <tbody>
                             @{
                                 foreach (Order od in Model.orders)
                                 {
-                                            <tr>
-                                                <td>
-                                                    @Html.ActionLink(od.OrderISerialId, "ABusinessMemberOrder", new { id=od.Fid })
-                                                </td>
-                                                <td>@od.OrderTime</td>
-                                                <td>@od.TotalAmount</td>
-                                                <td>
-                                                    @{
+                                    <tr>
+                                        <td>
+                                            @Html.ActionLink(od.OrderISerialId, "ABusinessMemberOrder", new { id=od.Fid })
+                                        </td>
+                                        <td>@od.OrderTime</td>
+                                        <td>@od.TotalAmount</td>
+                                        <td>
+                                            @{
                                                 if (od.OrderState=="0")
                                                 {
-                                                                    @:購物車中
+                                                    @:購物車中
                                                 }
                                                 else if (od.OrderState=="1")
                                                 {
-                                                                    @:未接單
+                                                    @:未接單
                                                 }
                                                 else if (od.OrderState=="2")
                                                 {
-                                                                    @:已接單
+                                                    @:已接單
                                                 }
                                                 else if (od.OrderState=="3")
                                                 {
-                                                                    @:商家準備中
+                                                    @:商家準備中
                                                 }
                                                 else if (od.OrderState=="4")
                                                 {
-                                                                    @:訂單已完成
+                                                    @:訂單已完成
                                                 }
                                                 else if (od.OrderState=="5")
                                                 {
-                                                                    @:商家退單
+                                                    @:商家退單
                                                 }
                                                 else if (od.OrderState=="6")
                                                 {
-                                                                    @:揪團失敗
+                                                    @:揪團失敗
                                                 }
-                                                    }
-                                                </td>
-                                                <td>@od.NFid</td>
-                                            </tr>
+                                            }
+                                        </td>
+                                        <td>@od.NFid</td>
+                                    </tr>
                                 }
                             }
                         </tbody>
@@ -223,12 +223,45 @@
 
 </div>
 </form>
+<div class="modal fade" id="sendMail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">帳號停權/復權通知</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">收件人:</label>
+                    <input type="text" class="form-control" id="recipient-name" name="txtRecipient" value="@Model.Email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">訊息內容:</label>
+                    <textarea class="form-control" id="message-text" name="txtMessage"></textarea>
+                    </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnSend">Send message</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts{
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $('.nav-item').eq(1).addClass('active').siblings().removeClass('active');
     $('[name=infoDiv]').eq(1).hide();
     $('.conBtn').eq(0).addClass('clicked');
     //$('.authBtn').eq(1).addClass('clicked2');
+    let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
+        keyboard: false
+    });
+
+
     $('.conBtn').on({
         click: function () {
             $(this).addClass('clicked').siblings().removeClass('clicked');
@@ -248,6 +281,27 @@
             $(this).removeClass('clicked');
         }
     });
+    $('#btnSend').click(function(){
+            console.log($('[name = txtMessage]').val());
+            $.ajax({
+                url: `@Url.Content("~/Admin/sendAccountLockedNotice")`,
+                type: "post",
+                data: {
+                    data: JSON.stringify({
+                        memberId: $('[name = "Fid"]').val(),
+                        IsSuspensed: $('[name = "IsSuspensed"]').val(),
+                        txtRecipient: $('[name = txtRecipient]').val(),
+                        txtMessage: $('[name = txtMessage]').val(),
+                        memberType: 'B'
+                    }),
+                },
+                dataType: "json",
+                success: function (msg) {
+                    console.log(msg);
+                    sendMail.hide();
+                }
+            });
+    });
     $('.authBtn').on({
         click: function (event) {
             event.preventDefault();
@@ -259,6 +313,9 @@
                     $(this).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked2'); } });
                     $(this).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked2'); } });
                     $(this).attr('disabled', 'disabled').siblings().removeAttr('disabled');
+                    
+                    
+                    sendMail.show();
                 }
                 else
                     return false;
@@ -270,6 +327,9 @@
                     $(this).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked2'); } });
                     $(this).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked2'); } });
                     $(this).attr('disabled', 'disabled').siblings().removeAttr('disabled');
+
+                    sendMail.show();
+
                 } else
                     return false;
             }
@@ -299,6 +359,40 @@
 @section Styles{
 
     <style>
+        .btn-close {
+            box-sizing: content-box;
+            width: 1em;
+            height: 1em;
+            padding: 0.25em 0.25em;
+            color: #000;
+            background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+            border: 0;
+            border-radius: 0.25rem;
+            opacity: 0.5;
+        }
+
+            .btn-close:hover {
+                color: #000;
+                text-decoration: none;
+                opacity: 0.75;
+            }
+
+            .btn-close:focus {
+                outline: 0;
+                box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+                opacity: 1;
+            }
+
+        .alert-dismissible .btn-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 2;
+            padding: 1.25rem 1rem;
+        }
+
+
+
         #pwdInvalid {
             color: red;
             margin-left: 10px;

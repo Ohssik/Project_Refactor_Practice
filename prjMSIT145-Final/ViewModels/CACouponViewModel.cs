@@ -5,7 +5,7 @@ namespace prjMSIT145_Final.ViewModels
 {
     public class CACouponViewModel
     {
-        private Coupon _coupon;
+        private Coupon _coupon;        
         public CACouponViewModel()
         {
             _coupon = new Coupon();
@@ -33,7 +33,7 @@ namespace prjMSIT145_Final.ViewModels
             get { return _coupon.Price; }
             set { _coupon.Price = value; }
         }
-        [DisplayName("是否已使用")]
+        [DisplayName("允許使用")]
         public int? IsUsed
         {
             get { return _coupon.IsUsed; }
@@ -45,5 +45,11 @@ namespace prjMSIT145_Final.ViewModels
             get { return _coupon.Memo; }
             set { _coupon.Memo = value; }
         }
+        
+        [DisplayName("所屬會員ID")]
+        public int? NmemberID { get; set; }
+        [DisplayName("所屬會員")]
+        public string? NmemberName { get; set; }
+
     }
 }

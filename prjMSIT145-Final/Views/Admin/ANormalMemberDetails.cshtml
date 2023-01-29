@@ -104,11 +104,11 @@
                                 <div id="stopAuthBar">
                                     @{
                                         if(Model.IsSuspensed>0){
-                                            <button class="authBtn clicked2" disabled>是</button>
-                                            <button class="authBtn">否</button>
+                                            <button class="authBtn clicked2" data-bs-target="#sendMail" disabled>是</button>
+                                            <button class="authBtn" data-bs-target="#sendMail">否</button>
                                         }else{
-                                            <button class="authBtn">是</button>
-                                            <button class="authBtn clicked2" disabled>否</button>
+                                            <button class="authBtn" data-bs-target="#sendMail">是</button>
+                                            <button class="authBtn clicked2" data-bs-target="#sendMail" disabled>否</button>
                                         }
                                     }
                                     <input type="hidden" value=@Model.IsSuspensed name="IsSuspensed" />
@@ -162,7 +162,7 @@
                             <th>日期</th>
                             <th>金額</th>
                             <th>訂單狀態</th>
-                            <th>購買店家</th>
+                            <th>商家ID</th>
                             </thead>
                             <tbody>
                                 @{
@@ -222,14 +222,64 @@
 
     </div>
 </form>
+<div class="modal fade" id="sendMail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">帳號停權/復權通知</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
 
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">收件人:</label>
+                    <input type="text" class="form-control" id="recipient-name" name="txtRecipient" value="@Model.Email">
+                </div>
+                <div class="mb-3">
+                    <label for="message-text" class="col-form-label">訊息內容:</label>
+                    <textarea class="form-control" id="message-text" name="txtMessage"></textarea>
+                </div>
 
-@section Scripts {             
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnSend">Send message</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $('.nav-item').eq(0).addClass('active').siblings().removeClass('active');
         $('[name=infoDiv]').eq(1).hide();
         $('.conBtn').eq(0).addClass('clicked');
         //$('.authBtn').eq(1).addClass('clicked2');
+        let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
+            keyboard: false
+        });
+        $('#btnSend').click(function () {
+            console.log($('[name = txtMessage]').val());
+            $.ajax({
+                url: `@Url.Content("~/Admin/sendAccountLockedNotice")`,
+                type: "post",
+                data: {
+                    data: JSON.stringify({
+                        memberId: $('[name = "Fid"]').val(),
+                        IsSuspensed: $('[name = "IsSuspensed"]').val(),
+                        txtRecipient: $('[name = txtRecipient]').val(),
+                        txtMessage: $('[name = txtMessage]').val(),
+                        memberType: 'N'
+                    }),
+                },
+                dataType: "json",
+                success: function (msg) {
+                    console.log(msg);
+                    sendMail.hide();
+                }
+            });
+        });
         $('.conBtn').on({
             click: function () {
                 $(this).addClass('clicked').siblings().removeClass('clicked');
@@ -261,6 +311,7 @@
                         $(this).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked2'); } });
                         $(this).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked2'); } });
                         $(this).attr('disabled', 'disabled').siblings().removeAttr('disabled');
+                        sendMail.show();
                     }
                     else
                         return false;
@@ -272,6 +323,7 @@
                         $(this).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked2'); } });
                         $(this).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked2'); } });
                         $(this).attr('disabled', 'disabled').siblings().removeAttr('disabled');
+                        sendMail.show();
                     }else
                         return false;                    
                 }

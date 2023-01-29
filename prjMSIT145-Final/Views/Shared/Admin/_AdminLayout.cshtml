@@ -162,6 +162,7 @@
                             </li>
 
                             <!-- Nav Item - Alerts -->
+                            @*
                             <li class="nav-item dropdown no-arrow mx-1">
                                 <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -211,8 +212,9 @@
                                     <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                                 </div>
                             </li>
-
+                            *@
                             <!-- Nav Item - Messages -->
+                            @*
                             <li class="nav-item dropdown no-arrow mx-1">
                                 <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -285,7 +287,7 @@
                                     <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
                                 </div>
                             </li>
-
+                            *@
                             <div class="topbar-divider d-none d-sm-block"></div>
 
                             <!-- Nav Item - User Information -->
@@ -299,19 +301,23 @@
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                      aria-labelledby="userDropdown">
+                                     @*
                                     <a class="dropdown-item" href="#">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Profile
                                     </a>
+                                    *@
                                     <a class="dropdown-item" href="#">
                                         <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Settings
                                     </a>
+                                    @*
                                     <a class="dropdown-item" href="#">
                                         <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Activity Log
                                     </a>
                                     <div class="dropdown-divider"></div>
+                                    *@
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
@@ -354,15 +360,15 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">確定登出嗎?</h5>
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-body">確認您的作業是否已完成儲存</div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="login.html">Logout</a>
+                        <a class="btn btn-primary" href="@Url.Action("ALogout","Admin")">Logout</a>
                     </div>
                 </div>
             </div>
@@ -384,24 +390,7 @@
 
     <!-- Page level custom scripts -->
     <script src="~/js/demo/datatables-demo.js"></script>
-    @*<script>
-        $.ajax({
-                url: `@Url.Content("~/AdminMembers/checkIsLogined")`,
-                type:"post",
-                data:{
-                    "city": "彰化縣"
-                },
-                dataType: "json",
-                success: function (datas) {
-                    let docFrag = document.createDocumentFragment();
-                    $(datas).each(function (i, site) {
-                        let s = $('<p></p>').text(site);
-                        $(docFrag).append(s);
-                    });
-                    $('#divAlert').append(docFrag);
-                }
-            });
-    </script>*@
+    
     @RenderSection("Scripts",required:false)
 </body>
 </html>

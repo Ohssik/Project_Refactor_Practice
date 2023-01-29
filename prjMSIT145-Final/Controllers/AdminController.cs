@@ -6,6 +6,7 @@ using prjMSIT145_Final.ViewModels;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Drawing;
+using System.Net.Mail;
 using System.Text.Json;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -23,6 +24,72 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+        public IActionResult sendAccountLockedNotice(string data)
+        {
+            if (!string.IsNullOrEmpty(data))
+            {
+                CASendEmailViewModel mail=JsonConvert.DeserializeObject<CASendEmailViewModel>(data);
+                if (mail.memberType=="B")
+                {
+                    var user = _context.BusinessMembers.FirstOrDefault(t => t.Fid == mail.memberId);
+                    user.IsSuspensed = (int)mail.IsSuspensed;
+                }
+                else if (mail.memberType=="N")
+                {
+                    var user = _context.NormalMembers.FirstOrDefault(t => t.Fid == mail.memberId);
+                    user.IsSuspensed = (int)mail.IsSuspensed;
+                }
+                _context.SaveChanges();
+
+                MailMessage MyMail = new MailMessage();
+                MyMail.From = new MailAddress("日柴 <ShibaAdmin@msit145shiba.com.tw>", "日柴", System.Text.Encoding.UTF8);
+                //foreach(string receiver in ReceiveMail)
+                //{
+                //    MyMail.To.Add(receiver); //設定收件者Email
+                //}
+                MyMail.To.Add(mail.txtRecipient);                
+                //MyMail.Bcc.Add("jftoes@gmail.com,yrrek9120@gmail.com"); //加入密件副本的Mail
+
+                string changeType = (int)mail.IsSuspensed==1 ? "停權" : "復權";
+                MyMail.Subject = $"帳號{changeType}通知";
+
+                MyMail.Body = $"您好：<br>您的帳戶已被{changeType}，若有問題請洽詢網站管理員。" +
+                    "<br><br>" +
+                    $"{changeType}原因：<br>"+
+                    mail.txtMessage +
+                    "<br><br>=====================================================================<br>" +
+                    "<br>此為系統通知，請勿直接回信，謝謝"; //設定信件內容
+
+                MyMail.IsBodyHtml = true; //是否使用html格式
+                
+
+                SmtpClient MySMTP = new SmtpClient();
+
+                MySMTP.Credentials = new System.Net.NetworkCredential("b9809004@gapps.ntust.edu.tw", "Gknt824nut"); //這裡要填正確的帳號跟密碼
+                MySMTP.Host = "smtp.gmail.com"; //設定smtp Server
+
+                MySMTP.Port = 25;
+                MySMTP.EnableSsl = true; //gmail預設開啟驗證
+                
+                try
+                {
+                    MySMTP.Send(MyMail);
+
+                }
+                catch (Exception ex)
+                {
+                    return Content(ex.ToString());
+                }
+                finally
+                {
+                    MyMail.Dispose(); //釋放資源
+
+                }
+            }
+            
+            return NoContent();
+
         }
         public IActionResult checkPwd(string account, string pwd)
         {
@@ -58,7 +125,14 @@ namespace prjMSIT145_Final.Controllers
             //return RedirectToAction("ANormalMemberList");
             return RedirectToAction("ANormalMemberList");
         }
-
+        public IActionResult ALogout()
+        {
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_ADMIN))
+            {
+                HttpContext.Session.Remove(CDictionary.SK_LOGINED_ADMIN);
+            }
+            return RedirectToAction("ALogin");
+        }
         public IActionResult ANormalMemberList()
         {
             List<CANormalMemberViewModel> list = new List<CANormalMemberViewModel>();
@@ -119,7 +193,7 @@ namespace prjMSIT145_Final.Controllers
                         user.Password = n.txtPassword;                        
                     }
                 }
-                user.IsSuspensed = (int)n.IsSuspensed;
+                //user.IsSuspensed = (int)n.IsSuspensed;
                 _context.SaveChanges();
             }
 

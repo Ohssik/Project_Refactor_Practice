@@ -86,7 +86,7 @@ namespace prjMSIT145_Final.ViewModels
             get { return _normalMember.MemberPhotoFile; }
             set { _normalMember.MemberPhotoFile = value; }
         }
-        [DisplayName("是否停權")]
+        [DisplayName("帳號停權中")]
         public string? _IsSuspensed
         {
             get
