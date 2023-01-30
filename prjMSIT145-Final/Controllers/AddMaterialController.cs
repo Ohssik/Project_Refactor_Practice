@@ -40,7 +40,6 @@ namespace prjMSIT145_Final.Controllers
 									 proC.OptionGroupName,
 									 proC.Memo
 								 }).Where(p => p.BFid == member.Fid).OrderBy(b => b.OptionGroupName);
-					//var datas = _context.ViewOptionsToGroups.Where(p => p.BFid == member.Fid).OrderBy(o => o.OptionGroupName);
 					if (keyword != null)
 						datas = datas.Where(k => k.OptionName.Contains(keyword) || k.OptionGroupName.Contains(keyword)).OrderBy(o => o.OptionGroupName);
 

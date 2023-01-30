@@ -100,23 +100,23 @@
                     item.isForSale = "停售"
 
 				result += `
-									<tr>
-									<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
-									<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
-									<input type="hidden" name="${item.categoryFid}" value="${item.categoryFid}"/>
+						<tr>
+						<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
+						<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
+						<input type="hidden" name="${item.categoryFid}" value="${item.categoryFid}"/>
 
-									<td><input style='width:30px; height:20px;' type="image" src="../images/${item.photo}"></td>
-									<td>${item.productName}</td>
-									<td>${item.unitPrice}</td>
-									<td>${item.categoryName}</td>
-									<td>${item.isForSale}</td>
-									<td>${item.memo}</td>
-									<td>
-										<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/edit.png">編輯</button></a>
-										<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/garbage.png">刪除</button>
-									</td>
-									</tr>
-										`
+						<td><input style='width:30px; height:20px;' type="image" src="../images/${item.photo}"></td>
+						<td>${item.productName}</td>
+						<td>${item.unitPrice}</td>
+						<td>${item.categoryName}</td>
+						<td>${item.isForSale}</td>
+						<td>${item.memo}</td>
+						<td>
+							<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/edit.png">編輯</button></a>
+							<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/garbage.png">刪除</button>
+						</td>
+						</tr>
+						`
 			});
 			tbody.innerHTML = result;
 			//刪除

@@ -75,7 +75,7 @@
 				<hr style="border:1px solid #000; height:1px">
 			</div>
 			<div class="leftmargin">
-				<p>類別備註</p>
+				<p>備註</p>
 				<textarea class="textArea" rows="4" name="Memo">-</textarea>
 			</div>
 		</form>
@@ -85,7 +85,7 @@
 			<thead>
 			<th>類別名稱</th>
 			<th>是否多選</th>
-			<th colspan="2">類別備註</th>
+			<th colspan="2">備註</th>
 			</thead>
 			<tbody id="tbody">
 			</tbody>
@@ -103,6 +103,7 @@
 		const modalBody = document.querySelector(".modal-body"); //未選擇刪除的類別,更改警告內容
 		const fid = document.querySelector("#fid"); //已存在的類別id;
 		const isMultiple = document.querySelector("#isMultiple"); //類別是否多選
+		const textArea = document.querySelector(".textArea"); //類別備註
 
 		list();
 		async function list() {
@@ -130,9 +131,10 @@
 				value.addEventListener("click", function () {
 					const id = this.children[0].value; //取得點取的資料列id
 					const name = this.cells[0].innerHTML; //取得點取的資料列名稱
-
+					const memo = this.cells[3].innerHTML; //取得點取的資料列備註
 					txt.value = name;
 					fid.value = id;
+					textArea.value = memo;
 				})
 			})
 		}
