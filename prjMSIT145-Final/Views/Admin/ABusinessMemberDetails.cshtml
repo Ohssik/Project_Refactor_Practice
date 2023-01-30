@@ -1,6 +1,6 @@
 ﻿@model prjMSIT145_Final.ViewModels.CABusinessMemberViewModel
 @{
-    ViewData["Title"] = "商家會員管理";
+    ViewData["Title"] = "管理者控制台/商家會員管理";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
 <form asp-action="ABusinessMemberDetails">
@@ -129,24 +129,27 @@
                             <input type="text" name="txtConfirmPwd" value=@Model.txtConfirmPwd>
                         </td>
                     </tr>
-
+                    <tr>
+                        <td colspan="2">
+                            <div id="divSave">
+               
+                                <button id="btnSave" class="btn btn-success btn-icon-split" type="submit">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </span>
+                                    <span class="text">儲存密碼</span>
+                                </button>
+                                <span id="pwdInvalid"></span>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
 
             </div>
 
 
         </div>
-        <div id="divSave">
-
-                <button id="btnSave" class="btn btn-success btn-icon-split" type="submit">
-                <span class="icon text-white-50">
-                    <i class="fas fa-arrow-right"></i>
-                </span>
-                <span class="text">儲存</span>
-            </button>
-
-            <span id="pwdInvalid"></span>
-        </div>
+        
 
     </div>
     <div>
@@ -227,7 +230,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">帳號停權/復權通知</h5>
+                <h5 class="modal-title" id="exampleModalLabel">帳號停權/復權通知信</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -243,8 +246,8 @@
                 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="btnSend">Send message</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="btnSend">寄出</button>
             </div>
         </div>
     </div>
@@ -256,7 +259,7 @@
     $('.nav-item').eq(1).addClass('active').siblings().removeClass('active');
     $('[name=infoDiv]').eq(1).hide();
     $('.conBtn').eq(0).addClass('clicked');
-    //$('.authBtn').eq(1).addClass('clicked2');
+    let authBtnIsClicked, isSus;
     let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
         keyboard: false
     });
@@ -281,15 +284,22 @@
             $(this).removeClass('clicked');
         }
     });
+
+    $('#btnCancel').click(function () {
+        $('#btnSend').removeAttr('disabled');
+        $('[name=txtMessage]').val('');
+    });
     $('#btnSend').click(function(){
-            console.log($('[name = txtMessage]').val());
+            $(this).attr('disabled', 'disabled');
+            changeAuthBtnClicked(authBtnIsClicked, isSus);
+
             $.ajax({
                 url: `@Url.Content("~/Admin/sendAccountLockedNotice")`,
                 type: "post",
                 data: {
                     data: JSON.stringify({
                         memberId: $('[name = "Fid"]').val(),
-                        IsSuspensed: $('[name = "IsSuspensed"]').val(),
+                        IsSuspensed: isSus,
                         txtRecipient: $('[name = txtRecipient]').val(),
                         txtMessage: $('[name = txtMessage]').val(),
                         memberType: 'B'
@@ -297,7 +307,8 @@
                 },
                 dataType: "json",
                 success: function (msg) {
-                    console.log(msg);
+                    //console.log(msg);                    
+                    $('[name=txtMessage]').val('');
                     sendMail.hide();
                 }
             });
@@ -308,27 +319,20 @@
 
             if ($(this).text() == '是') {
                 if (confirm('確定要停權該會員帳號嗎?')) {
-                    $('input[name=IsSuspensed]').val(1);
-                    $(this).addClass('clicked').siblings().removeClass('clicked2');
-                    $(this).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked2'); } });
-                    $(this).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked2'); } });
-                    $(this).attr('disabled', 'disabled').siblings().removeAttr('disabled');
-                    
-                    
-                    sendMail.show();
+                    authBtnIsClicked = this;
+                    isSus = 1;
+                    sendMail.show();      
+                    $('#btnSend').removeAttr('disabled');
                 }
                 else
                     return false;
             } else {
 
                 if (confirm('確定要復權該會員帳號嗎?')) {
-                    $('input[name=IsSuspensed]').val(0);
-                    $(this).addClass('clicked').siblings().removeClass('clicked2');
-                    $(this).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked2'); } });
-                    $(this).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked2'); } });
-                    $(this).attr('disabled', 'disabled').siblings().removeAttr('disabled');
-
+                    authBtnIsClicked = this;
+                    isSus = 0;
                     sendMail.show();
+                    $('#btnSend').removeAttr('disabled');
 
                 } else
                     return false;
@@ -352,8 +356,20 @@
             pwdInvalid.text('兩次輸入的密碼不符');
             return false;
         }
+        if (txtPwd.trim() == '' || txtConPwd.trim() == '') {
+            return false;
+        }
 
     });
+
+    function changeAuthBtnClicked(authBtnIsClicked, isSus) {
+        $('input[name=IsSuspensed]').val(isSus);
+        $(authBtnIsClicked).addClass('clicked2').siblings().removeClass('clicked2');
+        $(authBtnIsClicked).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked2'); } });
+        $(authBtnIsClicked).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked2'); } });
+        $(authBtnIsClicked).attr('disabled', 'disabled').siblings().removeAttr('disabled');
+    }
+
 </script>
 }
 @section Styles{

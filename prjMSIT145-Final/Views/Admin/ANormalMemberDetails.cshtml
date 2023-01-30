@@ -1,6 +1,6 @@
 ﻿@model prjMSIT145_Final.ViewModels.CANormalMemberViewModel
 @{
-    ViewData["Title"] = "一般會員管理";
+    ViewData["Title"] = "管理者控制台/一般會員管理";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
 
@@ -47,11 +47,11 @@
                                 @{
                                     if (Model.Gender == "1")
                                     {
-                                        @:男                                            
+                                              @:男                                            
                                     }
                                     else if (Model.Gender == "0")
                                     {                                            
-                                        @:女
+                                             @:女
                                     }
                                 }                                
                             </td>
@@ -104,11 +104,11 @@
                                 <div id="stopAuthBar">
                                     @{
                                         if(Model.IsSuspensed>0){
-                                            <button class="authBtn clicked2" data-bs-target="#sendMail" disabled>是</button>
-                                            <button class="authBtn" data-bs-target="#sendMail">否</button>
-                                        }else{
-                                            <button class="authBtn" data-bs-target="#sendMail">是</button>
-                                            <button class="authBtn clicked2" data-bs-target="#sendMail" disabled>否</button>
+                                                <button class="authBtn clicked2" data-bs-target="#sendMail" disabled>是</button>
+                                                <button class="authBtn" data-bs-target="#sendMail">否</button>
+                                    }else{
+                                                <button class="authBtn" data-bs-target="#sendMail">是</button>
+                                                <button class="authBtn clicked2" data-bs-target="#sendMail" disabled>否</button>
                                         }
                                     }
                                     <input type="hidden" value=@Model.IsSuspensed name="IsSuspensed" />
@@ -127,24 +127,27 @@
                                 <input type="text" name="txtConfirmPwd" value=@Model.txtConfirmPwd>
                             </td>
                         </tr>
-
+                        <tr>
+                            <td colspan="2">
+                                <div id="divSave">
+               
+                                    <button id="btnSave" class="btn btn-success btn-icon-split" type="submit">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </span>
+                                        <span class="text">儲存密碼</span>
+                                    </button>
+                                    <span id="pwdInvalid"></span>
+                                </div>
+                            </td>
+                        </tr>
                     </table>
 
                 </div>
 
 
             </div>
-            <div id="divSave">
-               
-                <button id="btnSave" class="btn btn-success btn-icon-split" type="submit">
-                    <span class="icon text-white-50">
-                        <i class="fas fa-arrow-right"></i>
-                    </span>
-                    <span class="text">儲存</span>
-                </button>
-                
-                <span id="pwdInvalid"></span>
-            </div>
+            
             
         </div>
 
@@ -178,31 +181,31 @@
                                                 @{
                                                     if (od.OrderState=="0")
                                                     {
-                                                        @:購物車中
+                                                                @:購物車中
                                                     }
                                                     else if (od.OrderState=="1")
                                                     {
-                                                        @:未接單
+                                                                 @:未接單
                                                     }
                                                     else if (od.OrderState=="2")
                                                     {
-                                                        @:已接單
+                                                                 @:已接單
                                                     }
                                                     else if (od.OrderState=="3")
                                                     {
-                                                        @:商家準備中
+                                                                  @:商家準備中
                                                     }
                                                     else if (od.OrderState=="4")
                                                     {
-                                                        @:訂單已完成
+                                                                  @:訂單已完成
                                                     }
                                                     else if (od.OrderState=="5")
                                                     {
-                                                        @:商家退單
+                                                                  @:商家退單
                                                     }
                                                     else if (od.OrderState=="6")
                                                     {
-                                                        @:揪團失敗
+                                                                  @:揪團失敗
                                                     }
                                                 }
                                                 </td>
@@ -226,7 +229,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">帳號停權/復權通知</h5>
+                <h5 class="modal-title" id="exampleModalLabel">帳號停權/復權通知信</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -242,8 +245,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="btnSend">Send message</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>
+                <button type="button" class="btn btn-primary" id="btnSend">寄出</button>
             </div>
         </div>
     </div>
@@ -255,19 +258,27 @@
         $('.nav-item').eq(0).addClass('active').siblings().removeClass('active');
         $('[name=infoDiv]').eq(1).hide();
         $('.conBtn').eq(0).addClass('clicked');
-        //$('.authBtn').eq(1).addClass('clicked2');
+
+        let authBtnIsClicked, isSus;
         let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
             keyboard: false
         });
+        $('#btnCancel').click(function () {
+            $('#btnSend').removeAttr('disabled');
+            $('[name=txtMessage]').val('');
+        });
         $('#btnSend').click(function () {
-            console.log($('[name = txtMessage]').val());
+            
+            $(this).attr('disabled','disabled');
+            changeAuthBtnClicked(authBtnIsClicked, isSus);
+
             $.ajax({
                 url: `@Url.Content("~/Admin/sendAccountLockedNotice")`,
                 type: "post",
                 data: {
                     data: JSON.stringify({
                         memberId: $('[name = "Fid"]').val(),
-                        IsSuspensed: $('[name = "IsSuspensed"]').val(),
+                        IsSuspensed: isSus,
                         txtRecipient: $('[name = txtRecipient]').val(),
                         txtMessage: $('[name = txtMessage]').val(),
                         memberType: 'N'
@@ -275,8 +286,11 @@
                 },
                 dataType: "json",
                 success: function (msg) {
-                    console.log(msg);
+                    //console.log(msg);
+                    
+                    $('[name=txtMessage]').val('');
                     sendMail.hide();
+
                 }
             });
         });
@@ -305,25 +319,21 @@
 
                 if($(this).text()=='是')
                 {
-                    if(confirm('確定要停權該會員帳號嗎?')){
-                        $('input[name=IsSuspensed]').val(1);
-                        $(this).addClass('clicked').siblings().removeClass('clicked2');
-                        $(this).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked2'); } });
-                        $(this).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked2'); } });
-                        $(this).attr('disabled', 'disabled').siblings().removeAttr('disabled');
+                    if(confirm('確定要停權該會員帳號嗎?')){                        
+                        authBtnIsClicked = this;
+                        isSus = 1;
                         sendMail.show();
+                        $('#btnSend').removeAttr('disabled');
                     }
                     else
                         return false;
                 }else{
 
-                    if(confirm('確定要復權該會員帳號嗎?')){
-                        $('input[name=IsSuspensed]').val(0);
-                        $(this).addClass('clicked').siblings().removeClass('clicked2');
-                        $(this).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked2'); } });
-                        $(this).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked2'); } });
-                        $(this).attr('disabled', 'disabled').siblings().removeAttr('disabled');
+                    if(confirm('確定要復權該會員帳號嗎?')){                        
+                        authBtnIsClicked = this;
+                        isSus = 0;
                         sendMail.show();
+                        $('#btnSend').removeAttr('disabled');
                     }else
                         return false;                    
                 }
@@ -346,13 +356,58 @@
                 pwdInvalid.text('兩次輸入的密碼不符');
                 return false;
             }
+            if (txtPwd.trim() == '' || txtConPwd.trim() == ''){
+                return false;
+            }
 
         });
+
+        
+        function changeAuthBtnClicked(authBtnIsClicked,isSus) {
+            $('input[name=IsSuspensed]').val(isSus);
+            $(authBtnIsClicked).addClass('clicked2').siblings().removeClass('clicked2');
+            $(authBtnIsClicked).off('mouseenter').siblings().on({ mouseenter: function () { $(this).addClass('clicked2'); } });
+            $(authBtnIsClicked).off('mouseleave').siblings().on({ mouseleave: function () { $(this).removeClass('clicked2'); } });
+            $(authBtnIsClicked).attr('disabled', 'disabled').siblings().removeAttr('disabled');
+        }
     </script>
 }
     @section Styles{
     
     <style>
+        .btn-close {
+            box-sizing: content-box;
+            width: 1em;
+            height: 1em;
+            padding: 0.25em 0.25em;
+            color: #000;
+            background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+            border: 0;
+            border-radius: 0.25rem;
+            opacity: 0.5;
+        }
+
+            .btn-close:hover {
+                color: #000;
+                text-decoration: none;
+                opacity: 0.75;
+            }
+
+            .btn-close:focus {
+                outline: 0;
+                box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+                opacity: 1;
+            }
+
+        .alert-dismissible .btn-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 2;
+            padding: 1.25rem 1rem;
+        }
+
+
         #pwdInvalid{
             color:red;
             margin-left:10px;

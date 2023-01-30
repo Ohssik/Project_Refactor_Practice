@@ -112,27 +112,32 @@
 
                     <!-- Topbar -->
                     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
+                        <marquee>
+                            <span id="showDateInfo"></span>
+                        </marquee>
                         <!-- Sidebar Toggle (Topbar) -->
                         <form class="form-inline">
                             <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                                 <i class="fa fa-bars"></i>
                             </button>
+                            
                         </form>
 
                         <!-- Topbar Search -->
-                        @*<form
+                        @*
+                        <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
+                        <div class="input-group" >                            
                         <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
                         aria-label="Search" aria-describedby="basic-addon2">
                         <div class="input-group-append">
                         <button class="btn btn-primary" type="button">
                         <i class="fas fa-search fa-sm"></i>
                         </button>
+                        </div>                        
                         </div>
-                        </div>
-                        </form>*@
+                        </form>
+                        *@
 
                         <!-- Topbar Navbar -->
                         <ul class="navbar-nav ml-auto">
@@ -390,7 +395,49 @@
 
     <!-- Page level custom scripts -->
     <script src="~/js/demo/datatables-demo.js"></script>
-    
+    <script>
+        let y = new Date().getFullYear();
+        let M = new Date().getMonth() + 1;
+        let d = new Date().getDate();
+        let weekDay = ['日', '一', '二', '三', '四', '五', '六'];
+        let w = weekDay[new Date().getDay()];
+        let h = new Date().getHours();
+        let showDateInfo = document.getElementById('showDateInfo');//跑馬燈訊息
+
+        if (h < 11)
+            showDateInfo.innerHTML = "早安，";
+        else if (h >= 11 && h < 14)
+            showDateInfo.innerHTML = "午安，";
+        else if (h >= 14 && h < 18)
+            showDateInfo.innerHTML = "下午好，";
+        else if (h >= 18)
+            showDateInfo.innerHTML = "晚上好，";
+
+        showDateInfo.innerHTML += `今天是 ${y}年${M}月${d}日 星期${w}`;
+
+        //取得台北天氣
+        (function () {
+            let url = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=rdec-key-123-45678-011121314";
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    let response = JSON.parse(this.response);
+                    //console.log(response);
+
+                    for (let i = 0; i < response.records.location[5].weatherElement[0].time.length; i++) {
+                        let now = new Date();
+                        let sTime = new Date(response.records.location[5].weatherElement[0].time[i].startTime);
+                        let eTime = new Date(response.records.location[5].weatherElement[0].time[i].endTime)
+                        if (now >= sTime && now < eTime) {
+                            showDateInfo.innerHTML += `，今天台北天氣大約是 ${response.records.location[5].weatherElement[0].time[i].parameter.parameterName}`;
+                        }
+                    }
+                }
+            };
+        })();
+    </script>
     @RenderSection("Scripts",required:false)
 </body>
 </html>

@@ -122,7 +122,7 @@ namespace prjMSIT145_Final.Controllers
 
             string json = System.Text.Json.JsonSerializer.Serialize(member);
             HttpContext.Session.SetString(CDictionary.SK_LOGINED_ADMIN, json);
-            //return RedirectToAction("ANormalMemberList");
+           
             return RedirectToAction("ANormalMemberList");
         }
         public IActionResult ALogout()
@@ -136,12 +136,10 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult ANormalMemberList()
         {
             List<CANormalMemberViewModel> list = new List<CANormalMemberViewModel>();
-            //if (k == null)
-            //{
             
             IEnumerable<NormalMember> normalMembers = from member in _context.NormalMembers
                    select member;
-            //}
+            
             if(normalMembers != null)
             {
                 foreach(NormalMember n in normalMembers)
@@ -268,12 +266,10 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult ABusinessMemberList()
         {
             List<CABusinessMemberViewModel> list = new List<CABusinessMemberViewModel>();
-            //if (k == null)
-            //{
-
+            
             IEnumerable<BusinessMember> businessMembers = from member in _context.BusinessMembers
                                                       select member;
-            //}
+            
             if (businessMembers != null)
             {
                 foreach (BusinessMember b in businessMembers)
