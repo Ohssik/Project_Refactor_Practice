@@ -79,8 +79,11 @@
 			const request = await fetch(`@Url.Content("~/Type/BCategoryList")`);
 			const data = await request.json();
 			let frag = document.createDocumentFragment();
-			frag = "<option>請選擇商品類別</option>";
+			//frag = "<option>請選擇商品類別</option>";
+			frag = "";
 			data.forEach(function (item, index) {
+				console.log(selType.value)
+				if(item.categoryName !== selType.value)
 				frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
 			})
 			selType.innerHTML += frag;

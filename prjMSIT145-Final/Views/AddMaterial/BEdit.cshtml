@@ -63,14 +63,12 @@
 			const response = await fetch(`@Url.Content("~/Type/BOptionGroup")`);
 			const data =await response.json();
 			let result = document.createDocumentFragment();
-			result += "<option>請選擇配料類別</option>";
+			result = "";
 			data.forEach(function (item,index) {
 				//console.log(data)
-
-				if(index === 0)
-				result +=`<option>${item.optionGroupName}</option>`
-				else if(data[index].optionGroupName !== data[index-1].optionGroupName)
-				result += `<option>${item.optionGroupName}</option>`;
+				if(item.optionGroupName !== selType.value)
+				result +=`<option>${item.optionGroupName}</option>`;
+			}
 			})
 			selType.innerHTML += result;
 		})
