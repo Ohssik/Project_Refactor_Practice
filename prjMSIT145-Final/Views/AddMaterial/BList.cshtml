@@ -87,7 +87,7 @@
 		const linkDelete = document.querySelector("#linkDelete"); //確定刪除配料
 
 		//關鍵字查詢(類別與商品)
-		txt.addEventListener("change", () => list());
+		txt.addEventListener("input", () => list());
 
 		list();
 		async function list() {

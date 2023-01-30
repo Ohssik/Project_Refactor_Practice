@@ -79,7 +79,7 @@
 		const btnDeleteCheck = document.querySelector("#linkDelete")//確認刪除按鈕
 
 		//關鍵字查詢(類別與商品)
-		txt.addEventListener("keyup", () => search());
+		txt.addEventListener("input", () => search());
 
 		search();
 		async function search() {
