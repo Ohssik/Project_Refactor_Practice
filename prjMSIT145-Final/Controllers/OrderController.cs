@@ -10,8 +10,10 @@ namespace prjMSIT145_Final.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        public IActionResult CList(int? NFid)
         {
+            if(NFid==null)
+                return Redirect("/CustomerMember/Login");
             return View();
         }
     }

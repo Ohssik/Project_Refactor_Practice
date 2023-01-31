@@ -1,0 +1,120 @@
+.shopinfocard {
+    margin: 20px 0px 0px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.shopinfoarea {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.shopinfo {
+    background-color: #FFFFFF;
+    width: 460px;
+    height: 180px;
+    border-radius: 10px 0px 0px 0px;
+    text-align: center;
+    padding: 10px;
+}
+
+.btnbar {
+    width: 450px;
+    height: 65px;
+    background-color: #9F4E27;
+    display: flex;
+    padding: 15px;
+    border-radius: 0px 0px 0px 10px;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: #FFFFFF;
+    margin: 0px 40px 0px 40px;
+}
+
+    .icon:first-child {
+        margin: 0px 40px 0px 5px;
+    }
+
+    .icon:last-child {
+        margin: 0px 5px 0px 40px;
+    }
+
+    .icon img {
+        background-color: #FFFFFF;
+        margin: 12.5px 0px 0px 13px;
+    }
+
+.btntext {
+    font-size: 14px;
+    color: #FFFFFF;
+    margin-top: 13px;
+    font-weight: bold;
+    text-align:center;
+}
+
+
+.ADarea {
+    background-color: #FFFFFF;
+    width: 720px;
+    height: 295px;
+    border-radius: 0px 10px 10px 0px;
+    margin: 0px 0px 0px 0px;
+    overflow: hidden;
+}
+
+    .ADarea img {
+        width: 720px;
+        height: 295px;
+    }
+
+.ShowClassdisplay {
+    margin: 15px auto;
+    width: 1200px;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.productclass {
+    background-color: #FFFFFF;
+    width: 370px;
+    padding: 5px;
+    margin: 0px 0px 25px 30px;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px #5a5555;
+}
+
+    .productclass:nth-child(3n+1) {
+        margin: 0px 0px 30px 0px;
+    }
+
+.classtitle {
+    color: #9F4E27;
+    margin: 10px;
+}
+
+.productitem {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    padding: 0px 0px 10px 0px;
+    border-bottom: 0.5px solid rgb(212, 207, 207);
+    align-items: center;
+}
+
+    .productitem:last-child {
+        padding: 0px;
+        border-bottom: none;
+    }
+
+.producttext {
+    font-size: 20px;
+    font-weight: bold;
+}

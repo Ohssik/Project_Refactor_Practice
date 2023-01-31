@@ -1,0 +1,75 @@
+﻿@model List<prjMSIT145_Final.ViewModels.VBusinessMemberContainImgViewModel>
+@{
+    Layout = "_CustomerLayout";
+    ViewData["Title"] = "Home Page";
+}
+@section Styles{
+    <link href="~/css/Customer_css/CMainpagestyle.css" rel="stylesheet" />
+    <link href="~/css/Customer_css/CShopcardstyle.css" rel="stylesheet" />
+}
+<section class="Displayarea">
+    <div class="ADblock">
+        <img src="~/images/Customer/Mainpage/shibaLogo_row2.png" />
+    </div>
+    <div class="Bone Boneposition1">
+        <div class="Quickbutton">
+            <img src="~/images/Customer/Mainpage/nearby 64x64.png" />
+        </div>
+        <p>找附近</p>
+    </div>
+    <div class="Bone Boneposition2">
+        <div class="Quickbutton">
+            <img src="~/images/Customer/Mainpage/findarea 64x64.png" />
+        </div>
+        <p>找區域</p>
+    </div>
+    <div class="Bone Boneposition3">
+        <div class="Quickbutton">
+            <img src="~/images/Customer/Mainpage/shop 64x64.png" />
+        </div>
+        <p>找品牌</p>
+    </div>
+    <div class="Bone Boneposition4">
+        <div class="Quickbutton">
+            <img src="~/images/Customer/Mainpage/coupon 64x64.png" />
+        </div>
+        <p>我的券夾</p>
+    </div>
+</section>
+<section class="Showshoptilte">
+    <p>附近推薦店家</p>
+    <div>
+        <h2>查看更多&ensp;</h2>
+        <img src="~/images/Customer/Mainpage/circlearrow_right 32x32.png" />
+    </div>
+</section>
+<section class="Showshopdisplay">
+    @{
+        foreach (var item in Model)
+        {
+            <div class="Shopcard" id="Shop @item.Fid">
+                <img class="Shopcardloggo" src="~/images/Customer/Shopcard/Test/circlelogo.png" />
+                <img class="Shopcardcover" src="~/images/Customer/Shopcard/Test/shopcover.png" />
+                <div class="Shopcardbottem">
+                    <h3>&ensp;@item.MemberName</h3>
+                    <ul>
+                        <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
+                        <li>&ensp;0.3 km&ensp;</li>
+                        <li>&ensp;★ 4.6&ensp;</li>
+                    </ul>
+                    <h4>&ensp;@item.Address</h4>
+                </div>
+            </div>
+        }
+    }
+</section>
+@section Scripts{
+    <script>
+        @foreach (var item in Model)
+        {
+            @:document.getElementById("Shop @(item.Fid)").addEventListener("click",function(){
+            @:window.location.href="Home/CShowProduct/?BFid=@(item.Fid)";
+            @:});
+        }   
+    </script>
+}
