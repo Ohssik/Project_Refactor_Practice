@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<prjMSIT145_Final.ViewModels.COrderDetialViewModel>
 @{
+    Layout = "_CustomerLayout";
     ViewData["Title"] = "List";
 }
 
@@ -169,10 +170,7 @@
             background-color: white
         }
 
-        .bodyBackgroundColor {
-            /* background-color: rgb(212, 218, 204); */
-            background-color: rgb(236, 236, 236);
-        }
+        
 
         .card_Guide_FontColor {
             color: #595757;
@@ -259,7 +257,7 @@
                     count++;
                     <div class="divCenter " id="divCenter">
                         <!-- *****動態產生****至140行為止 -->
-                        <div class="cartDiv cardBorderColor cardBackgroundColor padding" name="Click" id="Click">
+                        <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid">
                             <p class="card-text card_Guide_FontColor" hidden name="OrderFid">@Html.DisplayFor(modelItem => item.OrderFid)</p>
                             <div class="state_timeDiv">
                                 <!-- 背景色依狀態更改:接單:淡粉色,未接單:綠色,店家拒接單:紅色,完成訂單:灰色 -->
@@ -275,7 +273,7 @@
                                 <div class="">
                                     <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
                                     <div class="topBorder">
-                                        <p class="card-text card_Guide_FontColor">@Html.DisplayFor(modelItem => item.Qty)品項</p>
+                                        
                                         <p class="card-text card_Guide_FontColor">@Html.DisplayFor(modelItem => item.TotalAmount)金額</p>
                                     </div>
                                 </div>
@@ -295,15 +293,17 @@
     <script src="js/jquery-3.6.2.js"></script>
     <script>
         let obj = document.getElementById("divCenter");
-        var Click = document.querySelector(`#Click`)
+        
 
-        Click.addEventListener('click', function () {
+        @foreach(var item in Model)
+        {
+            @:document.getElementById("Click @(item.Fid)").addEventListener('click', function () {
 
-            console.log(this.children[0].innerHTML);
+            @:window.location.href="ListInfo/?Fid=@(item.Fid)";
 
-            location.replace(`ListInfo/${this.children[0].innerHTML}`)
-
-        }, false);
+            @:});
+            
+        }
 
         $("#cartDelete").find("i").hover(function () {
             $(this).css("color", "gray")

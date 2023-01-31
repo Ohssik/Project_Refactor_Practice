@@ -30,28 +30,44 @@ namespace prjMSIT145_Final.Controllers
         }
 
 
-        public IActionResult List(CKeywordViewModel vm)
+        public IActionResult List()
         {
 
-            string keyword = vm.txtKeyword;
-            IEnumerable<ViewShowFullOrder> datas = null;
-
-
-            if (keyword == null)
-                datas = from c in _context.ViewShowFullOrders
-                        select c;
-            else
-                datas = _context.ViewShowFullOrders.Where(c => c.BMemberName.Contains(keyword)).ToList();
-
             List<COrderDetialViewModel> list = new List<COrderDetialViewModel>();
-            foreach (var d in datas)
-            {
-                COrderDetialViewModel v = new COrderDetialViewModel();
-                v.Order = d;
-                list.Add(v);
-            }
-            return View(list);
 
+            var q = from emp in _context.Orders
+                    join g in _context.BusinessMembers
+                    on emp.BFid equals g.Fid
+                    select new
+                    {
+                        emp.OrderState,
+                        emp.OrderTime,
+                        emp.TotalAmount,
+                        g.MemberName,
+                        emp.Fid
+                    };
+
+            if (q != null)
+            {
+                
+                foreach (var c in q.ToList())
+                {
+                    COrderDetialViewModel vm = new COrderDetialViewModel();
+                    vm.OrderState = c.OrderState;
+                    vm.OrderTime = c.OrderTime;
+                    vm.TotalAmount = c.TotalAmount;
+                    vm.BMemberName = c.MemberName;
+                    vm.Fid = c.Fid;
+                   
+
+                    list.Add(vm);
+                }
+
+            }
+            
+            
+
+            return View(list);
         }
 
         public IActionResult ListInfo(int? orderid)
@@ -64,7 +80,7 @@ namespace prjMSIT145_Final.Controllers
 
             var orderBMemberName = from o in _context.Orders
                                    join b in _context.BusinessMembers
-                                   on o.NFid equals b.Fid
+                                   on o.BFid equals b.Fid
                                    select new
                                    {
                                        Fid = o.Fid,
@@ -156,10 +172,10 @@ namespace prjMSIT145_Final.Controllers
                     }
                     vm.items.Add(item2);
                 }
-
+                list.Add(vm);
             }
 
-            return View();
+            return Json(list);
         }
     }
 }

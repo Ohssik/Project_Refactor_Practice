@@ -202,7 +202,7 @@
 <body class="bodyBackgroundColor">
     <div class="div1 cardBackgroundColor">
         <!-- 左邊 -->
-        <div class="leftArea" id="DivTest">
+        <div class="leftArea" id="selType">
             <input type="hidden" name="OrderFid"  />
             <!-- 店家全區 -->
             <div class="flex bottomBorder">
@@ -349,6 +349,40 @@
 
 @section Scripts{
     <script>
+        
+        const selTest = document.getElementById('DivTest');
+        const selType = document.querySelector("#selType");
+        //console.log(selTest);
+
+        //loadDetail()
+
+        //async function loadDetail(orderid){
+        //    const response = await fetch(`@Url.Content("~/OrderDetial/ListInfo/?Fid=${Fid}")`)
+        //    const data = await response.json();
+        //    console.log(data);
+        //    let result = document.createDocumentFragment();
+        //    result = "";
+        //    data.forEach(function(item, index){
+        //        result += "<p>${item.fid}</p>"
+                              
+
+        //    });
+        //    tbody.innerHTML = result;
+        //};
+
+        window.addEventListener("load", async function () {
+            const request = await fetch(`@Url.Content("~/OrderDetial/ListInfo")`);
+            const data = await request.json();
+            console.log(data);
+            let frag = document.createDocumentFragment();
+            frag = "";
+            data.forEach(function (item, index) {
+                
+            });
+            selType.innerHTML += frag;
+            
+        })
+
 
         let check = true;
         for (let i = 1; i <= 5; i++) {
@@ -394,23 +428,6 @@
                 check = true;
             }
         }
-
-        //const selTest = document.getElementById('DivTest');
-        //console.log(selTest);
-
-        //loadDetail()
-
-        //async function loadDetail(orderid){
-        //    const response = await fetch(`@Url.Content("~/OrderDetial/ListInfoApi/?orderid=${orderid}")`)
-        //    const data = await response.json();
-        //    data.forEach(function(item, index){
-        //        const option = item.items;
-
-        //    selTest.innerHTML = join("");
-
-        //    });
-        //};
-
 
     </script>
     }

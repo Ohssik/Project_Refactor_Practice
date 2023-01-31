@@ -1,4 +1,5 @@
 ﻿using prjMSIT145_Final.Models;
+using prjMSIT145_Final.ViewModel;
 
 namespace prjMSIT145_Final.ViewModels
 {
@@ -15,10 +16,16 @@ namespace prjMSIT145_Final.ViewModels
             set { _order = value; }
         }
 
+
         public int OrderFid
         {
             get { return _order.OrderFid; }
             set { _order.OrderFid = value; }
+        }
+        public int? Fid
+        {
+            get { return _order.Fid; }
+            set { _order.Fid = value; }
         }
         public int? NFid
         {
@@ -130,5 +137,8 @@ namespace prjMSIT145_Final.ViewModels
             get { return _order.SubTotal; }
             set { _order.SubTotal = value; }
         }
+        public int? totalQty { get; set; }
+
+        public List<COrderItemViewModel> items { get; set; }
     }
 }
