@@ -1,0 +1,80 @@
+﻿@model prjMSIT145_Final.ViewModel.CProductOptionViewModel
+@{
+	Layout = "_BusinessLayout";
+    ViewData["Title"] = "BEdit";
+}
+
+@section Styles{
+	<link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+}
+
+<div class="outerlayer ">
+	<form method="post" enctype="multipart/form-data">
+		<input type="hidden" name="BFid" value="@Model.BFid" />
+		<input type="hidden" name="Fid" value="@Model.Fid" />
+		<div class="topdiv">
+			<a href="@Url.Content("~/AddMaterial/BList")"><img class="back" src="@Url.Content("~/images/backarrow.png")" value=""></a>
+			<input id="txtOptionGroupName" name="OptionName" class="inputtext" type="text" placeholder=" 輸入配料名稱....." value="@Model.OptionName"/>   @*配料名稱*@
+
+			<input id="btnSubmit" class="butt" type="submit" value="儲存" />
+		</div>
+
+		@*配料照片*@
+		@*<h6 id="h6">相片</h6>
+		<div class="divimage">
+		<div>
+		<input style="width:110px; height:70px;" id="imgShow" class="inputimage" type="image" src="../images/photo.png">
+		</div>
+		<div>
+		<p>餐點照片可協助顧客訂購那些美食,<br>進而提供銷售量.</p>
+		<div class="divinputimagebutton">
+		@*<input id="btnImgCreate" class="inputimagebutton"type="button" value="新增照片">*@
+		@*<input id="btnImgDownload" class="inputimagebutton" type="button" value="下載">
+		<label class="inputimagebutton" for="file" style="width:80px; padding: 5px;"><input id="file" name="file" type="file" style="display:none;" />上傳檔案</label>
+		<input id="btnImgDelete" class="inputimagebutton" type="button" value="刪除">
+		</div>
+		</div>
+		</div>*@
+		<select id="selType" name="OptionGroupName"><option>@Model.OptionGroupName</option></select>  @*選擇類別*@
+
+		<hr style="border:1px dashed #000; height:1px">
+		<h6 id="h6">價格</h6>
+		<label for="">預設價格</label>
+		<input type="text" value="@Model.UnitPrice" id="txtPrice" name="UnitPrice" />   @*配料價格*@
+		@*<hr style="border:1px dashed #000; height:1px">
+		<h6 id="h6">配料</h6>
+		<div class="form-check form-switch">
+		@*checked為1=>已上架
+		<input name="IsForSale" class="form-check-input" type="checkbox" role="switch" id="IsForSale" />  @*配料可否多選
+		<label class="form-check-label" for="flexSwitchCheckDefault"></label>
+		</div>*@
+		@*<hr style="border:1px dashed #000; height:1px">
+		<h6 id="h6">說明(選項)</h6>
+		<textarea placeholder=" 輸入說明...." id="txtMemo" name="Memo"></textarea>   @*配料備註*@
+	</form>
+</div>
+
+@section Scripts{
+	<script>
+		const selType = document.querySelector("#selType"); //選擇的類別
+		const btnSubmit = document.querySelector("#btnSubmit"); //儲存按鈕
+
+		window.addEventListener("load", async function () {
+			const response = await fetch(`@Url.Content("~/Type/BOptionGroup")`);
+			const data =await response.json();
+			let result = document.createDocumentFragment();
+			result = "";
+			data.forEach(function (item,index) {
+				//console.log(data)
+				if(item.optionGroupName !== selType.value)
+				result +=`<option>${item.optionGroupName}</option>`;
+			})
+			selType.innerHTML += result;
+		})
+		btnSubmit.addEventListener("click",function(){
+			if (selType.value == "請選擇配料類別")
+			alert("請確認配料類別是否選取!");
+		})
+	</script>
+	}

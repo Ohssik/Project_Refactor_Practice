@@ -1,0 +1,136 @@
+﻿@{
+	Layout = "_BusinessLayout";
+	ViewData["Title"] = "BList";
+}
+@section Styles{
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+	<script src="../js/ProductList.js"> </script>
+	<link rel="stylesheet" href="../css/ProductList.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+	<style>
+		.btnDeleteCheck {
+			border: none;
+			width: 15%;
+			color: orange;
+			font-size: 15px;
+			background-color: transparent;
+		}
+
+		.btnDeleteCancel {
+			border: none;
+			width: 15%;
+			color: black;
+			font-size: 15px;
+			background-color: transparent;
+		}
+	</style>
+}
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header" style="width:100%">
+				<h5 class="modal-title" id="exampleModalLabel">提醒</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				確定要刪除嗎?
+			</div>
+			<div class="modal-footer" style="width:100%">
+				<button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
+				<a id="linkDelete"><button style="width:70px;" class="btnDeleteCheck" data-bs-dismiss="modal">刪除</button></a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="productDiv">
+	<div class="top">
+		<div>
+			<h2 id="h2">餐點</h2>
+		</div>
+		<div class="topbutton">
+			<a href="@Url.Content("~/Product/BCreate")"><input class="insertbutton" type="button" value="+新增餐點" id="btnCreateProduct" /></a>
+			<a href="@Url.Content("~/Type/BItemTypeAddnEdit")"><input class="insertbutton" type="button" value="新增/編輯類別" /></a>
+		</div>
+	</div>
+	<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />
+	<!-- <select ><option></option></select>
+	 -->
+	<table id="table" class="table table-hover stripe">
+		<thead>
+		<th>相片</th>
+		<th>產品名稱</th>
+		<th>產品價格</th>
+		<th>產品類別</th>
+		<th>產品狀態</th>
+		<th>備註</th>
+		<th>選項</th>
+		</thead>
+		<tbody id="tbody">
+		</tbody>
+	</table>
+</div>
+
+@section Scripts{
+	<script>
+		const txt = document.querySelector("#txtKeyword");
+		const tbody = document.querySelector("#tbody");
+		const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
+		const btnDelete = document.getElementsByName("btnDelete"); //刪除按鈕
+		const btnDeleteCheck = document.querySelector("#linkDelete")//確認刪除按鈕
+
+		//關鍵字查詢(類別與商品)
+		txt.addEventListener("input", () => search());
+
+		search();
+		async function search() {
+			let response = await fetch(`@Url.Content("~/Product/BSearch?keyword=${txt.value}")`);
+			const datas = await response.json();
+			let result = document.createDocumentFragment();
+			result = "";
+			datas.forEach(function (item, index) {
+				//console.log(item.fid);
+				if (item.photo == null)  //沒有產品圖片就使用預設圖片
+					item.photo = "uparrow.png";
+
+				if (item.isForSale === 0)
+					item.isForSale = "未上架"
+				else if(item.isForSale === 1)
+					item.isForSale = "已上架"
+				else if (item.isForSale === 2)
+                    item.isForSale = "停售"
+
+				result += `
+						<tr>
+						<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
+						<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
+						<input type="hidden" name="${item.categoryFid}" value="${item.categoryFid}"/>
+
+						<td><input style='width:30px; height:20px;' type="image" src="../images/${item.photo}"></td>
+						<td>${item.productName}</td>
+						<td>${item.unitPrice}</td>
+						<td>${item.categoryName}</td>
+						<td>${item.isForSale}</td>
+						<td>${item.memo}</td>
+						<td>
+							<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/edit.png">編輯</button></a>
+							<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/garbage.png">刪除</button>
+						</td>
+						</tr>
+						`
+			});
+			tbody.innerHTML = result;
+			//刪除
+			btnDelete.forEach(function (click) {
+				click.addEventListener("click", function () {
+					//console.log(this.parentElement.parentElement.firstElementChild);
+					const id = this.parentElement.parentElement.firstElementChild;
+
+					btnDeleteCheck.addEventListener("click", function () {
+						btnDeleteCheck.setAttribute("href", `@Url.Content("~/Product/BDelete/${id.value}")`);
+					})
+				})
+			})
+		}
+	</script>
+}

@@ -1,0 +1,177 @@
+﻿@model prjMSIT145_Final.Models.NormalMember
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@section Styles{
+        <style>
+
+        </style>
+        <link rel="stylesheet" href="~/css/Customer_css/Register.css">
+
+}
+
+ <form asp-action="edit" enctype="multipart/form-data">
+
+     <h1>編輯資料</h1>
+     <div class="wrap">
+    <div class="leftgroup">
+        <div class="card1">
+            <div class="backcolor">
+               @* <img src="~/images/@Model.MemberPhotoFile" class="dog">
+                    <div class="text6">@Model.MemberName</div>
+                    <div class="text6">@Model.Phone</div>*@
+            </div>
+        </div>
+        <div class="card2">
+            <div class="text2">個人檔案</div>
+            <div class="text2">帳號管理</div>
+            <div class="text2">我的券夾</div>
+        </div>
+    </div>
+        <div class="card3">
+        <h4 class="title2">個人檔案</h4>
+        <div class="dashed"></div>
+        <input type="hidden"name="Fid" value="@Model.Fid"/>
+       @* <input type="file" name="photo" class="text-danger" value="~/images/@Model.MemberPhotoFile" />
+        <button> <img src="~/images/@Model.MemberPhotoFile" class="title3" style="width:100px" /></button>*@
+        <div class="aui-info">
+                <img src="~/images/@Model.MemberPhotoFile" id="img-txz" style="width: 3rem" class="aui-img-round user-img"/>
+                <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput" value="" />
+             </div> 
+        <span class="text3">
+            <p class="color">*</p>  
+            <p class="text4">真實姓名</p>
+        </span>
+        <div class="div1">
+            <input type="text" class="input" name="MemberName" value="@Model.MemberName" />
+        </div>
+        <span class="text3">
+            <p class="color">*</p>  
+            <p class="text4">手機號碼</p>
+        </span>
+        <div class="div1">
+            <input type="text" class="input" name="Phone" value="@Model.Phone"/>
+        </div>
+        <div class="text4">性別</div><br>
+        <div class="display">
+            @{
+                if(Model.Gender=="1"){
+                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" />
+                            <label>女</label>
+                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="男" checked />
+                            <label>男</label>
+                }else{
+                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" checked />
+                            <label>女</label>
+                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="男"  />
+                            <label>男</label>
+                    }
+                }
+
+            </div><br>
+            <span class="text3"> 
+                <p class="text4">生日</p>
+            </span>
+            @{
+                string st = "";
+                if (Model.Birthday != null){
+
+                    st = Convert.ToDateTime(Model.Birthday).ToString("yyyy-MM-dd");
+                }
+            <div class="div1">
+            <input id="birthid" type="date" class="date" name="Birthday" value="@st" />
+            </div>
+            };
+       
+        <span class="text3"> 
+            <p class="text4">居住地</p>
+        </span>
+        <div class="display">
+            <div class="div2">
+                <select type="text "id="city" class="input" name="AddressCity" >
+                    <option> @Model.AddressCity</option>
+                  
+                </select>
+            </div>
+            <div class="div2">
+                <select type="text "id="area" class="input" name="AddressArea">
+                    <option>@Model.AddressArea</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div>
+            <label>密碼</label>
+            <input type="password" name="Password" value="@Model.Password">
+
+        </div>
+        <div>
+            <label>信箱</label>
+            <input type="email" name="Email" value="@Model.Email"/>
+        </div>
+        <div class="display">
+            <input type="submit" class="enter" value="修改"/>
+        </div>
+       
+    </div>
+    </div>
+    </form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+        <script src="~/js/NormalMemberAddress/taiwan_districts.js"></script>
+        <script type="text/javascript">
+
+
+                 for (let item of data) { $("#city").append(`<option>${item.name}</option>`); }
+
+                  $("#city").change(function ()
+            {
+                $("#area").find("option").remove();
+                let city = $(this).val();
+                for (let item of data)
+                {
+                    if (city == item.name)
+                    {
+                        for (let district of item.districts)
+                            $("#area").append(`<option>${district.name}</option>`);
+                        break;
+                    }
+                }
+            });
+            
+            var upload= function (c,d){
+                "use strict";
+                var $c= document.querySelector(c),
+                    $d=document.querySelector(d),
+                    file =$c.files[0],
+                        reader =new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload=function (e){
+
+                            $d.setAttribute("src", e.target.result);
+                        };
+            };
+
+
+
+            //if(@Model.Gender=="1")
+            //{document.getElementById("radioboy").removeAttribute('checked');
+            //} 
+            //else
+            //document.getElementById("radiogirl").removeAttribute('checked');
+           
+            //document.querySelector("#birthid").date=@Model.Birthday;
+
+            
+    </script>
+
+
+
+}

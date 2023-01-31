@@ -1,0 +1,166 @@
+﻿@model prjMSIT145_Final.Models.ProductOptionGroup
+@{
+	Layout = "_BusinessLayout";
+	ViewData["Title"] = "BMaterialTypeAddnEdit";
+}
+@section Styles{
+	<link rel="stylesheet" href="../css/ProductCategoryCreate.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+	<link rel="stylesheet" href="../css/newTypeCreate.css">
+
+	<style>
+		.btnDeleteCheck {
+			border: none;
+			width: 15%;
+			color: orange;
+			font-size: 15px;
+			background-color: transparent;
+		}
+
+		.btnDeleteCancel {
+			border: none;
+			width: 15%;
+			color: black;
+			font-size: 15px;
+			background-color: transparent;
+		}
+		/*table{
+			width:100%;
+		}
+		.th{
+			width:350px
+		}
+		td{
+			width:100px
+		}*/
+	</style>
+}
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header" style="width:100%">
+				<h5 class="modal-title" id="exampleModalLabel">提醒</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				確定要刪除嗎?
+			</div>
+			<div class="modal-footer" style="width:100%">
+				<button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
+				<a id="linkDelete"><button style="width:70px;" class="btnDeleteCheck" data-bs-dismiss="modal">刪除</button></a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="mainDiv flex">
+	<div class="box">
+		<a href="@Url.Content("~/AddMaterial/BList")"><img class="" src="../images/backarrow.png"/></a>
+		<form method="post" enctype="application/x-www-form-urlencoded" action="BMaterialTypeSubmit">
+			<div class="leftmargin">
+				<div class="flex">
+					<input type="hidden" value="@Model.BFid" name="BFid" />
+					<input type="hidden" value="@Model.Fid" name="Fid" id="fid" />
+					<input class="leftTxt" type="text" placeholder=" 輸入類別名稱....." required name="OptionGroupName" />
+					<input class="butt" type="submit" value="儲存" />
+					<input class="butt" type="button" value="刪除" id="btnDelete"  data-bs-toggle="modal" data-bs-target="#exampleModal"/>
+				</div>
+				<hr style="border:1px solid #000; height:1px">
+			</div>
+			<div class="leftmargin">
+				<p>是否可多選</p>
+				<div class="form-check form-switch">
+					
+					<label class="form-check-label" for="IsMultiple">
+					<input class="form-check-input" type="checkbox" role="switch" name="IsMultiple" id="isMultiple"></label>
+				</div>
+				<hr style="border:1px solid #000; height:1px">
+			</div>
+			<div class="leftmargin">
+				<p>備註</p>
+				<textarea class="textArea" rows="4" name="Memo">-</textarea>
+			</div>
+		</form>
+	</div>
+	<div class="rigthDivMargin rightDiv leftBorder">
+		<table class="table table-hover ">
+			<thead>
+			<th>類別名稱</th>
+			<th>是否多選</th>
+			<th colspan="2">備註</th>
+			</thead>
+			<tbody id="tbody">
+			</tbody>
+		</table>
+	</div>
+</div>
+
+@section Scripts{
+	<script>
+		const txt = document.querySelector(".leftTxt"); //類別名稱
+		const tbody = document.querySelector("#tbody"); //表格資料
+		const tr = document.getElementsByName("tr"); //資料列
+		const btnDelete = document.querySelector("#btnDelete"); //點擊刪除
+		const linkDelete = document.querySelector("#linkDelete"); //確認刪除
+		const modalBody = document.querySelector(".modal-body"); //未選擇刪除的類別,更改警告內容
+		const fid = document.querySelector("#fid"); //已存在的類別id;
+		const isMultiple = document.querySelector("#isMultiple"); //類別是否多選
+		const textArea = document.querySelector(".textArea"); //類別備註
+
+		list();
+		async function list() {
+			const response = await fetch("@Url.Content("~/Type/BOptionGroup")");
+			const datas = await response.json();
+			console.log(datas);
+
+			let result = document.createDocumentFragment();
+			result = "";
+			datas.forEach(function (item, index) {
+				if (item.isMultiple == 0)
+					item.isMultiple = "否";
+				else
+					item.isMultiple = "是";
+				result += `<tr name='tr'>
+								<input type='hidden' value='${item.fid}'/>
+								<td>${item.optionGroupName}</td>
+								<td>${item.isMultiple}<td/>
+								<td  style="text-align:left">${item.memo}</td>
+								</tr>`
+			})
+			tbody.innerHTML = result;
+
+			tr.forEach(function (value) {
+				value.addEventListener("click", function () {
+					const id = this.children[0].value; //取得點取的資料列id
+					const name = this.cells[0].innerHTML; //取得點取的資料列名稱
+					const memo = this.cells[3].innerHTML; //取得點取的資料列備註
+					txt.value = name;
+					fid.value = id;
+					textArea.value = memo;
+				})
+			})
+		}
+
+		//商品是否多選
+		isMultiple.addEventListener("click", function () {
+			
+
+			if (isMultiple.checked)
+				isMultiple.value = 1;
+			else
+				isMultiple.value = 0;
+				console.log(isMultiple);
+		})
+
+		//刪除
+		btnDelete.addEventListener("click", function () {
+			console.log(fid.value)
+			if (fid.value == 0) {
+				modalBody.innerHTML = "選取要刪除的類別!";
+				linkDelete.firstElementChild.innerHTML = "確定";
+			}
+			else {
+				linkDelete.setAttribute("href", `@Url.Content("~/Type/BMaterialTypeDelete/${fid.value}")`);
+			}
+		})
+	</script>
+}
