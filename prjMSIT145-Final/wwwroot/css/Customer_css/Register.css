@@ -1,7 +1,7 @@
 .wrap{
    
-    width:1200px;
-  
+    width:1800px;
+   
     margin: 200px auto;
     display: flex;
 
@@ -44,9 +44,8 @@
     border: solid 2px; 
     border-color: transparent;
     width: 636px;
-    height: 810px;
     border-radius: 5px;
-
+    margin:50px auto;
     border-collapse: collapse;
     text-align: center;
     padding: 10px;
@@ -86,16 +85,15 @@
     margin: 40px;
 }
 .input {
-    width: 200px;
+    width: 100px;
     margin: auto;
     margin-left: 0;
-    height: 18px;
+/*    height: 18px;*/
     background-color: transparent;
     font-size: 14px;
     border-radius: 10px;
     border-color: transparent;
     outline: none;
-
 }
 .div1{
     width: 200px;
@@ -150,7 +148,7 @@
     outline: none;
 }
 .div2{
-    width: 270px;
+    width: 100px;
     height: 30px;
     background-color: transparent;
     font-size: 14px;
@@ -197,7 +195,7 @@
     right: 0;
     opacity: 0;
     display: block;
-    width: 3.5rem;
+    width: 10rem;
     clear: both;
     display: block;
     margin: auto;
