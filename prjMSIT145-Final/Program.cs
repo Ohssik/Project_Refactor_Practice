@@ -23,9 +23,14 @@ builder.Services.AddSession(op => {
 //¶}±ÒSessionªA°È end
 
 
+//builder.Services.AddDbContext<ispanMsit145shibaContext>(
+// options => options.UseSqlServer(
+// builder.Configuration.GetConnectionString("localconnection")
+//));
+
 builder.Services.AddDbContext<ispanMsit145shibaContext>(
  options => options.UseSqlServer(
- builder.Configuration.GetConnectionString("localconnection")
+ builder.Configuration.GetConnectionString("ispanMsit145shibaconnection")
 ));
 
 
