@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "Login";
 }
-<div class="wrap">
-    <div class="Content">
+<div class="wrap" id="wrap">
+    @*<div class="Content">
         <div class="Head">
             <p class="toptitle">歡迎使用你訂！線上訂餐系統</p>
             <p class="toptitle2">請選擇登入/註冊方式，通過驗證後即可使用</p>
@@ -37,12 +37,51 @@
                 <span class="text4">隱私權條款</span>
             </div>
         </div>
+    </div>*@
+    <div>
+        <p>一般用戶登入</p>
+    </div>
+    <div>
+        <p>網站管理員登入</p>
     </div>
 </div>
 
 
 
+@section Styles{
+    <style>
+    #wrap{
+        display:flex;
+         background-color:transparent;
+    }
+     .wrap>div{
+         width:200px;
+         height:100px;
+         margin: auto 10px;
+     }
+    .wrap>div:hover{
+        cursor: pointer;
+        border:5px solid pink;
+    }
+
+    .wrap > div:nth-child(1) {
+         background-color:yellow;
+     }
+     .wrap>div:nth-child(2){
+         background-color:white;
+     }
+     .wrap>div>p{
+         line-height:100px;
+         text-align:center;
+     }
+    </style>
+}
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <link rel="stylesheet" href="~/css/Customer_css/Login.css">
+    <script>
+        $('.wrap>div:nth-child(2)').click(function(){
+            location.assign('@Url.Action("Alogin","Admin")');
+        });
+    </script>
 }
