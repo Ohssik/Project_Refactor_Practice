@@ -3,8 +3,10 @@ using Microsoft.IdentityModel.Tokens;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Security.Cryptography;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace prjMSIT145_Final.Controllers
 {
@@ -188,7 +190,7 @@ namespace prjMSIT145_Final.Controllers
             foreach (var item1 in ProductClassTempList)
             {
                 #region 取得店家內，各商品類別內之產品資訊至集合
-                List<VProducts> ProductsList = new List<VProducts>();
+                List<VProductsViewModel> ProductsList = new List<VProductsViewModel>();
                 for (int p = 0; p < ProductClassTempList.Count; p++)
                 {
                     var Productdatas = from P in _context.Products
@@ -207,7 +209,7 @@ namespace prjMSIT145_Final.Controllers
                     ProductsList.Clear();
                     foreach (var item2 in Productdatas)
                     {
-                        ProductsList.Add(new VProducts
+                        ProductsList.Add(new VProductsViewModel
                         {
                             Fid = item2.Fid,
                             ProductName = item2.ProductName,
@@ -272,6 +274,59 @@ namespace prjMSIT145_Final.Controllers
                 ProductClassList = CUtility.ProductClassList,
             });
             return View(CUL);
+        }
+        [HttpPost]
+        public IActionResult AddtoCart()
+        {
+            #region 將新訂單寫入資料庫
+            _context.Orders.Add(new Order
+            {
+                NFid = 1,
+                BFid = 1,
+                //PickUpDate = ,
+                //PickUpTime = ,
+                //PickUpType = ,
+                PickUpPerson = "Test",
+                PickUpPersonPhone = "0900000000",
+                PayTermCatId= 1,
+                OrderState = "1",
+                Memo = "",
+                OrderTime = DateTime.Now,
+                TotalAmount = 99,
+                OrderISerialId = "9999009999",
+            });
+            _context.SaveChanges();
+            #endregion
+            #region 將Orderdetial寫入資料庫，並關閉表單
+            //foreach (Control item1 in flpTypeDisplay.Controls)
+            //{
+            //    foreach (Control item2 in item1.Controls[0].Controls)
+            //    {
+            //        if (item2.BackColor == Color.FromArgb(255, 128, 0))
+            //        {
+            //            int OptionID = Convert.ToInt32(item2.Name.Substring(8, 3)); //參考144行註解
+            //            int OptionGroupID = Convert.ToInt32(item2.Name.Substring(4, 3)); //參考144行註解
+            //            int Qty = Convert.ToInt32(labOrderNumber.Text);
+            //            DB.OrderDetail.Add(new OrderDetail
+            //            {
+            //                OrderItem_id = Utility.OrderitemID,
+            //                Order_fid = Utility.OrdersID,
+            //                Product_fid = Utility.ProductID,
+            //                Option_fid = OptionID,
+            //                OptionGroup_fid = OptionGroupID,
+            //                ProductName = labItemName.Text,
+            //                UnitPrice = BasePriceRecord,
+            //                Qty = Qty,
+            //                OrderDetails_Delete = "N"
+            //            });
+            //            DB.SaveChanges();
+            //        }
+            //    }
+            //}
+            //Utility.ProductCount = Convert.ToInt32(labOrderNumber.Text);
+            //this.Close();
+            #endregion
+            return RedirectToAction("CIndex");
         }
 
 

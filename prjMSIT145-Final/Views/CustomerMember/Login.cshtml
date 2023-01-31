@@ -2,32 +2,52 @@
 
 @{
     ViewData["Title"] = "Login";
+
 } 
-@*
-<div class="wrap" id="wrap">
-  <div class="Content">
+
+
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/Customer_css/Login.css">
+    <style>
+        a:link{
+            text-decoration-color: black;
+            text-decoration-line:none;
+        }
+    </style>
+}
+<div style="width:100%; display:flex;">
+    <div style="margin:10px auto; box-sizing:border-box;">
+        <a href="@Url.Content("~/BusinessMember/Blogin")"><img src="~/images/Customer/Navigation/person 32x32.png" />店家登入</a>
+        <a href="@Url.Content("~/Admin/ALogin")"><img src="~/images/Customer/Navigation/person 32x32.png" />平台登入</a>
+    </div>
+</div>
+
+
+    
+@using (Html.BeginForm()){
+
         <div class="Head">
-            <p class="toptitle">歡迎使用你訂！線上訂餐系統</p>
+            <p class="toptitle">歡迎使用線上訂餐系統</p>
             <p class="toptitle2">請選擇登入/註冊方式，通過驗證後即可使用</p>
-            <input type="submit" class="btn" value="使用手機註冊"></input>
-            <link rel="stylesheet" href="~/css/Customer_css/Login.css">
+           <input type="button" onclick=location.href="@Url.Content("~/CustomerMember/Register")" class="btn" value="使用手機註冊"/>
         </div>
         <div>
 
             <div class="text">
-                <img src="~/images/Customer/loginimage/call.png" class="img"></img>
-                <input type="text" placeholder="手機號碼" class="text2" />
+                    <img src="@Url.Content("~/images/Customer/Member/hide.png")" class="img"></img>
+                <input type="text" placeholder="手機號碼" class="text2" name="txtAccount" />
             </div>
             <p class="detail">只支援台灣手機號碼</p>
             <div class="text">
-                <img src="~/images/Customer/loginimage/key.png" class="img"></img>
-                <input type="password" placeholder="密碼" class="text2" />
-                <img src="~/images/Customer/loginimage/hide.png" class="img"></img>
+                    <img src="@Url.Content("~/images/Customer/Member/hide.png")" class="img"></img>
+                <input type="password" placeholder="密碼" class="text2" name="txtPassword" />
+                    <img src="@Url.Content("~/images/Customer/Member/hide.png")" class="img"></img>
             </div>
             <p class="detail">6-64位英數混合，英文需區分大小寫</p>
             <input type="submit" value="登入" class="login" />
             <div class="display">
-                <img src="~/images/Customer/loginimage/question.png" class="img"></img>
+                    <img src="@Url.Content("~/images/Customer/Member/question.png")" class="img"></img>
                 <p class="text3">忘記密碼</p>
             </div>
             <div class="dashed"></div>
@@ -38,18 +58,16 @@
                 <span class="text4">隱私權條款</span>
             </div>
         </div>
-    </div>
+    
     
 
-</div>
-*@
-
-
-
-
 }
+
+
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <link rel="stylesheet" href="~/css/Customer_css/Login.css">
     
 

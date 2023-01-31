@@ -8,6 +8,7 @@ namespace prjMSIT145_Final.Models
         public static List<VBusinessMemberDetailViewModel>? BusinessMemberDetailList = null;
         public static List<VPaymenttermViewModel>? PaymenttermList = null;
         public static List<VProductClassViewModel>? ProductClassList = null;
+        public static List<VOrdersViewModel>? OrdersList = null;
         public static int OrdersID = 0;
 
         public static int NormalMemberID = 1; //測試時使用1

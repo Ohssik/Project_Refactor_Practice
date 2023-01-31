@@ -6,6 +6,6 @@ namespace prjMSIT145_Final.ViewModels
     {
         public int Fid { get; set; }
         public string? CategoryName { get; set; }
-        public List<VProducts>? ProductsList { get; set; }
+        public List<VProductsViewModel>? ProductsList { get; set; }
     }
 }

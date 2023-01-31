@@ -6,27 +6,25 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
 //builder.Services.AddDbContext<ispanMsit145shibaContext>(
 // options => options.UseSqlServer(
 // builder.Configuration.GetConnectionString("ispanMsit145shibaConnection")
 //));
 
-builder.Services.AddControllersWithViews();
 
-//�}��Session�A�� start
+
+
+
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(op => {
+builder.Services.AddSession(op =>
+{
+
     op.IdleTimeout = TimeSpan.FromMinutes(20);
     op.Cookie.HttpOnly = true;
     op.Cookie.IsEssential = true;
 });
-//�}��Session�A�� end
 
-
-//builder.Services.AddDbContext<ispanMsit145shibaContext>(
-// options => options.UseSqlServer(
-// builder.Configuration.GetConnectionString("localconnection")
-//));
 
 builder.Services.AddDbContext<ispanMsit145shibaContext>(
  options => options.UseSqlServer(
@@ -50,7 +48,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(

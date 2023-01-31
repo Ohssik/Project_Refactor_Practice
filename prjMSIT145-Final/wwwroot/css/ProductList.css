@@ -4,7 +4,7 @@
     justify-content: space-around;
     margin-bottom: 60px;
 }
-div{
+.productDiv div {
     width: 800px;
     margin: 0 auto;
 }
@@ -18,8 +18,6 @@ div{
 .topbutton{
       display: flex;
       justify-content:space-around;
-      
-
 }
 .inserselecttext
 {
@@ -39,12 +37,11 @@ div{
    /*width: 130px;*/
   
 }
-select{
-
+.productDiv select {
     border-radius: 10px;
     margin-bottom: 200px;
 }
-table{
+.productDiv table {
     margin-left: 30px;
     font-weight: bold;
 }
@@ -54,10 +51,9 @@ table{
 }
 
 
-label{
-    font-size:18px;
+.productDiv label {
+    font-size: 18px;
     font-weight: bold;
-
 }
 #table_id_info{
     font-size: 14px;
