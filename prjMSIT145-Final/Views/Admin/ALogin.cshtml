@@ -1,0 +1,82 @@
+﻿@model prjMSIT145_Final.Models.AdminMember
+@{
+    ViewData["Title"] = "管理者控制台/登入";
+    Layout = "~/Views/Shared/Admin/_AdminLogin.cshtml";
+}
+@section Styles{
+    <style>
+        form{
+            margin:100px 20px;
+        }
+        #checkResult{
+            margin:10px 20px 10px 0;
+            color:red;
+        }
+    </style>
+}
+
+
+<form asp-action="ALogin" id="loginForm">
+    <div class="form-group">
+        <label asp-for="Account" class="control-label">管理者帳號</label>
+        <input asp-for="Account" class="form-control" />
+    
+    </div>
+    <div class="form-group">
+        <label asp-for="Password" class="control-label">密碼</label>
+        <input asp-for="Password" class="form-control" type="password" />
+    
+    </div>
+    <hr />
+    <div class="form-group">
+        <input id="btnSubmit" type="submit" value="Enter" class="btn btn-primary" />
+        <input id="btnDemo" type="button" value="Demo" class="btn btn-primary" />
+            
+    </div>
+        <h4 id="checkResult">@ViewData["checkAccountResult"]</h4>
+    
+</form>
+
+@section Scripts{
+    <script>
+        $('#btnDemo').click(function(){
+            $('input[name=Account]').val('admin');
+            $('input[name=Password]').val('adminnnn');
+        });
+
+        $('#btnSubmit').click(function(event){            
+
+            let checkResult = $('#checkResult');
+            let account=$('input[name=Account]').val();
+            let pwd=$('input[name=Password]').val();
+            //checkResult.text('');
+
+            if(account.trim() == '' || pwd.trim() == '')
+            {
+                checkResult.text('請輸入完整的帳號和密碼');                
+                return false;
+            }
+            
+            //$.ajax({
+            //    url: `@Url.Content("~/Admin/checkPwd")`,                
+            //    type: "post",
+            //    data: {
+            //        "account": $('input[name=Account]').val(),
+            //        "pwd": $('input[name=Password]').val()
+            //    },
+            //    dataType: "html",
+            //    success: function (msg) {
+            //        //result=msg;
+            //        //console.log(`msg:${msg}`);
+            //        if (msg != '1') {
+            //            checkResult.text('帳號或密碼有誤');
+            //            checkResult.css('color', 'red');
+            //            return false;
+            //        }
+            //    }
+            //});
+            
+            
+        });
+    </script>
+}

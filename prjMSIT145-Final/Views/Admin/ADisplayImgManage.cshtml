@@ -1,0 +1,676 @@
+﻿@model IEnumerable<prjMSIT145_Final.ViewModels.CAAdImg>
+@{
+    ViewData["Title"] = "管理者控制台/首頁圖片管理";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- Basic Card Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h5 class="m-0 font-weight-bold text-primary">輪播圖預覽</h5>
+        </div>
+        <div class="card-body">
+
+            <div class="addAdImg">
+                <label type="file">+</label>
+                <input type="file" name="addAd" id="addAd" accept=".png, .jpg, .jpeg" data-target="file-uploader" />
+            </div>
+           @* <div class="addAdImg">
+                <img data-target="image-preview" />
+            </div>*@
+            <div id="sortable" style="display: flex; padding-top: 0;" class="card-body">
+                @{
+                    foreach(var item in Model){
+                        if (item.OrderBy > 0)
+                        {
+                                <div class="divAds" id="@item.Fid" data-id="@item.Fid" data-name="@item.ImgName" data-st="@item.st" data-et="@item.et" data-link="@item.Hyperlink" data-blt="@item.ImgBelongTo">
+                                    <img class="adthumbs" src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
+                                </div>
+                        }
+                    }
+                }
+               
+            </div>
+            
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <!-- <div class="card-header py-3"></div> -->
+        <div class="card-body">
+            <div class="showAdImg">
+                @{
+                    var nModel = Model.ToList();
+                    foreach(var item in Model.ToList()){
+                        if(item.OrderBy==0){
+                            nModel.Remove(item);
+                        }
+                    }
+                }
+                <img src="@Url.Content("~/adminImg/adDisplay/"+nModel[0].ImgName)" alt="">
+
+            </div>
+            <div class="adInfo">
+
+                <div class="table-responsive">
+                    <table class="table table-borderless" id="dataTable" width="100%" cellspacing="0">
+
+                        <tbody>
+                                                        
+                            <tr>
+                                <td>@Html.DisplayNameFor(model=>model.ImgName)</td>
+                                <td id="tdImgName">
+                                    @nModel[0].ImgName
+                                    @*<input type="hidden" value="@nModel[0].Fid" name="Fid" />*@
+                                </td>
+
+                            </tr>
+                            
+                            <tr>
+                                <td>@Html.DisplayNameFor(model=>model.st)</td>
+                                <td id="tdStartTime">                                    
+                                    <input type="date" value="@nModel[0].st">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Html.DisplayNameFor(model=>model.et)</td>
+                                <td id="tdEndTime">
+                                    <input type="date" value="@nModel[0].et">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Html.DisplayNameFor(model=>model.Hyperlink)</td>
+                                <td id="tdHyperlink">
+                                    <input type="text" value="@nModel[0].Hyperlink">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Html.DisplayNameFor(model=>model.ImgBelongTo)</td>
+                                <td id="tdImgBelongTo">
+                                    @nModel[0].ImgBelongTo
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="">
+
+                        <button id="btnDelete" class="btn btn-danger btn-icon-split">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-arrow-right"></i>
+                            </span>
+                            <span class="text">刪除此張</span>
+                        </button>
+                        <button id="btnSave1" class="btn btn-success btn-icon-split">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span class="text">儲存</span>
+                        </button>
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h5 class="m-0 font-weight-bold text-primary">中間廣告圖預覽</h5>
+        </div>
+        <div class="card-body">
+            @{
+                foreach (var item in Model)
+                {
+                    if (item.OrderBy == 0){
+                            <div class="homeSmallAd" data-id="@item.Fid" data-name="@item.ImgName" >
+                                <img src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
+                            </div>
+                    }
+                }
+            }
+            
+        </div>
+        <div class="card-body">
+            @{
+
+                foreach (var item in Model)
+                {
+                    if (item.OrderBy == 0){
+                            <div class="table-responsive smallAdTable">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <tbody>
+
+                                    <tr>
+                                        <td>@Html.DisplayNameFor(model=>model.Hyperlink)</td>
+                                            <td><input class="smallAdLink" name="smallAdLink" data-id="@item.Fid" type="text" value="@item.Hyperlink"> </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                                <div name="imgInfo" data-id="@item.Fid">
+                                                    <input id="file" data-file="smallFile" data-id="@item.Fid" name="file" class="form-control" type="file" />
+
+                                                <button name="btnSaveImg" class="btn btn-success btn-icon-split">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-check"></i>
+                                                    </span>
+                                                    <span class="text">儲存</span>
+                                                </button>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                    }
+                }
+            }
+            
+        </div>
+    </div>
+</div>
+@section Scripts{
+   
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $('.nav-item').eq(2).addClass('active').siblings().removeClass('active');
+
+            let sortablePositions;
+            let ads;
+            $('#sortable>div:first').css('border', '7px solid red');
+            $("#sortable").sortable({
+                cursor: "move",
+                items: "div",                        //只是div可以拖動
+                opacity: 0.6,                       //拖動時，透明度為0.6
+                revert: false,                       //釋放時，增加動畫
+                update: function (event, ui) {       //更新排序之後
+                    console.log($(this).sortable("toArray"));
+                    //console.log(sortablePositions);
+                    if (sortablePositions != $(this).sortable("toArray")){
+                        sortablePositions = $(this).sortable("toArray");
+                        ads=new Array();
+                        $(sortablePositions).each(function (i,value) {
+                            
+                            let ad = {
+                                sFid: value,
+                                ImgName:$(`[data-id=${value}]`).data('name'),
+                                StartTime: $(`[data-id=${value}]`).data('st')/*"2019-07-26T00:00:00"*/,
+                                EndTime: $(`[data-id=${value}]`).data('et')/*"2019-07-31T00:00:00"*/,
+                                Hyperlink: $(`[data-id=${value}]`).data('link'),
+                                OrderBy: i + 1,
+                            };
+                            ads.push(ad);
+                        });
+
+                        //console.log(JSON.stringify(ads));
+                        //console.log(ads);
+
+                        $.ajax({
+                            url: `@Url.Content("~/Admin/changeAdOrderBy")`,
+                            type: "post",
+                            data:{ data:JSON.stringify(ads)},
+                            dataType: "json",
+                            success: function (msg) {
+                                console.log(msg);
+                                
+                            }
+                        });
+                    }                        
+                    //console.log("New position(update): " + ui.item.index());                    
+                }
+                
+            });
+
+            let clickedTarget = $('.divAds').eq(0).data('id');
+            $('#sortable').on('mousedown', '.divAds', function () {
+                clickedTarget = $(this).data('id');
+
+                $(this).css('border', '7px solid red').siblings().css('border', '0');
+
+                $.ajax({
+                    url: `@Url.Content("~/Admin/loadImgInfo")`,
+                    type: "post",
+                    data: {
+                        "fid": $(this).attr('data-id')
+
+                    },
+                    dataType: "json",
+                    success: function (msg) {
+
+                        $(msg).each(function (key, value) {
+                            //console.log(value);
+                            $('#tdFid').text(value.fid);
+                            $('#tdImgName').text(value.imgName);
+                            $('#tdImgBelongTo').text(value.imgBelongTo);
+                            $('#tdStartTime>input').val(value.st);
+                            $('#tdEndTime>input').val(value.et);
+                            $('#tdHyperlink>input').val(value.hyperlink);
+                            $('.showAdImg>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${value.imgName}`);
+                        });
+
+                    }
+                });
+
+            });
+            
+            $('#btnSave1').click(function(event){
+               
+                let ad = {
+                    sFid: `${clickedTarget}`,
+                    ImgName: $(`[data-id=${clickedTarget}]`).data('name'),
+                    StartTime: $(`#tdStartTime>input`).val().replace('/','-')/*"2019-07-26T00:00:00"*/,
+                    EndTime: $(`#tdEndTime>input`).val().replace('/', '-')/*"2019-07-31T00:00:00"*/,
+                    Hyperlink: $(`#tdHyperlink>input`).val(),
+                    OrderBy: 1,
+                };
+                
+
+                $.ajax({
+                    url: `@Url.Content("~/Admin/saveAdInfo")`,
+                    type: "post",
+                    data: { data: JSON.stringify(ad) },
+                    dataType: "json",
+                    success: function (msg) {
+                        console.log(msg);
+
+                        if(msg==1){
+                            alert('儲存成功');
+                        }
+
+                    }
+                });
+            });
+            
+
+            
+
+            $('#btnDelete').click(function(){
+                if (confirm('確定要刪除嗎?')){
+                    $.ajax({
+                        url: `@Url.Content("~/Admin/deleteAd")`,
+                        type: "post",
+                        data: { data: `${clickedTarget}` },
+                        dataType: "json",
+                        success: function (msg) {
+                            console.log(msg);
+
+                            if (msg == 1) {
+                                alert('刪除成功');
+                                location.reload(true);
+                            }
+
+                        }
+                    });
+                }else
+                    return false;
+                
+            });
+
+            
+            // STEP 1: select element and register change event
+            let newAdSrc;
+            const imagePreview = document.querySelector('[data-target="image-preview"]');
+            //const spinner = document.querySelector('[data-target="spinner"]');
+            const fileUploader = document.querySelector('[data-target="file-uploader"]');
+            fileUploader.addEventListener("change", handleFileUpload);
+
+            async function handleFileUpload(e) {
+                try {
+                    let count=$('#sortable').children('.divAds').length;
+                    if(count>=8)
+                    {
+                        alert('輪播圖數量已達上限，請刪除圖片後再新增');
+                        return false;
+                    }
+                    const file = e.target.files[0];
+                    //setUploading(true);
+                    if (!file) return;
+
+                    const beforeUploadCheck = await beforeUpload(file);
+                    if (!beforeUploadCheck.isValid) throw beforeUploadCheck.errorMessages;
+
+                    const arrayBuffer = await getArrayBuffer(file);
+                    const response = await uploadFileAJAX(arrayBuffer,file.type);
+
+                    //alert("上傳成功");
+                    showPreviewImage(file);
+                } catch (error) {
+                    alert(error);
+                    console.log("Catch Error: ", error);
+                } finally {
+                    e.target.value = '';  // reset input file
+                    //setUploading(false);
+                }
+            }
+
+            // STEP 2: showPreviewImage with createObjectURL
+            // If you prefer Base64 image, use "FileReader.readAsDataURL"
+            function showPreviewImage(fileObj) {
+                const image = URL.createObjectURL(fileObj);
+                //imagePreview.src = image;
+                newAdSrc=image;
+            }
+
+            // STEP 3: change file object into ArrayBuffer
+            function getArrayBuffer(fileObj) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    // Get ArrayBuffer when FileReader on load
+                    reader.addEventListener("load", () => {
+                        resolve(reader.result);
+                    });
+
+                    // Get Error when FileReader on error
+                    reader.addEventListener("error", () => {
+                        reject("error occurred in getArrayBuffer");
+                    });
+
+                    // read the blob object as ArrayBuffer
+                    // if you nedd Base64, use reader.readAsDataURL
+                    reader.readAsArrayBuffer(fileObj);
+                });
+            }
+
+            // STEP 4: upload file throguth AJAX
+            // - use "new Uint8Array()"" to change ArrayBuffer into TypedArray
+            // - TypedArray is not a truely Array,
+            //   use "Array.from()" to change it into Array
+            function uploadFileAJAX(arrayBuffer,filetype) {
+                // correct it to your own API endpoint
+                $.ajax({
+                    url: `@Url.Content("~/Admin/AaddAdImg")`,
+                    type: "post",
+                    data: {
+                        data: JSON.stringify({
+                            
+                            fileType: filetype,
+                            icon: Array.from(new Uint8Array(arrayBuffer))
+                        })
+                    },
+                    dataType: "json",
+                    success: function (msg) {
+                        console.log(msg);
+
+                        if (msg != null) {
+                            alert("上傳成功");
+                            let docFrag=document.createDocumentFragment();
+                            docFrag = `<div id='${msg.fid}' data-id='${msg.fid}' data-name='${msg.imgName}' class="divAds">
+                            <img class="adthumbs" src='${newAdSrc}' data-target="image-preview"/>
+                            </div>`;
+                            $('#sortable').append(docFrag);
+                            $('.showAdImg>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${msg.imgName}`);
+                            $('#tdImgName').text(msg.imgName);
+                            $('#tdStartTime>input').val('');
+                            $('#tdEndTime>input').val('');
+                            $('#tdHyperlink>input').val('');
+                            $('.divAds:last').css('border', '7px solid red').siblings().css('border', '0');
+                            
+                        }
+
+                    }
+                });
+
+
+            }
+
+            // STEP 5: Create before upload checker if needed
+            function beforeUpload(fileObject) {
+                return new Promise(resolve => {
+                    const validFileTypes = ["image/jpeg", "image/png"];
+                    const isValidFileType = validFileTypes.includes(fileObject.type);
+                    let errorMessages = [];
+
+                    if (!isValidFileType) {
+                        errorMessages.push("圖檔限制為 JPG or PNG !");
+                    }
+
+                    const isValidFileSize = fileObject.size / 1024 / 1024 < 2;
+                    if (!isValidFileSize) {
+                        errorMessages.push("圖檔必須小於2MB!");
+                    }
+
+                    resolve({
+                        isValid: isValidFileType && isValidFileSize,
+                        errorMessages: errorMessages.join("\n")
+                    });
+                });
+            }
+
+            function setUploading(isUploading) {
+                if (isUploading === true) {
+                    //spinner.classList.add("opacity-1");
+                } else {
+                    //spinner.classList.remove("opacity-1");
+                }
+            }
+
+            
+
+            let fileData;
+            $('[data-file="smallFile"]').change(async function (e) {               
+                try {                    
+                    
+                    let i = $(this).data('id');
+                    console.log(`i=${i}`);
+                    const file = e.target.files[0];
+                    //setUploading(true);
+                    if (!file) return;
+
+                    const beforeUploadCheck = await beforeUpload(file);
+                    if (!beforeUploadCheck.isValid) throw beforeUploadCheck.errorMessages;
+
+                    const arrayBuffer = await getArrayBuffer(file);
+                    //const response = await uploadFileAJAX(arrayBuffer, file.type);
+                    fileData = {
+                        fileType: file.type,
+                        icon: Array.from(new Uint8Array(arrayBuffer))
+                    };                    
+
+                    showPreviewImage(file);
+                    
+                    $(`.homeSmallAd[data-id=${i}]>img`).attr('src',newAdSrc);
+
+                } catch (error) {
+                    alert(error);
+                    console.log("Catch Error: ", error);
+                } finally {
+                    e.target.value = '';  // reset input file
+                    //setUploading(false);
+                }
+            });
+
+            $('[name=btnSaveImg]').click(async function () {
+                let i = $(this).siblings('#file').data('id');
+                //console.log(`i=${i}`);
+                let fileType='',fileIcon='';
+                if(fileData != null){
+                    fileType = fileData.fileType;
+                    fileIcon = fileData.icon;
+                }
+                $.ajax({
+                    url: `@Url.Content("~/Admin/saveSmallImgData")`,
+                    type: "post",                    
+                    data: {
+                        data:JSON.stringify({
+                            Fid: i,
+                            Hyperlink: $(`[name=smallAdLink][data-id=${i}]`).val(),
+                            fileType: fileType,
+                            icon: fileIcon
+                        })
+                    },
+                    
+                    dataType: "json",
+                    success: function (msg) {
+                        console.log(msg);
+
+                        if (msg != null) {
+                            //$('.homeSmallAd').eq(i).attr('data-id',msg.Fid);
+                            $('[name=smallAdLink]').eq(i).val(msg.hyperlink);
+                            //alert('儲存成功');
+                            let alertDiv = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>儲存成功</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>`;
+                            $(`[name=imgInfo][data-id=${i}]`).append(alertDiv);
+                            
+                        }
+
+                    }
+                });
+            });
+        });
+    </script>
+}
+@section Styles{
+    <style>
+        .btn-close {
+            box-sizing: content-box;
+            width: 1em;
+            height: 1em;
+            padding: 0.25em 0.25em;
+            color: #000;
+            background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+            border: 0;
+            border-radius: 0.25rem;
+            opacity: 0.5;
+        }
+
+        .btn-close:hover {
+            color: #000;
+            text-decoration: none;
+            opacity: 0.75;
+        }
+
+        .btn-close:focus {
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            opacity: 1;
+        }
+        .alert-dismissible .btn-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 2;
+            padding: 1.25rem 1rem;
+        }
+
+        #file{
+            margin-bottom:10px;
+        }
+        .memberImg {
+            width: 50px;
+            /* background-color: #9e4e27; */
+        }
+
+        .searchImg {
+            width: 30px;
+        }
+
+        img.adthumbs {
+            width: 100px;
+        }
+
+        .card-body {
+            display: flex;
+        }
+
+        .card-body > div {
+            margin-left: 10px;
+        }
+
+        .card-body > ul {
+            display: flex;
+        }
+
+        .card-body > ul li {
+            list-style: none;
+            padding-left: 10px;
+        }
+
+        #addAd {
+            /*font-size:70px;*/
+            line-height: 70px;
+            opacity: 0.0;
+            
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+
+            
+        }
+        .addAdImg {
+            width: 100px;
+            height: 70px;
+            border: 3px dotted gray;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .addAdImg label {
+            line-height: 70px;
+            font-size:2em;
+            
+        }
+
+        .addAdImg:nth-child(2)>img{
+            /*width:100%;*/
+            height:100%
+        }
+
+        .div1 {
+            display: flex;
+            position: relative;
+            /* border: 1px solid #abbde4;   */
+            padding: 5px;
+            display: inline-block;
+        }
+
+        .showAdImg {
+            /* width: 100%; */
+            height: 40vh;
+            /* margin: 0 auto; */
+        }
+
+        .adInfo {
+            width: 70%;
+        }
+
+        .adInfo table input {
+            width: 70%;
+        }
+
+        .showAdImg img {
+            height: 100%;
+        }
+
+        .homeSmallAd {
+            width: 30%;
+            margin: 0 10%;
+        }
+
+        .homeSmallAd img {
+            width: 100%;
+            height: 100%;
+            padding: 0 20px;
+        }
+
+        .smallAdTable {
+            margin: 0 50px;
+        }
+        .smallAdLink{
+            width: 100%;
+        }
+
+    </style>
+}
