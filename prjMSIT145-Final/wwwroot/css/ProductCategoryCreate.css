@@ -1,12 +1,12 @@
 .outerlayer{
-    width: 500px;
+    width: 450px;
     margin: 0 auto;
    
 }
 .topdiv{
     
     /* position: fixed; */
-    width: 500px;
+    width: 450px;
     height: 100px;
     margin-bottom: 10px;
     margin-top: 50px;
@@ -21,12 +21,12 @@
 .inputtext{
     
     border-width: 0;
-    font-size: 20px;
+    font-size: 15px;
   
 }
 .back{
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     margin-right: 100px;
     margin-top: -120px;
 }
