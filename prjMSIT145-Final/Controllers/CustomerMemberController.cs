@@ -14,5 +14,9 @@ namespace prjMSIT145_Final.Controllers
         {
             return View();
         }
+        public IActionResult Login()
+        {
+            return View();
+        }
     }
 }
