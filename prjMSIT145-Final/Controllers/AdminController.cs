@@ -43,7 +43,7 @@ namespace prjMSIT145_Final.Controllers
                 _context.SaveChanges();
 
                 MailMessage MyMail = new MailMessage();
-                MyMail.From = new MailAddress("日柴 <ShibaAdmin@msit145shiba.com.tw>", "日柴", System.Text.Encoding.UTF8);
+                MyMail.From = new MailAddress("ShibaAdmin@msit145shiba.com.tw", "日柴", System.Text.Encoding.UTF8);
                 //foreach(string receiver in ReceiveMail)
                 //{
                 //    MyMail.To.Add(receiver); //設定收件者Email
