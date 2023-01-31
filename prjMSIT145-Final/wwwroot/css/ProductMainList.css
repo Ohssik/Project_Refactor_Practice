@@ -1,0 +1,67 @@
+.outerlayer{
+    width: 500px;
+    margin: 0 auto;
+   
+}
+
+#h1{
+    font-weight: bold;
+}
+.spanh1down{
+    font-weight: bold;
+    font-size: 20px;
+}
+.divtopbutton{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.btnall{
+    margin-left: 20px;
+    border-radius: 10px;
+    background-color:black;
+    color: white;
+}
+.accordion {
+    background-color:white; /* #eee;*/
+    color: green;    /* #444;*/
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+    border-bottom: 1px solid gray;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+  .active, .accordion:hover {
+    background-color: #ccc;
+  }
+  
+  /* Style the accordion panel. Note: hidden by default */
+  .panel {
+    padding: 0 18px;
+    background-color: white;
+    display: none;
+    overflow: hidden;
+  }
+  .accordion:after {
+    content: '\02795'; /* Unicode character for "plus" sign (+) */	
+    
+    font-size: 10px;
+    color: #777;
+    float: left;
+    margin-right: 25px;
+  }
+  
+  .active:after {
+    content: "\2796"; /* Unicode character for "minus" sign (-) */
+  }
+  
+  td a{
+    text-decoration: none;
+    font-weight: bold;
+  }

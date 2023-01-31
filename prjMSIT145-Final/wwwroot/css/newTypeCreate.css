@@ -1,0 +1,34 @@
+.flex{
+    display: flex;
+}
+.box{
+    box-sizing: border-box;
+}
+.mainDiv {
+width:70%;
+margin: 30px auto;
+}
+.leftBorder{
+border-left: 2px dashed gray;
+}
+.leftTxt{
+border: none;
+/* width:70%; */
+}
+.leftmargin{
+margin: 20px 10px 5px 30px;
+}
+.textArea{
+min-width: 100%;
+min-height: 50px;
+}
+.rigthDivMargin{
+margin:20px 0 5px 5px;
+}
+.rightDiv{
+width:50%;
+padding: 0 0 0 10px;
+}
+.rightDiv table{
+width:100%
+}

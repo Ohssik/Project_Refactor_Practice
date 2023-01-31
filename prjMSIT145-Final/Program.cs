@@ -48,7 +48,7 @@ app.UseSession();//�ҥ�Session
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthorization();
