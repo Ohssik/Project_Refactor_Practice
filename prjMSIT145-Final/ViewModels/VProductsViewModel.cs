@@ -1,6 +1,6 @@
 ﻿namespace prjMSIT145_Final.ViewModels
 {
-    public class VProducts
+    public class VProductsViewModel
     {
         public int Fid { get; set; }
         public string ProductName { get; set; } = null!;
