@@ -56,7 +56,7 @@ namespace prjMSIT145_Final.Controllers
 
         public IActionResult ListInfo(int? orderid)
         {
-            orderid = 1;
+            
 
             var order = from o in _context.Orders
                         where o.Fid == orderid

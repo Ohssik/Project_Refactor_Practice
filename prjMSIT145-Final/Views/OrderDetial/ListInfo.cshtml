@@ -203,7 +203,7 @@
     <div class="div1 cardBackgroundColor">
         <!-- 左邊 -->
         <div class="leftArea" id="DivTest">
-            <input type="hidden" name="OrderFid" value="1" />
+            <input type="hidden" name="OrderFid"  />
             <!-- 店家全區 -->
             <div class="flex bottomBorder">
                 <div class="storeImg"></div>
@@ -262,7 +262,7 @@
                     <span>取餐人</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>柯燈</span>
+                    <span>@Html.DisplayFor(modelItem => Model.PickUpPerson)</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
