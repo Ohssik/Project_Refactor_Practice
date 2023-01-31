@@ -16,6 +16,47 @@ namespace prjMSIT145_Final.Controllers
         {           
             return View();
         }
+        private List<CACouponViewModel> _list()
+        {
+            List<CACouponViewModel> list = new List<CACouponViewModel>();
+
+            var coupons = from c in _context.Coupons
+                          join cn in _context.Coupon2NormalMembers on c.Fid equals cn.CouponId
+                          into sGroup
+                          from s in sGroup.DefaultIfEmpty()
+                          join n in _context.NormalMembers on s.MemberId equals n.Fid
+                          into sg2
+                          from sg in sg2.DefaultIfEmpty()
+                          select new
+                          {
+                              c.Fid,
+                              c.Price,
+                              c.CouponCode,
+                              c.Memo,
+                              c.IsUsed,
+                              NmemberID = s.MemberId,
+                              NmemberName = sg.MemberName
+                          };
+
+            if (coupons != null)
+            {
+                foreach (var c in coupons.ToList())
+                {
+                    CACouponViewModel cvm = new CACouponViewModel();
+                    cvm.Fid = c.Fid;
+                    cvm.Price = c.Price;
+                    cvm.CouponCode = c.CouponCode;
+                    cvm.Memo = c.Memo;
+                    cvm.IsUsed = c.IsUsed;
+                    cvm.NmemberID = c.NmemberID;
+                    cvm.NmemberName = c.NmemberName;
+                    list.Add(cvm);
+                }
+
+            }
+
+            return list;
+        }
         public IActionResult ACouponList()
         {
             List<CACouponViewModel> list = new List<CACouponViewModel>();            
@@ -112,9 +153,9 @@ namespace prjMSIT145_Final.Controllers
                 _context.SaveChanges();
                 result="1";
             }
-
-            //return RedirectToAction("ACouponList");
-            return NoContent();
+           
+            return Content(result);
+            //return NoContent();
 
         }
         

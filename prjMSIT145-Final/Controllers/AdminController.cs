@@ -8,6 +8,7 @@ using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Net.Mail;
 using System.Text.Json;
+using static NuGet.Packaging.PackagingConstants;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace prjMSIT145_Final.Controllers
@@ -199,43 +200,80 @@ namespace prjMSIT145_Final.Controllers
         }
 
         public IActionResult ANormalMemberOrder(int? id)
-        {//todo 停權前發送email通知
+        {
             if (id == null)
                 return RedirectToAction("ANormalMemberDetails");
 
-            var orderDatas = from order in _context.ViewShowFullOrders
-                             join bm in _context.BusinessImgs on order.BFid equals bm.BFid
-                             join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
-                             join payTerm in _context.PaymentTermCategories on order.PayTermCatId equals payTerm.Fid
-                             where order.OrderFid == (int)id
-                             select new
-                             {
-                                 order.BMemberName,
-                                 order.BMemberPhone,
-                                 order.OrderISerialId,
-                                 order.PickUpDate,
-                                 order.PickUpPerson,
-                                 order.PickUpPersonPhone,
-                                 order.PickUpTime,
-                                 order.PickUpType,
-                                 order.PayTermCatId,
-                                 order.Memo,
-                                 order.TotalAmount,
-                                 order.ProductName,
-                                 order.Options,
-                                 order.SubTotal,
-                                 order.Qty,
-                                 order.OrderState,
-                                 bm.LogoImgFileName,
-                                 bAdd.Address,
-                                 payTerm.PaymentType
-                             };
+            //var orderDatas = from order in _context.ViewShowFullOrders
+            //                 join bm in _context.BusinessImgs on order.BFid equals bm.BFid
+            //                 join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
+            //                 join payTerm in _context.PaymentTermCategories on order.PayTermCatId equals payTerm.Fid
+            //                 where order.OrderFid == (int)id
+            //                 select new
+            //                 {
+            //                     order.BMemberName,
+            //                     order.BMemberPhone,
+            //                     order.OrderISerialId,
+            //                     order.PickUpDate,
+            //                     order.PickUpPerson,
+            //                     order.PickUpPersonPhone,
+            //                     order.PickUpTime,
+            //                     order.PickUpType,
+            //                     order.PayTermCatId,
+            //                     order.Memo,
+            //                     order.TotalAmount,
+            //                     order.ProductName,
+            //                     order.Options,
+            //                     order.SubTotal,
+            //                     order.Qty,
+            //                     order.OrderState,
+            //                     bm.LogoImgFileName,
+            //                     bAdd.Address,
+            //                     payTerm.PaymentType
+            //                 };
+
+            var orderDatas = from order in _context.Orders
+                              join f in _context.ViewShowFullOrders on order.Fid equals f.OrderFid
+                              into group7
+                              from g7 in group7.DefaultIfEmpty()
+                              join bm in _context.BusinessImgs on g7.BFid equals bm.Fid
+                              into group2
+                              from g2 in group2.DefaultIfEmpty()
+                              join b in _context.BusinessMembers on order.BFid equals b.Fid
+                              into group3
+                              from g3 in group3.DefaultIfEmpty()
+                              join pay in _context.PaymentTermCategories on order.PayTermCatId equals pay.Fid
+                              into group4
+                              from g4 in group4.DefaultIfEmpty()
+                              where order.Fid == (int)id
+                              select new
+                              {
+                                  g7.BMemberPhone,
+                                  g7.BMemberName,
+                                  order.OrderISerialId,
+                                  order.PickUpDate,
+                                  order.PickUpPerson,
+                                  order.PickUpPersonPhone,
+                                  order.PickUpTime,
+                                  order.PickUpType,
+                                  order.PayTermCatId,
+                                  order.Memo,
+                                  order.TotalAmount,
+                                  g7.ProductName,
+                                  order.OrderState,
+                                  g7.Options,
+                                  g7.Qty,
+                                  g7.SubTotal,
+                                  g2.LogoImgFileName,
+                                  g3.Address,
+                                  g4.PaymentType
+                              };
 
             if (orderDatas != null)
             {
                 CANormalMemberOrderViewModel n = new CANormalMemberOrderViewModel();
                 List<CANormalMemberOrderDetailViewModel> items = new List<CANormalMemberOrderDetailViewModel>();
-                foreach (var vsf in orderDatas)
+                foreach (var vsf in orderDatas.Distinct())
                 {
                     CANormalMemberOrderDetailViewModel detail = new CANormalMemberOrderDetailViewModel();
                     detail.productName=vsf.ProductName;
@@ -243,20 +281,20 @@ namespace prjMSIT145_Final.Controllers
                     items.Add(detail);
                 }
                 n.details = items;
-                n.BMemberName = orderDatas.ToList()[0].BMemberName;
-                n.BMemberPhone = orderDatas.ToList()[0].BMemberPhone;
-                n.OrderISerialId = orderDatas.ToList()[0].OrderISerialId;
-                n.PickUpDate = orderDatas.ToList()[0].PickUpDate;
-                n.PickUpTime = orderDatas.ToList()[0].PickUpTime;
-                n.TotalAmount = orderDatas.ToList()[0].TotalAmount;
-                n.PickUpType = orderDatas.ToList()[0].PickUpType;
-                n.PickUpPerson = orderDatas.ToList()[0].PickUpPerson;
-                n.PickUpPersonPhone = orderDatas.ToList()[0].PickUpPersonPhone;
-                n.Memo = orderDatas.ToList()[0].Memo;
-                n.businessImgFile = orderDatas.ToList()[0].LogoImgFileName;
-                n.businessAddress = orderDatas.ToList()[0].Address;
-                n.PayTermCatName = orderDatas.ToList()[0].PaymentType;
-                n.OrderState = orderDatas.ToList()[0].OrderState;
+                n.BMemberName = orderDatas.Distinct().ToList()[0].BMemberName;
+                n.BMemberPhone = orderDatas.Distinct().ToList()[0].BMemberPhone;
+                n.OrderISerialId = orderDatas.Distinct().ToList()[0].OrderISerialId;
+                n.PickUpDate = orderDatas.Distinct().ToList()[0].PickUpDate;
+                n.PickUpTime = orderDatas.Distinct().ToList()[0].PickUpTime;
+                n.TotalAmount = orderDatas.Distinct().ToList()[0].TotalAmount;
+                n.PickUpType = orderDatas.Distinct().ToList()[0].PickUpType;
+                n.PickUpPerson = orderDatas.Distinct().ToList()[0].PickUpPerson;
+                n.PickUpPersonPhone = orderDatas.Distinct().ToList()[0].PickUpPersonPhone;
+                n.Memo = orderDatas.Distinct().ToList()[0].Memo;
+                n.businessImgFile = orderDatas.Distinct().ToList()[0].LogoImgFileName;
+                n.businessAddress = orderDatas.Distinct().ToList()[0].Address;
+                n.PayTermCatName = orderDatas.Distinct().ToList()[0].PaymentType;
+                n.OrderState = orderDatas.Distinct().ToList()[0].OrderState;
 
                 return View(n);
             }
@@ -333,16 +371,57 @@ namespace prjMSIT145_Final.Controllers
             if (id == null)
                 return RedirectToAction("ABusinessMemberDetails");
 
-            var orderDatas = from order in _context.ViewShowFullOrders
-                             join bm in _context.BusinessImgs on order.BFid equals bm.BFid
-                             join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
-                             join payTerm in _context.PaymentTermCategories on order.PayTermCatId equals payTerm.Fid
+            //var orderDatas = from order in _context.ViewShowFullOrders
+            //                 join bm in _context.BusinessImgs on order.BFid equals bm.BFid
+            //                 join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
+            //                 join payTerm in _context.PaymentTermCategories on order.PayTermCatId equals payTerm.Fid
+            //                 join nm in _context.NormalMembers on order.NFid equals nm.Fid
+            //                 where order.OrderFid == (int)id
+            //                 select new
+            //                 {
+            //                     order.BMemberName,
+            //                     order.BMemberPhone,
+            //                     order.OrderISerialId,
+            //                     order.PickUpDate,
+            //                     order.PickUpPerson,
+            //                     order.PickUpPersonPhone,
+            //                     order.PickUpTime,
+            //                     order.PickUpType,
+            //                     order.PayTermCatId,
+            //                     order.Memo,
+            //                     order.TotalAmount,
+            //                     order.ProductName,
+            //                     order.Options,
+            //                     order.SubTotal,
+            //                     order.Qty,
+            //                     order.OrderState,
+            //                     bm.LogoImgFileName,
+            //                     bAdd.Address,
+            //                     payTerm.PaymentType,
+            //                     nm.MemberPhotoFile
+            //                 };
+
+            var orderDatas = from order in _context.Orders
+                             join f in _context.ViewShowFullOrders on order.Fid equals f.OrderFid
+                             into group7
+                             from g7 in group7.DefaultIfEmpty()
+                             join bm in _context.BusinessImgs on g7.BFid equals bm.Fid
+                             into group2
+                             from g2 in group2.DefaultIfEmpty()
+                             join b in _context.BusinessMembers on order.BFid equals b.Fid
+                             into group3
+                             from g3 in group3.DefaultIfEmpty()
+                             join pay in _context.PaymentTermCategories on order.PayTermCatId equals pay.Fid
+                             into group4
+                             from g4 in group4.DefaultIfEmpty()
                              join nm in _context.NormalMembers on order.NFid equals nm.Fid
-                             where order.OrderFid == (int)id
+                             into group5
+                             from g5 in group5.DefaultIfEmpty()
+                             where order.Fid == (int)id
                              select new
                              {
-                                 order.BMemberName,
-                                 order.BMemberPhone,
+                                 g7.BMemberPhone,
+                                 g7.BMemberName,
                                  order.OrderISerialId,
                                  order.PickUpDate,
                                  order.PickUpPerson,
@@ -352,22 +431,22 @@ namespace prjMSIT145_Final.Controllers
                                  order.PayTermCatId,
                                  order.Memo,
                                  order.TotalAmount,
-                                 order.ProductName,
-                                 order.Options,
-                                 order.SubTotal,
-                                 order.Qty,
+                                 g7.ProductName,
                                  order.OrderState,
-                                 bm.LogoImgFileName,
-                                 bAdd.Address,
-                                 payTerm.PaymentType,
-                                 nm.MemberPhotoFile
+                                 g7.Options,
+                                 g7.Qty,
+                                 g7.SubTotal,
+                                 g2.LogoImgFileName,
+                                 g3.Address,
+                                 g4.PaymentType,
+                                 g5.MemberPhotoFile
                              };
 
             if (orderDatas != null)
             {
                 CANormalMemberOrderViewModel n = new CANormalMemberOrderViewModel();
                 List<CANormalMemberOrderDetailViewModel> items = new List<CANormalMemberOrderDetailViewModel>();
-                foreach (var vsf in orderDatas)
+                foreach (var vsf in orderDatas.Distinct())
                 {
                     CANormalMemberOrderDetailViewModel detail = new CANormalMemberOrderDetailViewModel();
                     detail.productName=vsf.ProductName;
@@ -375,21 +454,21 @@ namespace prjMSIT145_Final.Controllers
                     items.Add(detail);
                 }
                 n.details = items;
-                n.BMemberName = orderDatas.ToList()[0].BMemberName;
-                n.BMemberPhone = orderDatas.ToList()[0].BMemberPhone;
-                n.OrderISerialId = orderDatas.ToList()[0].OrderISerialId;
-                n.PickUpDate = orderDatas.ToList()[0].PickUpDate;
-                n.PickUpTime = orderDatas.ToList()[0].PickUpTime;
-                n.TotalAmount = orderDatas.ToList()[0].TotalAmount;
-                n.PickUpType = orderDatas.ToList()[0].PickUpType;
-                n.PickUpPerson = orderDatas.ToList()[0].PickUpPerson;
-                n.PickUpPersonPhone = orderDatas.ToList()[0].PickUpPersonPhone;
-                n.Memo = orderDatas.ToList()[0].Memo;
-                n.businessImgFile = orderDatas.ToList()[0].LogoImgFileName;
-                n.businessAddress = orderDatas.ToList()[0].Address;
+                n.BMemberName = orderDatas.Distinct().ToList()[0].BMemberName;
+                n.BMemberPhone = orderDatas.Distinct().ToList()[0].BMemberPhone;
+                n.OrderISerialId = orderDatas.Distinct().ToList()[0].OrderISerialId;
+                n.PickUpDate = orderDatas.Distinct().ToList()[0].PickUpDate;
+                n.PickUpTime = orderDatas.Distinct().ToList()[0].PickUpTime;
+                n.TotalAmount = orderDatas.Distinct().ToList()[0].TotalAmount;
+                n.PickUpType = orderDatas.Distinct().ToList()[0].PickUpType;
+                n.PickUpPerson = orderDatas.Distinct().ToList()[0].PickUpPerson;
+                n.PickUpPersonPhone = orderDatas.Distinct().ToList()[0].PickUpPersonPhone;
+                n.Memo = orderDatas.Distinct().ToList()[0].Memo;
+                n.businessImgFile = orderDatas.Distinct().ToList()[0].LogoImgFileName;
+                n.businessAddress = orderDatas.Distinct().ToList()[0].Address;
                 n.PayTermCatName = orderDatas.ToList()[0].PaymentType;
-                n.OrderState = orderDatas.ToList()[0].OrderState;
-                n.normalImgFile= orderDatas.ToList()[0].MemberPhotoFile;
+                n.OrderState = orderDatas.Distinct().ToList()[0].OrderState;
+                n.normalImgFile= orderDatas.Distinct().ToList()[0].MemberPhotoFile;
 
                 return View(n);
             }
