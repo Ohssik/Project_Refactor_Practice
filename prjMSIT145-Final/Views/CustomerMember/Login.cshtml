@@ -3,8 +3,30 @@
 @{
     ViewData["Title"] = "Login";
 }
+
+@section Styles{
+    <style>
+        a:link{
+            text-decoration-color: black;
+            text-decoration-line:none;
+        }
+    </style>
+}
+<div style="width:100%; display:flex;">
+    <div style="margin:10px auto; box-sizing:border-box;">
+        <a href="@Url.Content("~/BusinessMember/Blogin")"><img src="~/images/Customer/Navigation/person 32x32.png" />店家登入</a>
+   <a href="@Url.Content("~/Admin/ALogin")"><img src="~/images/Customer/Navigation/person 32x32.png" />平台登入</a>
+    </div>
+</div>
+
 <div class="wrap">
+    
     <div class="Content">
+        
+
+<div class="wrap" id="wrap">
+<div class="Content">
+
         <div class="Head">
             <p class="toptitle">歡迎使用你訂！線上訂餐系統</p>
             <p class="toptitle2">請選擇登入/註冊方式，通過驗證後即可使用</p>
@@ -39,10 +61,13 @@
         </div>
     </div>
 </div>
+    
+
 
 
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <link rel="stylesheet" href="~/css/Customer_css/Login.css">
+    
 }
