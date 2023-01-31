@@ -17,8 +17,9 @@ namespace prjMSIT145_Final.Controllers
         {
             _context = context;
         }
-        public IActionResult CList(int? NFid)
+        public IActionResult CCartList(int? NFid)
         {
+            NFid = 1;
             if(NFid==null)
                 return Redirect("/CustomerMember/Login");
             return View();
