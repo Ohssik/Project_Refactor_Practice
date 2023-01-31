@@ -1,4 +1,4 @@
-﻿@model prjMSIT145_Final.Models.NormalMember
+﻿@model prjMSIT145_Final.ViewModels.CNormalMemberViewModel
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -38,9 +38,11 @@
        @* <input type="file" name="photo" class="text-danger" value="~/images/@Model.MemberPhotoFile" />
         <button> <img src="~/images/@Model.MemberPhotoFile" class="title3" style="width:100px" /></button>*@
         <div class="aui-info">
-                <img src="~/images/@Model.MemberPhotoFile" id="img-txz" style="width: 3rem" class="aui-img-round user-img"/>
+                <img src="~/images/@Model.MemberPhotoFile" id="img-txz" style="width: 10rem" class="aui-img-round user-img" />
                 <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput" value="" />
-             </div> 
+                
+             </div>
+                <input type="hidden" name="MemberPhotoFile" value="@Model.MemberPhotoFile" />
         <span class="text3">
             <p class="color">*</p>  
             <p class="text4">真實姓名</p>
@@ -76,14 +78,15 @@
                 <p class="text4">生日</p>
             </span>
             @{
-                string st = "";
+             
                 if (Model.Birthday != null){
-
+                    string st = "";
                     st = Convert.ToDateTime(Model.Birthday).ToString("yyyy-MM-dd");
+                    <div class="div1">
+                    <input id="birthid" type="date" class="date" name="Birthday" value="@st" />
+                    </div>
                 }
-            <div class="div1">
-            <input id="birthid" type="date" class="date" name="Birthday" value="@st" />
-            </div>
+            
             };
        
         <span class="text3"> 
