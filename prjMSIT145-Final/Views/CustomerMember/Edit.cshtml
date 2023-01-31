@@ -57,15 +57,35 @@
         </div>
         <div class="text4">性別</div><br>
         <div class="display">
-            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" />女
-            <input id="radioboy"type="radio" class="text5" name="Gender" value="男" />男
-        </div><br>
-        <span class="text3"> 
-            <p class="text4">生日</p>
-        </span>
-        <div class="div1">
-            <input id="birthid"type="date" class="date" name="Birthday" data="@Model.Birthday" />
-        </div>
+            @{
+                if(Model.Gender=="1"){
+                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" />
+                            <label>女</label>
+                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="男" checked />
+                            <label>男</label>
+                }else{
+                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" checked />
+                            <label>女</label>
+                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="男"  />
+                            <label>男</label>
+                    }
+                }
+
+            </div><br>
+            <span class="text3"> 
+                <p class="text4">生日</p>
+            </span>
+            @{
+                string st = "";
+                if (Model.Birthday != null){
+
+                    st = Convert.ToDateTime(Model.Birthday).ToString("yyyy-MM-dd");
+                }
+            <div class="div1">
+            <input id="birthid" type="date" class="date" name="Birthday" value="@st" />
+            </div>
+            };
+       
         <span class="text3"> 
             <p class="text4">居住地</p>
         </span>
@@ -141,10 +161,11 @@
 
 
 
-            //if(@Model.Gender=="男")
-            //{document.getElementById("radioboy").setAttribute('checked','checked');} 
+            //if(@Model.Gender=="1")
+            //{document.getElementById("radioboy").removeAttribute('checked');
+            //} 
             //else
-            //document.getElementById("radiogirl").setAttribute('checked','checked');
+            //document.getElementById("radiogirl").removeAttribute('checked');
            
             //document.querySelector("#birthid").date=@Model.Birthday;
 

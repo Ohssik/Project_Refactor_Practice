@@ -42,9 +42,9 @@ namespace prjMSIT145_Final.Controllers
                 {
                     string json = JsonSerializer.Serialize(x);
                     HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json);
+                    return RedirectToAction("Edit");
                     //return RedirectToAction("Index");
-                    //return RedirectToAction("Index");
-                  
+                    //return Redirect("~/Home/index");
                 }
             }
             return View();
