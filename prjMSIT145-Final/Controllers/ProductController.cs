@@ -111,43 +111,43 @@ namespace prjMSIT145_Final.Controllers
             _context.SaveChanges();
             return RedirectToAction("BList");
         }
-        public ActionResult BEdit(int? id)
-        {
-            var datas = (from pro in _context.Products
-                         join proC in _context.ProductCategories
-                         on pro.CategoryFid equals proC.Fid
-                         select new
-                         {
-                             pro.Fid,
-                             pro.BFid,
-                             pro.UnitPrice,
-                             pro.IsForSale,
-                             pro.CategoryFid,
-                             pro.Memo,
-                             pro.Photo,
-                             pro.ProductName,
-                             proC.CategoryName
-                         }).Where(p => p.Fid == id);
-            CProductsViewModel vm = new CProductsViewModel();
-            foreach (var d in datas)
-            {
-                vm.Fid = d.Fid;
-                vm.BFid = d.BFid;
-                vm.ProductName = d.ProductName;
-                vm.UnitPrice = d.UnitPrice;
-                vm.IsForSale = d.IsForSale;
-                vm.Memo = d.Memo;
-                vm.Photo = d.Photo;
+        //public ActionResult BEdit(int? id)
+        //{
+        //    var datas = (from pro in _context.Products
+        //                 join proC in _context.ProductCategories
+        //                 on pro.CategoryFid equals proC.Fid
+        //                 select new
+        //                 {
+        //                     pro.Fid,
+        //                     pro.BFid,
+        //                     pro.UnitPrice,
+        //                     pro.IsForSale,
+        //                     pro.CategoryFid,
+        //                     pro.Memo,
+        //                     pro.Photo,
+        //                     pro.ProductName,
+        //                     proC.CategoryName
+        //                 }).Where(p => p.Fid == id);
+        //    CProductsViewModel vm = new CProductsViewModel();
+        //    foreach (var d in datas)
+        //    {
+        //        vm.Fid = d.Fid;
+        //        vm.BFid = d.BFid;
+        //        vm.ProductName = d.ProductName;
+        //        vm.UnitPrice = d.UnitPrice;
+        //        vm.IsForSale = d.IsForSale;
+        //        vm.Memo = d.Memo;
+        //        vm.Photo = d.Photo;
 
-                vm.CategoryName = d.CategoryName;
-                vm.CategoryFid = d.CategoryFid;
-            }
-            if (vm.Photo == null)
-                vm.Photo = "photo.png";
-            return View(vm);
-        }
+        //        vm.CategoryName = d.CategoryName;
+        //        vm.CategoryFid = d.CategoryFid;
+        //    }
+        //    if (vm.Photo == null)
+        //        vm.Photo = "photo.png";
+        //    return View(vm);
+        //}
 
-        [HttpPost]
+        //[HttpPost]
         public ActionResult BEdit(CProductsViewModel vm, IFormFile file)
         {
 
@@ -176,7 +176,7 @@ namespace prjMSIT145_Final.Controllers
                 pro.UnitPrice = vm.UnitPrice;
                 pro.Memo = vm.Memo;
 
-                _context.SaveChanges();
+                //_context.SaveChanges();
             }
             return RedirectToAction("BList");
         }
