@@ -95,6 +95,8 @@ namespace prjMSIT145_Final.Controllers
                     BannerImgFileName1 = item.BannerImgFileName1,
                 });
             }
+            if (BusinessMemberDetailList.Count==0)
+                return RedirectToAction("CIndex");
             if (BusinessMemberDetailList[0].IsSuspensed!=0 || BusinessMemberDetailList[0].IsOpened!=1)
                 return RedirectToAction("CIndex");
             CUtility.BusinessMemberDetailList = BusinessMemberDetailList;
@@ -288,6 +290,38 @@ namespace prjMSIT145_Final.Controllers
                 }
             }
             #endregion
+            #region 判斷商品類別生成區域辨別碼
+            int regionlength_1 = 0;
+            int regionlength_2 = 0;
+            int regionlength_3 = 0;
+            foreach(var item in CUtility.ProductClassList)
+            {
+                if(regionlength_1 <= regionlength_2 && regionlength_1 <= regionlength_3)
+                {
+                    int tempLength = 0;
+                    tempLength += 52;
+                    tempLength += (item.ProductsList.Count * 60);
+                    regionlength_1 += tempLength;
+                    item.PlayregionID = 1;
+                }
+                else if(regionlength_2 < regionlength_1 && regionlength_2 <= regionlength_3)
+                {
+                    int tempLength = 0;
+                    tempLength += 52;
+                    tempLength += (item.ProductsList.Count * 60);
+                    regionlength_2 += tempLength;
+                    item.PlayregionID = 2;
+                }
+                else
+                {
+                    int tempLength = 0;
+                    tempLength += 52;
+                    tempLength += (item.ProductsList.Count * 60);
+                    regionlength_3 += tempLength;
+                    item.PlayregionID = 3;
+                }
+            }
+            #endregion
             List<VCUtilityViewModel> CUL= new List<VCUtilityViewModel>();
             CUL.Add(new VCUtilityViewModel
             {
@@ -297,6 +331,7 @@ namespace prjMSIT145_Final.Controllers
             });
             return View(CUL);
         }
+
         [HttpPost]
         public IActionResult AddtoCart()
         {

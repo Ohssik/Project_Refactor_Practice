@@ -62,53 +62,98 @@
     </section>
 </section>
 <section class="ShowClassdisplay">
-    @{
-        foreach (var item1 in Model[0].ProductClassList)
-        {
-            <div class="productclass">
-                <h1 class="classtitle">@item1.CategoryName</h1>
-                @foreach (var item2 in item1.ProductsList)
+    <div class="ShowClassregion">
+        @{
+            foreach (var item1 in Model[0].ProductClassList)
+            {
+                if (item1.PlayregionID == 1)
                 {
-                    <div class="productitem">
-                        <p class="producttext">@item2.ProductName</p>
-                        <form action="/Home/AddtoCart" method="post">
-                            <input type="text" name="A" value="A" hidden />
-                            <button type="submit">購買</button>
-                        </form>
-                        <p class="producttext">$@Convert.ToInt32(item2.UnitPrice)</p>
+                    <div class="productclass">
+                        <h1 class="classtitle">@item1.CategoryName</h1>
+                        @foreach (var item2 in item1.ProductsList)
+                        {
+                            <div class="productitem" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <div class="PhotoandName">
+                                    <img src="~/images/@item2.Photo">
+                                    <p>@item2.ProductName</p>
+                                </div>
+                                <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
+                            </div>
+                        }
                     </div>
                 }
-            </div>
+            }
         }
-    }
+    </div>
+    <div class="ShowClassregion">
+        @{
+            foreach (var item1 in Model[0].ProductClassList)
+            {
+                if (item1.PlayregionID == 2)
+                {
+                    <div class="productclass">
+                        <h1 class="classtitle">@item1.CategoryName</h1>
+                        @foreach (var item2 in item1.ProductsList)
+                        {
+                            <div class="productitem" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <div class="PhotoandName">
+                                    <img src="~/images/@item2.Photo">
+                                    <p>@item2.ProductName</p>
+                                </div>
+                                <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        }
+    </div>
+    <div class="ShowClassregion">
+        @{
+            foreach (var item1 in Model[0].ProductClassList)
+            {
+                if (item1.PlayregionID == 3)
+                {
+                    <div class="productclass">
+                        <h1 class="classtitle">@item1.CategoryName</h1>
+                        @foreach (var item2 in item1.ProductsList)
+                        {
+                            <div class="productitem" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <div class="PhotoandName">
+                                    <img src="~/images/@item2.Photo">
+                                    <p>@item2.ProductName</p>
+                                </div>
+                                <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        }
+    </div>
 </section>
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 @section Scripts{
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-       
+
     </script>
 }
