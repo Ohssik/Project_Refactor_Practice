@@ -1,37 +1,17 @@
 .wrap{
    
     width:1800px;
-   
     margin: 200px auto;
     display: flex;
 
 }
-.leftgroup{
-    margin-right: 100px;
-}
-.title{
-    background-color: whitesmoke;
-    margin: 0;
-    height: 70px;
-    text-align: center;
-    border-color: aliceblue;
-}
-.card1{
-    background-color: whitesmoke;
-    border: solid 2px; 
-    border-color: transparent;
-    width: 200px;
-    height: 170px;
-    border-radius: 5px;
-
-    border-collapse: collapse;
-    text-align: center;
-    padding: 10px;
-    margin-bottom: 50px;
-   
+.card30 {
+    margin-left: 40px;
+    margin-bottom: 40px;
 }
 
-.text{
+
+.text {
     font-size: 14px;
     color: whitesmoke;
     text-align: center;
@@ -52,26 +32,17 @@
    
     
 }
-.card2{
-    background-color: whitesmoke;
-    border: solid 2px; 
-    border-color: transparent;
-    width: 200px;
-    height: 150px;
-    border-radius: 5px;
 
-    border-collapse: collapse;
-    text-align: left;
-    padding: 10px;
-  
-    
-}
 .title2{
     background-color: whitesmoke;
     margin: 10px;
 }
 .dashed{
     border: 0.1px solid rgb(236, 229, 229);
+}
+.divhint {
+    display: flex;
+    text-align: center;
 }
 .text2{
     font-size: 15px;
@@ -205,4 +176,15 @@
     color: red;
     font-size:14px;
     font-weight:bold;
+}
+.divheadpic {
+    margin-left: 400px;
+    width: 140px;
+    height: 120px;
+}
+
+.sapnphoto {
+    color: forestgreen;
+    font-size: 14px;
+    font-weight: bold;
 }

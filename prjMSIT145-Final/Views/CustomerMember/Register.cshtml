@@ -9,36 +9,72 @@
     </style>
     <link rel="stylesheet" href="~/css/Customer_css/Register.css">
 }
-<div wrap>
+  <div class="wrap">
  <form asp-action="Register" enctype="multipart/form-data">
-        <div class="card3">
-        <h4 class="title2">註冊會員</h4>
-        <hr style="border:1px dashed #000; height:0.1px">
-     @*   <div class="dashed"></div>*@
-       @* <img src="@Url.Content("~/images/Customer/Member/imgAdd.png")" class="title3" />*@
-        <div class="aui-info ">
-            <img src="@Url.Content("~/images/167126861274498_P19696185.jpg")" id="img-txz" style="width: 80px" class="aui-img-round user-img " />
-            <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
-         @*    style="width: 10rem"*@
-         
-        </div>
+
+      <div class="card3">
+            <div class="card30">
+                <h2 class="title2"> <img src="@Url.Content("~/images/Customer/Member/registerperson.png")" />註冊會員</h2>
+            </div>
+            <div class="dashed">
+
+             </div>
+       <div class="divheadpic">
+                    <div class="aui-info ">
+                        <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px"height="150px" class="aui-img-round user-img " />
+                         <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
+                         <span class="sapnphoto">點擊頭像預覽及修改</span>
+            
+                    </div>
+                </div>
         
         <span class="text3">
-            <p class="color">*</p>  
-            <p class="text4">真實姓名</p>
+            <p class="color">*</p>
+                    <p class="text4">真實姓名<span class="necessspan">(此欄位必填)</span></p>
         </span>
-        <div class="div1">
-            <input id="MemberName" type="text" class="input" name="MemberName" />
-                    <span id="namecorrect" class="spancorrect"></span>
-        </div>
+                <div class="divhint">
+                    <div class="div1">
+                        <input id="MemberName" type="text" class="input" name="MemberName" />
+                        <span id="namecorrect" class="spanerrormessage"></span>
+                    </div>
+                </div>
+       
           
-        <span class="text3">
-            <p class="color">*</p>  
-            <p class="text4">手機號碼</p>
-        </span>
-        <div class="div1">
-            <input type="text" class="input" name="Phone"/>
-        </div>
+                <span class="text3">
+                    <p class="color">*</p>
+                    <p class="text4">手機號碼<span class="necessspan">(此欄位必填)</span></p>
+                </span>
+
+                 <div class="divhint">
+                        <div class="div1">
+                             <input type="text" class="input" name="Phone" value="" id="Phone" />
+                        </div>
+                         <span id="phonecorrect" class="spanerrormessage"></span>
+                 </div>
+
+                <span class="text3">
+                    <p class="color">*</p>
+                    <p class="text4">密碼<span class="necessspan">(此欄位必填)</span></p>
+                </span>
+
+                <div class="divhint">
+                    <div class="div1">
+                        <input type="password" class="input" name="Password" value="" id="Password" />
+                    </div>
+                    <span id="phonecorrect" class="spanerrormessage"></span>
+                </div>
+                <span class="text3">
+                    <p class="color">*</p>
+                    <p class="text4">確認密碼<span class="necessspan">(此欄位必填)</span></p>
+                </span>
+
+                <div class="divhint">
+                    <div class="div1">
+                        <input type="password" class="input" name="Password" value="" id="Password" />
+                    </div>
+                    <span id="phonecorrect" class="spanerrormessage"></span>
+                </div>
+
         <div class="text4">性別</div><br>
         <div class="display">
             <input type="radio" class="text5" name="Gender"value="女" />女
@@ -62,23 +98,7 @@
                 <select type="text "id="area" class="input" name="AddressArea"></select>
             </div>
         </div>
-        <br>
-        <br>
-        <br>
-        <div>
-            <label>密碼</label>
-            <input type="password" name="Password">
-
-        </div>
-         <div>
-            <label>密碼</label>
-            <input type="password" name="Password">
-
-         </div>
-        <div>
-            <label>信箱</label>
-            <input type="email" name="Email"/>
-        </div>
+      
         <div class="display">
             <input id="submitid" type="submit" class="enter" value="確認"/>
         </div>
