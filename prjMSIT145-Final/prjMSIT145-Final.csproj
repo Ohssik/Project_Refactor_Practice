@@ -13,10 +13,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
 
-  <ItemGroup>
-    <Folder Include="wwwroot\images\Customer\" />
     <Folder Include="wwwroot\upload\" />
   </ItemGroup>
 

@@ -1,0 +1,218 @@
+﻿@model prjMSIT145_Final.ViewModels.CANormalMemberOrderViewModel
+@{
+    ViewData["Title"] = "管理者控制台/會員訂單細節";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div>
+        <div class="card shadow mb-4" id="norMemPhotoDiv">
+            <div id="shopInfo">
+                <div>
+                    <figure id="norMemPhoto">
+                        <img src="~/NormalMemberPhoto/@Model.normalImgFile" alt="">
+                    </figure>
+                </div>
+
+                @*<div id="btnBar">
+                    <div class="conBtn"><h5></h5></div>
+                    <div>
+                        <p class="pInfo"></p>
+                        <p class="pInfo"></p>
+
+                    </div>
+                </div>*@
+            </div>
+
+            <div class="table-responsive" name="infoDiv">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.OrderISerialId)</td>
+                        <td>
+                            @Model.OrderISerialId
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model._orderState)</td>
+                        <td>
+                            @Model._orderState
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model._pickUpTime)</td>
+                        <td>
+                            @Model._pickUpTime
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.TotalAmount)</td>
+                        <td>
+                            @Model.TotalAmount
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.PayTermCatName)</td>
+                        <td>
+                            @Model.PayTermCatName
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.PickUpType)</td>
+                        <td>
+                            @Model.PickUpType
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.PickUpPerson)</td>
+                        <td>
+                            @Model.PickUpPerson
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.PickUpPersonPhone)</td>
+                        <td>
+                            @Model.PickUpPersonPhone
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Memo)</td>
+                        <td>
+                            @Model.Memo
+                        </td>
+                    </tr>
+                </table>
+
+
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+    <div>
+
+        @{
+            foreach (var item in Model.details)
+            {
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h5 class="m-0 font-weight-bold text-primary">@item.productName</h5>
+                    </div>
+                    <div class="card-body">
+                        @item.Options
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+
+
+
+</div>
+@section Scripts{
+    <script>
+        $('.nav-item').eq(1).addClass('active').siblings().removeClass('active');
+    </script>
+
+}
+    @section Styles{
+    <style>
+        .memberImg {
+            width: 50px;
+        }
+
+        .searchImg {
+            width: 30px;
+        }
+
+        .container-fluid {
+            display: flex;
+            padding: 10px 20px;
+        }
+
+            .container-fluid .card.shadow.mb-4 {
+                margin: 10px;
+            }
+
+        #norMemPhoto {
+            padding: 15px;
+            height: 20vh;
+            margin: 0;
+        }
+
+        #norMemPhotoDiv img {
+            /* height: 10vh; */
+            object-fit: cover;
+            height: 100%;
+        }
+
+        .container-fluid > div:first-child {
+            width: 30%;
+        }
+
+        .container-fluid > div:last-child {
+            width: 40%;
+        }
+
+        #dataTable td:first-child {
+            width: 30%;
+        }
+
+        #btnBar {
+            width: 90%;
+            margin: auto;
+            /* display: flex; */
+        }
+
+        .conBtn {
+            width: 70%;
+            height: 40px;
+            margin: 10px;
+            background-color: rgb(173, 173, 173);
+            border-radius: 5px;
+            color: black;
+            text-align: center;
+        }
+
+            .conBtn h5 {
+                line-height: 40px;
+            }
+
+        #stopAuthBar {
+            width: 90%;
+            display: flex;
+        }
+
+        .authBtn {
+            width: 40%;
+            margin: 0 10px;
+            height: 30px;
+            background-color: rgb(222, 240, 174);
+            text-align: center;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .clicked2 {
+            background-color: rgb(103, 119, 57);
+            color: white;
+        }
+
+        #btnSave {
+            margin-left: 10px;
+        }
+
+        p.pInfo {
+            margin: 0 auto;
+        }
+
+        #shopInfo {
+            display: flex;
+        }
+    </style>
+}

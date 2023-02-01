@@ -1,0 +1,180 @@
+﻿@model prjMSIT145_Final.Models.NormalMember
+
+@{
+    ViewData["Title"] = "Register";
+}
+@section Styles{
+    <style>
+        
+    </style>
+    <link rel="stylesheet" href="~/css/Customer_css/Register.css">
+}
+
+ <form asp-action="Register" enctype="multipart/form-data">
+        <div class="card3">
+        <h4 class="title2">個人檔案</h4>
+        <div class="dashed"></div>
+        <img src="@Url.Content("~/images/Customer/Member/imgAdd.png")" class="title3" />
+        <div class="aui-info ">
+            <img src="@Url.Content("~/images/167126861274498_P19696185.jpg")" id="img-txz" style="width: 80px" class="aui-img-round user-img " />
+            <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
+         @*    style="width: 10rem"*@
+         
+        </div>
+        
+        <span class="text3">
+            <p class="color">*</p>  
+            <p class="text4">真實姓名</p>
+        </span>
+        <div class="div1">
+            <input id="MemberName" type="text" class="input" name="MemberName" />
+         
+        </div>
+           <span id="namecorrect" class="spancorrect"></span>
+        <span class="text3">
+            <p class="color">*</p>  
+            <p class="text4">手機號碼</p>
+        </span>
+        <div class="div1">
+            <input type="text" class="input" name="Phone"/>
+        </div>
+        <div class="text4">性別</div><br>
+        <div class="display">
+            <input type="radio" class="text5" name="Gender"value="女" />女
+            <input type="radio" class="text5" name="Gender" value="男" />男
+        </div><br>
+        <span class="text3"> 
+            <p class="text4">生日</p>
+        </span>
+        <div class="div1">
+            <input type="date" class="date" name="Birthday" />
+        </div>
+        <span class="text3"> 
+            <p class="text4">居住地</p>
+        </span>
+        <div class="display">
+            <div class="div2">
+                <select type="text "id="city" class="input" name="AddressCity">
+                </select>
+            </div>
+            <div class="div2">
+                <select type="text "id="area" class="input" name="AddressArea"></select>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div>
+            <label>密碼</label>
+            <input type="password" name="Password">
+
+        </div>
+        <div>
+            <label>信箱</label>
+            <input type="email" name="Email"/>
+        </div>
+        <div class="display">
+            <input id="submitid" type="submit" class="enter" value="確認"/>
+        </div>
+       
+      
+    </div>
+    </form>
+    @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+ 
+    <script src="@Url.Content("~/js/NormalMemberAddress/taiwan_districts.js")"></script>
+    <script>
+
+            
+         for (let item of data) { $("#city").append(`<option>${item.name}</option>`); }   //載入地區名
+
+              $("#city").change(function ()
+        {
+            $("#area").find("option").remove();
+            let city = $(this).val();
+            for (let item of data)
+            {
+                if (city == item.name)
+                {
+                    for (let district of item.districts)
+                        $("#area").append(`<option>${district.name}</option>`);
+                    break;
+                }
+            }
+        });
+
+
+        var upload = function (c, d) {                        //圖片點擊 預覽
+            "use strict";
+            var $c = document.querySelector(c),
+                $d = document.querySelector(d),
+                file = $c.files[0],
+                reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+
+                $d.setAttribute("src", e.target.result);
+            };
+        };
+
+
+        var submitbtn = document.getElementById("submitid");
+
+        document.getElementById("MemberName").addEventListener("change", checkPwd);
+        function checkPwd() {
+            var nameobj = document.getElementById("MemberName");
+            var spnameobj = document.getElementById("namecorrect");
+            var nameval = nameobj.value;
+            let ch; flag1 = false; flag2 = false;
+            if (nameval == "") {
+                spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled','disabled');
+                return;
+            }
+            else{
+                spnameobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+            };
+            
+      </script>
+
+
+
+  
+
+
+
+}
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
