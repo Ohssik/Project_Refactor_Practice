@@ -9,67 +9,96 @@
         <style>
 
         </style>
-        <link rel="stylesheet" href="~/css/Customer_css/Register.css">
+        <link rel="stylesheet" href="~/css/Customer_css/Edit.css">
 
 }
 
  <form asp-action="edit" enctype="multipart/form-data">
 
-     <h1>編輯資料</h1>
-     <div class="wrap">
+    
+  <div class="wrap">
     <div class="leftgroup">
         <div class="card1">
             <div class="backcolor">
-               @* <img src="~/images/@Model.MemberPhotoFile" class="dog">
+                <img src="~/images/@Model.MemberPhotoFile" class="dog">
                     <div class="text6">@Model.MemberName</div>
-                    <div class="text6">@Model.Phone</div>*@
+                    <div class="text6">@Model.Phone</div>
             </div>
         </div>
         <div class="card2">
-            <div class="text2">個人檔案</div>
-            <div class="text2">帳號管理</div>
+            <div class="text2"><a href="@Url.Content("~/CustomerMember/Edit")">個人檔案</a></div>
+            <div class="text2"><a href="@Url.Content("~/CustomerMember/Alterpassword")">修改密碼</a></div>
             <div class="text2">我的券夾</div>
         </div>
     </div>
         <div class="card3">
-        <h4 class="title2">個人檔案</h4>
+        <h2 class="title2"><img src="@Url.Content("~/images/Customer/Member/person.png")" />個人檔案</h2>
         <div class="dashed"></div>
         <input type="hidden"name="Fid" value="@Model.Fid"/>
        @* <input type="file" name="photo" class="text-danger" value="~/images/@Model.MemberPhotoFile" />
         <button> <img src="~/images/@Model.MemberPhotoFile" class="title3" style="width:100px" /></button>*@
-        <div class="aui-info">
-                <img src="~/images/@Model.MemberPhotoFile" id="img-txz" style="width: 10rem" class="aui-img-round user-img" />
-                <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput" value="" />
-                
-             </div>
+        <div class="divheadpic">
+                <div class="aui-info">
+                <img src="~/images/@Model.MemberPhotoFile" id="img-txz" style="width:150px"height="150px" class="aui-img-round user-img" />
+                 <input class="fileInput" type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" value="" />
+                </div>
+                <span class="sapnphoto">點擊頭像預覽及修改</span>
                 <input type="hidden" name="MemberPhotoFile" value="@Model.MemberPhotoFile" />
-        <span class="text3">
-            <p class="color">*</p>  
-            <p class="text4">真實姓名</p>
-        </span>
-        <div class="div1">
-            <input type="text" class="input" name="MemberName" value="@Model.MemberName" />
+                  
         </div>
         <span class="text3">
-            <p class="color">*</p>  
-            <p class="text4">手機號碼</p>
+            <p class="color">*</p>
+                    <p class="text4">真實姓名<span class="necessspan">(此欄位必填)</span></p>
         </span>
-        <div class="div1">
-            <input type="text" class="input" name="Phone" value="@Model.Phone"/>
+        <div class="divhint">
+                    <div class="div1">
+                        <input type="text" class="input" name="MemberName" value="@Model.MemberName" id="MemberName" />
+                    </div>
+                        <span id="namecorrect" class="spanerrormessage"></span>
         </div>
+
+
+       
+        <span class="text3">
+            <p class="color">*</p>
+                    <p class="text4">手機號碼<span class="necessspan">(此欄位必填)</span></p>
+        </span>
+
+        <div class="divhint">
+            <div class="div1">
+               <input type="text" class="input" name="Phone" value="@Model.Phone" id="Phone" />
+            </div>
+            <span id="phonecorrect" class="spanerrormessage"></span>
+        </div>
+
+
+
+
+
+
+         <span class="text3">
+             <p class="color">*</p>
+          <p class="text4">電子信箱<span class="necessspan">(此欄位必填)</span></p>
+          </span>
+          <div class="divhint">
+                    <div class="div1">
+                        <input type="email" class="input" name="Email" value="@Model.Email" id="Email" />
+                     </div>
+                        <span id="emailcorrect" class="spanerrormessage"></span>
+            </div>
         <div class="text4">性別</div><br>
         <div class="display">
             @{
                 if(Model.Gender=="1"){
-                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" />
-                            <label>女</label>
-                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="男" checked />
-                            <label>男</label>
+                                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" />
+                                            <label>女</label>
+                                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="男" checked />
+                                            <label>男</label>
                 }else{
-                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" checked />
-                            <label>女</label>
-                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="男"  />
-                            <label>男</label>
+                                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" checked />
+                                            <label>女</label>
+                                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="男"  />
+                                            <label>男</label>
                     }
                 }
 
@@ -77,18 +106,22 @@
             <span class="text3"> 
                 <p class="text4">生日</p>
             </span>
+            <div class="div1">
             @{
              
                 if (Model.Birthday != null){
-                    string st = "";
+                    string st;
                     st = Convert.ToDateTime(Model.Birthday).ToString("yyyy-MM-dd");
-                    <div class="div1">
-                    <input id="birthid" type="date" class="date" name="Birthday" value="@st" />
-                    </div>
+                  
+                                    <input id="birthid" type="date" class="date" name="Birthday" value="@st"/>
+              
+                }
+                else{
+                                     <input id="birthid" type="date" class="date" name="Birthday" value=""/>
                 }
             
-            };
-       
+            }
+            </div>
         <span class="text3"> 
             <p class="text4">居住地</p>
         </span>
@@ -105,20 +138,11 @@
                 </select>
             </div>
         </div>
-        <br>
-        <br>
-        <br>
-        <div>
-            <label>密碼</label>
-            <input type="password" name="Password" value="@Model.Password">
+        
+        <div class="dashed"></div>
 
-        </div>
-        <div>
-            <label>信箱</label>
-            <input type="email" name="Email" value="@Model.Email"/>
-        </div>
         <div class="display">
-            <input type="submit" class="enter" value="修改"/>
+                <input type="submit" class="enter" value="修改" id="submitid" />
         </div>
        
     </div>
@@ -161,6 +185,68 @@
                             $d.setAttribute("src", e.target.result);
                         };
             };
+
+        var submitbtn = document.getElementById("submitid");
+
+        document.getElementById("MemberName").addEventListener("change", checkPwd);
+        function checkPwd() {
+            var nameobj = document.getElementById("MemberName");           
+            var spnameobj = document.getElementById("namecorrect");
+            var nameval = nameobj.value;
+  
+            if (nameval =="") {
+                spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+                alert("有必填欄位未填");
+                return;
+            }
+            else {
+                spnameobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+        };
+
+        document.getElementById("Phone").addEventListener("change", checkPhone);
+        function checkPhone() {
+            var phoneobj = document.getElementById("Phone");
+            var spnphoneobj = document.getElementById("phonecorrect");
+            var phoneval = phoneobj.value;
+   
+            if (phoneval == "") {
+                spnphoneobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+                alert("有必填欄位未填");
+                return;
+            }
+            else {
+                spnphoneobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+        };
+        document.getElementById("Email").addEventListener("change", checkEmail);
+        function checkEmail() {
+            var emailobj = document.getElementById("Email");
+            var spnemailobj = document.getElementById("emailcorrect");
+            var emailval = emailobj.value;
+
+            if (emailval == "") {
+                spnemailobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+                alert("有必填欄位未填");
+                return;
+            }
+            else {
+                spnemailobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+        };
+       
+
+
+
+
+
+
 
 
 
