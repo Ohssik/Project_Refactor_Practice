@@ -83,7 +83,7 @@ namespace prjMSIT145_Final.Controllers
 
 
         
-            List<COrderDetialViewModel> list = new List<COrderDetialViewModel>();
+            
 
             var q = from o in _context.Orders
                                join b in _context.BusinessMembers
@@ -111,6 +111,7 @@ namespace prjMSIT145_Final.Controllers
             var Pr = from o in _context.OrderItems
                                    join p in _context.Products
                                    on o.ProductFid equals p.Fid
+                                   where o.OrderFid == Fid
                                    select new
                                    {
                                        Fid = o.Fid,
@@ -130,12 +131,15 @@ namespace prjMSIT145_Final.Controllers
                                OptionName = p.OptionName,
                                ItemPrice = p.UnitPrice
                            };
+
+
+            COrderDetialViewModel vm = new COrderDetialViewModel();
+
             if (q != null)
             {
 
                 foreach (var c in q.ToList())
                 {
-                    COrderDetialViewModel vm = new COrderDetialViewModel();
                     vm.OrderState = c.OrderState;
                     vm.OrderTime = c.OrderTime;
                     vm.TotalAmount = c.TotalAmount;
@@ -155,7 +159,7 @@ namespace prjMSIT145_Final.Controllers
                     vm.items = new List<COrderItemViewModel>();
 
                     var orderitem = from i in Pr
-                                    where i.Fid == c.Fid
+                                    where i.OrderFid == c.Fid
                                     select i;
 
                     foreach (var item in orderitem)
@@ -179,13 +183,13 @@ namespace prjMSIT145_Final.Controllers
                         vm.items.Add(item2);
                     }
 
-                    list.Add(vm);
+                    
                 }
 
             }
 
 
-            return View(list);
+            return View(vm);
     }
 }
 }
