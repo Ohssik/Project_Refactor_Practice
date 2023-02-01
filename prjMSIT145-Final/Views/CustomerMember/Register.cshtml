@@ -9,12 +9,13 @@
     </style>
     <link rel="stylesheet" href="~/css/Customer_css/Register.css">
 }
-
+<div wrap>
  <form asp-action="Register" enctype="multipart/form-data">
         <div class="card3">
-        <h4 class="title2">個人檔案</h4>
-        <div class="dashed"></div>
-        <img src="@Url.Content("~/images/Customer/Member/imgAdd.png")" class="title3" />
+        <h4 class="title2">註冊會員</h4>
+        <hr style="border:1px dashed #000; height:0.1px">
+     @*   <div class="dashed"></div>*@
+       @* <img src="@Url.Content("~/images/Customer/Member/imgAdd.png")" class="title3" />*@
         <div class="aui-info ">
             <img src="@Url.Content("~/images/167126861274498_P19696185.jpg")" id="img-txz" style="width: 80px" class="aui-img-round user-img " />
             <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
@@ -28,9 +29,9 @@
         </span>
         <div class="div1">
             <input id="MemberName" type="text" class="input" name="MemberName" />
-         
+                    <span id="namecorrect" class="spancorrect"></span>
         </div>
-           <span id="namecorrect" class="spancorrect"></span>
+          
         <span class="text3">
             <p class="color">*</p>  
             <p class="text4">手機號碼</p>
@@ -69,6 +70,11 @@
             <input type="password" name="Password">
 
         </div>
+         <div>
+            <label>密碼</label>
+            <input type="password" name="Password">
+
+         </div>
         <div>
             <label>信箱</label>
             <input type="email" name="Email"/>
@@ -80,6 +86,7 @@
       
     </div>
     </form>
+    </div>
     @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
  

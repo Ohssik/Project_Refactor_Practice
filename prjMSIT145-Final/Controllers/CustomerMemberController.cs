@@ -42,12 +42,21 @@ namespace prjMSIT145_Final.Controllers
                 {
                     string json = JsonSerializer.Serialize(x);
                     HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json);
-                    return RedirectToAction("Edit");
+                    //return RedirectToAction("Edit");
                     //return RedirectToAction("Index");
-                    //return Redirect("~/Home/index");
+                    return Redirect("~/Home/CIndex");
                 }
             }
             return View();
+        }
+
+
+        public ActionResult Loginout()
+        {
+            HttpContext.Session.Remove(CDictionary.SK_LOGINED_USER);
+
+            return Redirect("~/Home/CIndex");
+            //return RedirectToAction("Index", "CustomerMember");
         }
         public IActionResult Register()
         {
@@ -117,22 +126,21 @@ namespace prjMSIT145_Final.Controllers
 
 
 
-            NormalMember x = JsonSerializer.Deserialize<NormalMember>(loginmember);
+            //NormalMember x = JsonSerializer.Deserialize<NormalMember>(loginmember);
 
-            if (x.MemberPhotoFile == null)
-            {
-                x.MemberPhotoFile = "167126861274498_P19696185.jpg";
-            }
+            CNormalMemberViewModel x = JsonSerializer.Deserialize<CNormalMemberViewModel>(loginmember);
+            //NormalMember y = _context.NormalMembers.FirstOrDefault(c => c.Fid == x.Fid);
+            //x.MemberPhotoFile = y.MemberPhotoFile;
             return View(x);
         }
         [HttpPost]
-        public IActionResult Edit(CNormalMemberViewModel memberedit,IFormFile photo)
+        public IActionResult Edit(CNormalMemberViewModel memberedit)
         {
            
-            if (memberedit != null)
+            if (memberedit!= null)
             {
                 NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Fid == memberedit.Fid);
-                if (photo != null)
+                if (memberedit.photo != null)
                 {
                     string fileName = Guid.NewGuid().ToString() + ".jpg";
                     string filePath = Path.Combine(_eviroment.WebRootPath, "images", fileName);
@@ -140,7 +148,7 @@ namespace prjMSIT145_Final.Controllers
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                        photo.CopyTo(fileStream);
+                        memberedit.photo.CopyTo(fileStream);
                     }
                     memberedit.MemberPhotoFile = fileName;
                 }
@@ -156,7 +164,7 @@ namespace prjMSIT145_Final.Controllers
               
                 string json = JsonSerializer.Serialize(x);
                 HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json);
-                return RedirectToAction("memberview");
+                return RedirectToAction("Edit");
 
             }
             else
@@ -164,23 +172,25 @@ namespace prjMSIT145_Final.Controllers
                 return RedirectToAction("login");
             }
             
+    }
+        public IActionResult Alterpassword()
+        {
+            string loginmember = "";
+            loginmember = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            CNormalMemberViewModel x = JsonSerializer.Deserialize<CNormalMemberViewModel>(loginmember);
+            return View(x);
+        }
 
+        [HttpPost]
+        public IActionResult Alterpassword(CNormalMemberViewModel member)
+        {
+            NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Fid == member.Fid);
+            x.Password=member.Password;
+            _context.SaveChanges();
 
-
-
-
-
-
-
-
-
-
-
+            return RedirectToAction("Edit");
 
         }
-    
-
-
 
 
 

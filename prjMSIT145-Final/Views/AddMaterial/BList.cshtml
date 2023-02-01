@@ -5,6 +5,8 @@
 @section Styles{
 	<script src="../js/ProductList.js"> </script>
 	<link rel="stylesheet" href="../css/ProductList.css">
+	<link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">
+
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 	<style>
 		.btnDeleteCheck {
@@ -24,7 +26,8 @@
 		}
 	</style>
 }
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@*刪除按鈕彈窗*@
+<div class="modal fade" id="btnDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header" style="width:100%">
@@ -42,6 +45,34 @@
 	</div>
 </div>
 <div>
+
+	@*編輯的彈窗*@
+	<div class="editModal modal fade" id="btnEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" style="max-width:30%;">
+			<div class="modal-content" style=" box-sizing:border-box; padding:20px;">
+				<div class="modal-header" style="padding:0;">
+					<form method="post" enctype="multipart/form-data" action="BEdit">
+						<input type="hidden" name="BFid"/>
+						<input type="hidden" name="Fid" id="Fid"/>
+						<div class="topdiv">
+							<button type="button" data-bs-dismiss="modal" style="background-color:transparent ;border:none; width:30px; height:20px; position:absolute; top:20px; left:20px;"><img src="~/images/Business/exit.png" style="width:100%; height:100%;" /></button>
+							<input id="txtOptionName" name="OptionName" class="inputtext" type="text" placeholder=" 輸入配料名稱....." />   @*配料名稱*@
+
+							<input id="btnSubmit" class="butt" type="submit" value="儲存" style="margin-left:20px;"/>
+						</div>
+						<select id="selType" name="OptionGroupName" style="margin:5px 0;  border-radius:5px;"></select>  @*選擇類別*@
+
+						<hr style="border:1px dashed #000; height:1px">
+						<h6 id="h6">價格</h6>
+						<label for="">預設價格</label>
+						<input type="text" id="txtPrice" name="UnitPrice" style="border-radius:10px; border:1px solid; padding:0 5px;"/>   @*配料價格*@
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	@*列表*@
 	<div class="top">
 		<div>
 			<h2 id="h2">配料</h2>
@@ -52,8 +83,6 @@
 		</div>
 	</div>
 	<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />
-	<!-- <select ><option></option></select>
-	 -->
 	<table id="table" class="table table-hover stripe">
 		<thead>
 			@*<th>相片</th>*@
@@ -64,18 +93,6 @@
 		<th>選項</th>
 		</thead>
 		<tbody id="tbody">
-			@*<tr>
-			<td><input type="image" src="../images/uparrow.png"></td>
-			<td>花枝排</td>
-			<td>70.00</td>
-			<td>小菜類</td>
-			<td>-</td>
-			<td>
-			<button class="buteditgar"><img src="../images/garbage.png"></button>
-			<button class="buteditgar"><img src="../images/edit.png"></button>
-			</td>
-			</tr>
-			*@
 		</tbody>
 	</table>
 </div>
@@ -85,7 +102,10 @@
 		const tbody = document.querySelector("#tbody");
 		const txt = document.querySelector("#txtKeyword");  //關鍵字
 		const btnDelete = document.getElementsByName("btnDelete") //點擊刪除配料
+		const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
 		const linkDelete = document.querySelector("#linkDelete"); //確定刪除配料
+		const selType = document.querySelector("#selType"); //配料類別
+
 
 		//關鍵字查詢(類別與商品)
 		txt.addEventListener("input", () => list());
@@ -105,14 +125,14 @@
 							<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
 							<input type='hidden'  id='${item.optionGroupFid}' name='${item.optionGroupFid}' value='${item.optionGroupFid}'/>
 
-								<td >${item.optionName}</td>
-								<td>$${item.unitPrice}</td>
-								<td id='${item.optionGroupName}' name="OptionGroupName">${item.optionGroupName}</td>
+							<td>${item.optionName}</td>
+							<td>$${item.unitPrice}</td>
+							<td id='${item.optionGroupName}' name="OptionGroupName">${item.optionGroupName}</td>
 
-								<td>
-											<a href='@Url.Content("~/AddMaterial/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/edit.png">編輯</button></a>
-											<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/garbage.png">刪除</button>
-								</td>
+							<td>
+								<button class="buteditgar" name='btnEdit' data-bs-toggle="modal"  data-bs-target="#btnEditModal"><img src="../images/Business/edit.png">編輯</button>
+								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModal"><img src="../images/Business/garbage.png">刪除</button>
+					        <td>
 							</tr>`
 			});
 			tbody.innerHTML = result;
@@ -120,15 +140,41 @@
 			btnDelete.forEach(function (click) {
 				click.addEventListener("click",function(){
 					const id = this.parentElement.parentElement.firstElementChild;
-					//console.log(id.value);
 
 					linkDelete.addEventListener("click",async function(){
 						linkDelete.setAttribute("href",`@Url.Content("~/AddMaterial/BDelete/${id.value}")`);
 					})
 				})
-
 			})
 
+			//點選編輯按鈕
+			btnEdit.forEach(function(btn){
+				btn.addEventListener("click",function(){
+					const Fid = document.querySelector("#Fid");
+					const txtOptionName = document.querySelector("#txtOptionName");
+					const txtPrice = document.querySelector("#txtPrice");
+
+					const cell = this.parentElement.parentElement;
+
+					loadGroup();
+					Fid.value = cell.children[0].value;
+					txtOptionName.value  = cell.children[3].innerHTML;
+					selType.innerHTML = `<option>${cell.children[5].innerHTML}</option>`;
+					txtPrice.value = cell.children[4].innerHTML.substring(1);
+				})
+			})
+			//載入配料類別
+			async function loadGroup(){
+				const response = await fetch("@Url.Content("~/Type/BOptionGroup")");
+				const datas = await response.json();
+				let frag = document.createDocumentFragment();
+				frag = "";
+				datas.forEach(function(item,index){
+					if (item.optionGroupName !== selType.value)
+					frag += `<option>${item.optionGroupName}</option>`
+				})
+				selType.innerHTML += frag;
+			}
 		}
 	</script>
 }

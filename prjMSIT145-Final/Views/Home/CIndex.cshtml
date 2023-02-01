@@ -37,7 +37,7 @@
     </div>
 </section>
 <section class="Showshoptilte">
-    <p>附近推薦店家</p>
+    <p>專屬推薦店家</p>
     <div>
         <h2>查看更多&ensp;</h2>
         <img src="~/images/Customer/Mainpage/circlearrow_right 32x32.png" />
@@ -47,19 +47,45 @@
     @{
         foreach (var item in Model)
         {
-            <div class="Shopcard" id="Shop @item.Fid">
-                <img class="Shopcardloggo" src="~/images/Customer/Shopcard/Test/circlelogo.png" />
-                <img class="Shopcardcover" src="~/images/Customer/Shopcard/Test/shopcover.png" />
-                <div class="Shopcardbottem">
-                    <h3>&ensp;@item.MemberName</h3>
-                    <ul>
-                        <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
-                        <li>&ensp;0.3 km&ensp;</li>
-                        <li>&ensp;★ 4.6&ensp;</li>
-                    </ul>
-                    <h4>&ensp;@item.Address</h4>
-                </div>
-            </div>
+            if (item.IsSuspensed == 0)
+            {
+                if (item.IsOpened > 0)
+                {
+                    @if (item.IsOpened == 1)
+                    {
+                        <div class="Shopcard CursorPointer" id="Shop @item.Fid">
+                            <img class="Shopcardcover" src="~/images/Customer/Shopcard/Test/shopcover.png" />
+                            <img class="Shopcardloggo" src="~/images/Customer/Shopcard/Test/circlelogo.png" />
+                            <div class="Shopcardbottem">
+                                <h3>&ensp;@item.MemberName</h3>
+                                <ul>
+                                    <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
+                                    <li>&ensp;0.3 km&ensp;</li>
+                                    <li>&ensp;★ 4.6&ensp;</li>
+                                </ul>
+                                <h4>&ensp;@item.Address</h4>
+                            </div>
+                        </div>
+                    }
+                    @if (item.IsOpened == 2)
+                    {
+                        <div class="Shopcard CursorDefault" id="Shop @item.Fid">
+                            <img class="Shopcardcover" src="~/images/Customer/Shopcard/Test/shopcover.png" />
+                            <img class="Shopcardloggo" src="~/images/Customer/Shopcard/Test/circlelogo.png" />
+                            <div class="ShopisClose">暫停接單</div>
+                            <div class="Shopcardbottem">
+                                <h3>&ensp;@item.MemberName</h3>
+                                <ul>
+                                    <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
+                                    <li>&ensp;0.3 km&ensp;</li>
+                                    <li>&ensp;★ 4.6&ensp;</li>
+                                </ul>
+                                <h4>&ensp;@item.Address</h4>
+                            </div>
+                        </div>
+                    }
+                }
+            }
         }
     }
 </section>
@@ -67,9 +93,15 @@
     <script>
         @foreach (var item in Model)
         {
-            @:document.getElementById("Shop @(item.Fid)").addEventListener("click",function(){
-            @:window.location.href="Home/CShowProduct/?BFid=@(item.Fid)";
-            @:});
-        }   
+            if (item.IsSuspensed == 0)
+            {
+                @if (item.IsOpened == 1)
+                {
+                    @:document.getElementById("Shop @(item.Fid)").addEventListener("click", function () {
+                    @:location.href="/Home/CShowProduct?BFid=@(item.Fid)";
+                    @:});
+                }
+            }
+        }
     </script>
 }

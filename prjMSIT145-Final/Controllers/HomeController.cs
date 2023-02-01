@@ -30,7 +30,6 @@ namespace prjMSIT145_Final.Controllers
                 OpenTime = BM.OpenTime,
                 CloseTime = BM.CloseTime,
                 Address = BM.Address,
-                MemberAccount=BM.MemberAccount,
                 IsSuspensed=BM.IsSuspensed,
                 Gps=BM.Gps,
                 IsOpened=BM.IsOpened,
@@ -46,7 +45,6 @@ namespace prjMSIT145_Final.Controllers
                     OpenTime = Convert.ToString(item.OpenTime).Substring(0,5),
                     CloseTime = Convert.ToString(item.CloseTime).Substring(0, 5),
                     Address = item.Address,
-                    MemberAccount = item.MemberAccount,
                     IsSuspensed = item.IsSuspensed,
                     Gps = item.Gps,
                     IsOpened = item.IsOpened,
@@ -58,7 +56,7 @@ namespace prjMSIT145_Final.Controllers
             return View(CUtility.BusinessMemberList);
         }
 
-        public IActionResult CShowProduct(int? BFid,int? OrderFid)
+        public IActionResult CShowProduct(int? BFid,int? OpenCheck,int? NFid,int? OrderFid)
         {
             if (BFid == null)
                 return RedirectToAction("CIndex");
