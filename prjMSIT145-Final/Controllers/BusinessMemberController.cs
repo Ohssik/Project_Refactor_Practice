@@ -3,6 +3,7 @@ using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModel;
 using System.Text.Json;
 
+
 namespace prjMSIT145_Final.Controllers
 {
     public class BusinessMemberController : Controller
@@ -19,6 +20,8 @@ namespace prjMSIT145_Final.Controllers
         [HttpPost]
         public IActionResult Blogin(CLoginViewModel cLoginViewModel)
         {
+            if (cLoginViewModel.fEmailRegister == null)
+            {
             //帳戶帳號密碼確認
             BusinessMember b= _context.BusinessMembers.FirstOrDefault(b=>b.Email.Equals(cLoginViewModel.fEmail)&&b.Password.Equals(cLoginViewModel.fPassword));
             if (b != null)
@@ -30,7 +33,12 @@ namespace prjMSIT145_Final.Controllers
                     return RedirectToAction("BList", "Order");
                 }
             }
+                    return View();
+            }
+           Gmail gmail = new Gmail();
+            gmail.sendGmail(cLoginViewModel.fEmailRegister);
             return View();
+
         }
 
 

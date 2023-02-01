@@ -291,7 +291,7 @@ namespace prjMSIT145_Final.Controllers
                 Memo = o.Memo,
                 OrderTime = o.OrderTime,
                 TotalAmount = o.TotalAmount,
-                OrderISerialId = o.OrderISerialId,
+                OrderISerialId = o.OrderISerialId
             });
             //合併產品名
             var orderitemToProduct = _context.OrderItems.Join(_context.Products, o => o.ProductFid, p => p.Fid, (o, p) => new
@@ -308,7 +308,7 @@ namespace prjMSIT145_Final.Controllers
                 Fid = i.Fid,
                 ItemId=i.ItemFid,
                 OptionName = p.OptionName,
-                ItemPrice = p.UnitPrice,
+                ItemPrice = p.UnitPrice
             });
 
 

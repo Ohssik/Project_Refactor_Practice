@@ -23,7 +23,7 @@
                 {
                     count++;
 
-                    <tr id="ListBar" data-bs-toggle="modal" data-bs-target="#detailModal" class="container">
+                    <tr id="ListBar" data-bs-toggle="modal" data-bs-target="#detailModal" class="container" name="baritem">
                         <td id="Fid" hidden>@Html.DisplayFor(modelItem => item.Fid)</td>
                         <th class=" col-1 align-middle">#@count</th>
                         <td class="col-4 align-middle">@Html.DisplayFor(modelItem => item.OrderISerialId)</td>
@@ -97,8 +97,9 @@
                 loadDetail(this.children[0].innerHTML)
             })
             async function loadDetail(orderid) {
-                const response = await fetch(`@Url.Content("~/Order/BListDetailApi/?orderid=${orderid}")`)
+                    const response = await fetch(`@Url.Content("~/Order/BListDetailApi/?orderid=${orderid}")`)
                 const datas = await response.json();
+                    console.log(datas);
                 datas.forEach(function (item, index) {
                     console.log(item);
                     //console.log(item.items);
