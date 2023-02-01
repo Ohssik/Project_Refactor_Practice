@@ -176,7 +176,7 @@ namespace prjMSIT145_Final.Controllers
                 pro.UnitPrice = vm.UnitPrice;
                 pro.Memo = vm.Memo;
 
-                //_context.SaveChanges();
+                _context.SaveChanges();
             }
             return RedirectToAction("BList");
         }

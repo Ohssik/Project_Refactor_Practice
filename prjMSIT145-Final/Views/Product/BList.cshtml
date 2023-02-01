@@ -29,6 +29,7 @@
 		}
 	</style>
 }
+@*刪除的彈窗*@
 <div class="modal fade" id="btnDeleteModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
@@ -47,7 +48,8 @@
 	</div>
 </div>
 <div>
-
+	
+	@*編輯的彈窗*@
 	<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" style="max-width:30%;">
 			<div class="modal-content" style=" box-sizing:border-box; padding:20px;">
@@ -97,7 +99,9 @@
 				</div>
 			</div>
 		</div>
-	</div>
+    </div>
+	
+	@*列表*@
 	<div class="top">
 		<div>
 			<h2 id="h2">餐點</h2>
@@ -108,8 +112,6 @@
 		</div>
 	</div>
 	<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />
-	<!-- <select ><option></option></select>
-	 -->
 	<table id="table" class="table table-hover stripe">
 		<thead>
 		<th>相片</th>
@@ -125,8 +127,6 @@
 	</table>
 </div>
 
-
-
 @section Scripts{
 	<script>
 		const txt = document.querySelector("#txtKeyword");
@@ -136,6 +136,7 @@
 		const btnDeleteCheck = document.querySelector("#linkDelete")//確認刪除按鈕
 		const btnSubmit = document.querySelector("#btnSubmit"); //編輯完成後的儲存按鈕
 		const fid = document.querySelector("#Fid");
+		const selType = document.querySelector("#selType");
 
 		//關鍵字查詢(類別與商品)
 		txt.addEventListener("input", () => search());
@@ -165,7 +166,7 @@
 						<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
 						<input type="hidden" name="${item.categoryFid}" value="${item.categoryFid}"/>
 
-						<td><input style='width:30px; height:20px;' type="image" src="../images/${item.photo}"></td>
+						<td><input style='width:50px; height:50px;' type="image" src="../images/${item.photo}"></td>
 						<td>${item.productName}</td>
 						<td>${item.unitPrice}</td>
 						<td>${item.categoryName}</td>
@@ -190,30 +191,64 @@
 					})
 				})
 			})
-			btnEdit.forEach(function(btn){
-				btn.addEventListener("click",function(){
-					const txtProductName = document.querySelector("#txtProductName");
-					const imgShow = document.querySelector("#imgShow");
-					const selType = document.querySelector("#selType");
-					const txtPrice = document.querySelector("#txtPrice");
-					const txtMemo = document.querySelector("#txtMemo");
 
-					const cell = this.parentElement.parentElement;
+			//列表中點選編輯按鈕
+			btnEdit.forEach(function(btn){
+				btn.addEventListener("click", function(){
+					loadOption();
+					const txtProductName = document.querySelector("#txtProductName");  //產品名
+					const imgShow = document.querySelector("#imgShow"); //照片
+					const txtPrice = document.querySelector("#txtPrice"); //價錢
+					const txtMemo = document.querySelector("#txtMemo"); //備註
+					const cell = this.parentElement.parentElement;  //tr內的值
+
 					txtProductName.value = cell.children[4].innerHTML;
 					imgShow.setAttribute("src",cell.children[3].firstElementChild.getAttribute("src"));
 					selType.innerHTML = `<option>${cell.children[6].innerHTML}</option>`;
 					txtPrice.value = cell.children[5].innerHTML;
 					txtMemo.innerHTML = cell.children[8].innerHTML;
-					fid.value =  cell.children[0].innerHTML;
-
-					console.log(fid.value);
-					console.log(cell.children[0].innerHTML);
-
+					fid.value =cell.children[0].value;
 				})
 			})
 		}
-		//btnSubmit.addEventListener("click",function(){
-		//	document.querySelector("form").setAttribute("action", "BEdit");
-		//})
+		//載入所有商品類別
+		async function loadOption() {
+			const request = await fetch(`@Url.Content("~/Type/BCategoryList")`);
+			const data = await request.json();
+
+			let frag = document.createDocumentFragment();
+			frag = "";
+			data.forEach(function (item, index) {
+				if (item.categoryName !== selType.value)
+					frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
+			})
+			selType.innerHTML += frag;
+			console.log(selType)
+		}
+		//上傳照片
+		file.addEventListener("change", function () {
+			const file = this.files[0];
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				imgShow.setAttribute("src", e.target.result);
+			};
+			reader.readAsDataURL(file);
+		})
+		//移除照片
+		btnImgDelete.addEventListener("click", function () {
+			file.outerHTML = file.outerHTML;
+			imgShow.setAttribute("src", "../images/Business/upload.png");
+		})
+		//送出時確認商品類別及狀態是否選取
+		btnSubmit.addEventListener("click", function (event) {
+			if (selType.value == "請選擇商品類別") {
+				event.preventDefault();
+				alert("請確認商品類別是否選取!")
+			}
+			if (!IsForSale0.checked && !IsForSale1.checked && !IsForSale2.checked) {
+				event.preventDefault();
+				alert("請確認商品狀態是否選取!");
+			}
+		})
 	</script>
 }
