@@ -7,7 +7,6 @@
         public string? OpenTime { get; set; }
         public string? CloseTime { get; set; }
         public string? Address { get; set; }
-        public string? MemberAccount { get; set; }
         public int? IsSuspensed { get; set; }
         public string? Gps { get; set; }
         public int? IsOpened { get; set; }

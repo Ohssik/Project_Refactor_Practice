@@ -7,6 +7,7 @@ using System.Diagnostics.Metrics;
 using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using System.Collections.Generic;
+using prjMSIT145_Final.ViewModels;
 
 namespace prjMSIT145_Final.Controllers
 {
@@ -22,7 +23,50 @@ namespace prjMSIT145_Final.Controllers
             NFid = 1;
             if(NFid==null)
                 return Redirect("/CustomerMember/Login");
-            return View();
+            List<VOrdersViewModel> OrdersList = new List<VOrdersViewModel>();
+            var Orderdatas = from O in _context.Orders
+                             where O.NFid == NFid
+                             select new
+                                 {
+                                 Fid=O.Fid,
+                                 NFid=O.NFid,
+                                 BFid=O.BFid,
+                                 PickUpDate=O.PickUpDate,
+                                 PickUpTime=O.PickUpTime,
+                                 PickUpType=O.PickUpType,
+                                 PickUpPerson=O.PickUpPerson,
+                                 PickUpPersonPhone=O.PickUpPersonPhone,
+                                 PayTermCatId=O.PayTermCatId,
+                                 TaxIdnum=O.TaxIdnum,
+                                 OrderState=O.OrderState,
+                                 Memo  = O.Memo,
+                                 OrderTime=O.OrderTime,
+                                 TotalAmount=O.TotalAmount,
+                                 OrderISerialId=O.OrderISerialId,  
+                             };
+            foreach (var item in Orderdatas)
+            {
+                OrdersList.Add(new VOrdersViewModel
+                {
+                    Fid = item.Fid,
+                    NFid = item.NFid,
+                    BFid = item.BFid,
+                    PickUpDate = item.PickUpDate,
+                    PickUpTime = item.PickUpTime,
+                    PickUpType = item.PickUpType,
+                    PickUpPerson = item.PickUpPerson,
+                    PickUpPersonPhone = item.PickUpPersonPhone,
+                    PayTermCatId = item.PayTermCatId,
+                    TaxIdnum = item.TaxIdnum,
+                    OrderState = item.OrderState,
+                    Memo = item.Memo,
+                    OrderTime = item.OrderTime,
+                    TotalAmount = item.TotalAmount,
+                    OrderISerialId = item.OrderISerialId,
+                });
+            }
+            CUtility.OrdersList = OrdersList;
+            return View(CUtility.OrdersList);
         }
         [HttpPost]
         public IActionResult BList(int? orderid)

@@ -1,5 +1,5 @@
 ﻿.Showshopdisplay {
-    margin: 15px auto;
+    margin: 30px auto;
     width: 1200px;
     display: flex;
     justify-content: flex-start;
@@ -13,11 +13,20 @@
     background-color: #FFFFFF;
     border-radius: 5px;
     box-shadow: 3px 3px 5px #5a5555;
+    cursor: pointer;
 }
 
-    .Shopcard:nth-child(3n+1) {
-        margin: 0px 0px 30px 0px;
-    }
+.CursorPointer {
+    cursor: pointer;
+}
+
+.CursorDefault {
+    cursor: default;
+}
+
+.Shopcard:nth-child(3n+1) {
+    margin: 0px 0px 30px 0px;
+}
 
 .Shopcardbottem {
     height: 90px;
@@ -58,7 +67,7 @@
     height: 70px;
     clip-path: circle(50% at 50% 50%);
     position: absolute;
-    margin: 10px 0px 0px 10px;
+    margin: 10px 0px 0px -370px;
 }
 
 .Shopcardcover {
@@ -66,4 +75,20 @@
     height: 240px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    position: relative;
+}
+
+.ShopisClose {
+    width: 380px;
+    height: 240px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    position: absolute;
+    text-align: center;
+    line-height: 240px;
+    background: rgba(0,0,0,0.47);
+    margin:-245px 0px 0px 0px;
+    color:#FFFFFF;
+    font-size:24px;
+    font-weight:bold;
 }
