@@ -25,9 +25,9 @@
                     foreach(var item in Model){
                         if (item.OrderBy > 0)
                         {
-                                <div class="divAds" id="@item.Fid" data-id="@item.Fid" data-name="@item.ImgName" data-st="@item.st" data-et="@item.et" data-link="@item.Hyperlink" data-blt="@item.ImgBelongTo">
-                                    <img class="adthumbs" src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
-                                </div>
+                            <div class="divAds" id="@item.Fid" data-id="@item.Fid" data-name="@item.ImgName" data-st="@item.st" data-et="@item.et" data-link="@item.Hyperlink" data-blt="@item.ImgBelongTo">
+                                <img class="adthumbs" src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
+                            </div>
                         }
                     }
                 }
@@ -126,9 +126,9 @@
                 foreach (var item in Model)
                 {
                     if (item.OrderBy == 0){
-                            <div class="homeSmallAd" data-id="@item.Fid" data-name="@item.ImgName" >
-                                <img src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
-                            </div>
+                        <div class="homeSmallAd" data-id="@item.Fid" data-name="@item.ImgName" >
+                            <img src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
+                        </div>
                     }
                 }
             }
@@ -140,36 +140,66 @@
                 foreach (var item in Model)
                 {
                     if (item.OrderBy == 0){
-                            <div class="table-responsive smallAdTable">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <tbody>
+                        <div class="table-responsive smallAdTable">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <tbody>
 
-                                    <tr>
-                                        <td>@Html.DisplayNameFor(model=>model.Hyperlink)</td>
-                                            <td><input class="smallAdLink" name="smallAdLink" data-id="@item.Fid" type="text" value="@item.Hyperlink"> </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                                <div name="imgInfo" data-id="@item.Fid">
-                                                    <input id="file" data-file="smallFile" data-id="@item.Fid" name="file" class="form-control" type="file" />
+                                <tr>
+                                    <td>@Html.DisplayNameFor(model=>model.Hyperlink)</td>
+                                        <td><input class="smallAdLink" name="smallAdLink" data-id="@item.Fid" type="text" value="@item.Hyperlink"> </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                            <div name="imgInfo" data-id="@item.Fid">
+                                                <input id="file" data-file="smallFile" data-id="@item.Fid" name="file" class="form-control" type="file" />
 
-                                                <button name="btnSaveImg" class="btn btn-success btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-check"></i>
-                                                    </span>
-                                                    <span class="text">儲存</span>
-                                                </button>
-                                            </div>
-                                        </td>
+                                            <button name="btnSaveImg" class="btn btn-success btn-icon-split">
+                                                <span class="icon text-white-50">
+                                                    <i class="fas fa-check"></i>
+                                                </span>
+                                                <span class="text">儲存</span>
+                                            </button>
+                                        </div>
+                                    </td>
 
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
                     }
                 }
             }
             
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">           
+            <div class="modal-body">                
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"></label>                    
+                    </div>                    
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseMsg">確定</button>                
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmMsg" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">確定要刪除嗎？</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnSubmit">確定</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>
+
+            </div>
         </div>
     </div>
 </div>
@@ -180,6 +210,12 @@
     <script>
         $(function () {
             $('.nav-item').eq(2).addClass('active').siblings().removeClass('active');
+            let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
+                keyboard: false
+            });
+            let confirmMsg = new bootstrap.Modal(document.getElementById('confirmMsg'), {
+                keyboard: false
+            });
 
             let sortablePositions;
             let ads;
@@ -258,7 +294,17 @@
                 });
 
             });
+
+      
             
+            
+            $('#btnCloseMsg').click(function(){
+                $('#msgAlert>label').text('');
+                //window.setTimeout(()=>{
+                    location.reload(true);
+                //},500);
+            });
+
             $('#btnSave1').click(function(event){
                
                 let ad = {
@@ -280,7 +326,9 @@
                         console.log(msg);
 
                         if(msg==1){
-                            alert('儲存成功');
+                            //alert('儲存成功');
+                            $('#msgAlert label').text('儲存成功');
+                            msgAlert.show();
                         }
 
                     }
@@ -290,8 +338,11 @@
 
             
 
-            $('#btnDelete').click(function(){
-                if (confirm('確定要刪除嗎?')){
+            $('#btnDelete').click(function(){                
+                confirmMsg.show();                
+            });
+
+            $('#btnSubmit').click(function(){
                     $.ajax({
                         url: `@Url.Content("~/Admin/deleteAd")`,
                         type: "post",
@@ -301,15 +352,18 @@
                             console.log(msg);
 
                             if (msg == 1) {
-                                alert('刪除成功');
-                                location.reload(true);
+                                //alert('刪除成功');
+                                confirmMsg.hide();
+                                $('#msgAlert label').text('刪除成功');
+                                msgAlert.show();
+
                             }
 
                         }
                     });
-                }else
-                    return false;
-                
+            });
+            $('#btnCancel').click(function () {                
+                confirmMsg.hide();
             });
 
             
@@ -325,7 +379,9 @@
                     let count=$('#sortable').children('.divAds').length;
                     if(count>=8)
                     {
-                        alert('輪播圖數量已達上限，請刪除圖片後再新增');
+                        //alert('輪播圖數量已達上限，請刪除圖片後再新增');
+                        $('#msgAlert label').text('輪播圖數量已達上限，請刪除圖片後再新增');
+                        msgAlert.show();
                         return false;
                     }
                     const file = e.target.files[0];
@@ -398,7 +454,8 @@
                         console.log(msg);
 
                         if (msg != null) {
-                            alert("上傳成功");
+                            $('#msgAlert label').text('上傳成功');
+                            msgAlert.show();
                             let docFrag=document.createDocumentFragment();
                             docFrag = `<div id='${msg.fid}' data-id='${msg.fid}' data-name='${msg.imgName}' class="divAds">
                             <img class="adthumbs" src='${newAdSrc}' data-target="image-preview"/>
@@ -510,7 +567,7 @@
                         console.log(msg);
 
                         if (msg != null) {
-                            //$('.homeSmallAd').eq(i).attr('data-id',msg.Fid);
+                            
                             $('[name=smallAdLink]').eq(i).val(msg.hyperlink);
                             //alert('儲存成功');
                             let alertDiv = `<div class="alert alert-success alert-dismissible fade show" role="alert">

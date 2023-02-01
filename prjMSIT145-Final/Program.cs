@@ -9,11 +9,8 @@ builder.Services.AddControllersWithViews();
 
 //builder.Services.AddDbContext<ispanMsit145shibaContext>(
 // options => options.UseSqlServer(
-// builder.Configuration.GetConnectionString("ispanMsit145shibaConnection")
+// builder.Configuration.GetConnectionString("localconnection")
 //));
-
-
-
 
 
 builder.Services.AddDistributedMemoryCache();

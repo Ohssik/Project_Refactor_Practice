@@ -12,6 +12,17 @@
             margin:10px 20px 10px 0;
             color:red;
         }
+
+        .form-group.forgotPwd > div {
+            display:inline;
+            position:absolute;
+            right:0;
+            bottom:0;
+        }
+
+        .form-group.forgotPwd{
+            position:relative;
+        }
     </style>
 }
 
@@ -28,9 +39,13 @@
     
     </div>
     <hr />
-    <div class="form-group">
+    <div class="form-group forgotPwd">
         <input id="btnSubmit" type="submit" value="Enter" class="btn btn-primary" />
         <input id="btnDemo" type="button" value="Demo" class="btn btn-primary" />
+        <div>
+            <a href="@Url.Action("AForgotAdminPwd","Admin")" id="forgotPwd">忘記密碼了?</a>
+        </div>
+        
             
     </div>
         <h4 id="checkResult">@ViewData["checkAccountResult"]</h4>
@@ -39,9 +54,14 @@
 
 @section Scripts{
     <script>
+        $('#forgotPwd').click(function(){
+            //todo 忘記密碼
+            alert('建置中..');
+            return false;
+        });
         $('#btnDemo').click(function(){
             $('input[name=Account]').val('admin');
-            $('input[name=Password]').val('adminnnn');
+            $('input[name=Password]').val('adminnnnn');
         });
 
         $('#btnSubmit').click(function(event){            
@@ -56,26 +76,6 @@
                 checkResult.text('請輸入完整的帳號和密碼');                
                 return false;
             }
-            
-            //$.ajax({
-            //    url: `@Url.Content("~/Admin/checkPwd")`,                
-            //    type: "post",
-            //    data: {
-            //        "account": $('input[name=Account]').val(),
-            //        "pwd": $('input[name=Password]').val()
-            //    },
-            //    dataType: "html",
-            //    success: function (msg) {
-            //        //result=msg;
-            //        //console.log(`msg:${msg}`);
-            //        if (msg != '1') {
-            //            checkResult.text('帳號或密碼有誤');
-            //            checkResult.css('color', 'red');
-            //            return false;
-            //        }
-            //    }
-            //});
-            
             
         });
     </script>

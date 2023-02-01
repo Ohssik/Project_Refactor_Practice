@@ -1,0 +1,144 @@
+﻿@model prjMSIT145_Final.ViewModels.CASettingViewModel
+
+@{
+    ViewData["Title"] = "ASetting";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+<h1>管理者設定</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div>
+            <figure id="adminMemPhoto">
+                <img src="~/adminImg/logo3.png" alt="">
+            </figure>
+
+        </div>
+        <form asp-action="ASetting">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>             
+                <input asp-for="Fid" class="form-control" type="hidden" value="@Model.Fid" />
+                
+            <div class="form-group">
+                <h3 asp-for="Account" class="control-label">@Model.Account</h3>                
+            </div>
+           
+            <div class="form-group">
+                <label asp-for="txtPassword" class="control-label">輸入新密碼</label>
+                <input asp-for="txtPassword" class="form-control" id="txtPassword" />
+                <span asp-validation-for="txtPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="txtConfirmPwd" class="control-label" >再次輸入新密碼</label>
+                <input asp-for="txtConfirmPwd" class="form-control" id="txtConfirmPwd" type="password" />
+                
+            </div>
+            <div class="form-group">
+                <input type="submit" value="儲存" class="btn btn-primary" id="btnSubmit" />
+                <span asp-validation-for="txtConfirmPwd" class="text-danger" id="pwdInvalid"></span>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label"></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseMsg">確定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(function(){
+            let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
+                keyboard: false
+            });
+
+            let pwdInvalid = $('#pwdInvalid');
+            
+            $('#btnSubmit').click(function(event){
+                event.preventDefault();
+                txtPwd = $('#txtPassword').val();
+                txtConPwd = $('#txtConfirmPwd').val();
+                pwdInvalid.text('');
+                if ((txtPwd != '' || txtConPwd != '') && txtPwd != txtConPwd) {
+                    pwdInvalid.text('兩次輸入的密碼不符');
+                    return false;
+                }
+                if (txtPwd.trim() == '' || txtConPwd.trim() == '') {
+                    return false;
+                }
+
+                $.ajax({
+                    url:'@Url.Content("~/Admin/saveAdminPwd")',
+                    type:'post',
+                    data:{
+                        data:JSON.stringify({
+                            Fid:@Model.Fid,
+                            Account:'@Model.Account',
+                            txtPassword: txtPwd,
+                            txtConfirmPwd: txtConPwd,
+                            RoleLevel:@Model.RoleLevel,
+                        })
+                    },
+                    dataType:'json',
+                    success:function(msg){
+                        if(msg==1){
+                            $('#msgAlert label').text('儲存成功');
+                            msgAlert.show();
+                        }
+                    }
+                
+                });
+            });
+
+            $('#btnCloseMsg').click(function () {
+                $('#msgAlert>label').text('');
+                //window.setTimeout(()=>{
+                location.reload(true);
+                //},500);
+            });
+        });
+    </script>
+}
+@section Styles{
+    <style>
+        #adminMemPhoto {
+            /*padding: 15px;*/
+            height: 20vh;
+            margin: 0 30%;
+            border: 1px solid;
+            text-align:center;
+        }
+
+        #adminMemPhoto>img{
+            object-fit: cover;
+            height: 100%;
+            
+        }
+
+        .row{
+            margin-left:5%;
+        }
+
+        h3.control-label{
+            text-align:center;
+            margin:20px auto;
+        }
+        h1{
+            margin-left: 5%;
+        }
+    </style>
+    
+}
+
