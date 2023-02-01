@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using prjMSIT145_Final.Models;
@@ -649,7 +650,40 @@ namespace prjMSIT145_Final.Controllers
             return Json(returnAd);
             
         }
+        public IActionResult ASetting()
+        {
+            CASettingViewModel admin = new CASettingViewModel();
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_ADMIN))
+            {
+                string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_ADMIN);
+                AdminMember member = System.Text.Json.JsonSerializer.Deserialize<AdminMember>(json);
+                if (member != null)
+                    admin.admin = member;
+            }
+            
+            return View(admin);
+        }
+        
+        public IActionResult saveAdminPwd(string data)
+        {
+            string result = "0";
+            
+            if (!string.IsNullOrEmpty(data))
+            {
+                CASettingViewModel cas = JsonConvert.DeserializeObject<CASettingViewModel>(data);
 
+                AdminMember updateItem = _context.AdminMembers.FirstOrDefault(a => a.Fid == cas.Fid);
+                updateItem.Password = cas.txtPassword;           
 
+                _context.SaveChanges();
+                result = "1";
+            }
+
+            return Content(result);
+        }
+        public IActionResult AForgotAdminPwd()
+        {
+            return View();
+        }
     }
 }

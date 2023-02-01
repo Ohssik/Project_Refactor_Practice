@@ -175,5 +175,10 @@ namespace prjMSIT145_Final.Controllers
 
             return RedirectToAction("ACouponList");
         }
+
+        public IActionResult CCouponExchange()
+        {
+            return View();
+        }
     }
 }
