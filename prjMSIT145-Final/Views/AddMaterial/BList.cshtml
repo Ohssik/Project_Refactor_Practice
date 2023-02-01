@@ -5,6 +5,8 @@
 @section Styles{
 	<script src="../js/ProductList.js"> </script>
 	<link rel="stylesheet" href="../css/ProductList.css">
+	<link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">
+
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 	<style>
 		.btnDeleteCheck {
@@ -45,7 +47,7 @@
 <div>
 
 	@*編輯的彈窗*@
-	<div class="modal fade" id="btnEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="editModal modal fade" id="btnEditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" style="max-width:30%;">
 			<div class="modal-content" style=" box-sizing:border-box; padding:20px;">
 				<div class="modal-header" style="padding:0;">
@@ -53,17 +55,17 @@
 						<input type="hidden" name="BFid"/>
 						<input type="hidden" name="Fid" id="Fid"/>
 						<div class="topdiv">
-							<button data-bs-dismiss="modal" style="background-color:transparent ;border:none; width:30px; height:20px; position:absolute; top:20px; left:20px;"><img src="~/images/Business/exit.png" style="width:100%; height:100%;" /></button>
+							<button type="button" data-bs-dismiss="modal" style="background-color:transparent ;border:none; width:30px; height:20px; position:absolute; top:20px; left:20px;"><img src="~/images/Business/exit.png" style="width:100%; height:100%;" /></button>
 							<input id="txtOptionName" name="OptionName" class="inputtext" type="text" placeholder=" 輸入配料名稱....." />   @*配料名稱*@
 
-							<input id="btnSubmit" class="butt" type="submit" value="儲存" />
+							<input id="btnSubmit" class="butt" type="submit" value="儲存" style="margin-left:20px;"/>
 						</div>
-						<select id="selType" name="OptionGroupName"></select>  @*選擇類別*@
+						<select id="selType" name="OptionGroupName" style="margin:5px 0;  border-radius:5px;"></select>  @*選擇類別*@
 
 						<hr style="border:1px dashed #000; height:1px">
 						<h6 id="h6">價格</h6>
 						<label for="">預設價格</label>
-						<input type="text" id="txtPrice" name="UnitPrice" />   @*配料價格*@
+						<input type="text" id="txtPrice" name="UnitPrice" style="border-radius:10px; border:1px solid; padding:0 5px;"/>   @*配料價格*@
 					</form>
 				</div>
 			</div>
@@ -102,6 +104,8 @@
 		const btnDelete = document.getElementsByName("btnDelete") //點擊刪除配料
 		const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
 		const linkDelete = document.querySelector("#linkDelete"); //確定刪除配料
+		const selType = document.querySelector("#selType"); //配料類別
+
 
 		//關鍵字查詢(類別與商品)
 		txt.addEventListener("input", () => list());
@@ -121,13 +125,13 @@
 							<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
 							<input type='hidden'  id='${item.optionGroupFid}' name='${item.optionGroupFid}' value='${item.optionGroupFid}'/>
 
-							<td >${item.optionName}</td>
+							<td>${item.optionName}</td>
 							<td>$${item.unitPrice}</td>
 							<td id='${item.optionGroupName}' name="OptionGroupName">${item.optionGroupName}</td>
 
 							<td>
-								<button class="buteditgar" name='btnEdit' data-bs-toggle="modal"  data-bs-target="#btnEditModal"><img src="../images/edit.png">編輯</button>
-								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModal"><img src="../images/garbage.png">刪除</button>
+								<button class="buteditgar" name='btnEdit' data-bs-toggle="modal"  data-bs-target="#btnEditModal"><img src="../images/Business/edit.png">編輯</button>
+								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModal"><img src="../images/Business/garbage.png">刪除</button>
 					        <td>
 							</tr>`
 			});
@@ -148,18 +152,29 @@
 				btn.addEventListener("click",function(){
 					const Fid = document.querySelector("#Fid");
 					const txtOptionName = document.querySelector("#txtOptionName");
-					const selType = document.querySelector("#selType");
 					const txtPrice = document.querySelector("#txtPrice");
 
 					const cell = this.parentElement.parentElement;
 
+					loadGroup();
 					Fid.value = cell.children[0].value;
 					txtOptionName.value  = cell.children[3].innerHTML;
-					selType.innerHTML = `<option>${cell.children[5].value}</option>`;
-					txtPrice.value = cell.children[4].innerHTML;
+					selType.innerHTML = `<option>${cell.children[5].innerHTML}</option>`;
+					txtPrice.value = cell.children[4].innerHTML.substring(1);
 				})
 			})
-
+			//載入配料類別
+			async function loadGroup(){
+				const response = await fetch("@Url.Content("~/Type/BOptionGroup")");
+				const datas = await response.json();
+				let frag = document.createDocumentFragment();
+				frag = "";
+				datas.forEach(function(item,index){
+					if (item.optionGroupName !== selType.value)
+					frag += `<option>${item.optionGroupName}</option>`
+				})
+				selType.innerHTML += frag;
+			}
 		}
 	</script>
 }

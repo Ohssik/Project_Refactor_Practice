@@ -12,7 +12,7 @@
     margin-top: 50px;
     border-bottom: 1px gray solid;
     display: flex;
-    justify-content: center;
+    justify-content:space-around;
     align-items: center;
   
     
@@ -39,8 +39,6 @@
 #h6{
     font-weight: bold;
     font-size: 20px;
-    
-  
 }
 .inputimage{
     width: 60px;
@@ -66,11 +64,11 @@ textarea{
     width: 500px;
     height: 150px;
     background-color: gainsboro;
-    border-radius: 15px;
+    border-radius: 10px;
 }
 select{
     width: 200px;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 
