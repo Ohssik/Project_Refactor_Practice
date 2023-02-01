@@ -16,6 +16,12 @@ namespace prjMSIT145_Final.ViewModels
             set { _order = value; }
         }
 
+        public string? Address
+        {
+            get;
+            set;
+        }
+
 
         public int OrderFid
         {

@@ -1,4 +1,4 @@
-﻿@model prjMSIT145_Final.ViewModel.COrderListViewModel
+﻿@model List<prjMSIT145_Final.ViewModels.COrderDetialViewModel>
 
 @{
     ViewData["Title"] = "ListInfo";
@@ -199,30 +199,29 @@
 
 
 
+    
+
 <body class="bodyBackgroundColor">
     <div class="div1 cardBackgroundColor">
         <!-- 左邊 -->
-        <div class="leftArea" id="selType">
-            <input type="hidden" name="OrderFid"  />
+  
+        <div class="leftArea">
             <!-- 店家全區 -->
             <div class="flex bottomBorder">
                 <div class="storeImg"></div>
                 <div class="spanFont">
-                    <p>店家名稱:好蒿喝茶</p>
-                    <p>連絡電話:0212345678</p>
-                    <p>店家地址:台北市大安區復興南路</p>
+                    <p>店家名稱:@Model[0].BMemberName</p>
+                    <p>連絡電話:@Model[0].BMemberPhone</p>
+                    <p>店家地址:@Model[0].Address</p>
                 </div>
 
             </div>
-            <!-- <div class="leftPickUpNum">
-                    <div>取餐號 - 1234</div>
-                </div> -->
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
                 <div class="leftDiv_leftSpan ">
                     <span>訂單狀態</span>
                 </div>
                 <div class="leftDiv_rightSpan legtDiv_StateSpan">
-                    <span>訂單完成</span>
+                    <span>@Model[0].OrderState</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -230,7 +229,7 @@
                     <span>取餐時間</span>
                 </div>
                 <div class="leftDiv_rightSpan legtDiv_StateSpan">
-                    <span name="time1" id="time1">2022-11-02 13:20</span>
+                    <span name="time1" id="time1">@Convert.ToString(Model[0].PickUpDate).Substring(0,9) @Model[0].PickUpTime</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -238,7 +237,7 @@
                     <span>付款金額</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>$90</span>
+                    <span>$@Model[0].TotalAmount</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -246,7 +245,7 @@
                     <span>付款方式</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>現金</span>
+                    <span>@Model[0].PayTermCatId</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -254,23 +253,29 @@
                     <span>取餐方式</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>自取</span>
+                    <span>@Model[0].PickUpType</span>
                 </div>
             </div>
+            
+            
+                
+            
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
                 <div class="leftDiv_leftSpan">
                     <span>取餐人</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>@Html.DisplayFor(modelItem => Model.PickUpPerson)</span>
+                    <span>@Model[0].PickUpPerson</span>
                 </div>
             </div>
+           
+            
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
                 <div class="leftDiv_leftSpan">
                     <span>聯絡電話</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>0922885566</span>
+                    <span>@Model[0].PickUpPersonPhone</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter leftDiv_infoDiv">
@@ -290,11 +295,12 @@
                 <textarea class="leftDiv_Rate cardBorderColor" name="" id="rateArea"></textarea>
                 <input type="submit" value="送出評論" />
             </div>
-
+           
         </div>
         <!-- 右邊 -->
+
         <div class="rightDiv rightDiv_display">
-            <div class="rightItemDiv margin itemCard_padding_margin button_Icon_Guide_BackGroundColor">
+            <div class="rightItemDiv margin itemCard_padding_margin button_Icon_Guide_BackGroundColor" id="AdivBody">
                 <!-- *餐點資訊,依實際點選內容增加span -->
                 <h6>餐點名稱</h6>
                 <div class="flexAndItemsCenter displayBetween ">
@@ -311,38 +317,6 @@
                 </div>
             </div>
 
-            <div class="rightItemDiv margin itemCard_padding_margin button_Icon_Guide_BackGroundColor">
-                <!-- *餐點資訊,依實際點選內容增加span -->
-                <h6>餐點名稱</h6>
-                <div class="flexAndItemsCenter displayBetween ">
-                    <div>
-                        <span id="itemDetailFont" class="spanFont">
-                            <span><span>綠茶</span> /</span>
-                            <span><span>L</span> /</span>
-                            <span><span>正常糖</span> /</span>
-                            <span><span>去冰</span> /</span>
-                            <span><span>$20</span> /</span>
-                            <span><span>x1</span> </span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="rightItemDiv margin itemCard_padding_margin button_Icon_Guide_BackGroundColor">
-                <!-- *餐點資訊,依實際點選內容增加span -->
-                <h6>餐點名稱</h6>
-                <div class="flexAndItemsCenter displayBetween ">
-                    <div>
-                        <span id="itemDetailFont" class="spanFont">
-                            <span><span>紅茶</span> /</span>
-                            <span><span>L</span> /</span>
-                            <span><span>正常糖</span> /</span>
-                            <span><span>少冰</span> /</span>
-                            <span><span>$20</span> /</span>
-                            <span><span>x2</span> </span>
-                        </span>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </body>
@@ -350,38 +324,29 @@
 @section Scripts{
     <script>
         
-        const selTest = document.getElementById('DivTest');
+        @*
         const selType = document.querySelector("#selType");
-        //console.log(selTest);
-
-        //loadDetail()
-
-        //async function loadDetail(orderid){
-        //    const response = await fetch(`@Url.Content("~/OrderDetial/ListInfo/?Fid=${Fid}")`)
-        //    const data = await response.json();
-        //    console.log(data);
-        //    let result = document.createDocumentFragment();
-        //    result = "";
-        //    data.forEach(function(item, index){
-        //        result += "<p>${item.fid}</p>"
-                              
-
-        //    });
-        //    tbody.innerHTML = result;
-        //};
-
-        window.addEventListener("load", async function () {
+        const selBody = document.getElementById("AdivBody");
+       
+        window.addEventListener("load", async function (order) {
             const request = await fetch(`@Url.Content("~/OrderDetial/ListInfo")`);
             const data = await request.json();
             console.log(data);
-            let frag = document.createDocumentFragment();
-            frag = "";
+            let result = document.createDocumentFragment();
+            result = "";
             data.forEach(function (item, index) {
-                
+                result += `
+                                                        <td>${item.pickUpPerson}</td>
+                                                        <td>${item.bMemberName}</td>
+                                                        <td>${item.bAddress}</td>
+                                                        <td>${item.pickUpPersonPhone}</td>
+                                                        <td>${item.pickUpType}</td>
+        `
             });
-            selType.innerHTML += frag;
-            
-        })
+            selType.innerHTML = result;
+
+        });*@
+        
 
 
         let check = true;
@@ -428,6 +393,8 @@
                 check = true;
             }
         }
+
+        
 
     </script>
     }
