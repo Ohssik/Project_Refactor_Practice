@@ -1,4 +1,5 @@
-﻿@{
+﻿@model prjMSIT145_Final.ViewModel.CProductsViewModel
+@{
 	Layout = "_BusinessLayout";
 	ViewData["Title"] = "BList";
 }
@@ -6,8 +7,10 @@
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
 	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
 	<script src="../js/ProductList.js"> </script>
-	<link rel="stylesheet" href="../css/ProductList.css">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="@Url.Content("~/css/ProductList.css")">
+	<link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">
+
 	<style>
 		.btnDeleteCheck {
 			border: none;
@@ -26,7 +29,8 @@
 		}
 	</style>
 }
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@*刪除的彈窗*@
+<div class="modal fade" id="btnDeleteModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header" style="width:100%">
@@ -43,19 +47,71 @@
 		</div>
 	</div>
 </div>
-<div class="productDiv">
+<div>
+	
+	@*編輯的彈窗*@
+	<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" style="max-width:30%;">
+			<div class="modal-content" style=" box-sizing:border-box; padding:20px;">
+				<div class="modal-header" style="padding:0;">
+					<form method="post" enctype="multipart/form-data" action="BEdit">
+						<input type="hidden" id="Fid" name="Fid" />
+						<div class="topdiv">
+							<button type="button" data-bs-dismiss="modal" style="background-color:transparent ;border:none; width:30px; height:20px; position:absolute; top:20px; left:20px;"><img src="~/images/Business/exit.png" style="width:100%; height:100%;" /></button>
+							<input id="txtProductName" name="ProductName" class="inputtext" type="text" value="" required />   @*產品名稱*@
+							<input id="btnSubmit" class="butt" type="submit" value="儲存" />
+						</div>
+
+						@*產品照片*@
+						<h6 id="h6">相片</h6>
+						<div class="divimage">
+							<div>
+								<img id="imgShow" class="inputimage" src="" />
+							</div>
+							<div>
+								<p>餐點照片可協助顧客訂購那些美食,<br>進而提供銷售量.</p>
+								<div class="divinputimagebutton">
+									<label class="inputimagebutton" for="file" style="width:80px; padding: 5px;"><input id="file" name="file" type="file" style="display:none;" />上傳檔案</label>
+									<input id="btnImgDelete" class="inputimagebutton" type="button" value="刪除">
+								</div>
+							</div>
+						</div>
+
+						<select id="selType" name="categoryName"  style="border-radius:5px;"><option></option></select>  @*選擇類別*@
+
+						<hr />
+						<h6 id="h6">價格及販售方式</h6>
+						<span>透過自取</span><br>
+						<label for="">預設價格</label>
+						<input type="text" value="" id="txtPrice" name="UnitPrice" required />   @*產品價格*@
+						<hr/>
+						<h6 id="h6">餐點狀態</h6>
+						<div>
+							@*餐點狀態*@
+							<label for="IsForSale0" class="me-3"><input name="IsForSale" class="form-check-label me-1" type="radio" id="IsForSale0" value="0" />未上架</label>
+							<label for="IsForSale1" class="me-3"><input name="IsForSale" class="form-check-label me-1" type="radio" id="IsForSale1" value="1" />已上架</label>
+							<label for="IsForSale2" class="me-3"><input name="IsForSale" class="form-check-label me-1" type="radio" id="IsForSale2" value="2" />停售</label>
+						</div>
+						<hr  />
+						<h6 id="h6">說明(選項)</h6>
+						<textarea  style="max-height:100px; min-height:50px; min-width:270px;" placeholder=" 輸入說明.....例如豬肉產地" id="txtMemo" name="Memo"></textarea>   @*產品備註*@
+					</form>
+				</div>
+			</div>
+		</div>
+    </div>
+	
+	@*列表*@
 	<div class="top">
 		<div>
 			<h2 id="h2">餐點</h2>
 		</div>
 		<div class="topbutton">
 			<a href="@Url.Content("~/Product/BCreate")"><input class="insertbutton" type="button" value="+新增餐點" id="btnCreateProduct" /></a>
-			<a href="@Url.Content("~/Type/BItemTypeAddnEdit")"><input class="insertbutton" type="button" value="新增/編輯類別" /></a>
+			<a href="@Url.Content("~/Type/BItemTypeAddnEdit")" style="margin-left:20px;"><input class="insertbutton" type="button" value="新增/編輯類別" /></a>
 		</div>
 	</div>
 	<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />
-	<!-- <select ><option></option></select>
-	 -->
 	<table id="table" class="table table-hover stripe">
 		<thead>
 		<th>相片</th>
@@ -78,6 +134,9 @@
 		const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
 		const btnDelete = document.getElementsByName("btnDelete"); //刪除按鈕
 		const btnDeleteCheck = document.querySelector("#linkDelete")//確認刪除按鈕
+		const btnSubmit = document.querySelector("#btnSubmit"); //編輯完成後的儲存按鈕
+		const fid = document.querySelector("#Fid");
+		const selType = document.querySelector("#selType");
 
 		//關鍵字查詢(類別與商品)
 		txt.addEventListener("input", () => search());
@@ -91,7 +150,7 @@
 			datas.forEach(function (item, index) {
 				//console.log(item.fid);
 				if (item.photo == null)  //沒有產品圖片就使用預設圖片
-					item.photo = "uparrow.png";
+					item.photo = "Business/upload.png";
 
 				if (item.isForSale === 0)
 					item.isForSale = "未上架"
@@ -100,21 +159,22 @@
 				else if (item.isForSale === 2)
                     item.isForSale = "停售"
 
+							//<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/edit.png">編輯</button></a>
 				result += `
 						<tr>
 						<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
 						<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
 						<input type="hidden" name="${item.categoryFid}" value="${item.categoryFid}"/>
 
-						<td><input style='width:30px; height:20px;' type="image" src="../images/${item.photo}"></td>
+						<td><input style='width:50px; height:50px;' type="image" src="../images/${item.photo}"></td>
 						<td>${item.productName}</td>
 						<td>${item.unitPrice}</td>
 						<td>${item.categoryName}</td>
 						<td>${item.isForSale}</td>
 						<td>${item.memo}</td>
 						<td>
-							<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/edit.png">編輯</button></a>
-							<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="../images/garbage.png">刪除</button>
+								<button class="buteditgar" name='btnEdit'  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img src="../images/Business/edit.png">編輯</button>
+								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModel"><img src="../images/Business/garbage.png">刪除</button>
 						</td>
 						</tr>
 						`
@@ -131,6 +191,65 @@
 					})
 				})
 			})
+
+			//列表中點選編輯按鈕
+			btnEdit.forEach(function(btn){
+				btn.addEventListener("click", function(){
+					loadCategory();
+
+					const txtProductName = document.querySelector("#txtProductName");  //產品名
+					const imgShow = document.querySelector("#imgShow"); //照片
+					const txtPrice = document.querySelector("#txtPrice"); //價錢
+					const txtMemo = document.querySelector("#txtMemo"); //備註
+					const cell = this.parentElement.parentElement;  //tr內的值
+
+					txtProductName.value = cell.children[4].innerHTML;
+					imgShow.setAttribute("src",cell.children[3].firstElementChild.getAttribute("src"));
+					selType.innerHTML = `<option>${cell.children[6].innerHTML}</option>`;
+					txtPrice.value = cell.children[5].innerHTML;
+					txtMemo.innerHTML = cell.children[8].innerHTML;
+					fid.value =cell.children[0].value;
+				})
+			})
 		}
+		//載入所有商品類別
+		async function loadCategory() {
+			const request = await fetch(`@Url.Content("~/Type/BCategoryList")`);
+			const data = await request.json();
+
+			let frag = document.createDocumentFragment();
+			frag = "";
+			data.forEach(function (item, index) {
+				if (item.categoryName !== selType.value)
+					frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
+			})
+			selType.innerHTML += frag;
+			console.log(selType)
+		}
+		//上傳照片
+		file.addEventListener("change", function () {
+			const file = this.files[0];
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				imgShow.setAttribute("src", e.target.result);
+			};
+			reader.readAsDataURL(file);
+		})
+		//移除照片
+		btnImgDelete.addEventListener("click", function () {
+			file.outerHTML = file.outerHTML;
+			imgShow.setAttribute("src", "../images/Business/upload.png");
+		})
+		//送出時確認商品類別及狀態是否選取
+		btnSubmit.addEventListener("click", function (event) {
+			if (selType.value == "請選擇商品類別") {
+				event.preventDefault();
+				alert("請確認商品類別是否選取!")
+			}
+			if (!IsForSale0.checked && !IsForSale1.checked && !IsForSale2.checked) {
+				event.preventDefault();
+				alert("請確認商品狀態是否選取!");
+			}
+		})
 	</script>
 }
