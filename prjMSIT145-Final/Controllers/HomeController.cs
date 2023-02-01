@@ -56,7 +56,7 @@ namespace prjMSIT145_Final.Controllers
             return View(CUtility.BusinessMemberList);
         }
 
-        public IActionResult CShowProduct(int? BFid,int? OpenCheck,int? NFid,int? OrderFid)
+        public IActionResult CShowProduct(int? BFid,int? NFid,int? OrderFid)
         {
             if (BFid == null)
                 return RedirectToAction("CIndex");
@@ -95,6 +95,8 @@ namespace prjMSIT145_Final.Controllers
                     BannerImgFileName1 = item.BannerImgFileName1,
                 });
             }
+            if (BusinessMemberDetailList[0].IsSuspensed!=0 || BusinessMemberDetailList[0].IsOpened!=1)
+                return RedirectToAction("CIndex");
             CUtility.BusinessMemberDetailList = BusinessMemberDetailList;
             #endregion
             #region 取得該店家付款方式資訊至集合
@@ -109,59 +111,70 @@ namespace prjMSIT145_Final.Controllers
                                BFid=P.BFid,
                                PaymentType=A.PaymentType,
                            };
-            int ListCount = Paymenttermdatas.ToList().Count;
-            int IDcheck = 0;
-            int IDconfirm = 0;
-            int temp = 0;
             string PayWay = "";
-            for (int i = 0; i < ListCount + 1; i++)
+            int ListCount = Paymenttermdatas.ToList().Count;
+            if (ListCount != 0)
             {
-                if (i == ListCount)
+                int IDcheck = 0;
+                int IDconfirm = 0;
+                int temp = 0;
+                for (int i = 0; i < ListCount + 1; i++)
                 {
-                    if (i != IDcheck)
+                    if (i == ListCount)
                     {
-                        IDcheck = i;
-                        if (IDconfirm != temp)
+                        if (i != IDcheck)
                         {
-                            PaymenttermList.Add(new VPaymenttermViewModel
+                            IDcheck = i;
+                            if (IDconfirm != temp)
                             {
-                                BFid = IDconfirm,
-                                PaymentType = PayWay
-                            });
-                            temp = IDconfirm;
-                            PayWay = "";
+                                PaymenttermList.Add(new VPaymenttermViewModel
+                                {
+                                    BFid = IDconfirm,
+                                    PaymentType = PayWay
+                                });
+                                temp = IDconfirm;
+                                PayWay = "";
+                            }
+                            IDconfirm = IDcheck;
+                            PayWay = Paymenttermdatas.ToList()[i - 1].PaymentType;
                         }
-                        IDconfirm = IDcheck;
-                        PayWay = Paymenttermdatas.ToList()[i - 1].PaymentType;
+                        else
+                        {
+                            PayWay += "、" + Paymenttermdatas.ToList()[i - 1].PaymentType;
+                        }
                     }
                     else
                     {
-                        PayWay += "、" + Paymenttermdatas.ToList()[i - 1].PaymentType;
-                    }
-                }
-                else
-                {
-                    if (Paymenttermdatas.ToList()[i].BFid != IDcheck)
-                    {
-                        IDcheck = (int)Paymenttermdatas.ToList()[i].BFid;
-                        if (IDconfirm != temp)
+                        if (Paymenttermdatas.ToList()[i].BFid != IDcheck)
                         {
-                            PaymenttermList.Add(new VPaymenttermViewModel
+                            IDcheck = (int)Paymenttermdatas.ToList()[i].BFid;
+                            if (IDconfirm != temp)
                             {
-                                BFid = IDconfirm,
-                                PaymentType = PayWay,
-                            });
-                            temp = IDconfirm;
-                            PayWay = "";
+                                PaymenttermList.Add(new VPaymenttermViewModel
+                                {
+                                    BFid = IDconfirm,
+                                    PaymentType = PayWay,
+                                });
+                                temp = IDconfirm;
+                                PayWay = "";
+                            }
+                            IDconfirm = IDcheck;
+                            PayWay = Paymenttermdatas.ToList()[i].PaymentType;
                         }
-                        IDconfirm = IDcheck;
-                        PayWay = Paymenttermdatas.ToList()[i].PaymentType;
-                    }
-                    else
-                    {
-                        PayWay += "、" + Paymenttermdatas.ToList()[i].PaymentType;
+                        else
+                        {
+                            PayWay += "、" + Paymenttermdatas.ToList()[i].PaymentType;
+                        }
                     }
                 }
+            }
+            else
+            {
+                PaymenttermList.Add(new VPaymenttermViewModel
+                {
+                    BFid = BFid,
+                    PaymentType = "店家未提供付款方式",
+                });
             }
             CUtility.PaymenttermList = PaymenttermList;
             #endregion
@@ -228,19 +241,30 @@ namespace prjMSIT145_Final.Controllers
             }
             CUtility.ProductClassList = ProductClassList;
             #endregion
-            #region 判斷是否為加點
-            OrderFid = CUtility.OrdersID;
-            if (OrderFid != 0)
+            #region 判斷是否為加點，並計算各產品已點數量
+            if (OrderFid != 0 && OrderFid != null)
             {
-                var OrderItemTable = from D in _context.ViewOrderDetails
-                                     where D.OrderFid == OrderFid
+                var Orderdatas = from O in _context.Orders
+                                 where O.Fid == OrderFid
+                                 select new
+                                 {
+                                     OrderState = O.OrderState,
+                                 };
+                int OrderListCount = Orderdatas.ToList().Count;
+                if (OrderListCount == 0)
+                    return RedirectToAction("CIndex");
+                string isFinished = Orderdatas.ToList()[0].OrderState;
+                if (isFinished != "0")
+                    return RedirectToAction("CIndex");
+                var OrderItemdatas = from OI in _context.OrderItems
+                                     where OI.OrderFid == OrderFid
                                      select new
                                      {
-                                         ItemFid = D.ItemFid,
-                                         ProductFid = D.ProductFid,
-                                         Qty = D.Qty
+                                         Fid = OI.Fid,
+                                         ProductFid = OI.ProductFid,
+                                         Qty = OI.Qty
                                      };
-                var ReCount = from O in OrderItemTable.Distinct()
+                var ReCount = from O in OrderItemdatas.Distinct()
                               group O by O.ProductFid into G
                               select new
                               {

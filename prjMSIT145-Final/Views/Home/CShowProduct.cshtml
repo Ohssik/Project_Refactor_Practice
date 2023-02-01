@@ -4,13 +4,31 @@
     ViewData["Title"] = "CShowProduct";
 }
 @section Styles{
+    <link href="~/css/Customer_css/CBSonlyClass.css" rel="stylesheet" />
     <link href="~/css/Customer_css/CShowProduct.css" rel="stylesheet" />
 }
 <section class="shopinfocard">
     <div class="shopinfoarea">
         <div class="shopinfo">
             <img class="Shoplogo" src="~/images/Customer/Shopcard/Test/circlelogo.png" />
-            <P>@Model[0].BusinessMemberDetailList[0].MemberName</P>
+            <div>
+                <div class="shoptitle">@Model[0].BusinessMemberDetailList[0].MemberName</div>
+                <div class="infoblock">
+                    <div class="InfoArea">店家資訊</div>
+                    <div class="InfoArea">
+                        <img src="~/images/Customer/ShowProduct/Ystar 16x16.png" />
+                        <img src="~/images/Customer/ShowProduct/Ystar 16x16.png" />
+                        <img src="~/images/Customer/ShowProduct/Ystar 16x16.png" />
+                        <img src="~/images/Customer/ShowProduct/Ystar 16x16.png" />
+                        <img src="~/images/Customer/ShowProduct/Nstar 16x16.png" />
+                        <p>4.2 (6)</p>
+                    </div>
+                    <div class="InfoArea"><img src="~/images/Customer/ShowProduct/opentime 20x20.png" /><p>@Model[0].BusinessMemberDetailList[0].OpenTime ~ @Model[0].BusinessMemberDetailList[0].CloseTime</p></div>
+                    <div class="InfoArea"><img src="~/images/Customer/ShowProduct/phone 20x20.png" /><p>@Model[0].BusinessMemberDetailList[0].Phone</p></div>
+                    <div class="InfoArea"><img src="~/images/Customer/ShowProduct/address 20x20.png" /><p>@Model[0].BusinessMemberDetailList[0].Address</p></div>
+                    <div class="InfoArea"><img src="~/images/Customer/ShowProduct/paymentterm 20x20.png" /><p>@Model[0].PaymenttermList[0].PaymentType</p></div>
+                </div>
+            </div>
         </div>
         <div class="btnbar">
             <div class="iconwrap">
@@ -64,8 +82,33 @@
         }
     }
 </section>
-@section Scripts{
-    <script>
 
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+@section Scripts{
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+       
     </script>
 }
