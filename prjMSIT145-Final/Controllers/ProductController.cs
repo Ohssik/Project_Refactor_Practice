@@ -157,7 +157,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 if (file != null)
                 {
-                    string oldPath = _host.WebRootPath + pro.Photo;
+                    string oldPath = _host.WebRootPath + $"\\images\\{pro.Photo}";
                     if (System.IO.File.Exists(oldPath))
                     {
                         System.IO.File.Delete(oldPath);
@@ -170,7 +170,16 @@ namespace prjMSIT145_Final.Controllers
                     }
                     pro.Photo = fileName;
                 }
-                pro.IsForSale = vm.IsForSale;
+                else
+				{
+					string oldPath = _host.WebRootPath + $"\\images\\{pro.Photo}";
+					if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+					pro.Photo = null;
+				}
+				pro.IsForSale = vm.IsForSale;
                 pro.CategoryFid = proC.Fid;
                 pro.ProductName = vm.ProductName;
                 pro.UnitPrice = vm.UnitPrice;
