@@ -48,7 +48,6 @@
     border-color: transparent;
     width: 636px;
     border-radius: 20px;
-/*    margin: 50px auto;*/
     border-collapse: collapse;
     text-align: center;
     padding: 10px;
@@ -102,10 +101,9 @@
 }
 
 .input {
-    width: 200px;
+    width: 180px;
     margin: auto;
-   
-    /*    height: 18px;*/
+    font-weight: bold;
     background-color: transparent;
     font-size: 14px;
     border-radius: 10px;
@@ -248,4 +246,8 @@
 .spanerrormessage{
     font-size:14px;
     font-weight:bold;
+}
+.Formatspan{
+    font-size: 10px;
+    color: darkgray;
 }

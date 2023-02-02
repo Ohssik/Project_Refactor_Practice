@@ -3,7 +3,8 @@
     width:1800px;
     margin: 200px auto;
     display: flex;
-
+    text-align:center;
+    justify-items:center;
 }
 .card30 {
     margin-left: 40px;
@@ -24,21 +25,27 @@
     border: solid 2px; 
     border-color: transparent;
     width: 636px;
-    border-radius: 5px;
-    margin:50px auto;
+    border-radius: 20px;
+   /* margin:50px auto;*/
     border-collapse: collapse;
     text-align: center;
     padding: 10px;
-   
+    margin:0 auto;
     
+}
+.necessspan {
+    color: red;
+    font-size: 14px;
 }
 
 .title2{
     background-color: whitesmoke;
     margin: 10px;
+    margin-right:50px;
 }
-.dashed{
+.dashed {
     border: 0.1px solid rgb(236, 229, 229);
+    margin-bottom: 10px;
 }
 .divhint {
     display: flex;
@@ -50,32 +57,32 @@
     margin: 10px;
     padding-bottom:20px ;
     font-weight: bold;
+
 }
 .title3{
     background-color: whitesmoke;
     margin: 40px;
 }
 .input {
-    width: 100px;
+    width: 180px;
     margin: auto;
-    margin-left: 0;
-/*    height: 18px;*/
+ 
     background-color: transparent;
     font-size: 14px;
     border-radius: 10px;
     border-color: transparent;
+    font-weight:bold;
     outline: none;
 }
-.div1{
+.div1 {
     width: 200px;
     height: 30px;
-    background-color:transparent;
+    background-color: transparent;
     font-size: 14px;
     border-radius: 10px;
     border: solid 1px rgb(99, 99, 99);
     display: flex;
     margin-bottom: 30px;
-
 }
 .text3 {
     font-size: 15px;
@@ -87,7 +94,7 @@
 }
 .color{
     background-color: whitesmoke;
-    color: #ff5e7d;
+    color:blue;
     margin-right: 10px;
     font-size: 20px;
 }
@@ -95,12 +102,11 @@
     display: flex;
     background-color: transparent;
 }
-.text4{
-    font-size: 15px;
+.text4 {
+    font-size: 18px;
     background-color: transparent;
     font-weight: bold;
     text-align: left;
- 
 }
 .text5{
     font-size: 16px;
@@ -187,4 +193,17 @@
     color: forestgreen;
     font-size: 14px;
     font-weight: bold;
+}
+.spanerrormessage {
+    font-size: 14px;
+    font-weight: bold;
+}
+.Formatspan{
+    font-size:10px;
+    color:darkgray;
+}
+.regsterleftgroup{
+    margin-top:-80px;
+
+
 }
