@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Packaging.Signing;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
 using System.Diagnostics;
@@ -222,15 +223,18 @@ namespace prjMSIT145_Final.Controllers
                     ProductsList.Clear();
                     foreach (var item2 in Productdatas)
                     {
-                        ProductsList.Add(new VProductsViewModel
+                        if (item2.IsForSale != 0)
                         {
-                            Fid = item2.Fid,
-                            ProductName = item2.ProductName,
-                            UnitPrice = Convert.ToInt32(item2.UnitPrice),
-                            IsForSale = item2.IsForSale,
-                            Photo = item2.Photo,
-                            OrdetAmount = 0,
-                        });
+                            ProductsList.Add(new VProductsViewModel
+                            {
+                                Fid = item2.Fid,
+                                ProductName = item2.ProductName,
+                                UnitPrice = Convert.ToInt32(item2.UnitPrice),
+                                IsForSale = item2.IsForSale,
+                                Photo = item2.Photo,
+                                OrdetAmount = 0,
+                            });
+                        }
                     }
                 }
                 #endregion
@@ -299,7 +303,8 @@ namespace prjMSIT145_Final.Controllers
                 if(regionlength_1 <= regionlength_2 && regionlength_1 <= regionlength_3)
                 {
                     int tempLength = 0;
-                    tempLength += 52;
+                    if(item.ProductsList.Count!=0)
+                        tempLength += 52;
                     tempLength += (item.ProductsList.Count * 60);
                     regionlength_1 += tempLength;
                     item.PlayregionID = 1;
@@ -307,7 +312,8 @@ namespace prjMSIT145_Final.Controllers
                 else if(regionlength_2 < regionlength_1 && regionlength_2 <= regionlength_3)
                 {
                     int tempLength = 0;
-                    tempLength += 52;
+                    if (item.ProductsList.Count != 0)
+                        tempLength += 52;
                     tempLength += (item.ProductsList.Count * 60);
                     regionlength_2 += tempLength;
                     item.PlayregionID = 2;
@@ -315,7 +321,8 @@ namespace prjMSIT145_Final.Controllers
                 else
                 {
                     int tempLength = 0;
-                    tempLength += 52;
+                    if (item.ProductsList.Count != 0)
+                        tempLength += 52;
                     tempLength += (item.ProductsList.Count * 60);
                     regionlength_3 += tempLength;
                     item.PlayregionID = 3;
@@ -330,6 +337,105 @@ namespace prjMSIT145_Final.Controllers
                 ProductClassList = CUtility.ProductClassList,
             });
             return View(CUL);
+        }
+
+        public IActionResult CShowProductOption(int? PFid, int? NFid, int? OrderFid)
+        {
+            int BasePrice = 0; //根據點選配料變動
+            int BasePriceRecord = 0;
+            int TotalPrice = 0;
+            #region 取得點選產品的基礎資訊
+            List<VProductBasicInfoViewModel> ProductBasicInfoList= new List<VProductBasicInfoViewModel>();
+            var ProductInfodatas = from P in _context.Products
+                              where P.Fid == PFid
+                              select new
+                              {
+                                  Fid = P.Fid,
+                                  ProductName = P.ProductName,
+                                  UnitPrice = P.UnitPrice,
+                                  Memo=P.Memo,
+                                  Photo = P.Photo,
+                              };
+            foreach (var item in ProductInfodatas)
+            {
+                ProductBasicInfoList.Add(new VProductBasicInfoViewModel
+                {
+                    Fid = item.Fid,
+                    ProductName = item.ProductName,
+                    UnitPrice = item.UnitPrice,
+                    Memo = item.Memo,
+                    Photo = item.Photo,
+                });
+            }
+            CUtility.ProductBasicInfoList= ProductBasicInfoList;
+            #endregion
+            #region 取得商品配料類別資訊至集合
+            List<VOptionGroupViewModel> OptionGroupList = new List<VOptionGroupViewModel>();
+            var OptionGroupDatas = from P in _context.Products
+                                   join OTP in _context.OptionsToProducts on P.Fid equals OTP.ProductFid
+                                   join OG in _context.ProductOptionGroups on OTP.OptionGroupFid equals OG.Fid
+                                   where P.Fid == PFid
+                                   orderby P.Fid
+                                   select new
+                                   {
+                                       Fid= OG.Fid,
+                                       OptionGroupName= OG.OptionGroupName,
+                                       IsMultiple=OG.IsMultiple,
+                                   };
+            List<TOptionGroupTemp> OptionGroupTempList = new List<TOptionGroupTemp>();
+            foreach (var item in OptionGroupDatas)
+            {
+                OptionGroupTempList.Add(new TOptionGroupTemp
+                {
+                    Fid = item.Fid,
+                    OptionGroupName = item.OptionGroupName,
+                    IsMultiple = item.IsMultiple,
+                });
+            }
+            foreach (var item1 in OptionGroupTempList)
+            {
+                #region 取得商品內，各配料類別內之配料資訊至集合
+                List<VOptionViewModel> OptionList = new List<VOptionViewModel>();
+                for (int p = 0; p < OptionGroupTempList.Count; p++)
+                {
+                    var OptionTable = from O in _context.ProductOptions
+                                      where O.OptionGroupFid == item1.Fid
+                                      orderby O.Fid
+                                      select new
+                                      {
+                                          Fid = O.Fid,
+                                          OptionName = O.OptionName,
+                                          UnitPrice = O.UnitPrice,
+                                      };
+                    OptionList.Clear();
+                    foreach (var item2 in OptionTable)
+                    {
+                        OptionList.Add(new VOptionViewModel
+                        {
+                            Fid = item2.Fid,
+                            OptionName = item2.OptionName,
+                            UnitPrice = Convert.ToInt32(item2.UnitPrice),
+                        });
+                    }
+                }
+                #endregion
+                OptionGroupList.Add(new VOptionGroupViewModel
+                {
+                    Fid = item1.Fid,
+                    OptionGroupName = item1.OptionGroupName,
+                    IsMultiple = item1.IsMultiple,
+                    OptionList = OptionList
+                });
+            }
+            CUtility.OptionGroupList = OptionGroupList;
+            #endregion
+            List<VCUtilityViewModel> CUL = new List<VCUtilityViewModel>();
+            CUL.Add(new VCUtilityViewModel
+            {
+                ProductBasicInfoList = CUtility.ProductBasicInfoList,
+                OptionGroupList = CUtility.OptionGroupList,
+            });
+            return Json(CUL);
         }
 
         [HttpPost]
@@ -385,7 +491,6 @@ namespace prjMSIT145_Final.Controllers
             #endregion
             return RedirectToAction("CIndex");
         }
-
 
         //-------------------------------------------------------------------------------------------------
         public IActionResult Privacy()
