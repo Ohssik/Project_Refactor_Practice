@@ -65,20 +65,20 @@
     @{
         foreach (var item1 in Model[0].ProductClassList)
         {
-            <div class="productclass">
-                <h1 class="classtitle">@item1.CategoryName</h1>
-                @foreach (var item2 in item1.ProductsList)
+                    <div class="productclass">
+                        <h1 class="classtitle">@item1.CategoryName</h1>
+                        @foreach (var item2 in item1.ProductsList)
                 {
-                    <div class="productitem">
-                        <p class="producttext">@item2.ProductName</p>
-                        <form action="/Home/AddtoCart" method="post">
-                            <input type="text" name="A" value="A" hidden />
-                            <button type="submit">購買</button>
-                        </form>
-                        <p class="producttext">$@Convert.ToInt32(item2.UnitPrice)</p>
-                    </div>
+                            <div class="productitem">
+                                <p class="producttext">@item2.ProductName</p>
+                                <form action="/Home/AddtoCart" method="post">
+                                    <input type="text" name="A" value="A" hidden />
+                                    <button type="submit">購買</button>
+                                </form>
+                                <p class="producttext">$@Convert.ToInt32(item2.UnitPrice)</p>
+                            </div>
                 }
-            </div>
+                    </div>
         }
     }
 </section>
@@ -109,6 +109,7 @@
 @section Scripts{
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-       
+        
     </script>
 }
+

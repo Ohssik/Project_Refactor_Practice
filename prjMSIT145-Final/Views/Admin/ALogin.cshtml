@@ -43,7 +43,7 @@
         <input id="btnSubmit" type="submit" value="Enter" class="btn btn-primary" />
         <input id="btnDemo" type="button" value="Demo" class="btn btn-primary" />
         <div>
-            <a href="@Url.Action("AForgotAdminPwd","Admin")" id="forgotPwd">忘記密碼了?</a>
+            <a href="#" id="forgotPwd">忘記密碼了?</a>
         </div>
         
             
@@ -51,17 +51,77 @@
         <h4 id="checkResult">@ViewData["checkAccountResult"]</h4>
     
 </form>
+    <div class="modal fade" id="sendMail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">發送忘記密碼通知</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
 
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">請輸入登入手機或帳號:</label>
+                        <input type="text" class="form-control" id="recipient-name" name="txtAccount" value="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">註冊Email:</label>
+                        <input class="form-control" id="message-text" name="txtEmail" />
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>
+                    <button type="button" class="btn btn-primary" id="btnSend">送出</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @section Scripts{
     <script>
-        $('#forgotPwd').click(function(){
-            //todo 忘記密碼
-            alert('建置中..');
-            return false;
+        let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
+            keyboard: false
+        });
+        $('#btnCancel').click(function () {
+            $('#btnSend').removeAttr('disabled');
+            $('[name=txtAccount]').val('');
+            $('[name=txtEmail]').val('');
+        });
+        $('#btnSend').click(function () {
+
+            $(this).attr('disabled', 'disabled');
+            
+            $.ajax({
+                url: `@Url.Content("~/Admin/AForgotAdminPwd")`,
+                type: "post",
+                data: {
+                    data: JSON.stringify({
+                        txtAccount: $('[name = txtAccount]').val(),
+                        txtEmail: $('[name = txtEmail]').val(),
+                        memberType: 'N'
+                    }),
+                },
+                dataType: "json",
+                success: function (msg) {
+                    console.log(`msg=${msg}`);
+                    
+                    $('[name=txtAccount]').val('');
+                    $('[name=txtEmail]').val('');
+                    sendMail.hide();
+
+                }
+            });
+        });
+        $('#forgotPwd').click(function(){            
+            sendMail.show();
+            $('#btnSend').removeAttr('disabled');
+            $('[name=txtAccount]').val('0911111112');
+            $('[name=txtEmail]').val('rmtorh@hotmail.com');
+            
         });
         $('#btnDemo').click(function(){
             $('input[name=Account]').val('admin');
-            $('input[name=Password]').val('adminnnnn');
+            $('input[name=Password]').val('adminnnn');
         });
 
         $('#btnSubmit').click(function(event){            

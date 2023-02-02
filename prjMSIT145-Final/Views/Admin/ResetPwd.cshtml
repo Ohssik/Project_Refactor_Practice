@@ -1,0 +1,126 @@
+﻿@model prjMSIT145_Final.ViewModels.CResetPwdViewModel
+
+@{
+    ViewData["Title"] = "修改密碼";
+   Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@section Styles{
+    <link href="@Url.Content("~/css/customer_css/cbsonlyclass.css")" rel="stylesheet" />
+    <style>
+        .row {
+            width: 50%;
+            margin: 10% auto;
+        }
+
+        .col-md-4 {
+            margin: 0 auto;
+        }
+
+        .col-md-4 > div {
+            margin: 10px auto;
+        }
+
+        #btnSubmit {
+            margin-top: 10px;
+        }
+    </style>
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ResetPwd</title>
+</head>
+<body>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ResetPwd" name="ResetPwdForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>           
+            <input asp-for="txtAccount" class="form-control" type="hidden" value="" />
+            <input asp-for="token" class="form-control" type="hidden" value="" />
+            <div class="form-group">
+                <label asp-for="txtPassword" class="control-label">輸入新密碼</label>
+                <input asp-for="txtPassword" class="form-control" />
+                
+            </div>
+            <div class="form-group">
+                <label asp-for="txtConfirmPwd" class="control-label">再次輸入新密碼</label>
+                <input asp-for="txtConfirmPwd" class="form-control" />
+                
+            </div>
+            <div class="form-group">
+                <input type="submit" value="送出" class="btn btn-secondary" id="btnSubmit" />
+
+            </div>
+                <span asp-validation-for="txtConfirmPwd" class="text-danger" id="pwdInvalid"></span>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script>
+            $(function () {
+
+                let token = getUrlParameter('token');
+                let acc = getUrlParameter('acc');
+                //console.log(`token=${token}`);
+                //console.log(`acc=${acc}`);
+                $('[name=token]').val(token);
+                $('[name=txtAccount]').val(acc);
+                $('#btnSubmit').click(async function () {
+                    event.preventDefault();
+
+                    let pwdInvalid = $('#pwdInvalid');
+                    pwdInvalid.text('');
+                    let txtPwd = $('input[name=txtPassword]').val();
+                    let txtConPwd = $('input[name=txtConfirmPwd]').val();
+                    if ((txtPwd != '' || txtConPwd != '') && txtPwd != txtConPwd) {
+                        pwdInvalid.text('兩次輸入的密碼不符');
+                        return false;
+                    }
+                    if (txtPwd.trim() == '' || txtConPwd.trim() == '') {
+                        return false;
+                    }
+
+                    let formData = new FormData(document.ResetPwdForm);
+
+                    let f = await fetch(`@Url.Content("~/Admin/submitResetPwd")`, {
+                        body: formData,
+                        method: "post",
+                    });
+                    let msg = await f.text();
+
+                    if (msg.indexOf('success')!=-1) {
+                        alert('修改成功');
+                        location.replace('@Url.Action("ALogin","Admin")');
+                    }else{
+                        console.log(msg);
+                        alert('已超過修改密碼的期限，請重新點擊忘記密碼連結');
+                        location.replace('@Url.Action("ALogin","Admin")');
+                    }
+                });
+
+                //抓 url get 參數
+                function getUrlParameter(sParam) {
+                    var sPageURL = window.location.search.substring(1),
+                        sURLVariables = sPageURL.split('&'),
+                        sParameterName,
+                        i;
+
+                    for (i = 0; i < sURLVariables.length; i++) {
+                        sParameterName = sURLVariables[i].split('=');
+
+                        if (sParameterName[0] === sParam) {
+                            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                        }
+                    }
+                    return false;
+                }
+            });
+        </script>
+}
+</body>
+</html>

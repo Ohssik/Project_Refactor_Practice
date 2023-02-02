@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>prjMSIT145_Final</RootNamespace>
+    <UserSecretsId>9e13e542-577f-4d3c-9157-edea4d764027</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
