@@ -1,4 +1,4 @@
-﻿@model List<prjMSIT145_Final.ViewModels.COrderDetialViewModel>
+﻿@model prjMSIT145_Final.ViewModels.COrderDetialViewModel
 
 @{
     ViewData["Title"] = "ListInfo";
@@ -210,9 +210,9 @@
             <div class="flex bottomBorder">
                 <div class="storeImg"></div>
                 <div class="spanFont">
-                    <p>店家名稱:@Model[0].BMemberName</p>
-                    <p>連絡電話:@Model[0].BMemberPhone</p>
-                    <p>店家地址:@Model[0].Address</p>
+                    <p>店家名稱:@Model.BMemberName</p>
+                    <p>連絡電話:@Model.BMemberPhone</p>
+                    <p>店家地址:@Model.Address</p>
                 </div>
 
             </div>
@@ -221,7 +221,7 @@
                     <span>訂單狀態</span>
                 </div>
                 <div class="leftDiv_rightSpan legtDiv_StateSpan">
-                    <span>@Model[0].OrderState</span>
+                    <span>@Model.OrderState</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -229,7 +229,7 @@
                     <span>取餐時間</span>
                 </div>
                 <div class="leftDiv_rightSpan legtDiv_StateSpan">
-                    <span name="time1" id="time1">@Convert.ToString(Model[0].PickUpDate).Substring(0,9) @Model[0].PickUpTime</span>
+                    <span name="time1" id="time1">@Convert.ToString(Model.PickUpDate).Substring(0,9) @Model.PickUpTime</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -237,7 +237,7 @@
                     <span>付款金額</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>$@Model[0].TotalAmount</span>
+                    <span>$@Model.TotalAmount</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -245,7 +245,7 @@
                     <span>付款方式</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>@Model[0].PayTermCatId</span>
+                    <span>@Model.PayTermCatId</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -253,7 +253,7 @@
                     <span>取餐方式</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>@Model[0].PickUpType</span>
+                    <span>@Model.PickUpType</span>
                 </div>
             </div>
             
@@ -265,7 +265,7 @@
                     <span>取餐人</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>@Model[0].PickUpPerson</span>
+                    <span>@Model.PickUpPerson</span>
                 </div>
             </div>
            
@@ -275,7 +275,7 @@
                     <span>聯絡電話</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>@Model[0].PickUpPersonPhone</span>
+                    <span>@Model.PickUpPersonPhone</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter leftDiv_infoDiv">
@@ -297,27 +297,28 @@
             </div>
            
         </div>
+        
         <!-- 右邊 -->
-
         <div class="rightDiv rightDiv_display">
+        @foreach(var item in Model.items){
             <div class="rightItemDiv margin itemCard_padding_margin button_Icon_Guide_BackGroundColor" id="AdivBody">
                 
                 <!-- *餐點資訊,依實際點選內容增加span -->
-                <h6>餐點名稱</h6>
+                    <h6>@item.ProductName</h6>
                 <div class="flexAndItemsCenter displayBetween ">
                     <div>
                         <span id="itemDetailFont" class="spanFont">
-                            <span><span>紅茶</span> /</span>
-                            <span><span>M</span> /</span>
-                            <span><span>半糖</span> /</span>
-                            <span><span>少冰</span> /</span>
-                            <span><span>$10</span> /</span>
-                            <span><span>x3</span> </span>
+                             @foreach(var item2 in item.OptionName)
+                             {
+                                <span><span>@item2</span> /</span>  
+                             }
+                                <span><span>$@item.OptionAmount</span> /</span>
+                                <span><span>@item.Qty 份</span> </span>
                         </span>
                     </div>
                 </div>
             </div>
-
+            }
         </div>
     </div>
 </body>
