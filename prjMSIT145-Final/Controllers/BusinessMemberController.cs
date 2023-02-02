@@ -22,23 +22,39 @@ namespace prjMSIT145_Final.Controllers
         {
             if (cLoginViewModel.fEmailRegister == null)
             {
-            //帳戶帳號密碼確認
-            BusinessMember b= _context.BusinessMembers.FirstOrDefault(b=>b.Email.Equals(cLoginViewModel.fEmail)&&b.Password.Equals(cLoginViewModel.fPassword));
-            if (b != null)
-            {
-                if (b.Email.Equals(cLoginViewModel.fEmail) && b.Password.Equals(cLoginViewModel.fPassword))
+                //帳戶帳號密碼確認
+                BusinessMember b = _context.BusinessMembers.FirstOrDefault(b => b.Email.Equals(cLoginViewModel.fEmail) && b.Password.Equals(cLoginViewModel.fPassword));
+                if (b != null)
                 {
-                    string json = JsonSerializer.Serialize(b);
-                    HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json);
-                    return RedirectToAction("BList", "Order");
+                    if (b.Email.Equals(cLoginViewModel.fEmail) && b.Password.Equals(cLoginViewModel.fPassword))
+                    {
+                        string json = JsonSerializer.Serialize(b);
+                        HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json);
+                        return RedirectToAction("BList", "Order");
+                    }
                 }
+                return View();
             }
-                    return View();
-            }
-           Gmail gmail = new Gmail();
+            Gmail gmail = new Gmail();
             gmail.sendGmail(cLoginViewModel.fEmailRegister);
             return View();
 
+        }
+
+
+
+        public IActionResult Register(string? email)
+        {
+            ViewBag.email = email;
+            return PartialView();
+        }
+        [HttpPost]
+        public IActionResult Register(BusinessMember member)
+        {
+           _context.BusinessMembers.Add(member);
+            _context.SaveChanges();
+
+            return PartialView();
         }
 
 
@@ -47,5 +63,9 @@ namespace prjMSIT145_Final.Controllers
             return View();
         }
         
+
+
+
+
     }
 }

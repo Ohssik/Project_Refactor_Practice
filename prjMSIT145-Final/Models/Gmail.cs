@@ -20,7 +20,7 @@ namespace prjMSIT145_Final.Models
             mail.Subject = "企業驗證信";
 
             //內容
-            mail.Body = "親愛的使用者你好 以下是你的註冊網址 https://localhost:7266/BusinessMember/Blogin    日柴Daily";
+            mail.Body = $"親愛的使用者你好 以下是你的註冊網址 https://localhost:7266/BusinessMember/Register/?email={sendto}   日柴Daily";
 
             //內容使用html
             mail.IsBodyHtml = true;
