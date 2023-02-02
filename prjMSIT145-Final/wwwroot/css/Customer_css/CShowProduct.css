@@ -176,7 +176,38 @@
         margin-left:10px;
     }
 
+.AmountBall {
+    width: 25px;
+    height: 25px;
+    clip-path: circle(50% at 50% 50%);
+    background-color: #9F4E27;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    margin-left: 10px;
+    font-size: 16px;
+    font-family:Carlito;
+}
+
 .producttext {
     font-size: 20px;
     font-weight: bold;
+}
+
+.productNotsale {
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #595757;
+    padding: 5px;
+    border-radius: 5px;
+    color: #FFFFFF;
+}
+
+.CursorPointer {
+    cursor: pointer;
+}
+
+.CursorDefault {
+    cursor: default;
 }

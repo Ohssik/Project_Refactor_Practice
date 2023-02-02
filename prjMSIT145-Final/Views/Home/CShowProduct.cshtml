@@ -66,21 +66,48 @@
         @{
             foreach (var item1 in Model[0].ProductClassList)
             {
-                if (item1.PlayregionID == 1)
+                if (item1.ProductsList.Count != 0)
                 {
-                    <div class="productclass">
-                        <h1 class="classtitle">@item1.CategoryName</h1>
-                        @foreach (var item2 in item1.ProductsList)
-                        {
-                            <div class="productitem" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                <div class="PhotoandName">
-                                    <img src="~/images/@item2.Photo">
-                                    <p>@item2.ProductName</p>
-                                </div>
-                                <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
-                            </div>
-                        }
-                    </div>
+                    if (item1.PlayregionID == 1)
+                    {
+                        <div class="productclass">
+                            <h1 class="classtitle">@item1.CategoryName</h1>
+                            @foreach (var item2 in item1.ProductsList)
+                            {
+                                @if (item2.IsForSale != 0)
+                                {
+                                    @if (item2.IsForSale == 1)
+                                    {
+                                        <div class="productitem CursorPointer" data-bs-toggle="modal" data-bs-target="#OptionModal">
+                                            <div class="PhotoandName">
+                                                <img src="~/images/@item2.Photo">
+                                                <p>@item2.ProductName</p>
+                                                @if (@item2.OrdetAmount > 0)
+                                                {
+                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                }
+                                            </div>
+                                            <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="productitem CursorDefault">
+                                            <div class="PhotoandName">
+                                                <img src="~/images/@item2.Photo">
+                                                <p>@item2.ProductName</p>
+                                                @if (@item2.OrdetAmount > 0)
+                                                {
+                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                }
+                                            </div>
+                                            <p class="productNotsale">停售</p>
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                    }
                 }
             }
         }
@@ -89,21 +116,48 @@
         @{
             foreach (var item1 in Model[0].ProductClassList)
             {
-                if (item1.PlayregionID == 2)
+                if (item1.ProductsList.Count != 0)
                 {
-                    <div class="productclass">
-                        <h1 class="classtitle">@item1.CategoryName</h1>
-                        @foreach (var item2 in item1.ProductsList)
-                        {
-                            <div class="productitem" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                <div class="PhotoandName">
-                                    <img src="~/images/@item2.Photo">
-                                    <p>@item2.ProductName</p>
-                                </div>
-                                <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
-                            </div>
-                        }
-                    </div>
+                    if (item1.PlayregionID == 2)
+                    {
+                        <div class="productclass">
+                            <h1 class="classtitle">@item1.CategoryName</h1>
+                            @foreach (var item2 in item1.ProductsList)
+                            {
+                                @if (item2.IsForSale != 0)
+                                {
+                                    @if (item2.IsForSale == 1)
+                                    {
+                                        <div class="productitem CursorPointer" data-bs-toggle="modal" data-bs-target="#OptionModal">
+                                            <div class="PhotoandName">
+                                                <img src="~/images/@item2.Photo">
+                                                <p>@item2.ProductName</p>
+                                                @if (@item2.OrdetAmount > 0)
+                                                {
+                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                }
+                                            </div>
+                                            <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="productitem CursorDefault">
+                                            <div class="PhotoandName">
+                                                <img src="~/images/@item2.Photo">
+                                                <p>@item2.ProductName</p>
+                                                @if (@item2.OrdetAmount > 0)
+                                                {
+                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                }
+                                            </div>
+                                            <p class="productNotsale">停售</p>
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                    }
                 }
             }
         }
@@ -112,21 +166,48 @@
         @{
             foreach (var item1 in Model[0].ProductClassList)
             {
-                if (item1.PlayregionID == 3)
+                if (item1.ProductsList.Count != 0)
                 {
-                    <div class="productclass">
-                        <h1 class="classtitle">@item1.CategoryName</h1>
-                        @foreach (var item2 in item1.ProductsList)
-                        {
-                            <div class="productitem" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                <div class="PhotoandName">
-                                    <img src="~/images/@item2.Photo">
-                                    <p>@item2.ProductName</p>
-                                </div>
-                                <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
-                            </div>
-                        }
-                    </div>
+                    if (item1.PlayregionID == 3)
+                    {
+                        <div class="productclass">
+                            <h1 class="classtitle">@item1.CategoryName</h1>
+                            @foreach (var item2 in item1.ProductsList)
+                            {
+                                @if (item2.IsForSale != 0)
+                                {
+                                    @if (item2.IsForSale == 1)
+                                    {
+                                        <div class="productitem CursorPointer" data-bs-toggle="modal" data-bs-target="#OptionModal">
+                                            <div class="PhotoandName">
+                                                <img src="~/images/@item2.Photo">
+                                                <p>@item2.ProductName</p>
+                                                @if (@item2.OrdetAmount > 0)
+                                                {
+                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                }
+                                            </div>
+                                            <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="productitem CursorDefault">
+                                            <div class="PhotoandName">
+                                                <img src="~/images/@item2.Photo">
+                                                <p>@item2.ProductName</p>
+                                                @if (@item2.OrdetAmount > 0)
+                                                {
+                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                }
+                                            </div>
+                                            <p class="productNotsale">停售</p>
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                    }
                 }
             }
         }
@@ -134,14 +215,14 @@
 </section>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="OptionModal" tabindex="-1" aria-labelledby="OptionModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="OptionModalLabel">標題</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="OptionDisplayArea">
                 ...
             </div>
             <div class="modal-footer">
@@ -151,9 +232,19 @@
         </div>
     </div>
 </div>
+
 @section Scripts{
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-
+        let Test = document.getElementById('OptionDisplayArea');
+        Test.addEventListener('click', () => getOptiondatas());
+        getOptiondatas();
+        async function getOptiondatas() {
+            const response = await fetch("@Url.Content("~/Home/CShowProductOption?PFid=1")");
+            const datas = await response.json();
+            Test.innerHTML = datas;
+            console.log(datas);
+        }
     </script>
 }
+

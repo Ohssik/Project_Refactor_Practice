@@ -1,61 +1,46 @@
 ﻿@model prjMSIT145_Final.ViewModels.CACouponViewModel
 
 @{
-    ViewData["Title"] = "CCouponExchange";
+    ViewData["Title"] = "優惠券兌換";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
+@section Styles{    
+    <link href="~/css/customer_css/cbsonlyclass.css" rel="stylesheet" />
+    <style>
+        .row{
+            width:50%;
+            margin:10px auto;
+        }
 
-<h1>CCouponExchange</h1>
+        .col-md-4{
+            margin:0 auto;
+        }
 
-<div>
-    <h4>CACouponViewModel</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Fid)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Fid)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CouponCode)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CouponCode)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsUsed)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsUsed)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Memo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Memo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NmemberID)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NmemberID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NmemberName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NmemberName)
-        </dd>
-    </dl>
+        .col-md-4>div{
+            margin:10px auto;
+        }
+
+        .col-md-4 button{
+            margin-top:10px;
+        }
+    </style>
+}
+@section Scripts{
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+}
+
+<div class="row">
+    <div class="col-md-4">
+        
+        <div class="form-group">
+                <h3 asp-for="Account" class="control-label">請輸入優惠券代碼：</h3>
+        </div>
+        <div class="form-group">            
+            <input type="text" name="CouponCode" class="form-control" />
+            <button class="btn btn-secondary">submit</button>
+        </div>   
+            
+    </div>
+    
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+
