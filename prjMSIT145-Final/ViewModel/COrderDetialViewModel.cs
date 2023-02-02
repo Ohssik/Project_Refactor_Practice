@@ -78,10 +78,10 @@ namespace prjMSIT145_Final.ViewModels
             get { return _order.PickUpPersonPhone; }
             set { _order.PickUpPersonPhone = value; }
         }
-        public int? PayTermCatId
+        public string? PayTermCatId
         {
-            get { return _order.PayTermCatId; }
-            set { _order.PayTermCatId = value; }
+            get ; 
+            set ; 
         }
         public string? OrderState
         {

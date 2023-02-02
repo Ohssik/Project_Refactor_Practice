@@ -54,7 +54,30 @@ namespace prjMSIT145_Final.Controllers
                 foreach (var c in q.ToList())
                 {
                     COrderDetialViewModel vm = new COrderDetialViewModel();
-                    vm.OrderState = c.OrderState;
+                    switch (c.OrderState)
+                    {
+                        case "1":
+                            vm.OrderState = "未接單";
+                            break;
+                        case "2":
+                            vm.OrderState = "已接單";
+                            break;
+                        case "3":
+                            vm.OrderState = "商家準備中";
+                            break;
+
+                        case "4":
+                            vm.OrderState = "已完成";
+                            break;
+                        case "5":
+                            vm.OrderState = "商家退單";
+                            break;
+
+                        default:
+                            vm.OrderState = "揪團失敗";
+                            break;
+                    }
+                    
                     vm.OrderTime = c.OrderTime;
                     vm.TotalAmount = c.TotalAmount;
                     vm.BMemberName = c.MemberName;
@@ -81,13 +104,11 @@ namespace prjMSIT145_Final.Controllers
     public IActionResult ListInfo(int? Fid)
     {
 
-
-        
-            
-
             var q = from o in _context.Orders
                                join b in _context.BusinessMembers
                                on o.BFid equals b.Fid
+                               join a in _context.PaymentTermCategories
+                               on o.PayTermCatId equals a.Fid
                                where o.Fid == Fid
                                select new
                                {
@@ -102,11 +123,12 @@ namespace prjMSIT145_Final.Controllers
                                    PickUpType = o.PickUpType,
                                    PickUpPerson = o.PickUpPerson,
                                    PickUpPersonPhone = o.PickUpPersonPhone,
-                                   PayTernCatId = o.PayTermCatId,
+                                   PayTernCatId = a.PaymentType,
                                    OrderState = o.OrderState,
                                    Memo = o.Memo,
                                    OrderTime = o.OrderTime,
                                    TotalAmount = o.TotalAmount
+                                   
                                };
             var Pr = from o in _context.OrderItems
                                    join p in _context.Products
@@ -140,7 +162,30 @@ namespace prjMSIT145_Final.Controllers
 
                 foreach (var c in q.ToList())
                 {
-                    vm.OrderState = c.OrderState;
+                    switch (c.OrderState)
+                    {
+                        case "1":
+                            vm.OrderState = "未接單";
+                            break;
+                        case "2":
+                            vm.OrderState = "已接單";
+                            break;
+                        case "3":
+                            vm.OrderState = "商家準備中";
+                            break;
+
+                        case "4":
+                            vm.OrderState = "已完成";
+                            break;
+                        case "5":
+                            vm.OrderState = "商家退單";
+                            break;
+
+                        default:
+                            vm.OrderState = "揪團失敗";
+                            break;
+                    }
+                    
                     vm.OrderTime = c.OrderTime;
                     vm.TotalAmount = c.TotalAmount;
                     vm.PickUpPerson= c.PickUpPerson;
@@ -161,7 +206,6 @@ namespace prjMSIT145_Final.Controllers
                     var orderitem = from i in Pr
                                     where i.OrderFid == c.Fid
                                     select i;
-
                     foreach (var item in orderitem)
                     {
                         COrderItemViewModel item2 = new COrderItemViewModel();

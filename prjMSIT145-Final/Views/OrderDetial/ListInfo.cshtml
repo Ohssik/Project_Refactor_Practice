@@ -6,6 +6,8 @@
 @section Styles{
     <style>
 
+        
+
         .div1 {
             margin: 5px auto;
             width: 70%;
@@ -55,6 +57,8 @@
             font-size: 10px;
         }
 
+        
+
         .leftDiv_infoDiv {
             height: 40px;
             box-sizing: border-box;
@@ -65,6 +69,13 @@
             width: 150px;
             font-size: 10px;
             border-radius: 5px;
+        }
+
+        .rightDiv_rightSpan {
+            width: 709px;
+            font-size: 10px;
+            border-radius: 5px;
+            text-align:right;
         }
 
         .leftDiv_StateSpan {
@@ -78,6 +89,11 @@
 
         .bottomBorder {
             border-bottom: 1px solid lightgray;
+            
+        }
+        .topBorder {
+            
+            border-top: 1px solid lightgray;
         }
 
         .leftDiv_Rate {
@@ -180,17 +196,15 @@
             background-color: white;
         }
 
-        .bodyBackgroundColor {
-            /* background-color: rgb(212, 218, 204); */
-            background-color: rgb(236, 236, 236);
-        }
+        
 
         .card_Guide_FontColor {
             color: #595757;
         }
 
-        * {
-            color: #595757;
+        
+        p,span{
+            font-size:14px;
         }
     </style>
 }
@@ -201,7 +215,7 @@
 
     
 
-<body class="bodyBackgroundColor">
+<body >
     <div class="div1 cardBackgroundColor">
         <!-- 左邊 -->
   
@@ -209,18 +223,18 @@
             <!-- 店家全區 -->
             <div class="flex bottomBorder">
                 <div class="storeImg"></div>
-                <div class="spanFont">
+                <div class="spanFont ">
                     <p>店家名稱:@Model.BMemberName</p>
                     <p>連絡電話:@Model.BMemberPhone</p>
                     <p>店家地址:@Model.Address</p>
                 </div>
-
+                
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
                 <div class="leftDiv_leftSpan ">
                     <span>訂單狀態</span>
                 </div>
-                <div class="leftDiv_rightSpan legtDiv_StateSpan">
+                <div class="leftDiv_rightSpan legtDiv_StateSpan ">
                     <span>@Model.OrderState</span>
                 </div>
             </div>
@@ -319,35 +333,22 @@
                 </div>
             </div>
             }
+             <div class="flexAndItemsCenter topBorder leftDiv_infoDiv">
+                <div class="leftDiv_leftSpan">
+                    <span>應付金額</span>
+                </div>
+                <div class="rightDiv_rightSpan">
+                    <span>$@Model.TotalAmount</span>
+                </div>
+                    
+             </div>
         </div>
     </div>
 </body>
 
 @section Scripts{
     <script>
-        
-        @*
-        const selType = document.querySelector("#selType");
-        const selBody = document.getElementById("AdivBody");
-       
-        window.addEventListener("load", async function (order) {
-            const request = await fetch(`@Url.Content("~/OrderDetial/ListInfo")`);
-            const data = await request.json();
-            console.log(data);
-            let result = document.createDocumentFragment();
-            result = "";
-            data.forEach(function (item, index) {
-                result += `
-                                                        <td>${item.pickUpPerson}</td>
-                                                        <td>${item.bMemberName}</td>
-                                                        <td>${item.bAddress}</td>
-                                                        <td>${item.pickUpPersonPhone}</td>
-                                                        <td>${item.pickUpType}</td>
-        `
-            });
-            selType.innerHTML = result;
 
-        });*@
         
 
 
