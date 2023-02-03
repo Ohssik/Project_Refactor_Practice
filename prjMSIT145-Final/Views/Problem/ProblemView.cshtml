@@ -1,0 +1,251 @@
+﻿@{
+    ViewData["Title"] = "ProblemView";
+}
+        <style>
+            /*Azure的logo*/
+            .azureLogo{
+                width: 50px;
+                height: 40px;
+                position: fixed;
+                bottom: 80px;
+                right: 150px;
+            }
+
+                .azureLogo img{
+                    width: 100%;
+                    height: 100%;
+                }
+
+            .azure{
+                position: fixed;
+                right: 450px;
+                top: 20px;
+                margin-top: 50px;
+            }
+            /* 腳掌印 */
+            .logoDiv {
+                width: 50px;
+                height: 40px;
+                position: fixed;
+                bottom: 80px;
+                right: 60px;
+            }
+
+                .logoDiv img {
+                    width: 100%;
+                    height: 100%;
+                }
+
+            .logo {
+                position: fixed;
+                right: 40px;
+                top: 20px;
+            }
+            /* 平台及使用者頭像 */
+            .imgDiv {
+                min-width: 50px;
+                height: 50px;
+                margin: 0 5px;
+                border-radius: 50%;
+            }
+
+                .imgDiv img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                }
+
+            .scroll {
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            .display {
+                display: flex;
+                /* align-items:center; */
+            }
+            /* 對話框 */
+            .msgDiv {
+                min-height: 700px;
+                max-height: 700px;
+                max-width: 380px;
+                min-width: 380px;
+                /*background-color: antiquewhite;*/
+            }
+
+            #collapseExample{
+                margin-top:50px;
+            }
+            /* 平台 */
+            .serviceDiv {
+                max-width: 280px;
+                min-width: 280px;
+                /* background-color: antiquewhite; */
+            }
+
+            .serviceMsg {
+                word-wrap: break-word;
+                /* word-break: break-all; */
+                font-size: 13px;
+            }
+
+                .serviceMsg p {
+                    color: sienna;
+                    font-size: 20px;
+                    margin: 2px;
+                }
+
+            .qDiv {
+                margin: 5px 0;
+                border: 1px solid rgb(216, 216, 216);
+                box-sizing: border-box;
+                padding: 0 5px;
+                border-radius: 5px;
+            }
+            /* 使用者 */
+            .userDiv {
+                width: 365px;
+                justify-content: right;
+                margin-top: 10px;
+            }
+
+            .userMsg {
+                word-wrap: break-word;
+                font-size: 13px;
+                box-sizing: border-box;
+                padding: 15px 0;
+                /* background-color: aqua; */
+            }
+            /* 輸入框 */
+            .txtDiv {
+                margin: 10px 0 0 5px;
+                background-color: transparent;
+                width: 100%;
+            }
+
+                .txtDiv input {
+                    width: 90%;
+                }
+
+                .txtDiv button {
+                    height: 30px;
+                    width: 40px;
+                    border: none;
+                    margin-left: 5px;
+                    background-color: transparent;
+                }
+
+                .txtDiv img {
+                    height: 100%;
+                    width: 100%;
+                }
+        </style>
+@*Azure機器人*@
+    <div class="azureLogo"
+		 data-bs-toggle="collapse"
+		 data-bs-target="#azure"
+         aria-expanded="false"
+         aria-controls="collapseExample">
+        <img src="@Url.Content("~/images/Problem/AzureBot.png")" alt="" />
+    </div>
+    <div class="azure collapse" id="azure">
+        <div class="card card-body ">
+            <iframe src='https://webchat.botframework.com/embed/msit14501daily-bot?s=sBZOKBWuvAU.FFRe_6cBbQ1LCnnx85WWa4mkmpEfJqewEceFCfWMPMw' style='min-width: 400px;max-width:400px; min-height: 740px;'></iframe>
+        </div>
+    </div>
+
+    <!-- 要把collapse 加入id=collapseExample的class裡 -->
+    <!-- 手動刻 -->
+    <div class="logoDiv"
+		 data-bs-toggle="collapse"
+		 data-bs-target="#collapseExample"
+		 aria-expanded="false"
+		 aria-controls="collapseExample">
+        <img src="images/DailyBot.png" alt="" />
+    </div>
+
+    <div class="logo collapse" id="collapseExample">
+        <div class="card card-body ">
+            <!-- 以下自己刻 -->
+            <div class="msgDiv scroll">
+                <div class="display serviceDiv">
+                    <div class="imgDiv"><img src="~/images/Problem/dailyLogo.png" /></div>
+                    <div class="serviceMsg">
+                        你好，請輸入問題，以便為您解答!
+                        <div class="qDiv">
+                            <p>&nbsp;常見問題:</p>
+                            <table class="table table-hover">
+                                <tr><td>變更或取消訂單</td></tr>
+                                <tr><td>收到的商品有誤</td></tr>
+                                <tr><td>沒收到優惠券</td></tr>
+                                <tr><td>信用卡退款</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="resultDiv">
+                    @*<div class="display userDiv">
+				<div class="userMsg">信用卡退款</div>
+				<div class="imgDiv"><img src="images/user.png" alt="" /></div>
+				</div>*@
+                </div>
+            </div>
+
+            <div class="txtDiv display">
+                <input type="text" id="txt" />
+                <button id="btnSubmit" type="button"><img src="~/images/Problem/send.png" /></button>
+            </div>
+        </div>
+    </div>
+@*根據登入的使用者不同更改頭像,變數=>userImg*@
+        <script>
+            const msgDiv = document.querySelector(".msgDiv"); //對話框
+            const userImg = document.querySelector("#userImg"); //客戶頭像
+            const txt = document.querySelector("#txt"); //輸入框
+            const btnSubmit = document.querySelector("#btnSubmit"); //送出
+            const tr = document.querySelectorAll("tr");
+            const resultDiv = document.querySelector("#resultDiv");
+
+            let msg = "";
+            // 點選常見問題
+            tr.forEach(function (td) {
+                td.addEventListener("click", function () {
+                    console.log(this.firstElementChild.innerHTML);
+                    msg = this.firstElementChild.innerHTML;
+                    txt.value = msg;
+                });
+            });
+
+            //按下送出鈕
+            btnSubmit.addEventListener("click", async function (event) {
+                if (txt.value === "") {
+                    alert("請輸入內容")
+
+                    return false;
+                }
+                let fragForUser = document.createDocumentFragment();
+                let fragForService = document.createDocumentFragment();
+
+                const request = await fetch(`@Url.Content("~/Home/Problem?keyword=${txt.value}")`);
+                const data = await request.json();
+                console.log(data.answer)
+                fragForService = `<div class="display serviceDiv">
+                                             <div class="imgDiv"><img src="~/images/Problem/dailyLogo.png" /></div>
+                                                 <div class="serviceMsg">
+                                                    ${data.answer}
+                                                </div>
+                                            </div>
+                                        </div>`;
+
+                fragForUser =`<div class="display userDiv">
+                            <div class="userMsg">${txt.value}</div>
+                                <div class="imgDiv"><img src="~/images/Problem/user.png" alt="" /></div>
+                            </div>`;
+
+                resultDiv.innerHTML += fragForUser;
+                resultDiv.innerHTML += fragForService;
+                msgDiv.scrollTop = msgDiv.scrollHeight;
+
+                txt.value = "";
+            });
+        </script>

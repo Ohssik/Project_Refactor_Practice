@@ -1,0 +1,109 @@
+﻿@model prjMSIT145_Final.Models.BusinessMember
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>註冊</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <style>
+        @@media (min-width: 1025px) {
+            .h-custom {
+                height: 100vh !important;
+            }
+        }
+    </style>
+
+</head>
+<div>
+    <section class=" vw-100 vh-100" style="background-color: #FF7300;">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-8 col-xl-6">
+                    <div class="card rounded-3">
+                        <img src="@Url.Content("~/images/Customer/Mainpage/shibaLogo_row2.png")"
+                             class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
+                             alt="Sample photo">
+                        <div class="card-body p-4 p-md-5">
+                            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">基本資料</h3>
+
+                            <form asp-action="Register">
+                                <div asp-validation-summary="ModelOnly" class="text-danger">
+                                </div><div class="form-group">
+                                    <label asp-for="Email" class="control-label"></label>
+                                    <input asp-for="Email" class="form-control" value="@ViewBag.email" readonly="readonly" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Password" class="control-label"></label>
+                                    <input asp-for="Password" class="form-control" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="MemberName" class="control-label"></label>
+                                    <input asp-for="MemberName" class="form-control" />
+                                    <span asp-validation-for="MemberName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Brand" class="control-label"></label>
+                                    <input asp-for="Brand" class="form-control" />
+                                    <span asp-validation-for="Brand" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Phone" class="control-label"></label>
+                                    <input asp-for="Phone" class="form-control" />
+                                    <span asp-validation-for="Phone" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Address" class="control-label"></label>
+                                    <input asp-for="Address" class="form-control" />
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="ShopType" class="control-label"></label>
+                                    <input asp-for="ShopType" class="form-control" />
+                                    <span asp-validation-for="ShopType" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-6 mb-4">
+                                    <label asp-for="ContactPerson" class="control-label"></label>
+                                    <input asp-for="ContactPerson" class="form-control" />
+                                    <span asp-validation-for="ContactPerson" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="OpenTime" class="control-label"></label>
+                                    <input asp-for="OpenTime" class="form-control" />
+                                    <span asp-validation-for="OpenTime" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CloseTime" class="control-label"></label>
+                                    <input asp-for="CloseTime" class="form-control" />
+                                    <span asp-validation-for="CloseTime" class="text-danger"></span>
+                                </div>
+                                <div class="form-group" hidden>
+                                    <label asp-for="Fid" class="control-label"></label>
+                                    <input asp-for="Fid" class="form-control" />
+                                    <span asp-validation-for="Fid" class="text-danger"></span>
+                                </div>
+                                <div class="form-group" hidden>
+                                    <label asp-for="EmailCertified" class="control-label"></label>
+                                    <input asp-for="EmailCertified" class="form-control" value="0" />
+                                    <span asp-validation-for="EmailCertified" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+
+                                    <input type="submit" value="送出" class="btn btn-primary" />
+                                </div>
+                            </form>
+
+                            <a asp-action="Login">登入</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
