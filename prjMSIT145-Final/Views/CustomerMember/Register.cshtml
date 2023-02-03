@@ -9,36 +9,84 @@
     </style>
     <link rel="stylesheet" href="~/css/Customer_css/Register.css">
 }
-<div wrap>
+  
  <form asp-action="Register" enctype="multipart/form-data">
-        <div class="card3">
-        <h4 class="title2">註冊會員</h4>
-        <hr style="border:1px dashed #000; height:0.1px">
-     @*   <div class="dashed"></div>*@
-       @* <img src="@Url.Content("~/images/Customer/Member/imgAdd.png")" class="title3" />*@
-        <div class="aui-info ">
-            <img src="@Url.Content("~/images/167126861274498_P19696185.jpg")" id="img-txz" style="width: 80px" class="aui-img-round user-img " />
-            <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
-         @*    style="width: 10rem"*@
-         
-        </div>
+        <div class="wrap">
+      <div class="card3">
+            <div class="card30">
+                <h2 class="title2"> <img src="@Url.Content("~/images/Customer/Member/registerperson.png")" />註冊會員</h2>
         
+            <div class="dashed">
+
+             </div>
+       <div class="divheadpic">
+                    <div class="aui-info ">
+                            <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px"  class="aui-img-round user-img " />
+                         <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
+                         <span class="sapnphoto">點擊頭像預覽及修改</span>
+            
+                    </div>
+                </div>
+        <div class="regsterleftgroup">
         <span class="text3">
-            <p class="color">*</p>  
-            <p class="text4">真實姓名</p>
+            <p class="color">*</p>
+                        <p class="text4">真實姓名<span class="necessspan">(必填)</span><span class="Formatspan">(三個中文字)</span></p>
         </span>
-        <div class="div1">
-            <input id="MemberName" type="text" class="input" name="MemberName" />
-                    <span id="namecorrect" class="spancorrect"></span>
-        </div>
+                <div class="divhint">
+                    <div class="div1">
+                            <input id="MemberName" type="text" class="input" value="" name="MemberName" />
+                        
+                    </div>
+                        <span id="namecorrect" class="spanerrormessage"></span>
+                </div>
+                
           
-        <span class="text3">
-            <p class="color">*</p>  
-            <p class="text4">手機號碼</p>
-        </span>
-        <div class="div1">
-            <input type="text" class="input" name="Phone"/>
-        </div>
+                <span class="text3">
+                    <p class="color">*</p>
+                        <p class="text4">手機號碼<span class="necessspan">(必填)</span><span class="Formatspan">(台灣手機號碼)</span></p>
+                </span>
+
+                 <div class="divhint">
+                        <div class="div1">
+                             <input type="text" class="input" name="Phone" value="" id="Phone" />
+                        </div>
+                         <span id="phonecorrect" class="spanerrormessage"></span>
+                 </div>
+
+                    <span class="text3">
+                        <p class="color">*</p>
+                        <p class="text4">電子信箱<span class="necessspan">(必填)</span><span class="Formatspan">(信箱格式)</span></p>
+                    </span>
+                    <div class="divhint">
+                        <div class="div1">
+                            <input type="email" class="input" name="Email" value="" id="Email" />
+                        </div>
+                        <span id="emailcorrect" class="spanerrormessage"></span>
+                    </div>
+
+                <span class="text3">
+                    <p class="color">*</p>
+                        <p class="text4">密碼<span class="necessspan">(必填)</span><span class="Formatspan">(大小寫英文加4個數字)</span></p>
+                </span>
+
+                <div class="divhint">
+                    <div class="div1">
+                        <input type="password" class="input" name="Password"  id="Password" />
+                    </div>
+                    <span id="passwordcorrect" class="spanerrormessage"></span>
+                </div>
+                <span class="text3">
+                    <p class="color">*</p>
+                        <p class="text4">確認密碼<span class="necessspan">(必填)</span><span class="Formatspan">(與密碼一致)</span></p>
+                </span>
+
+                <div class="divhint">
+                    <div class="div1">
+                        <input type="password" class="input" name="Password"  id="Password2" />
+                    </div>
+                    <span id="password2correct" class="spanerrormessage"></span>
+                </div>
+
         <div class="text4">性別</div><br>
         <div class="display">
             <input type="radio" class="text5" name="Gender"value="女" />女
@@ -62,31 +110,18 @@
                 <select type="text "id="area" class="input" name="AddressArea"></select>
             </div>
         </div>
-        <br>
-        <br>
-        <br>
-        <div>
-            <label>密碼</label>
-            <input type="password" name="Password">
-
-        </div>
-         <div>
-            <label>密碼</label>
-            <input type="password" name="Password">
-
-         </div>
-        <div>
-            <label>信箱</label>
-            <input type="email" name="Email"/>
-        </div>
+                    <div class="dashed"></div>
+                   
         <div class="display">
             <input id="submitid" type="submit" class="enter" value="確認"/>
+                       
         </div>
-       
-      
+                    </div>
+                </div>
     </div>
+        </div>
     </form>
-    </div>
+ 
     @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
  
@@ -128,12 +163,12 @@
 
         var submitbtn = document.getElementById("submitid");
 
-        document.getElementById("MemberName").addEventListener("change", checkPwd);
+        document.getElementById("MemberName").addEventListener("blur", checkPwd);
         function checkPwd() {
             var nameobj = document.getElementById("MemberName");
             var spnameobj = document.getElementById("namecorrect");
             var nameval = nameobj.value;
-            let ch; flag1 = false; flag2 = false;
+        
             if (nameval == "") {
                 spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
                 submitbtn.setAttribute('disabled','disabled');
@@ -144,6 +179,106 @@
                 submitbtn.removeAttribute('disabled');
             }
             };
+
+
+        document.getElementById("Phone").addEventListener("blur", checkPhone);
+        function checkPhone() {
+            var phoneobj = document.getElementById("Phone");
+            var spnphoneobj = document.getElementById("phonecorrect");
+            var phoneval = phoneobj.value;
+
+            if (phoneval == "") {
+                spnphoneobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+              
+                return;
+            }
+            else {
+                spnphoneobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+        };
+        document.getElementById("Email").addEventListener("blur", checkEmail);
+        function checkEmail() {
+            var emailobj = document.getElementById("Email");
+            var spnemailobj = document.getElementById("emailcorrect");
+            var emailval = emailobj.value;
+
+            if (emailval == "") {
+                spnemailobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+                
+                return;
+            }
+            else {
+                spnemailobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+        };
+
+        document.getElementById("Password").addEventListener("blur", checkPassword);
+        function checkPassword() {
+            var passwordobj = document.getElementById("Password");
+            var spnpasswordobj = document.getElementById("passwordcorrect");
+            var passwordval = passwordobj.value;
+
+            if (passwordval == "") {
+                spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+
+                return;
+            }
+            else {
+                spnpasswordobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+            if(passwordval.length<6){
+                spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>請輸入超過6個字";
+                submitbtn.setAttribute('disabled', 'disabled');
+
+                return;
+            }
+            else {
+                spnpasswordobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+            if(passwordval.length>=6){
+
+                re = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/)
+                  
+                 if(re.test(passwordval)){
+                    submitbtn.removeAttribute('disabled');
+                    spnpasswordobj.innerHTML = "";
+                 }
+                 else{
+                    spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>請輸入正確格式";
+                    submitbtn.setAttribute('disabled','disabled');
+                    return;
+                 }
+
+
+            }
+        };
+        document.getElementById("Password2").addEventListener("blur",checkPassword2);
+         function checkPassword2(){
+            var pass1=document.getElementById("Password");
+            var pass2=document.getElementById("Password2");
+            var spnpassword2 = document.getElementById("password2correct");
+             if(pass1.value!=pass2.value){
+               spnpassword2.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>請確認上下密碼一致";
+                submitbtn.setAttribute('disabled', 'disabled');
+
+             }
+             else{
+                 submitbtn.removeAttribute('disabled');
+                spnpassword2.innerHTML = "";
+             }
+
+
+
+
+
+         }
             
       </script>
 

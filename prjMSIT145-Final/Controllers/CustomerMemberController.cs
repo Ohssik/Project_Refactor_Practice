@@ -49,6 +49,12 @@ namespace prjMSIT145_Final.Controllers
             }
             return View();
         }
+        public ActionResult memberheadphoto()
+        {
+            
+
+            return Json(CDictionary.SK_LOGINED_USER);
+        }
 
 
         public ActionResult Loginout()

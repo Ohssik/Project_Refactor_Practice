@@ -7,7 +7,8 @@
 
 @section Styles{
     <link rel="stylesheet" href="~/css/Customer_css/Login.css">
-    <link rel="stylesheet" href="~/css/Customer_css/CBSonlyClass.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
     <style>
         a:link {
             text-decoration-color: black;
@@ -43,9 +44,11 @@
                 <p class="detail">只支援台灣手機號碼</p>
                 <div class="text">
                     <img src="@Url.Content("~/images/Customer/Member/hide.png")" class="img"></img>
-                    <input type="password" placeholder="密碼" class="text2" name="txtPassword" />
-                    <img src="@Url.Content("~/images/Customer/Member/hide.png")" class="img"></img>
+                    <input id="iconpassword"type="password" placeholder="密碼" class="text2" name="txtPassword" />
+                    <i style="margin-left:-100px;margin-top:10px;" class="far fa-eye" id="togglePassword"></i>
+                @*    <img src="@Url.Content("~/images/Customer/Member/hide.png")" class="img"></img>*@
                 </div>
+               
                 <p class="detail">6-64位英數混合，英文需區分大小寫</p>
                 <input type="submit" value="登入" class="login" />
                 <div class="display">

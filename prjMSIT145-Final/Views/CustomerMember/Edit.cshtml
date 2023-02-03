@@ -20,7 +20,7 @@
     <div class="leftgroup">
         <div class="card1">
             <div class="backcolor">
-                <img src="~/images/@Model.MemberPhotoFile" class="dog">
+                        <img style="border-radius:80px" src="~/images/@Model.MemberPhotoFile" class="dog">
                     <div class="text6">@Model.MemberName</div>
                     <div class="text6">@Model.Phone</div>
             </div>
@@ -36,11 +36,10 @@
         <h2 class="title2"><img src="@Url.Content("~/images/Customer/Member/person.png")" />個人檔案</h2>
         <div class="dashed"></div>
         <input type="hidden"name="Fid" value="@Model.Fid"/>
-       @* <input type="file" name="photo" class="text-danger" value="~/images/@Model.MemberPhotoFile" />
-        <button> <img src="~/images/@Model.MemberPhotoFile" class="title3" style="width:100px" /></button>*@
+      
         <div class="divheadpic">
                 <div class="aui-info">
-                <img src="~/images/@Model.MemberPhotoFile" id="img-txz" style="width:150px"height="150px" class="aui-img-round user-img" />
+                            <img src="~/images/@Model.MemberPhotoFile" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img" />
                  <input class="fileInput" type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" value="" />
                 </div>
                 <span class="sapnphoto">點擊頭像預覽及修改</span>
@@ -49,7 +48,7 @@
         </div>
         <span class="text3">
             <p class="color">*</p>
-                    <p class="text4">真實姓名<span class="necessspan">(此欄位必填)</span></p>
+                    <p class="text4">真實姓名<span class="necessspan">(必填)</span><span class="Formatspan">(三個中文字)</span></p>
         </span>
         <div class="divhint">
                     <div class="div1">
@@ -62,7 +61,7 @@
        
         <span class="text3">
             <p class="color">*</p>
-                    <p class="text4">手機號碼<span class="necessspan">(此欄位必填)</span></p>
+                        <p class="text4">手機號碼<span class="necessspan">(必填)</span><span class="Formatspan">(台灣號碼)</span></p>
         </span>
 
         <div class="divhint">
@@ -79,7 +78,7 @@
 
          <span class="text3">
              <p class="color">*</p>
-          <p class="text4">電子信箱<span class="necessspan">(此欄位必填)</span></p>
+                        <p class="text4">電子信箱<span class="necessspan">(必填)</span><span class="Formatspan">(信箱格式)</span></p>
           </span>
           <div class="divhint">
                     <div class="div1">
@@ -87,6 +86,8 @@
                      </div>
                         <span id="emailcorrect" class="spanerrormessage"></span>
             </div>
+
+
         <div class="text4">性別</div><br>
         <div class="display">
             @{
