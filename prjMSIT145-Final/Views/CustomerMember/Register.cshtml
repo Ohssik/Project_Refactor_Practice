@@ -21,8 +21,9 @@
              </div>
        <div class="divheadpic">
                     <div class="aui-info ">
-                            <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px"  class="aui-img-round user-img " />
-                         <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
+                       
+                          <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />                  
+                           <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
                          <span class="sapnphoto">點擊頭像預覽及修改</span>
             
                     </div>
@@ -34,7 +35,7 @@
         </span>
                 <div class="divhint">
                     <div class="div1">
-                            <input id="MemberName" type="text" class="input" value="" name="MemberName" />
+                                <input id="MemberName" type="text" class="input" value="@ViewBag.Name" name="MemberName" />
                         
                     </div>
                         <span id="namecorrect" class="spanerrormessage"></span>
@@ -48,7 +49,7 @@
 
                  <div class="divhint">
                         <div class="div1">
-                             <input type="text" class="input" name="Phone" value="" id="Phone" />
+                             <input type="text" class="input" name="Phone" value="@ViewBag.Phone" id="Phone" />
                         </div>
                          <span id="phonecorrect" class="spanerrormessage"></span>
                  </div>
@@ -59,7 +60,7 @@
                     </span>
                     <div class="divhint">
                         <div class="div1">
-                            <input type="email" class="input" name="Email" value="" id="Email" />
+                            <input type="email" class="input" name="Email" value="@ViewBag.Email" id="Email" />
                         </div>
                         <span id="emailcorrect" class="spanerrormessage"></span>
                     </div>
@@ -71,7 +72,7 @@
 
                 <div class="divhint">
                     <div class="div1">
-                        <input type="password" class="input" name="Password"  id="Password" />
+                        <input type="password" class="input" name="Password" value="@ViewBag.password" id="Password" />
                     </div>
                     <span id="passwordcorrect" class="spanerrormessage"></span>
                 </div>
@@ -82,32 +83,75 @@
 
                 <div class="divhint">
                     <div class="div1">
-                        <input type="password" class="input" name="Password"  id="Password2" />
+                                <input type="password" class="input" name="Password" value="@ViewBag.password" id="Password2" />
                     </div>
                     <span id="password2correct" class="spanerrormessage"></span>
                 </div>
 
         <div class="text4">性別</div><br>
         <div class="display">
-            <input type="radio" class="text5" name="Gender"value="女" />女
-            <input type="radio" class="text5" name="Gender" value="男" />男
+                            @{
+
+                            if (ViewBag.Gender==null){
+                                <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" />
+                                <label>女</label>
+                                <input id="radioboy" type="radio" class="text5" name="Gender" value="男" />
+                                <label>男</label>
+                             }
+                             else{
+
+                            if (ViewBag.Gender == "1")
+                            {
+                                    <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" checked />
+                                <label>女</label>
+                                <input id="radioboy" type="radio" class="text5" name="Gender" value="男"  />
+                                <label>男</label>
+                            }
+                            else
+                            {
+                                <input id="radiogirl" type="radio" class="text5" name="Gender" value="女"  />
+                                <label>女</label>
+                                    <input id="radioboy" type="radio" class="text5" name="Gender" value="男" checked />
+                                <label>男</label>
+                            }
+                            };
+                        }
         </div><br>
         <span class="text3"> 
             <p class="text4">生日</p>
         </span>
         <div class="div1">
-            <input type="date" class="date" name="Birthday" />
+             @{
+
+                            if (ViewBag.birthday != null)
+                            {
+                                string st;
+                                st = Convert.ToDateTime(ViewBag.birthday).ToString("yyyy-MM-dd");
+
+                                <input id="birthid" type="date" class="date" name="Birthday" value="@st" />
+              
+                }
+                else{
+                                <input id="birthid" type="date" class="date" name="Birthday" value=""/>
+                }
+            
+            }
+                           
+                            
         </div>
         <span class="text3"> 
             <p class="text4">居住地</p>
         </span>
         <div class="display">
             <div class="div2">
-                <select type="text "id="city" class="input" name="AddressCity">
+                                <select type="text " id="city" class="input"  name="AddressCity">
+                                    <option>@ViewBag.city</option>
                 </select>
             </div>
             <div class="div2">
-                <select type="text "id="area" class="input" name="AddressArea"></select>
+                <select type="text "id="area" class="input" name="AddressArea">
+                                    <option>@ViewBag.area</option>
+                </select>
             </div>
         </div>
                     <div class="dashed"></div>
@@ -278,7 +322,25 @@
 
 
 
-         }
+         };
+
+
+
+        document.getElementById("submitid").addEventListener("click", async () => {                //判斷帳號是否重複
+            const request = await fetch(`@Url.Content("~/CustomerMember/Verifyaccount")`);
+          
+            const data= await request.json();
+            if(data==""){
+               
+                 alert("已發送驗證信");
+            }
+            else{
+                alert(data);
+            }
+           });
+       
+
+
             
       </script>
 

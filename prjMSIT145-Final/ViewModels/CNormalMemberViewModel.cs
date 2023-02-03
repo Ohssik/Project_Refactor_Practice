@@ -1,4 +1,5 @@
-﻿using prjMSIT145_Final.Models;
+﻿using Microsoft.Build.Framework;
+using prjMSIT145_Final.Models;
 
 
 namespace prjMSIT145_Final.ViewModels
@@ -36,12 +37,13 @@ namespace prjMSIT145_Final.ViewModels
             get { return _member.Password; }
             set { _member.Password = value; }
         }
-        
+        [Required]
         public string? Gender
         {
             get { return _member.Gender; }
             set { _member.Gender = value; }
         }
+        [Required]
         public string? AddressCity
         {
             get { return _member.AddressCity; }

@@ -53,8 +53,14 @@
                         //<li><a href=@Url.Action("Edit","CustomerMember")><img src=`@Url.Content("~/images/${@x.MemberPhotoFile}")` /><p>&emsp;會員中心</p></a></li>
                         //<li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content(`~/images/${@x.MemberPhotoFile}`)" /><p>&emsp;會員中心</p></a></li>
                         //<li><a href=@Url.Action("Edit","CustomerMember")><img src="~/images/@x.MemberPhotoFile" style="width:55px" /><p>&emsp;會員中心</p></a></li>
+                          if(x.MemberPhotoFile!=null){
+
+                            <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content($"~/images/{x.MemberPhotoFile}")" style="width:55px;border-radius:30px"/><p>&emsp;會員中心</p></a></li>
                           
-                         <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content($"~/images/{x.MemberPhotoFile}")" style="width:55px;border-radius:30px"/><p>&emsp;會員中心</p></a></li>
+                          }
+                          else{
+                            <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content("~/images/Customer/Member/photo.png")" style="width:55px;border-radius:30px" /><p>&emsp;會員中心</p></a></li>
+                          }
                             //<li><a id="aloginout" href=@Url.Action("Loginout","CustomerMember", null,new {onclick="return confirm('確定要刪除嗎?')"})><p>登出</p></a></li>
 
                           <li><p style="margin-top:28px;">@Html.ActionLink("登出", "Loginout","CustomerMember", null,new {onclick="return confirm('確定要登出嗎?')"})</p></li>

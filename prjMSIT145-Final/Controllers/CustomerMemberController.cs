@@ -5,6 +5,7 @@ using NuGet.Protocol;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Principal;
@@ -73,12 +74,21 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult Register(CNormalMemberViewModel vm, IFormFile photo)
         {
             var data = _context.NormalMembers.Select(c => c.Phone);
-            foreach(var i in data)
+            foreach (var i in data)
             {
-                if (i==vm.Phone&&i=="")
+                if (i == vm.Phone || i == "")
                 {
-                    return Content("帳號重複");
-                    //TempData["message"] = "測試alert";
+                    ViewBag.Name = vm.MemberName;
+                    ViewBag.Phone = vm.Phone;
+                    ViewBag.Email = vm.Email;
+                    ViewBag.Gender= vm.Gender;
+                    ViewBag.city = vm.AddressCity;
+                    ViewBag.area = vm.AddressArea;
+                    ViewBag.birthday = vm.Birthday;
+                    ViewBag.MemberPhotoFile = vm.MemberPhotoFile;
+                    ViewBag.password = vm.Password;
+                    return View();
+                   
                 }
             }
 
@@ -86,18 +96,11 @@ namespace prjMSIT145_Final.Controllers
             {
               return Content("請輸入生日");
             }
-            //string photoName = Guid.NewGuid().ToString() + ".jpg";
-            //string path = _eviroment.WebRootPath + "/images/" + photoName;
-            //string fileName = photo.FileName;
-
-            //string filePath = Path.Combine(_host.WebRootPath, "uploads", fileName);
-            //vm.photo.CopyTo(new FileStream(path,FileMode.Create));
+            
             if (photo != null)
             {
                 string fileName = Guid.NewGuid().ToString() + ".jpg";
                 string filePath = Path.Combine(_eviroment.WebRootPath, "images", fileName);
-                //檔案上傳到uploads資料夾中
-
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     photo.CopyTo(fileStream);
@@ -106,9 +109,22 @@ namespace prjMSIT145_Final.Controllers
             }
             _context.Add(vm.member);
             _context.SaveChanges();
-           
-            return Content("註冊成功");
+
+            return Redirect("~/Home/CIndex");
           
+        }
+        public IActionResult Verifyaccount(CNormalMemberViewModel vm)
+        {
+            var data = _context.NormalMembers.Select(c => c.Phone);
+            foreach (var i in data)
+            {
+                if (i == vm.Phone || i == "")
+                {
+                    return Json("帳號重複");
+                   
+                }
+            }
+          return Json ("");
         }
         public IActionResult memberview()
         {
