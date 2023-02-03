@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace prjMSIT145_Final.Controllers
 {
-	public class TypeController : Controller
+    public class TypeController : Controller
 	{
 		private readonly ispanMsit145shibaContext _context;
 		public TypeController(ispanMsit145shibaContext context)

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 
 namespace prjMSIT145_Final.Models
 {
-    public partial class AdminMember
+    public partial class ChangeRequestPassword
     {
-        public int Fid { get; set; }
+        public string Token { get; set; } = null!;
         public string? Account { get; set; }
-        public string? Password { get; set; }
-        public int? RoleLevel { get; set; }
         public string? Email { get; set; }
+        public DateTime? Expire { get; set; }
     }
 }
