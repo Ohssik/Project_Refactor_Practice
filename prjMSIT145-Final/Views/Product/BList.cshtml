@@ -125,7 +125,6 @@
 		<tbody id="tbody">
 		</tbody>
 	</table>
-	<span id="tablePage"></span>
 </div>
 
 @section Scripts{
@@ -139,10 +138,6 @@
 		const btnSubmit = document.querySelector("#btnSubmit"); //編輯完成後的儲存按鈕
 		const fid = document.querySelector("#Fid");
 		const selType = document.querySelector("#selType");
-
-		$("#table").on("click",function(){
-			alert("點擊")
-		})
 		
 		//關鍵字查詢(類別與商品)
 		txt.addEventListener("input", () => search());
