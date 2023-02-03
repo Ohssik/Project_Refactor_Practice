@@ -273,27 +273,27 @@
                     count++;
                     
                         <!-- *****動態產生****至140行為止 -->
-                        <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" style="margin-right:40px">
+                        <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid"  style="margin-right:40px">
                             <p class="card-text card_Guide_FontColor" hidden name="OrderFid">@Html.DisplayFor(modelItem => item.OrderFid)</p>
                             <div class="state_timeDiv">
                                 <!-- 背景色依狀態更改:接單:淡粉色,未接單:綠色,店家拒接單:紅色,完成訂單:灰色 -->
                                 @if(item.OrderState != ""){
                                     @if (item.OrderState == "未接單")
                                     {
-                                        <div class="state backgroundcolor1" id="tab_1">@Html.DisplayFor(modelItem => item.OrderState)</div>
+                                        <div class="state backgroundcolor1" name="tab_1">@Html.DisplayFor(modelItem => item.OrderState)</div>
 
                                     }
                                     else if (item.OrderState == "已接單")
                                     {
-                                        <div class="state backgroundcolor2" id="tab_2">@Html.DisplayFor(modelItem => item.OrderState)</div>
+                                        <div class="state backgroundcolor2" name="tab_2">@Html.DisplayFor(modelItem => item.OrderState)</div>
                                     }
                                     else if (item.OrderState == "已完成")
                                     {
-                                        <div class="state backgroundcolor4" id="tab_4">@Html.DisplayFor(modelItem => item.OrderState)</div>
+                                        <div class="state backgroundcolor4" name="tab_4">@Html.DisplayFor(modelItem => item.OrderState)</div>
                                     }
                                     else if (item.OrderState == "商家退單")
                                     {
-                                        <div class="state backgroundcolor5" id="tab_5">@Html.DisplayFor(modelItem => item.OrderState)</div>
+                                        <div class="state backgroundcolor5" name="tab_5">@Html.DisplayFor(modelItem => item.OrderState)</div>
                                     }
                                     else
                                     {
@@ -328,7 +328,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
             crossorigin="anonymous"></script>
-    <script src="js/jquery-3.6.2.js"></script>
+    <script src="@Url.Content("~/js/jquery-3.6.2.js")"></script>
     <script>
 
         @foreach(var item in Model)
@@ -341,21 +341,21 @@
             
         };
 
-        const selCity = document.querySelector('#select1');
 
         $(function () {
             //全部選擇隱藏
-            $('div[id^="tab_"]').hide();
+            //$('div[id^="tab_"]').hide();
             $('#slt1').change(function () {
                 let sltValue = $(this).val();
                 console.log(sltValue);
 
-                $('div[id^="tab_"]').hide();
+                $('div[name^="tab_"]').hide();
                 //指定選擇顯示
-                $(sltValue).show();
+                $(`div[name="${sltValue}"]`).show();
             });
 
         });
+        
             
         
 
