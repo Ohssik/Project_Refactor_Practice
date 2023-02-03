@@ -1,4 +1,4 @@
-﻿@model prjMSIT145_Final.ViewModels.CACouponViewModel
+﻿@model IEnumerable<prjMSIT145_Final.ViewModels.CACouponViewModel>
 
 @{
     ViewData["Title"] = "優惠券兌換";
@@ -7,62 +7,198 @@
 @section Styles{    
     <link href="~/css/customer_css/cbsonlyclass.css" rel="stylesheet" />
     <style>
-        .row{
+        .exch.row{
             width:50%;
-            margin:10px auto;
+            margin:30px auto;
             /*border: 0.5px solid gray*/
             background-color:rgb(254,249,226);
             border-radius:15px;
         }
-
-        .col-md-4{
+        .exch.row.coupon{
+            width:40%;
+        }
+        .exch.col-md-4{
             margin:10px auto;
-            width:60%;
+            width:90%;
             text-align:center;
         }
-        .col-md-4>hr{
-            
-            /*width:95%;*/
+        
+        .hr{
+            width:95%;
             margin:20px auto;
-            border: 1px solid rgb(213,213,213)
+            /*margin:20px 0;*/
+            border: 1px solid rgb(213,213,213);
         }
-        #hr{
-            margin:20px 0;
-
+        .hr.dotted{
+            border-style:dotted;
         }
-        .col-md-4>div{
+        .exch.col-md-4>div{
             margin:10px;            
         }
-        
-        .col-md-4 button{
+
+        .exch.col-md-4 button{
             margin-top:10px;
         }
 
         #CouponCode{
              /*padding-right:30px;*/
+            width:50%;
+            margin:auto;
         }
+        #acc{
+            width:95%;
+        }
+        #pwd{
+            width:95%;
+        }
+        #exampleModalLabel{
+            font-size:1.5em;
+        }
+
     </style>
 }
 @section Scripts{
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-}
+    <script>
+        $(function(){
+            let pwdInvalid = $('#pwdInvalid');
+            pwdInvalid.text('');
+            let simpleLogin = new bootstrap.Modal(document.getElementById('simpleLogin'), {
+                keyboard: false
+            });
+        @{
+            if (!Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                            @:simpleLogin.show();$('#btnSend').removeAttr('disabled');                    
+            }
+        }
 
-<div class="row">
-    <div class="col-md-4">
+            $('.Copyright').removeClass('fixed_footer');
+            $(window).scrollTop(1);
+            let scrollTop = $(window).scrollTop();
+            console.log(`scrollTop=${scrollTop}`);
+            if ($(window).scrollTop() > 0) {                
+                $('.Copyright').removeClass('fixed_footer');
+
+            } else {
+                $('.Copyright').addClass('fixed_footer');
+
+            }
+            $(window).scrollTop(0);
+
+
+            $('#btnCancel').click(function () {
+                $('#btnSend').removeAttr('disabled');
+                $('[name=txtAccount]').val('');
+                $('[name=txtPassword]').val('');
+                location.replace('@Url.Content("~/home/CIndex")');
+            });
+            $('#btnSend').click(async function () {
+                event.preventDefault();
+                if ($('[name=txtAccount]').val() == '' || $('[name=txtPassword]').val() == '')
+                    return false;
+
+                $(this).attr('disabled', 'disabled');
+                let formData = new FormData(document.loginForm);
+
+                let f = await fetch(`@Url.Content("~/Coupon/CSimpleLogin")`, {
+                    body: formData,
+                    method: "post",
+                });
+                let msg = await f.text();
+                console.log(msg);
+                if (msg == -1) {
+                    pwdInvalid.text('您的帳號已被停權，請洽詢網站管理員。');
+                    $('#btnSend').removeAttr('disabled');
+                    //location.replace('@Url.Content("~/home/CIndex")');
+                } else if (msg == 1) {                    
+                    
+                    //pwdInvalid.text('登入成功。');
+                    $('[name=txtAccount]').val('');
+                    $('[name=txtPassword]').val('');
+                    simpleLogin.hide();
+                    location.replace('@Url.Content("~/Coupon/CCouponExchange")');
+
+                }else{
+                    pwdInvalid.text('帳號或密碼錯誤。');
+                    $('[name=txtPassword]').val('');
+                    $('#btnSend').removeAttr('disabled'); 
+
+                }
+            });
+        });
+    </script>
+}
+<div class="exch row">
+    <div class="exch col-md-4">
         
         <div class="form-group">
-                <h3 asp-for="Account" class="control-label">優惠券兌換專區</h3>
+                <h2 class="control-label">優惠券兌換專區</h2>
         </div>
-        <hr id="hr">
+        <hr class="hr">
         <div class="form-group">
             <p class="control-label">請在下面輸入兌換代碼</p>
         </div>
         <div class="form-group" id="CouponCode">
-                <input type="text" name="CouponCode" class="form-control" />
-            <button class="btn btn-secondary">submit</button>
+            <input type="text" name="CouponCode" class="form-control" />
+            <button class="btn btn-secondary">送出</button>
         </div>   
             
     </div>
     
 </div>
+    <hr class="hr dotted" />
+    @{
+    string price = "";
+    foreach(var item in Model){
+        price = ((decimal)item.Price).ToString("###,###");
+    <div class="exch row coupon">
+                            <div class="exch col-md-4">
+                                <div class="form-group">
+                                    <h2 class="control-label">@item.Title</h2>                        
+                                </div>
+                                
+                                <div class="form-group">
+                                    <p class="control-label">@item.Memo</p>
+
+                                <button class="btn btn-danger">折價 @price 元</button>
+                                </div>
+                            </div>
+    </div>
+        }
+    }
+    
+
+    <div class="modal fade" id="simpleLogin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="loginForm">
+                <div class="modal-header">
+                    <p class="modal-title" id="exampleModalLabel">請先登入</p>
+                    
+                </div>
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">手機</label>
+                        <input type="text" class="form-control" id="acc" name="txtAccount" value="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">密碼</label>
+                        <input class="form-control" id="pwd" name="txtPassword" />
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                        <span class="text-danger" id="pwdInvalid"></span>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>
+                    <button type="button" class="btn btn-primary" id="btnSend">送出</button>
+                        
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
 

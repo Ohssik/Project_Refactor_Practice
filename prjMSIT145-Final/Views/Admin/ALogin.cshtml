@@ -88,6 +88,8 @@
             $('[name=txtEmail]').val('');
         });
         $('#btnSend').click(function () {
+            if ($('[name=txtAccount]').val()=='' || $('[name=txtEmail]').val()=='')
+                return false;
 
             $(this).attr('disabled', 'disabled');
             

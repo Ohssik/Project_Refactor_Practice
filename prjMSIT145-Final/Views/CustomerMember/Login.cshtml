@@ -7,12 +7,22 @@
 
 @section Styles{
     <link rel="stylesheet" href="~/css/Customer_css/Login.css">
+    <link rel="stylesheet" href="~/css/Customer_css/CBSonlyClass.css">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
     <style>
         a:link {
             text-decoration-color: black;
             text-decoration-line: none;
+        }
+        #txtAccount{
+            width:95%;
+        }
+        #txtEmail{
+            width:95%;
+        }
+        #exampleModalLabel{
+            font-size:1.5em;
         }
     </style>
 }
@@ -82,11 +92,11 @@
 
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">請輸入登入手機或帳號:</label>
-                    <input type="text" class="form-control" id="recipient-name" name="txtAccount" value="">
+                    <input type="text" class="form-control" id="txtAccount" name="txtAccount" value="">
                 </div>
                 <div class="mb-3">
                     <label for="message-text" class="col-form-label">註冊Email:</label>
-                    <input class="form-control" id="message-text" name="txtEmail" />
+                    <input class="form-control" id="txtEmail" name="txtEmail" />
                 </div>
 
             </div>

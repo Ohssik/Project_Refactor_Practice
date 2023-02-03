@@ -45,7 +45,13 @@ namespace prjMSIT145_Final.ViewModels
             get { return _coupon.Memo; }
             set { _coupon.Memo = value; }
         }
-        
+        [DisplayName("標題")]
+        public string? Title
+        {
+            get { return _coupon.Title; }
+            set { _coupon.Title = value; }
+        }
+
         [DisplayName("所屬會員ID")]
         public int? NmemberID { get; set; }
         [DisplayName("所屬會員")]
