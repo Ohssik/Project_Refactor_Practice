@@ -12,7 +12,7 @@
             <div class="card shadow mb-4" id="norMemPhotoDiv">
                 <div>
                     <figure id="norMemPhoto">
-                        <img src="~/NormalMemberPhoto/@Model.MemberPhotoFile" alt="">
+                        <img src="~/images/Customer/Member/@Model.MemberPhotoFile" alt="">
                     </figure>
 
                 </div>
@@ -286,7 +286,7 @@
                 },
                 dataType: "json",
                 success: function (msg) {
-                    //console.log(msg);
+                    console.log(`msg=${msg}`);
                     
                     $('[name=txtMessage]').val('');
                     sendMail.hide();
@@ -319,23 +319,23 @@
 
                 if($(this).text()=='是')
                 {
-                    if(confirm('確定要停權該會員帳號嗎?')){                        
+                    //if(confirm('確定要停權該會員帳號嗎?')){                        
                         authBtnIsClicked = this;
                         isSus = 1;
                         sendMail.show();
                         $('#btnSend').removeAttr('disabled');
-                    }
-                    else
-                        return false;
+                    //}
+                    //else
+                        //return false;
                 }else{
 
-                    if(confirm('確定要復權該會員帳號嗎?')){                        
+                    //if(confirm('確定要復權該會員帳號嗎?')){                        
                         authBtnIsClicked = this;
                         isSus = 0;
                         sendMail.show();
                         $('#btnSend').removeAttr('disabled');
-                    }else
-                        return false;                    
+                    //}else
+                        //return false;                    
                 }
             },
             mouseenter: function () {

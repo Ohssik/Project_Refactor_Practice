@@ -1,0 +1,46 @@
+﻿@model prjMSIT145_Final.ViewModels.CACouponViewModel
+
+@{
+    ViewData["Title"] = "優惠券兌換";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@section Styles{    
+    <link href="~/css/customer_css/cbsonlyclass.css" rel="stylesheet" />
+    <style>
+        .row{
+            width:50%;
+            margin:10px auto;
+        }
+
+        .col-md-4{
+            margin:0 auto;
+        }
+
+        .col-md-4>div{
+            margin:10px auto;
+        }
+
+        .col-md-4 button{
+            margin-top:10px;
+        }
+    </style>
+}
+@section Scripts{
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+}
+
+<div class="row">
+    <div class="col-md-4">
+        
+        <div class="form-group">
+                <h3 asp-for="Account" class="control-label">請輸入優惠券代碼：</h3>
+        </div>
+        <div class="form-group">            
+            <input type="text" name="CouponCode" class="form-control" />
+            <button class="btn btn-secondary">submit</button>
+        </div>   
+            
+    </div>
+    
+</div>
+

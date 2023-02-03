@@ -49,6 +49,12 @@ namespace prjMSIT145_Final.Controllers
             }
             return View();
         }
+        public ActionResult memberheadphoto()
+        {
+            
+
+            return Json(CDictionary.SK_LOGINED_USER);
+        }
 
 
         public ActionResult Loginout()
@@ -56,6 +62,7 @@ namespace prjMSIT145_Final.Controllers
             HttpContext.Session.Remove(CDictionary.SK_LOGINED_USER);
 
             return Redirect("~/Home/CIndex");
+            //return RedirectToAction("Index", "CustomerMember");
         }
         public IActionResult Register()
         {
@@ -163,7 +170,7 @@ namespace prjMSIT145_Final.Controllers
               
                 string json = JsonSerializer.Serialize(x);
                 HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json);
-                return RedirectToAction("memberview");
+                return RedirectToAction("Edit");
 
             }
             else
@@ -171,23 +178,25 @@ namespace prjMSIT145_Final.Controllers
                 return RedirectToAction("login");
             }
             
+    }
+        public IActionResult Alterpassword()
+        {
+            string loginmember = "";
+            loginmember = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            CNormalMemberViewModel x = JsonSerializer.Deserialize<CNormalMemberViewModel>(loginmember);
+            return View(x);
+        }
 
+        [HttpPost]
+        public IActionResult Alterpassword(CNormalMemberViewModel member)
+        {
+            NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Fid == member.Fid);
+            x.Password=member.Password;
+            _context.SaveChanges();
 
-
-
-
-
-
-
-
-
-
-
+            return RedirectToAction("Edit");
 
         }
-    
-
-
 
 
 

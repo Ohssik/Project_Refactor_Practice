@@ -164,7 +164,7 @@ namespace prjMSIT145_Final.Models
 
                 entity.Property(e => e.IsSuspensed)
                     .HasColumnName("isSuspensed")
-                    .HasDefaultValueSql("((0))");
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.MemberAccount).HasMaxLength(50);
 
