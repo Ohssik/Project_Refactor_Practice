@@ -5674,7 +5674,7 @@ textarea.form-control-lg {
     flex-wrap: wrap;
     flex-shrink: 0;
     align-items: center;
-    justify-content: flex-end;
+    justify-content:space-between;
     padding: 0.75rem;
     border-top: 1px solid #dee2e6;
     border-bottom-right-radius: calc(0.3rem - 1px);
