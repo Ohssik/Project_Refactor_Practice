@@ -146,5 +146,8 @@ namespace prjMSIT145_Final.ViewModels
         public int? totalQty { get; set; }
 
         public List<COrderItemViewModel> items { get; set; }
+
+        
+
     }
 }

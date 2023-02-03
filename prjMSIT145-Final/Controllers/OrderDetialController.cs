@@ -206,7 +206,7 @@ namespace prjMSIT145_Final.Controllers
                     var orderitem = from i in Pr
                                     where i.OrderFid == c.Fid
                                     select i;
-                    foreach (var item in orderitem)
+                    foreach (var item in orderitem.ToList())
                     {
                         COrderItemViewModel item2 = new COrderItemViewModel();
                         item2.ProductName = item.ProductName;
@@ -219,6 +219,7 @@ namespace prjMSIT145_Final.Controllers
                         var itemOption = from o in ItemName
                                          where o.ItemFid == item.Fid
                                          select o;
+                        
                         foreach (var Option in itemOption)
                         {
                             item2.OptionName.Add(Option.OptionName);
