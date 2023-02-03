@@ -211,3 +211,124 @@
 .CursorDefault {
     cursor: default;
 }
+
+
+
+
+
+
+/*以下為Modal使用CSS*/
+.ModalTitle {
+    color: #9F4E27;
+}
+
+.ProductPhoto {
+    width: 449px;
+    height: 449px;
+}
+
+.OptionGroupTitle {
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0px 10px 0px;
+}
+
+.NeedChoose {
+    color: magenta;
+    font-size: 20px;
+    font-weight:300;
+}
+
+.OptionsArea {
+    margin: 10px auto;
+    width: 449px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.Optiondiv {
+    margin: 0px 0px 8px 7px;
+    width: 125px;
+    background-color: #9F4E27;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+}
+
+    .Optiondiv:nth-child(3n+1) {
+        margin: 0px 0px 8px 0px;
+    }
+
+    .Optiondiv p {
+        color:#FFFFFF;
+        font-size:20px;
+        font-weight:600;
+    }
+
+.DisplayColumn {
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+    width:250px;
+}
+
+.TotalPrice {
+    color: #000000;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom:5px;
+}
+
+.DisplayFlex {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.Minusbtn {
+    border: 2px solid #9F4E27;
+    border-radius: 5px 0px 0px 5px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #FFFFFF;
+    font-family: Arial;
+    padding: 2px 20px;
+    background-color: #9F4E27;
+}
+
+.Countbtn {
+    border-top: 2px solid #9F4E27;
+    border-bottom: 2px solid #9F4E27;
+    font-size: 20px;
+    font-weight: 500;
+    color: #9F4E27;
+    font-family: Arial;
+    padding:2px 50px;
+}
+
+.Plusbtn {
+    border: 2px solid #9F4E27;
+    border-radius: 0px 5px 5px 0px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #FFFFFF;
+    font-family: Arial;
+    padding: 2px 20px;
+    background-color: #9F4E27;
+}
+
+.Submitbtn {
+    width: 180px;
+    padding: 15px;
+    background-color: #9F4E27;
+    border: 0px solid #9F4E27;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 600;
+}

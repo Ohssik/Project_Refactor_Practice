@@ -10,17 +10,32 @@
 
         </style>
         <link rel="stylesheet" href="~/css/Customer_css/Edit.css">
+        
 
 }
+
+
+
+
 
  <form asp-action="edit" enctype="multipart/form-data">
 
     
   <div class="wrap">
+
     <div class="leftgroup">
         <div class="card1">
             <div class="backcolor">
-                        <img style="border-radius:80px" src="~/images/@Model.MemberPhotoFile" class="dog">
+                       @{
+                        if (Model.MemberPhotoFile!=null){
+                             <img style="border-radius:80px" src="~/images/@Model.MemberPhotoFile" class="dog">
+                                }
+                        else{
+                             <img style="border-radius:80px" src="@Url.Content("~/images/Customer/Member/photo.png")" class="dog">
+                        }
+
+                       }
+                       
                     <div class="text6">@Model.MemberName</div>
                     <div class="text6">@Model.Phone</div>
             </div>
@@ -39,7 +54,16 @@
       
         <div class="divheadpic">
                 <div class="aui-info">
-                            <img src="~/images/@Model.MemberPhotoFile" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img" />
+                 @{ 
+                    if(Model.MemberPhotoFile!=null){
+                                        <img src="~/images/@Model.MemberPhotoFile" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img" />
+                                }
+                       else{
+                                    <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img" />
+                       }
+
+
+                  } 
                  <input class="fileInput" type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" value="" />
                 </div>
                 <span class="sapnphoto">點擊頭像預覽及修改</span>
@@ -92,15 +116,15 @@
         <div class="display">
             @{
                 if(Model.Gender=="1"){
-                                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" />
-                                            <label>女</label>
-                                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="男" checked />
-                                            <label>男</label>
+                                                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" />
+                                                            <label>女</label>
+                                                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="男" checked />
+                                                            <label>男</label>
                 }else{
-                                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" checked />
-                                            <label>女</label>
-                                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="男"  />
-                                            <label>男</label>
+                                                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="女" checked />
+                                                            <label>女</label>
+                                                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="男"  />
+                                                            <label>男</label>
                     }
                 }
 
@@ -115,11 +139,11 @@
                     string st;
                     st = Convert.ToDateTime(Model.Birthday).ToString("yyyy-MM-dd");
                   
-                                    <input id="birthid" type="date" class="date" name="Birthday" value="@st"/>
+                                                    <input id="birthid" type="date" class="date" name="Birthday" value="@st"/>
               
                 }
                 else{
-                                     <input id="birthid" type="date" class="date" name="Birthday" value=""/>
+                                                     <input id="birthid" type="date" class="date" name="Birthday" value=""/>
                 }
             
             }
@@ -144,7 +168,8 @@
         <div class="dashed"></div>
 
         <div class="display">
-                <input type="submit" class="enter" value="修改" id="submitid" />
+                    <input type="submit" class="enter" value="修改" id="submitid"  />
+
         </div>
             </div>
         </div>
@@ -154,6 +179,7 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+        
         <script src="~/js/NormalMemberAddress/taiwan_districts.js"></script>
         <script type="text/javascript">
 

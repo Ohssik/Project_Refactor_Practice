@@ -61,6 +61,7 @@
         <img class="Shopcardcover" src="~/images/Customer/Shopcard/Test/shopcover.png" />
     </section>
 </section>
+
 <section class="ShowClassdisplay">
     <div class="ShowClassregion">
         @{
@@ -78,7 +79,7 @@
                                 {
                                     @if (item2.IsForSale == 1)
                                     {
-                                        <div class="productitem CursorPointer" data-bs-toggle="modal" data-bs-target="#OptionModal">
+                                        <div class="productitem CursorPointer" id="Prod @item2.Fid" data-bs-toggle="modal" data-bs-target="#OptionModal">
                                             <div class="PhotoandName">
                                                 <img src="~/images/@item2.Photo">
                                                 <p>@item2.ProductName</p>
@@ -128,7 +129,7 @@
                                 {
                                     @if (item2.IsForSale == 1)
                                     {
-                                        <div class="productitem CursorPointer" data-bs-toggle="modal" data-bs-target="#OptionModal">
+                                        <div class="productitem CursorPointer" id="Prod @item2.Fid" data-bs-toggle="modal" data-bs-target="#OptionModal">
                                             <div class="PhotoandName">
                                                 <img src="~/images/@item2.Photo">
                                                 <p>@item2.ProductName</p>
@@ -178,7 +179,7 @@
                                 {
                                     @if (item2.IsForSale == 1)
                                     {
-                                        <div class="productitem CursorPointer" data-bs-toggle="modal" data-bs-target="#OptionModal">
+                                        <div class="productitem CursorPointer" id="Prod @item2.Fid" data-bs-toggle="modal" data-bs-target="#OptionModal">
                                             <div class="PhotoandName">
                                                 <img src="~/images/@item2.Photo">
                                                 <p>@item2.ProductName</p>
@@ -214,37 +215,89 @@
     </div>
 </section>
 
-<!-- Modal -->
-<div class="modal fade" id="OptionModal" tabindex="-1" aria-labelledby="OptionModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="OptionModalLabel">標題</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="OptionDisplayArea">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+<!-- FormArea -->
+<form asp-controller="" asp-action="" method="post" enctype="multipart/form-data">
+    <input type="text" name="BFid" id="BFid" value="@Model[0].BusinessMemberDetailList[0].Fid" />
+    <input type="text" name="PFid" id="PFid" value="無變化" />
+    <div style="height:500px;width:500px;background-color:aqua;"></div>
+    <!-- Modal -->
+    <div class="modal fade" id="OptionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h2 class="ModalTitle" id="ProductTitle">標題</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body" id="OptionDisplayArea">
+                    <img id="ProductPhoto" class="ProductPhoto" src="~/images/Customer/Mainpage/shibaLogo_row2.png" />
+                    <p class="OptionGroupTitle"><span class="NeedChoose">✱</span>尺寸</p>
+                    <div class="OptionsArea">
+                        <div class="Optiondiv"><p>大大大大大大</p><p>大大大大大大</p></div>
+                        <div class="Optiondiv"><p>大大大大大大</p><p>大大大大大大</p></div>
+                        <div class="Optiondiv"><p>大大大大大大</p><p>大大大大大大</p></div>
+                        <div class="Optiondiv"><p>大大大大大大</p><p>大大大大大大</p></div>
+                    </div>
+                    <p class="OptionGroupTitle"><span class="NeedChoose">✱</span>尺寸</p>
+                    <div class="OptionsArea">
+                        <div class="Optiondiv"><p>大大大大大大</p><p>大大大大大大</p></div>
+                        <div class="Optiondiv"><p>大大大大大大</p><p>大大大大大大</p></div>
+                        <div class="Optiondiv"><p>大大大大大大</p><p>大大大大大大</p></div>
+                        <div class="Optiondiv"><p>大大大大大大</p><p>大大大大大大</p></div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="DisplayColumn">
+                        <p class="TotalPrice">總金額：︁<span class="TotalPrice"> 60 </span>元</p>
+                        <div class="DisplayFlex">
+                            <div class="Minusbtn">-</div>
+                            <div class="Countbtn">99</div>
+                            <div class="Plusbtn">+</div>
+                        </div>
+                    </div>
+                    <button type="button" class="Submitbtn">加入購物車</button>
+                </div>
+
             </div>
         </div>
     </div>
-</div>
+</form>
+
 
 @section Scripts{
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        let Test = document.getElementById('OptionDisplayArea');
-        Test.addEventListener('click', () => getOptiondatas());
-        getOptiondatas();
-        async function getOptiondatas() {
-            const response = await fetch("@Url.Content("~/Home/CShowProductOption?PFid=1")");
-            const datas = await response.json();
-            Test.innerHTML = datas;
-            console.log(datas);
+        let OptionDisplayArea = document.getElementById('OptionDisplayArea');
+
+        @foreach (var item1 in Model[0].ProductClassList)
+        {
+            @if (item1.ProductsList.Count != 0)
+            {
+                @foreach (var item2 in item1.ProductsList)
+                {
+                    @if (item2.IsForSale == 1)
+                    {
+                        @:document.getElementById("Prod @(item2.Fid)").addEventListener("click", function () {
+                        @:document.getElementById("PFid").value=@(item2.Fid);
+                        @:document.getElementById("ProductTitle").innerHTML="@(item2.ProductName)";
+                        @:getOptiondatas();
+                        @:});
+                    }
+                }
+            }
         }
+
+            async function getOptiondatas() {
+                const response = await fetch("@Url.Content("~/Home/CShowProductOption?PFid=1")");
+                const datas = await response.json();
+                STRdatas = JSON.stringify(datas);
+                console.log(datas);
+                console.log(datas[0]);
+                console.log(datas[0].ProductBasicInfoList[0].fid);
+                //OptionDisplayArea.innerHTML += STRdatas;
+            }
     </script>
 }
 
