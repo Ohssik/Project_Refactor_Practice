@@ -10,18 +10,32 @@
         .row{
             width:50%;
             margin:10px auto;
+            /*border: 0.5px solid gray*/
+            background-color:rgb(254,249,226);
+            border-radius:15px;
         }
 
         .col-md-4{
-            margin:0 auto;
-        }
-
-        .col-md-4>div{
             margin:10px auto;
+            width:60%;
+            text-align:center;
         }
-
+        .col-md-4>hr{
+            
+            /*width:95%;*/
+            margin:20px 0;
+            border: 1px solid rgb(213,213,213)
+        }
+        .col-md-4>div{
+            margin:10px;            
+        }
+        
         .col-md-4 button{
             margin-top:10px;
+        }
+
+        #CouponCode{
+             /*padding-right:30px;*/
         }
     </style>
 }
@@ -33,10 +47,14 @@
     <div class="col-md-4">
         
         <div class="form-group">
-                <h3 asp-for="Account" class="control-label">請輸入優惠券代碼：</h3>
+                <h3 asp-for="Account" class="control-label">優惠券兌換專區</h3>
         </div>
-        <div class="form-group">            
-            <input type="text" name="CouponCode" class="form-control" />
+        <hr>
+        <div class="form-group">
+            <p class="control-label">請在下面輸入兌換代碼</p>
+        </div>
+        <div class="form-group" id="CouponCode">
+                <input type="text" name="CouponCode" class="form-control" />
             <button class="btn btn-secondary">submit</button>
         </div>   
             

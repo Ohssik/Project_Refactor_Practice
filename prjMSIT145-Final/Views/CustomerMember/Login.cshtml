@@ -100,6 +100,9 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         $(function(){
             let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
@@ -130,6 +133,7 @@
 
                         $('[name=txtAccount]').val('');
                         $('[name=txtEmail]').val('');
+                        alert('發信成功');
                         sendMail.hide();
 
                     }
