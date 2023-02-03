@@ -6,6 +6,7 @@ namespace prjMSIT145_Final.Models
     public partial class ViewShowFullOrder
     {
         public int OrderFid { get; set; }
+        public int? Fid { get; set; }
         public int? NFid { get; set; }
         public int? BFid { get; set; }
         public string? BMemberName { get; set; }

@@ -1,10 +1,12 @@
-﻿@model prjMSIT145_Final.ViewModel.COrderListViewModel
+﻿@model prjMSIT145_Final.ViewModels.COrderDetialViewModel
 
 @{
     ViewData["Title"] = "ListInfo";
 }
 @section Styles{
     <style>
+
+        
 
         .div1 {
             margin: 5px auto;
@@ -55,6 +57,8 @@
             font-size: 10px;
         }
 
+        
+
         .leftDiv_infoDiv {
             height: 40px;
             box-sizing: border-box;
@@ -65,6 +69,13 @@
             width: 150px;
             font-size: 10px;
             border-radius: 5px;
+        }
+
+        .rightDiv_rightSpan {
+            width: 709px;
+            font-size: 10px;
+            border-radius: 5px;
+            text-align:right;
         }
 
         .leftDiv_StateSpan {
@@ -78,6 +89,11 @@
 
         .bottomBorder {
             border-bottom: 1px solid lightgray;
+            
+        }
+        .topBorder {
+            
+            border-top: 1px solid lightgray;
         }
 
         .leftDiv_Rate {
@@ -180,17 +196,15 @@
             background-color: white;
         }
 
-        .bodyBackgroundColor {
-            /* background-color: rgb(212, 218, 204); */
-            background-color: rgb(236, 236, 236);
-        }
+        
 
         .card_Guide_FontColor {
             color: #595757;
         }
 
-        * {
-            color: #595757;
+        
+        p,span{
+            font-size:14px;
         }
     </style>
 }
@@ -199,30 +213,29 @@
 
 
 
-<div class="bodyBackgroundColor">
+    
+
+<div >
     <div class="div1 cardBackgroundColor">
         <!-- 左邊 -->
-        <div class="leftArea" id="DivTest">
-            <input type="hidden" name="OrderFid" value="1" />
+  
+        <div class="leftArea">
             <!-- 店家全區 -->
             <div class="flex bottomBorder">
                 <div class="storeImg"></div>
-                <div class="spanFont">
-                    <p>店家名稱:好蒿喝茶</p>
-                    <p>連絡電話:0212345678</p>
-                    <p>店家地址:台北市大安區復興南路</p>
+                <div class="spanFont ">
+                    <p>店家名稱:@Model.BMemberName</p>
+                    <p>連絡電話:@Model.BMemberPhone</p>
+                    <p>店家地址:@Model.Address</p>
                 </div>
-
+                
             </div>
-            <!-- <div class="leftPickUpNum">
-                    <div>取餐號 - 1234</div>
-                </div> -->
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
                 <div class="leftDiv_leftSpan ">
                     <span>訂單狀態</span>
                 </div>
-                <div class="leftDiv_rightSpan legtDiv_StateSpan">
-                    <span>訂單完成</span>
+                <div class="leftDiv_rightSpan legtDiv_StateSpan ">
+                    <span>@Model.OrderState</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -230,7 +243,7 @@
                     <span>取餐時間</span>
                 </div>
                 <div class="leftDiv_rightSpan legtDiv_StateSpan">
-                    <span name="time1" id="time1">2022-11-02 13:20</span>
+                    <span name="time1" id="time1">@Convert.ToString(Model.PickUpDate).Substring(0,9) @Model.PickUpTime</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -238,7 +251,7 @@
                     <span>付款金額</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>$90</span>
+                    <span>$@Model.TotalAmount</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -246,7 +259,7 @@
                     <span>付款方式</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>現金</span>
+                    <span>@Model.PayTermCatId</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -254,23 +267,29 @@
                     <span>取餐方式</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>自取</span>
+                    <span>@Model.PickUpType</span>
                 </div>
             </div>
+            
+            
+                
+            
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
                 <div class="leftDiv_leftSpan">
                     <span>取餐人</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>柯燈</span>
+                    <span>@Model.PickUpPerson</span>
                 </div>
             </div>
+           
+            
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
                 <div class="leftDiv_leftSpan">
                     <span>聯絡電話</span>
                 </div>
                 <div class="leftDiv_rightSpan">
-                    <span>0922885566</span>
+                    <span>@Model.PickUpPersonPhone</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter leftDiv_infoDiv">
@@ -290,65 +309,48 @@
                 <textarea class="leftDiv_Rate cardBorderColor" name="" id="rateArea"></textarea>
                 <input type="submit" value="送出評論" />
             </div>
-
+           
         </div>
+        
         <!-- 右邊 -->
         <div class="rightDiv rightDiv_display">
-            <div class="rightItemDiv margin itemCard_padding_margin button_Icon_Guide_BackGroundColor">
+        @foreach(var item in Model.items){
+            <div class="rightItemDiv margin itemCard_padding_margin button_Icon_Guide_BackGroundColor" id="AdivBody">
+                
                 <!-- *餐點資訊,依實際點選內容增加span -->
-                <h6>餐點名稱</h6>
+                    <h6>@item.ProductName</h6>
                 <div class="flexAndItemsCenter displayBetween ">
                     <div>
                         <span id="itemDetailFont" class="spanFont">
-                            <span><span>紅茶</span> /</span>
-                            <span><span>M</span> /</span>
-                            <span><span>半糖</span> /</span>
-                            <span><span>少冰</span> /</span>
-                            <span><span>$10</span> /</span>
-                            <span><span>x3</span> </span>
+                             @foreach(var item2 in item.OptionName)
+                             {
+                                <span><span>@item2</span> /</span>  
+                             }
+                                <span><span>$@item.OptionAmount</span> /</span>
+                                <span><span>@item.Qty 份</span> </span>
                         </span>
                     </div>
                 </div>
             </div>
-
-            <div class="rightItemDiv margin itemCard_padding_margin button_Icon_Guide_BackGroundColor">
-                <!-- *餐點資訊,依實際點選內容增加span -->
-                <h6>餐點名稱</h6>
-                <div class="flexAndItemsCenter displayBetween ">
-                    <div>
-                        <span id="itemDetailFont" class="spanFont">
-                            <span><span>綠茶</span> /</span>
-                            <span><span>L</span> /</span>
-                            <span><span>正常糖</span> /</span>
-                            <span><span>去冰</span> /</span>
-                            <span><span>$20</span> /</span>
-                            <span><span>x1</span> </span>
-                        </span>
-                    </div>
+            }
+             <div class="flexAndItemsCenter topBorder leftDiv_infoDiv">
+                <div class="leftDiv_leftSpan">
+                    <span>應付金額</span>
                 </div>
-            </div>
-            <div class="rightItemDiv margin itemCard_padding_margin button_Icon_Guide_BackGroundColor">
-                <!-- *餐點資訊,依實際點選內容增加span -->
-                <h6>餐點名稱</h6>
-                <div class="flexAndItemsCenter displayBetween ">
-                    <div>
-                        <span id="itemDetailFont" class="spanFont">
-                            <span><span>紅茶</span> /</span>
-                            <span><span>L</span> /</span>
-                            <span><span>正常糖</span> /</span>
-                            <span><span>少冰</span> /</span>
-                            <span><span>$20</span> /</span>
-                            <span><span>x2</span> </span>
-                        </span>
-                    </div>
+                <div class="rightDiv_rightSpan">
+                    <span>$@Model.TotalAmount</span>
                 </div>
-            </div>
+                    
+             </div>
         </div>
     </div>
 </div>
 
 @section Scripts{
     <script>
+
+        
+
 
         let check = true;
         for (let i = 1; i <= 5; i++) {
@@ -395,22 +397,7 @@
             }
         }
 
-        //const selTest = document.getElementById('DivTest');
-        //console.log(selTest);
-
-        //loadDetail()
-
-        //async function loadDetail(orderid){
-        //    const response = await fetch(`@Url.Content("~/OrderDetial/ListInfoApi/?orderid=${orderid}")`)
-        //    const data = await response.json();
-        //    data.forEach(function(item, index){
-        //        const option = item.items;
-
-        //    selTest.innerHTML = join("");
-
-        //    });
-        //};
-
+        
 
     </script>
     }
