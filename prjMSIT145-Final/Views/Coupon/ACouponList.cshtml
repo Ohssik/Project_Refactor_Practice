@@ -66,7 +66,7 @@
                                     @{
                                         if (item.IsUsed > 0)
                                         {
-                                                                 @:V
+                                                                                                 @:V
                                         }
                                     }
                                 </td>
@@ -80,7 +80,7 @@
                                     @Html.DisplayFor(modelItem => item.NmemberID)
                                 </td>
                                 <td>
-                                    <button class="btn btn-info btn-circle" data-bs-toggle="modal" data-bs-target="#addModal">
+                                    <button name="btnUpdate" class="btn btn-info btn-circle" data-bs-target="#addModal">
                                         <i class="fas fa-info-circle"></i>
                                     </button>
                                     <button class="btn btn-danger btn-circle">
@@ -143,6 +143,12 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>        
             $('.nav-item').eq(3).addClass('active').siblings().removeClass('active');
+        let addModal = new bootstrap.Modal(document.getElementById('addModal'), {
+            keyboard: false
+        });
+        $('[name=btnUpdate]').click(function(){
+            addModal.show();
+        });
         $('#buttonAdd').click(function(){
             clearData();
             $('#IsUsed').val(0);
@@ -170,11 +176,14 @@
                     dataType:"json",
                     success: function (msg) {
                         //console.log(`msg=${msg}`);
-                        if (msg == 1)
+                        if (msg == 1){
                             alert("修改成功");
+                            addModal.hide();
+                            location.reload();
+                        }
+                            
                     }
-                }).done(function (data) {
-                    
+                }).done(function (data) {                    
                     clearData();
                 })
 
@@ -196,8 +205,12 @@
                     },
                     dataType: "json"
                 }).done(function (data) {
-                    if(data==1)
-                        alert("新增成功")
+                    if(data==1){
+                        alert("新增成功");
+                        addModal.hide();
+                        location.reload();
+                    }
+                        
                     
                     clearData();
                 })
@@ -205,9 +218,9 @@
             }
 
             //$('#addModal').modal('hide');
-            let setTimeoutID=setTimeout(()=>{
-                location.reload();
-            },1000);
+            //let setTimeoutID=setTimeout(()=>{
+            //    location.reload();
+            //},1000);
             
         })
 
@@ -242,12 +255,13 @@
                 
                 }).done(function (data) {
                     alert("刪除成功");
-                    
+                    addModal.hide();
+                    location.reload();
                 });
 
-                let setTimeoutID = setTimeout(() => {
-                    location.reload();
-                }, 500);
+                //let setTimeoutID = setTimeout(() => {
+                //    location.reload();
+                //}, 500);
             }else
                 return false;
         });

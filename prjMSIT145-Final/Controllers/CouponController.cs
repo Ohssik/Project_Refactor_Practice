@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
@@ -138,12 +139,19 @@ namespace prjMSIT145_Final.Controllers
                     newCoup.IsUsed = cac.IsUsed;
                     newCoup.CouponCode=Guid.NewGuid().ToString().Substring(0,10);
                     _context.Coupons.Add(newCoup);
+                    _context.SaveChanges();
                     if (cac.NmemberID!=null)
                     {
                         Coupon2NormalMember c2n = new Coupon2NormalMember();
                                                         
                         c2n.MemberId = cac.NmemberID;
-                        c2n.CouponId=cac.Fid;
+
+                        int fid = 1;
+                        var lastCoup = _context.Coupons.OrderByDescending(c => c.Fid).FirstOrDefault();
+                        if (lastCoup != null)
+                            fid=lastCoup.Fid;
+
+                        c2n.CouponId=fid;
                         _context.Coupon2NormalMembers.Add(c2n);                            
 
                     }
@@ -178,7 +186,59 @@ namespace prjMSIT145_Final.Controllers
 
         public IActionResult CCouponExchange()
         {
-            return View();
+            int memberId = 0;
+            List<CACouponViewModel> list=new List<CACouponViewModel>();
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                NormalMember user = JsonConvert.DeserializeObject<NormalMember>(json);
+                if (user != null)
+                {
+                    memberId = user.Fid;
+                    var coupons = from c2n in _context.Coupon2NormalMembers
+                                  join coup in  _context.Coupons on c2n.CouponId equals coup.Fid
+                                  into cGroup
+                                  from c in cGroup.DefaultIfEmpty()
+                                  where c2n.MemberId==memberId && c.IsUsed==1
+                                  select new
+                                  {
+                                      c2n.CouponId,
+                                      c.Title,
+                                      c.Price,
+                                      c.Memo
+
+                                  };
+                    foreach(var c in coupons)
+                    {
+                        CACouponViewModel cac = new CACouponViewModel();
+                        cac.Fid = (int)c.CouponId;
+                        cac.Title = c.Title;
+                        cac.Price = c.Price;
+                        cac.Memo = c.Memo;
+                        cac.NmemberID = memberId;
+                        list.Add(cac);
+                    }
+
+                }
+            }
+            return View(list.AsEnumerable());
+        }
+        public IActionResult CSimpleLogin(CLoginViewModel login)
+        {
+            string result = "0";
+            NormalMember x = _context.NormalMembers.FirstOrDefault(t => t.Phone.Equals(login.txtAccount) && t.Password.Equals(login.txtPassword));
+            if (x != null)
+            {
+                if (x.IsSuspensed == 0)
+                {
+                    string json = JsonConvert.SerializeObject(x);
+                    HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json);
+                    result = "1";
+                }
+                else
+                    result = "-1";
+            }
+            return Content(result);
         }
     }
 }

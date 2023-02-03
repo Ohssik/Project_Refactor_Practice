@@ -96,7 +96,11 @@
         //            document.getElementById("alink").innerHTML = '<li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content("~/images/Customer/Navigation/person 32x32.png")"/><p>&emsp;會員中心</p></a></li><li><a id="loginout" href="">登出</a></li>';
         //}
         //};
+        
+            
             $(window).scrollTop(1);
+            let scrollTop = $(window).scrollTop();
+            console.log(`scrollTop_lay=${scrollTop}`);
             if ($(window).scrollTop() > 0) {
                 $('.Copyright').removeClass('fixed_footer');
 
@@ -104,7 +108,7 @@
                 $('.Copyright').addClass('fixed_footer');
 
             }
-            $(window).scrollTop(0);
+            //$(window).scrollTop(0);
 
         //document.getElementById("aloginout").addEventListener("click",()=>{
         //    if(confirm("確定要登出?")==false){
