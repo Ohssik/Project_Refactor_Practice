@@ -3,13 +3,33 @@
 }
 @section Styles{
 		<style>
+			/*Azure的logo*/
+			.azureLogo{
+				width: 50px;
+				height: 40px;
+				position: fixed;
+				bottom: 80px;
+				right: 150px;
+			}
+
+				.azureLogo img{
+					width: 100%;
+					height: 100%;
+				}
+
+			.azure{
+				position: fixed;
+				right: 450px;
+				top: 20px;
+				margin-top: 50px;
+			}
 			/* 腳掌印 */
 			.logoDiv {
 				width: 50px;
 				height: 40px;
 				position: fixed;
-				bottom: 20px;
-				right: 40px;
+				bottom: 80px;
+				right: 60px;
 			}
 
 				.logoDiv img {
@@ -47,11 +67,15 @@
 			}
 			/* 對話框 */
 			.msgDiv {
-				min-height: 480px;
-				max-height: 480px;
+				min-height: 700px;
+				max-height: 700px;
 				max-width: 380px;
 				min-width: 380px;
 				/*background-color: antiquewhite;*/
+			}
+
+			#collapseExample{
+				margin-top:50px;
 			}
 			/* 平台 */
 			.serviceDiv {
@@ -119,6 +143,19 @@
 		</style>
 	}
 <body>
+	@*Azure機器人*@
+	<div class="azureLogo"
+		 data-bs-toggle="collapse"
+		 data-bs-target="#azure"
+         aria-expanded="false"
+         aria-controls="collapseExample">
+		<img src="@Url.Content("~/images/Problem/AzureBot.png")" alt="" />
+	</div>
+	<div class="azure collapse" id="azure">
+		<div class="card card-body ">
+			<iframe src='https://webchat.botframework.com/embed/msit14501daily-bot?s=sBZOKBWuvAU.FFRe_6cBbQ1LCnnx85WWa4mkmpEfJqewEceFCfWMPMw' style='min-width: 400px;max-width:400px; min-height: 740px;'></iframe>
+		</div>
+	</div>
 	<!-- 要把collapse 加入id=collapseExample的class裡 -->
 	<!-- 手動刻 -->
 	<div class="logoDiv"
@@ -129,12 +166,12 @@
 		<img src="images/DailyBot.png" alt="" />
 	</div>
 
-	<div class="logo" id="collapseExample">
+	<div class="logo collapse" id="collapseExample">
 		<div class="card card-body ">
 			<!-- 以下自己刻 -->
 			<div class="msgDiv scroll">
 				<div class="display serviceDiv">
-					<div class="imgDiv"><img src="images/dailyLogo.png" /></div>
+					<div class="imgDiv"><img src="~/images/Problem/dailyLogo.png" /></div>
 					<div id="serviceMsg">
 						你好，請輸入問題，以便為您解答!
 						<div class="qDiv">
@@ -158,7 +195,7 @@
 
 			<div class="txtDiv display">
 				<input type="text" id="txt" />
-				<button id="btnSubmit" type="button"><img src="images/send.png" /></button>
+				<button id="btnSubmit" type="button"><img src="~/images/Problem/send.png" /></button>
 			</div>
 		</div>
 	</div>
@@ -202,18 +239,18 @@
 				const data = await request.json();
 				console.log(data.answer)
 				fragForService = `<div class="display serviceDiv">
-													 <div class="imgDiv"><img src="images/dailyLogo.png" /></div>
-													 <div id="serviceMsg">
-															${data.answer}
-													</div>
-												</div>
-											</div>`;
+											 <div class="imgDiv"><img src="~/images/Problem/dailyLogo.png" /></div>
+												 <div id="serviceMsg">
+													${data.answer}
+										    	</div>
+											</div>
+										</div>`;
 
 				fragForUser =
 					`<div class="display userDiv">
-										<div id="userMsg">${txt.value}</div>
-										<div class="imgDiv"><img src="images/user.png" alt="" /></div>
-									  </div>`;
+							<div id="userMsg">${txt.value}</div>
+								<div class="imgDiv"><img src="~/images/Problem/user.png" alt="" /></div>
+					</div>`;
 
 				resultDiv.innerHTML += fragForUser;
 				resultDiv.innerHTML += fragForService;
