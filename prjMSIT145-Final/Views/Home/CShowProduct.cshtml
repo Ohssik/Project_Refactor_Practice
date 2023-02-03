@@ -4,28 +4,55 @@
     ViewData["Title"] = "CShowProduct";
 }
 @section Styles{
+    <link href="~/css/Customer_css/CBSonlyClass.css" rel="stylesheet" />
     <link href="~/css/Customer_css/CShowProduct.css" rel="stylesheet" />
 }
 <section class="shopinfocard">
     <div class="shopinfoarea">
         <div class="shopinfo">
-            <P>@Model[0].BusinessMemberDetailList[0].MemberName</P>
+            <img class="Shoplogo" src="~/images/Customer/Shopcard/Test/circlelogo.png" />
+            <div>
+                <div class="shoptitle">@Model[0].BusinessMemberDetailList[0].MemberName</div>
+                <div class="infoblock">
+                    <div class="InfoArea">店家資訊</div>
+                    <div class="InfoArea">
+                        <img src="~/images/Customer/ShowProduct/Ystar 16x16.png" />
+                        <img src="~/images/Customer/ShowProduct/Ystar 16x16.png" />
+                        <img src="~/images/Customer/ShowProduct/Ystar 16x16.png" />
+                        <img src="~/images/Customer/ShowProduct/Ystar 16x16.png" />
+                        <img src="~/images/Customer/ShowProduct/Nstar 16x16.png" />
+                        <p>4.2 (6)</p>
+                    </div>
+                    <div class="InfoArea"><img src="~/images/Customer/ShowProduct/opentime 20x20.png" /><p>@Model[0].BusinessMemberDetailList[0].OpenTime ~ @Model[0].BusinessMemberDetailList[0].CloseTime</p></div>
+                    <div class="InfoArea"><img src="~/images/Customer/ShowProduct/phone 20x20.png" /><p>@Model[0].BusinessMemberDetailList[0].Phone</p></div>
+                    <div class="InfoArea"><img src="~/images/Customer/ShowProduct/address 20x20.png" /><p>@Model[0].BusinessMemberDetailList[0].Address</p></div>
+                    <div class="InfoArea"><img src="~/images/Customer/ShowProduct/paymentterm 20x20.png" /><p>@Model[0].PaymenttermList[0].PaymentType</p></div>
+                </div>
+            </div>
         </div>
         <div class="btnbar">
-            <div class="icon">
-                <img src="~/images/Customer/ShowProduct/discount 24x24.png" />
+            <div class="iconwrap">
+                <div class="icon">
+                    <img src="~/images/Customer/ShowProduct/discount 24x24.png" />
+                </div>
                 <div class="btntext">優惠</div>
             </div>
-            <div class="icon">
-                <img src="~/images/Customer/ShowProduct/take.png" />
+            <div class="iconwrap">
+                <div class="icon">
+                    <img src="~/images/Customer/ShowProduct/take 24x24.png" />
+                </div>
                 <div class="btntext">怎取餐</div>
             </div>
-            <div class="icon">
-                <img src="~/images/Customer/ShowProduct/search.png" />
+            <div class="iconwrap">
+                <div class="icon">
+                    <img src="~/images/Customer/ShowProduct/search 24x24.png" />
+                </div>
                 <div class="btntext">找商品</div>
             </div>
-            <div class="icon">
-                <img src="~/images/Customer/ShowProduct/add.png" />
+            <div class="iconwrap">
+                <div class="icon">
+                    <img src="~/images/Customer/ShowProduct/add 24x24.png" />
+                </div>
                 <div class="btntext">揪團</div>
             </div>
         </div>
@@ -35,28 +62,189 @@
     </section>
 </section>
 <section class="ShowClassdisplay">
-    @{
-        foreach (var item1 in Model[0].ProductClassList)
-        {
-            <div class="productclass">
-                <h1 class="classtitle">@item1.CategoryName</h1>
-                @foreach (var item2 in item1.ProductsList)
+    <div class="ShowClassregion">
+        @{
+            foreach (var item1 in Model[0].ProductClassList)
+            {
+                if (item1.ProductsList.Count != 0)
                 {
-                    <div class="productitem">
-                        <p class="producttext">@item2.ProductName</p>
-                        <form action="/Home/AddtoCart" method="post">
-                            <input type="text" name="A" value="A" hidden />
-                            <button type="submit">購買</button>
-                        </form>
-                        <p class="producttext">$@Convert.ToInt32(item2.UnitPrice)</p>
-                    </div>
+                    if (item1.PlayregionID == 1)
+                    {
+                        <div class="productclass">
+                            <h1 class="classtitle">@item1.CategoryName</h1>
+                            @foreach (var item2 in item1.ProductsList)
+                            {
+                                @if (item2.IsForSale != 0)
+                                {
+                                    @if (item2.IsForSale == 1)
+                                    {
+                                        <div class="productitem CursorPointer" data-bs-toggle="modal" data-bs-target="#OptionModal">
+                                            <div class="PhotoandName">
+                                                <img src="~/images/@item2.Photo">
+                                                <p>@item2.ProductName</p>
+                                                @if (@item2.OrdetAmount > 0)
+                                                {
+                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                }
+                                            </div>
+                                            <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="productitem CursorDefault">
+                                            <div class="PhotoandName">
+                                                <img src="~/images/@item2.Photo">
+                                                <p>@item2.ProductName</p>
+                                                @if (@item2.OrdetAmount > 0)
+                                                {
+                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                }
+                                            </div>
+                                            <p class="productNotsale">停售</p>
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                    }
                 }
-            </div>
+            }
         }
-    }
+    </div>
+    <div class="ShowClassregion">
+        @{
+            foreach (var item1 in Model[0].ProductClassList)
+            {
+                if (item1.ProductsList.Count != 0)
+                {
+                    if (item1.PlayregionID == 2)
+                    {
+                        <div class="productclass">
+                            <h1 class="classtitle">@item1.CategoryName</h1>
+                            @foreach (var item2 in item1.ProductsList)
+                            {
+                                @if (item2.IsForSale != 0)
+                                {
+                                    @if (item2.IsForSale == 1)
+                                    {
+                                        <div class="productitem CursorPointer" data-bs-toggle="modal" data-bs-target="#OptionModal">
+                                            <div class="PhotoandName">
+                                                <img src="~/images/@item2.Photo">
+                                                <p>@item2.ProductName</p>
+                                                @if (@item2.OrdetAmount > 0)
+                                                {
+                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                }
+                                            </div>
+                                            <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="productitem CursorDefault">
+                                            <div class="PhotoandName">
+                                                <img src="~/images/@item2.Photo">
+                                                <p>@item2.ProductName</p>
+                                                @if (@item2.OrdetAmount > 0)
+                                                {
+                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                }
+                                            </div>
+                                            <p class="productNotsale">停售</p>
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                    }
+                }
+            }
+        }
+    </div>
+    <div class="ShowClassregion">
+        @{
+            foreach (var item1 in Model[0].ProductClassList)
+            {
+                if (item1.ProductsList.Count != 0)
+                {
+                    if (item1.PlayregionID == 3)
+                    {
+                        <div class="productclass">
+                            <h1 class="classtitle">@item1.CategoryName</h1>
+                            @foreach (var item2 in item1.ProductsList)
+                            {
+                                @if (item2.IsForSale != 0)
+                                {
+                                    @if (item2.IsForSale == 1)
+                                    {
+                                        <div class="productitem CursorPointer" data-bs-toggle="modal" data-bs-target="#OptionModal">
+                                            <div class="PhotoandName">
+                                                <img src="~/images/@item2.Photo">
+                                                <p>@item2.ProductName</p>
+                                                @if (@item2.OrdetAmount > 0)
+                                                {
+                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                }
+                                            </div>
+                                            <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="productitem CursorDefault">
+                                            <div class="PhotoandName">
+                                                <img src="~/images/@item2.Photo">
+                                                <p>@item2.ProductName</p>
+                                                @if (@item2.OrdetAmount > 0)
+                                                {
+                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                }
+                                            </div>
+                                            <p class="productNotsale">停售</p>
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                    }
+                }
+            }
+        }
+    </div>
 </section>
-@section Scripts{
-    <script>
 
+<!-- Modal -->
+<div class="modal fade" id="OptionModal" tabindex="-1" aria-labelledby="OptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="OptionModalLabel">標題</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="OptionDisplayArea">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let Test = document.getElementById('OptionDisplayArea');
+        Test.addEventListener('click', () => getOptiondatas());
+        getOptiondatas();
+        async function getOptiondatas() {
+            const response = await fetch("@Url.Content("~/Home/CShowProductOption?PFid=1")");
+            const datas = await response.json();
+            Test.innerHTML = datas;
+            console.log(datas);
+        }
     </script>
 }
+

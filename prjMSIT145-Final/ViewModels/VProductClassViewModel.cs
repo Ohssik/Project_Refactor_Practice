@@ -7,5 +7,6 @@ namespace prjMSIT145_Final.ViewModels
         public int Fid { get; set; }
         public string? CategoryName { get; set; }
         public List<VProductsViewModel>? ProductsList { get; set; }
+        public int PlayregionID { get; set; }
     }
 }

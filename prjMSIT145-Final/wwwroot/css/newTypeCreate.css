@@ -3,6 +3,7 @@
 }
 .box{
     box-sizing: border-box;
+    width:50%;
 }
 .mainDiv {
 width:70%;
@@ -13,22 +14,29 @@ border-left: 2px dashed gray;
 }
 .leftTxt{
 border: none;
+background-color:transparent;
+width:250px;
 /* width:70%; */
 }
 .leftmargin{
 margin: 20px 10px 5px 30px;
 }
-.textArea{
-min-width: 100%;
-min-height: 50px;
-}
+    .leftmargin hr{
+        margin-top:30px;
+    }
+    .textArea {
+        min-width: 100%;
+        min-height: 50px;
+        background-color:transparent;
+    }
 .rigthDivMargin{
 margin:20px 0 5px 5px;
 }
 .rightDiv{
-width:50%;
+width:70%;
 padding: 0 0 0 10px;
+
 }
 .rightDiv table{
-width:100%
+width:100%;
 }

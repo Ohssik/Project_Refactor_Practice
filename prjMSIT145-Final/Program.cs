@@ -7,29 +7,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 
-//builder.Services.AddDbContext<ispanMsit145shibaContext>(
-// options => options.UseSqlServer(
-// builder.Configuration.GetConnectionString("ispanMsit145shibaConnection")
-//));
-
-
-
+builder.Services.AddDbContext<ispanMsit145shibaContext>(
+ options => options.UseSqlServer(
+ builder.Configuration.GetConnectionString("ispanMsit145shibaconnection")
+));
 
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(op =>
 {
-
     op.IdleTimeout = TimeSpan.FromMinutes(20);
     op.Cookie.HttpOnly = true;
     op.Cookie.IsEssential = true;
 });
 
 
-builder.Services.AddDbContext<ispanMsit145shibaContext>(
- options => options.UseSqlServer(
- builder.Configuration.GetConnectionString("ispanMsit145shibaconnection")
-));
+//builder.Services.AddDbContext<ispanMsit145shibaContext>(
+// options => options.UseSqlServer(
+// builder.Configuration.GetConnectionString("ispanMsit145shibaconnection")
+//));
 
 
 var app = builder.Build();

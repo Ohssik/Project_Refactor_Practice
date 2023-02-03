@@ -7,6 +7,6 @@
         public decimal? UnitPrice { get; set; }
         public int? IsForSale { get; set; }
         public string? Photo { get; set; }
-        public int OrdetAmount { get; set; }
+        public int? OrdetAmount { get;set; }
     }
 }

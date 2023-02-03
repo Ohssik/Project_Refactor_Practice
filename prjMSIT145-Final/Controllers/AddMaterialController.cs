@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace prjMSIT145_Final.Controllers
 {
-	public class AddMaterialController : Controller
+    public class AddMaterialController : Controller
 	{
 		ispanMsit145shibaContext _context;
 		IWebHostEnvironment _host;
@@ -16,9 +16,12 @@ namespace prjMSIT145_Final.Controllers
 		}
 
 		public IActionResult BList()
-		{
-			return View();
-		}
+        {
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+                return View();
+
+            return RedirectToAction("Blogin", "BusinessMember");
+        }
 		public ActionResult BSearch(string keyword)
 		{
 			string json = "";
@@ -79,24 +82,24 @@ namespace prjMSIT145_Final.Controllers
 			return RedirectToAction("BList");
 		}
 		
-		public ActionResult BEdit(int? id)
-		{
-			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-			BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-			var datas = _context.ViewOptionsToGroups.Where(o => o.Fid == id);
-			CProductOptionViewModel vm = new CProductOptionViewModel();
-			foreach (var d in datas)
-			{
-				vm.Fid = d.Fid;
-				vm.BFid = member.Fid;
-				vm.UnitPrice = Math.Round(Convert.ToDouble(d.UnitPrice));
-				vm.OptionGroupFid = d.OptionGroupFid;
-				vm.OptionName = d.OptionName;
-				vm.OptionGroupName = d.OptionGroupName;
-			}
-			return View(vm);
-		}
-		[HttpPost]
+		//public ActionResult BEdit(int? id)
+		//{
+		//	string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+		//	BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+		//	var datas = _context.ViewOptionsToGroups.Where(o => o.Fid == id);
+		//	CProductOptionViewModel vm = new CProductOptionViewModel();
+		//	foreach (var d in datas)
+		//	{
+		//		vm.Fid = d.Fid;
+		//		vm.BFid = member.Fid;
+		//		vm.UnitPrice = Math.Round(Convert.ToDouble(d.UnitPrice));
+		//		vm.OptionGroupFid = d.OptionGroupFid;
+		//		vm.OptionName = d.OptionName;
+		//		vm.OptionGroupName = d.OptionGroupName;
+		//	}
+		//	return View(vm);
+		//}
+		//[HttpPost]
 		public ActionResult BEdit(CProductOptionViewModel vm)
 		{
 			ProductOptionGroup optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName);

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Text.Json;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -15,6 +16,15 @@
             margin: 0px;
             padding: 0px;
         }
+        
+
+        .fixed_footer{
+            position:fixed;
+            bottom:0px;
+            left: 0px;
+            right: 0px;
+        }
+       
     </style>
     
     @await RenderSectionAsync("Styles", required: false)
@@ -26,15 +36,38 @@
                 <li><a asp-area="" asp-controller="Home" asp-action="CIndex">訂購</a></li>
                 <li><a asp-area="" asp-controller="Order" asp-action="CCartList">購物車</a></li>
                 <li><a asp-area="" asp-controller="OrderDetial" asp-action="List">訂單</a></li>
-                <li><a asp-area="" asp-controller="Home" asp-action="CIndex">兌換專區</a></li>
+                <li><a asp-area="" asp-controller="Coupon" asp-action="CCouponExchange">兌換專區</a></li>
                 <li><a asp-area="" asp-controller="Home" asp-action="CIndex">客服信箱</a></li>
             </ul>
         </nav>
         <a class="Navigationbar_Logo" asp-area="" asp-controller="Home" asp-action="CIndex"><img class="Navigationbar_Logo" src="~/images/Customer/Navigation/shibaLogo_row1.png" /></a>
         <nav>
-            <ul class="Navigationbar_Member">
-                <li><a asp-area="" asp-controller="CustomerMember" asp-action="Login"><img src="~/images/Customer/Navigation/person 32x32.png" /><p>&emsp;登入 / 註冊</p></a></li>
+             
+            <ul id="alink" class="Navigationbar_Member">
+                @{
+                    if(Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)){
+                        string  json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
+                        NormalMember x = JsonSerializer.Deserialize<NormalMember>(json);
+
+                        //<li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content("~/images/Customer/Navigation/person 32x32.png")"/><p>&emsp;會員中心</p></a></li><li><a id="loginout" href="">登出</a></li>
+                        //<li><a href=@Url.Action("Edit","CustomerMember")><img src=`@Url.Content("~/images/${@x.MemberPhotoFile}")` /><p>&emsp;會員中心</p></a></li>
+                        //<li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content(`~/images/${@x.MemberPhotoFile}`)" /><p>&emsp;會員中心</p></a></li>
+                        //<li><a href=@Url.Action("Edit","CustomerMember")><img src="~/images/@x.MemberPhotoFile" style="width:55px" /><p>&emsp;會員中心</p></a></li>
+                          
+                         <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content($"~/images/{x.MemberPhotoFile}")" style="width:55px;border-radius:30px"/><p>&emsp;會員中心</p></a></li>
+                            //<li><a id="aloginout" href=@Url.Action("Loginout","CustomerMember", null,new {onclick="return confirm('確定要刪除嗎?')"})><p>登出</p></a></li>
+
+                          <li><p style="margin-top:28px;">@Html.ActionLink("登出", "Loginout","CustomerMember", null,new {onclick="return confirm('確定要登出嗎?')"})</p></li>
+                          
+                    }else{
+                            <li><a href=@Url.Action("Login","CustomerMember")><img src="@Url.Content("~/images/Customer/Navigation/person 32x32.png")" /><p>&emsp;登入 / 註冊</p></a></li>
+                    }
+                }
+               
             </ul>
+           @* <ul class="Navigationbar_Member">
+                <li><a asp-area="" asp-controller="CustomerMember" asp-action="Edit"><img src="~/images/Customer/Navigation/person 32x32.png" /><p>&emsp;會員 / 編輯</p></a></li>
+            </ul>*@
         </nav>
     </header>
 
@@ -47,8 +80,39 @@
         <p><a asp-area="" asp-controller="Home" asp-action="CIndex">&copy;&ensp;2023&ensp;ShibaDaily&ensp;臺灣</a></p>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>*@
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+    @*<script src="~/js/site.js" asp-append-version="true"></script>*@
+    
+    <script>
+        $(function(){
+        //{
+        //    if(Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)){
+        //            document.getElementById("alink").innerHTML = '<li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content("~/images/Customer/Navigation/person 32x32.png")"/><p>&emsp;會員中心</p></a></li><li><a id="loginout" href="">登出</a></li>';
+        //}
+        //};
+            $(window).scrollTop(1);
+            if ($(window).scrollTop() > 0) {
+                $('.Copyright').removeClass('fixed_footer');
+
+            } else {
+                $('.Copyright').addClass('fixed_footer');
+
+            }
+            $(window).scrollTop(0);
+
+        //document.getElementById("aloginout").addEventListener("click",()=>{
+        //    if(confirm("確定要登出?")==false){
+        //        return;
+        //    }
+                
+        //});
+        
+
+            
+
+        });
+
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

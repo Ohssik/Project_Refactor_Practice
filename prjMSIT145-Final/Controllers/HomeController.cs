@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Packaging.Signing;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
 using System.Diagnostics;
@@ -30,7 +31,6 @@ namespace prjMSIT145_Final.Controllers
                 OpenTime = BM.OpenTime,
                 CloseTime = BM.CloseTime,
                 Address = BM.Address,
-                MemberAccount=BM.MemberAccount,
                 IsSuspensed=BM.IsSuspensed,
                 Gps=BM.Gps,
                 IsOpened=BM.IsOpened,
@@ -46,7 +46,6 @@ namespace prjMSIT145_Final.Controllers
                     OpenTime = Convert.ToString(item.OpenTime).Substring(0,5),
                     CloseTime = Convert.ToString(item.CloseTime).Substring(0, 5),
                     Address = item.Address,
-                    MemberAccount = item.MemberAccount,
                     IsSuspensed = item.IsSuspensed,
                     Gps = item.Gps,
                     IsOpened = item.IsOpened,
@@ -58,7 +57,7 @@ namespace prjMSIT145_Final.Controllers
             return View(CUtility.BusinessMemberList);
         }
 
-        public IActionResult CShowProduct(int? BFid,int? OrderFid)
+        public IActionResult CShowProduct(int? BFid,int? NFid,int? OrderFid)
         {
             if (BFid == null)
                 return RedirectToAction("CIndex");
@@ -97,6 +96,10 @@ namespace prjMSIT145_Final.Controllers
                     BannerImgFileName1 = item.BannerImgFileName1,
                 });
             }
+            if (BusinessMemberDetailList.Count==0)
+                return RedirectToAction("CIndex");
+            if (BusinessMemberDetailList[0].IsSuspensed!=0 || BusinessMemberDetailList[0].IsOpened!=1)
+                return RedirectToAction("CIndex");
             CUtility.BusinessMemberDetailList = BusinessMemberDetailList;
             #endregion
             #region 取得該店家付款方式資訊至集合
@@ -111,59 +114,70 @@ namespace prjMSIT145_Final.Controllers
                                BFid=P.BFid,
                                PaymentType=A.PaymentType,
                            };
-            int ListCount = Paymenttermdatas.ToList().Count;
-            int IDcheck = 0;
-            int IDconfirm = 0;
-            int temp = 0;
             string PayWay = "";
-            for (int i = 0; i < ListCount + 1; i++)
+            int ListCount = Paymenttermdatas.ToList().Count;
+            if (ListCount != 0)
             {
-                if (i == ListCount)
+                int IDcheck = 0;
+                int IDconfirm = 0;
+                int temp = 0;
+                for (int i = 0; i < ListCount + 1; i++)
                 {
-                    if (i != IDcheck)
+                    if (i == ListCount)
                     {
-                        IDcheck = i;
-                        if (IDconfirm != temp)
+                        if (i != IDcheck)
                         {
-                            PaymenttermList.Add(new VPaymenttermViewModel
+                            IDcheck = i;
+                            if (IDconfirm != temp)
                             {
-                                BFid = IDconfirm,
-                                PaymentType = PayWay
-                            });
-                            temp = IDconfirm;
-                            PayWay = "";
+                                PaymenttermList.Add(new VPaymenttermViewModel
+                                {
+                                    BFid = IDconfirm,
+                                    PaymentType = PayWay
+                                });
+                                temp = IDconfirm;
+                                PayWay = "";
+                            }
+                            IDconfirm = IDcheck;
+                            PayWay = Paymenttermdatas.ToList()[i - 1].PaymentType;
                         }
-                        IDconfirm = IDcheck;
-                        PayWay = Paymenttermdatas.ToList()[i - 1].PaymentType;
+                        else
+                        {
+                            PayWay += "、" + Paymenttermdatas.ToList()[i - 1].PaymentType;
+                        }
                     }
                     else
                     {
-                        PayWay += "、" + Paymenttermdatas.ToList()[i - 1].PaymentType;
-                    }
-                }
-                else
-                {
-                    if (Paymenttermdatas.ToList()[i].BFid != IDcheck)
-                    {
-                        IDcheck = (int)Paymenttermdatas.ToList()[i].BFid;
-                        if (IDconfirm != temp)
+                        if (Paymenttermdatas.ToList()[i].BFid != IDcheck)
                         {
-                            PaymenttermList.Add(new VPaymenttermViewModel
+                            IDcheck = (int)Paymenttermdatas.ToList()[i].BFid;
+                            if (IDconfirm != temp)
                             {
-                                BFid = IDconfirm,
-                                PaymentType = PayWay,
-                            });
-                            temp = IDconfirm;
-                            PayWay = "";
+                                PaymenttermList.Add(new VPaymenttermViewModel
+                                {
+                                    BFid = IDconfirm,
+                                    PaymentType = PayWay,
+                                });
+                                temp = IDconfirm;
+                                PayWay = "";
+                            }
+                            IDconfirm = IDcheck;
+                            PayWay = Paymenttermdatas.ToList()[i].PaymentType;
                         }
-                        IDconfirm = IDcheck;
-                        PayWay = Paymenttermdatas.ToList()[i].PaymentType;
-                    }
-                    else
-                    {
-                        PayWay += "、" + Paymenttermdatas.ToList()[i].PaymentType;
+                        else
+                        {
+                            PayWay += "、" + Paymenttermdatas.ToList()[i].PaymentType;
+                        }
                     }
                 }
+            }
+            else
+            {
+                PaymenttermList.Add(new VPaymenttermViewModel
+                {
+                    BFid = BFid,
+                    PaymentType = "店家未提供付款方式",
+                });
             }
             CUtility.PaymenttermList = PaymenttermList;
             #endregion
@@ -209,15 +223,18 @@ namespace prjMSIT145_Final.Controllers
                     ProductsList.Clear();
                     foreach (var item2 in Productdatas)
                     {
-                        ProductsList.Add(new VProductsViewModel
+                        if (item2.IsForSale != 0)
                         {
-                            Fid = item2.Fid,
-                            ProductName = item2.ProductName,
-                            UnitPrice = Convert.ToInt32(item2.UnitPrice),
-                            IsForSale = item2.IsForSale,
-                            Photo = item2.Photo,
-                            OrdetAmount = 0,
-                        });
+                            ProductsList.Add(new VProductsViewModel
+                            {
+                                Fid = item2.Fid,
+                                ProductName = item2.ProductName,
+                                UnitPrice = Convert.ToInt32(item2.UnitPrice),
+                                IsForSale = item2.IsForSale,
+                                Photo = item2.Photo,
+                                OrdetAmount = 0,
+                            });
+                        }
                     }
                 }
                 #endregion
@@ -230,19 +247,30 @@ namespace prjMSIT145_Final.Controllers
             }
             CUtility.ProductClassList = ProductClassList;
             #endregion
-            #region 判斷是否為加點
-            OrderFid = CUtility.OrdersID;
-            if (OrderFid != 0)
+            #region 判斷是否為加點，並計算各產品已點數量
+            if (OrderFid != 0 && OrderFid != null)
             {
-                var OrderItemTable = from D in _context.ViewOrderDetails
-                                     where D.OrderFid == OrderFid
+                var Orderdatas = from O in _context.Orders
+                                 where O.Fid == OrderFid
+                                 select new
+                                 {
+                                     OrderState = O.OrderState,
+                                 };
+                int OrderListCount = Orderdatas.ToList().Count;
+                if (OrderListCount == 0)
+                    return RedirectToAction("CIndex");
+                string isFinished = Orderdatas.ToList()[0].OrderState;
+                if (isFinished != "0")
+                    return RedirectToAction("CIndex");
+                var OrderItemdatas = from OI in _context.OrderItems
+                                     where OI.OrderFid == OrderFid
                                      select new
                                      {
-                                         ItemFid = D.ItemFid,
-                                         ProductFid = D.ProductFid,
-                                         Qty = D.Qty
+                                         Fid = OI.Fid,
+                                         ProductFid = OI.ProductFid,
+                                         Qty = OI.Qty
                                      };
-                var ReCount = from O in OrderItemTable.Distinct()
+                var ReCount = from O in OrderItemdatas.Distinct()
                               group O by O.ProductFid into G
                               select new
                               {
@@ -266,6 +294,41 @@ namespace prjMSIT145_Final.Controllers
                 }
             }
             #endregion
+            #region 判斷商品類別生成區域辨別碼
+            int regionlength_1 = 0;
+            int regionlength_2 = 0;
+            int regionlength_3 = 0;
+            foreach(var item in CUtility.ProductClassList)
+            {
+                if(regionlength_1 <= regionlength_2 && regionlength_1 <= regionlength_3)
+                {
+                    int tempLength = 0;
+                    if(item.ProductsList.Count!=0)
+                        tempLength += 52;
+                    tempLength += (item.ProductsList.Count * 60);
+                    regionlength_1 += tempLength;
+                    item.PlayregionID = 1;
+                }
+                else if(regionlength_2 < regionlength_1 && regionlength_2 <= regionlength_3)
+                {
+                    int tempLength = 0;
+                    if (item.ProductsList.Count != 0)
+                        tempLength += 52;
+                    tempLength += (item.ProductsList.Count * 60);
+                    regionlength_2 += tempLength;
+                    item.PlayregionID = 2;
+                }
+                else
+                {
+                    int tempLength = 0;
+                    if (item.ProductsList.Count != 0)
+                        tempLength += 52;
+                    tempLength += (item.ProductsList.Count * 60);
+                    regionlength_3 += tempLength;
+                    item.PlayregionID = 3;
+                }
+            }
+            #endregion
             List<VCUtilityViewModel> CUL= new List<VCUtilityViewModel>();
             CUL.Add(new VCUtilityViewModel
             {
@@ -275,6 +338,106 @@ namespace prjMSIT145_Final.Controllers
             });
             return View(CUL);
         }
+
+        public IActionResult CShowProductOption(int? PFid, int? NFid, int? OrderFid)
+        {
+            int BasePrice = 0; //根據點選配料變動
+            int BasePriceRecord = 0;
+            int TotalPrice = 0;
+            #region 取得點選產品的基礎資訊
+            List<VProductBasicInfoViewModel> ProductBasicInfoList= new List<VProductBasicInfoViewModel>();
+            var ProductInfodatas = from P in _context.Products
+                              where P.Fid == PFid
+                              select new
+                              {
+                                  Fid = P.Fid,
+                                  ProductName = P.ProductName,
+                                  UnitPrice = P.UnitPrice,
+                                  Memo=P.Memo,
+                                  Photo = P.Photo,
+                              };
+            foreach (var item in ProductInfodatas)
+            {
+                ProductBasicInfoList.Add(new VProductBasicInfoViewModel
+                {
+                    Fid = item.Fid,
+                    ProductName = item.ProductName,
+                    UnitPrice = item.UnitPrice,
+                    Memo = item.Memo,
+                    Photo = item.Photo,
+                });
+            }
+            CUtility.ProductBasicInfoList= ProductBasicInfoList;
+            #endregion
+            #region 取得商品配料類別資訊至集合
+            List<VOptionGroupViewModel> OptionGroupList = new List<VOptionGroupViewModel>();
+            var OptionGroupDatas = from P in _context.Products
+                                   join OTP in _context.OptionsToProducts on P.Fid equals OTP.ProductFid
+                                   join OG in _context.ProductOptionGroups on OTP.OptionGroupFid equals OG.Fid
+                                   where P.Fid == PFid
+                                   orderby P.Fid
+                                   select new
+                                   {
+                                       Fid= OG.Fid,
+                                       OptionGroupName= OG.OptionGroupName,
+                                       IsMultiple=OG.IsMultiple,
+                                   };
+            List<TOptionGroupTemp> OptionGroupTempList = new List<TOptionGroupTemp>();
+            foreach (var item in OptionGroupDatas)
+            {
+                OptionGroupTempList.Add(new TOptionGroupTemp
+                {
+                    Fid = item.Fid,
+                    OptionGroupName = item.OptionGroupName,
+                    IsMultiple = item.IsMultiple,
+                });
+            }
+            foreach (var item1 in OptionGroupTempList)
+            {
+                #region 取得商品內，各配料類別內之配料資訊至集合
+                List<VOptionViewModel> OptionList = new List<VOptionViewModel>();
+                for (int p = 0; p < OptionGroupTempList.Count; p++)
+                {
+                    var OptionTable = from O in _context.ProductOptions
+                                      where O.OptionGroupFid == item1.Fid
+                                      orderby O.Fid
+                                      select new
+                                      {
+                                          Fid = O.Fid,
+                                          OptionName = O.OptionName,
+                                          UnitPrice = O.UnitPrice,
+                                      };
+                    OptionList.Clear();
+                    foreach (var item2 in OptionTable)
+                    {
+                        OptionList.Add(new VOptionViewModel
+                        {
+                            Fid = item2.Fid,
+                            OptionName = item2.OptionName,
+                            UnitPrice = Convert.ToInt32(item2.UnitPrice),
+                        });
+                    }
+                }
+                #endregion
+                OptionGroupList.Add(new VOptionGroupViewModel
+                {
+                    Fid = item1.Fid,
+                    OptionGroupName = item1.OptionGroupName,
+                    IsMultiple = item1.IsMultiple,
+                    OptionList = OptionList
+                });
+            }
+            CUtility.OptionGroupList = OptionGroupList;
+            #endregion
+            List<VCUtilityViewModel> CUL = new List<VCUtilityViewModel>();
+            CUL.Add(new VCUtilityViewModel
+            {
+                ProductBasicInfoList = CUtility.ProductBasicInfoList,
+                OptionGroupList = CUtility.OptionGroupList,
+            });
+            return Json(CUL);
+        }
+
         [HttpPost]
         public IActionResult AddtoCart()
         {
@@ -328,7 +491,6 @@ namespace prjMSIT145_Final.Controllers
             #endregion
             return RedirectToAction("CIndex");
         }
-
 
         //-------------------------------------------------------------------------------------------------
         public IActionResult Privacy()

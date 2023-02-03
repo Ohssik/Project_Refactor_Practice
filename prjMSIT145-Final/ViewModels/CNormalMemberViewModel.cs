@@ -30,11 +30,13 @@ namespace prjMSIT145_Final.ViewModels
             get { return _member.Phone; }
             set { _member.Phone = value; }
         }
+      
         public string? Password
         {
             get { return _member.Password; }
             set { _member.Password = value; }
         }
+        
         public string? Gender
         {
             get { return _member.Gender; }

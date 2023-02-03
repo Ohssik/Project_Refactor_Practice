@@ -1,5 +1,5 @@
 .shopinfocard {
-    margin: 20px 0px 0px 0px;
+    margin: 30px 0px 0px 0px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,86 +14,131 @@
 
 .shopinfo {
     background-color: #FFFFFF;
-    width: 460px;
-    height: 180px;
-    border-radius: 10px 0px 0px 0px;
-    text-align: center;
-    padding: 10px;
+    width: 420px;
+    height: 220px;
+    border-radius: 20px 0px 0px 0px;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    border-left: solid 10px #9F4E27;
+    border-top: solid 10px #9F4E27;
+    border-right: solid 10px #9F4E27;
 }
 
+.shoptitle {
+    margin: 0px 0px 0px 10px;
+    font-family: monospace;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.Shoplogo {
+    width: 70px;
+    height: 70px;
+    clip-path: circle(50% at 50% 50%);
+    margin: 0px 15px 0px 10px;
+}
+
+.infoblock {
+    width: 350px;
+    height: 200px;
+}
+
+.InfoArea {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 7px 0px;
+    font-size: 18px;
+    margin-left: 10px;
+    font-family: monospace;
+}
+
+    .InfoArea p {
+        font-size: 18px;
+        margin-left: 10px;
+        font-family: ui-monospace;
+    }
+
+    .InfoArea img {
+        margin-left: 5px;
+    }
+
 .btnbar {
-    width: 450px;
-    height: 65px;
+    width: 420px;
+    height: 85px;
     background-color: #9F4E27;
     display: flex;
-    padding: 15px;
-    border-radius: 0px 0px 0px 10px;
+    justify-content: space-between;
+    padding: 5px 30px;
+    border-radius: 0px 0px 0px 20px;
+}
+
+.iconwrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .icon {
     width: 50px;
     height: 50px;
-    border-radius: 25px;
+    clip-path: circle(50% at 50% 50%);
     background-color: #FFFFFF;
-    margin: 0px 40px 0px 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
-    .icon:first-child {
-        margin: 0px 40px 0px 5px;
-    }
-
-    .icon:last-child {
-        margin: 0px 5px 0px 40px;
-    }
-
-    .icon img {
-        background-color: #FFFFFF;
-        margin: 12.5px 0px 0px 13px;
-    }
 
 .btntext {
     font-size: 14px;
     color: #FFFFFF;
-    margin-top: 13px;
+    margin-top: 5px;
     font-weight: bold;
-    text-align:center;
+    text-align: center;
 }
 
 
 .ADarea {
     background-color: #FFFFFF;
     width: 720px;
-    height: 295px;
-    border-radius: 0px 10px 10px 0px;
+    height: 365px;
+    border-radius: 0px 20px 20px 0px;
     margin: 0px 0px 0px 0px;
     overflow: hidden;
 }
 
     .ADarea img {
         width: 720px;
-        height: 295px;
+        height: 365px;
     }
 
 .ShowClassdisplay {
-    margin: 15px auto;
+    margin: 30px auto;
     width: 1200px;
     display: flex;
     justify-content: flex-start;
+    align-items: flex-start;
     flex-wrap: wrap;
 }
+
+.ShowClassregion {
+    margin: 0px 0px 0px 30px;
+}
+
+    .ShowClassregion:first-child {
+        margin: 0px 0px 0px 0px;
+    }
 
 .productclass {
     background-color: #FFFFFF;
     width: 370px;
     padding: 5px;
-    margin: 0px 0px 25px 30px;
+    margin: 0px 0px 25px 0px;
     border-radius: 5px;
     box-shadow: 3px 3px 5px #5a5555;
 }
-
-    .productclass:nth-child(3n+1) {
-        margin: 0px 0px 30px 0px;
-    }
 
 .classtitle {
     color: #9F4E27;
@@ -114,7 +159,55 @@
         border-bottom: none;
     }
 
+.PhotoandName {
+    display: flex;
+    justify-content: flex-start;
+    align-items:center;
+}
+
+    .PhotoandName img {
+        width:40px;
+        height:40px;
+    }
+
+    .PhotoandName p {
+        font-size: 20px;
+        font-weight: bold;
+        margin-left:10px;
+    }
+
+.AmountBall {
+    width: 25px;
+    height: 25px;
+    clip-path: circle(50% at 50% 50%);
+    background-color: #9F4E27;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    margin-left: 10px;
+    font-size: 16px;
+    font-family:Carlito;
+}
+
 .producttext {
     font-size: 20px;
     font-weight: bold;
+}
+
+.productNotsale {
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #595757;
+    padding: 5px;
+    border-radius: 5px;
+    color: #FFFFFF;
+}
+
+.CursorPointer {
+    cursor: pointer;
+}
+
+.CursorDefault {
+    cursor: default;
 }

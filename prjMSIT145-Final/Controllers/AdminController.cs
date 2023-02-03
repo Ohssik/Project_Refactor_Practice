@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using prjMSIT145_Final.Models;
@@ -8,7 +9,14 @@ using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Net.Mail;
 using System.Text.Json;
+using static NuGet.Packaging.PackagingConstants;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Data.SqlClient;
+using NuGet.Common;
+using Newtonsoft.Json.Linq;
+using System.Security.Policy;
 
 namespace prjMSIT145_Final.Controllers
 {
@@ -16,10 +24,12 @@ namespace prjMSIT145_Final.Controllers
     {
         private readonly ispanMsit145shibaContext _context;
         private readonly IWebHostEnvironment _host;
-        public AdminController(ispanMsit145shibaContext context, IWebHostEnvironment host)
+        private readonly IConfiguration _config;
+        public AdminController(ispanMsit145shibaContext context, IWebHostEnvironment host, IConfiguration config)
         {
             _context = context;
             _host=host;
+            _config=config;
         }
         public IActionResult Index()
         {
@@ -27,69 +37,43 @@ namespace prjMSIT145_Final.Controllers
         }
         public IActionResult sendAccountLockedNotice(string data)
         {
+            var DemoMailServer = _config["DemoMailServer:pwd"];
+
             if (!string.IsNullOrEmpty(data))
-            {
+            {                                                
                 CASendEmailViewModel mail=JsonConvert.DeserializeObject<CASendEmailViewModel>(data);
-                if (mail.memberType=="B")
+                if (mail != null)
                 {
-                    var user = _context.BusinessMembers.FirstOrDefault(t => t.Fid == mail.memberId);
-                    user.IsSuspensed = (int)mail.IsSuspensed;
+                    if (mail.memberType == "B")
+                    {
+                        var user = _context.BusinessMembers.FirstOrDefault(t => t.Fid == mail.memberId);
+                        user.IsSuspensed = (int)mail.IsSuspensed;
+                    }
+                    else if (mail.memberType == "N")
+                    {
+                        var user = _context.NormalMembers.FirstOrDefault(t => t.Fid == mail.memberId);
+                        user.IsSuspensed = (int)mail.IsSuspensed;
+                    }
+                    _context.SaveChanges();
+
+                    string changeType = (int)mail.IsSuspensed == 1 ? "停權" : "復權";
+                    string mailBody = $"您好：<br>您的帳戶已被{changeType}，若有問題請洽詢網站管理員。" +
+                        "<br><br>" +
+                        $"{changeType}原因：<br>" +
+                        mail.txtMessage +
+                        "<br><br>=====================================================================<br>" +
+                        "<br>此為系統通知，請勿直接回信，謝謝";
+
+                    string mailSubject = $"帳號{changeType}通知";
+
+                    string result = sendMail(mail.txtRecipient, mailBody, mailSubject);
+                    return Content(result);
                 }
-                else if (mail.memberType=="N")
-                {
-                    var user = _context.NormalMembers.FirstOrDefault(t => t.Fid == mail.memberId);
-                    user.IsSuspensed = (int)mail.IsSuspensed;
-                }
-                _context.SaveChanges();
-
-                MailMessage MyMail = new MailMessage();
-                MyMail.From = new MailAddress("日柴 <ShibaAdmin@msit145shiba.com.tw>", "日柴", System.Text.Encoding.UTF8);
-                //foreach(string receiver in ReceiveMail)
-                //{
-                //    MyMail.To.Add(receiver); //設定收件者Email
-                //}
-                MyMail.To.Add(mail.txtRecipient);                
-                //MyMail.Bcc.Add("jftoes@gmail.com,yrrek9120@gmail.com"); //加入密件副本的Mail
-
-                string changeType = (int)mail.IsSuspensed==1 ? "停權" : "復權";
-                MyMail.Subject = $"帳號{changeType}通知";
-
-                MyMail.Body = $"您好：<br>您的帳戶已被{changeType}，若有問題請洽詢網站管理員。" +
-                    "<br><br>" +
-                    $"{changeType}原因：<br>"+
-                    mail.txtMessage +
-                    "<br><br>=====================================================================<br>" +
-                    "<br>此為系統通知，請勿直接回信，謝謝"; //設定信件內容
-
-                MyMail.IsBodyHtml = true; //是否使用html格式
-                
-
-                SmtpClient MySMTP = new SmtpClient();
-
-                MySMTP.Credentials = new System.Net.NetworkCredential("b9809004@gapps.ntust.edu.tw", "Gknt824nut"); //這裡要填正確的帳號跟密碼
-                MySMTP.Host = "smtp.gmail.com"; //設定smtp Server
-
-                MySMTP.Port = 25;
-                MySMTP.EnableSsl = true; //gmail預設開啟驗證
-                
-                try
-                {
-                    MySMTP.Send(MyMail);
-
-                }
-                catch (Exception ex)
-                {
-                    return Content(ex.ToString());
-                }
-                finally
-                {
-                    MyMail.Dispose(); //釋放資源
-
-                }
+                                    
             }
             
             return NoContent();
-
+            
         }
         public IActionResult checkPwd(string account, string pwd)
         {
@@ -199,43 +183,80 @@ namespace prjMSIT145_Final.Controllers
         }
 
         public IActionResult ANormalMemberOrder(int? id)
-        {//todo 停權前發送email通知
+        {
             if (id == null)
                 return RedirectToAction("ANormalMemberDetails");
 
-            var orderDatas = from order in _context.ViewShowFullOrders
-                             join bm in _context.BusinessImgs on order.BFid equals bm.BFid
-                             join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
-                             join payTerm in _context.PaymentTermCategories on order.PayTermCatId equals payTerm.Fid
-                             where order.OrderFid == (int)id
-                             select new
-                             {
-                                 order.BMemberName,
-                                 order.BMemberPhone,
-                                 order.OrderISerialId,
-                                 order.PickUpDate,
-                                 order.PickUpPerson,
-                                 order.PickUpPersonPhone,
-                                 order.PickUpTime,
-                                 order.PickUpType,
-                                 order.PayTermCatId,
-                                 order.Memo,
-                                 order.TotalAmount,
-                                 order.ProductName,
-                                 order.Options,
-                                 order.SubTotal,
-                                 order.Qty,
-                                 order.OrderState,
-                                 bm.LogoImgFileName,
-                                 bAdd.Address,
-                                 payTerm.PaymentType
-                             };
+            //var orderDatas = from order in _context.ViewShowFullOrders
+            //                 join bm in _context.BusinessImgs on order.BFid equals bm.BFid
+            //                 join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
+            //                 join payTerm in _context.PaymentTermCategories on order.PayTermCatId equals payTerm.Fid
+            //                 where order.OrderFid == (int)id
+            //                 select new
+            //                 {
+            //                     order.BMemberName,
+            //                     order.BMemberPhone,
+            //                     order.OrderISerialId,
+            //                     order.PickUpDate,
+            //                     order.PickUpPerson,
+            //                     order.PickUpPersonPhone,
+            //                     order.PickUpTime,
+            //                     order.PickUpType,
+            //                     order.PayTermCatId,
+            //                     order.Memo,
+            //                     order.TotalAmount,
+            //                     order.ProductName,
+            //                     order.Options,
+            //                     order.SubTotal,
+            //                     order.Qty,
+            //                     order.OrderState,
+            //                     bm.LogoImgFileName,
+            //                     bAdd.Address,
+            //                     payTerm.PaymentType
+            //                 };
+
+            var orderDatas = from order in _context.Orders
+                              join f in _context.ViewShowFullOrders on order.Fid equals f.OrderFid
+                              into group7
+                              from g7 in group7.DefaultIfEmpty()
+                              join bm in _context.BusinessImgs on g7.BFid equals bm.Fid
+                              into group2
+                              from g2 in group2.DefaultIfEmpty()
+                              join b in _context.BusinessMembers on order.BFid equals b.Fid
+                              into group3
+                              from g3 in group3.DefaultIfEmpty()
+                              join pay in _context.PaymentTermCategories on order.PayTermCatId equals pay.Fid
+                              into group4
+                              from g4 in group4.DefaultIfEmpty()
+                              where order.Fid == (int)id
+                              select new
+                              {
+                                  g7.BMemberPhone,
+                                  g7.BMemberName,
+                                  order.OrderISerialId,
+                                  order.PickUpDate,
+                                  order.PickUpPerson,
+                                  order.PickUpPersonPhone,
+                                  order.PickUpTime,
+                                  order.PickUpType,
+                                  order.PayTermCatId,
+                                  order.Memo,
+                                  order.TotalAmount,
+                                  g7.ProductName,
+                                  order.OrderState,
+                                  g7.Options,
+                                  g7.Qty,
+                                  g7.SubTotal,
+                                  g2.LogoImgFileName,
+                                  g3.Address,
+                                  g4.PaymentType
+                              };
 
             if (orderDatas != null)
             {
                 CANormalMemberOrderViewModel n = new CANormalMemberOrderViewModel();
                 List<CANormalMemberOrderDetailViewModel> items = new List<CANormalMemberOrderDetailViewModel>();
-                foreach (var vsf in orderDatas)
+                foreach (var vsf in orderDatas.Distinct())
                 {
                     CANormalMemberOrderDetailViewModel detail = new CANormalMemberOrderDetailViewModel();
                     detail.productName=vsf.ProductName;
@@ -243,20 +264,20 @@ namespace prjMSIT145_Final.Controllers
                     items.Add(detail);
                 }
                 n.details = items;
-                n.BMemberName = orderDatas.ToList()[0].BMemberName;
-                n.BMemberPhone = orderDatas.ToList()[0].BMemberPhone;
-                n.OrderISerialId = orderDatas.ToList()[0].OrderISerialId;
-                n.PickUpDate = orderDatas.ToList()[0].PickUpDate;
-                n.PickUpTime = orderDatas.ToList()[0].PickUpTime;
-                n.TotalAmount = orderDatas.ToList()[0].TotalAmount;
-                n.PickUpType = orderDatas.ToList()[0].PickUpType;
-                n.PickUpPerson = orderDatas.ToList()[0].PickUpPerson;
-                n.PickUpPersonPhone = orderDatas.ToList()[0].PickUpPersonPhone;
-                n.Memo = orderDatas.ToList()[0].Memo;
-                n.businessImgFile = orderDatas.ToList()[0].LogoImgFileName;
-                n.businessAddress = orderDatas.ToList()[0].Address;
-                n.PayTermCatName = orderDatas.ToList()[0].PaymentType;
-                n.OrderState = orderDatas.ToList()[0].OrderState;
+                n.BMemberName = orderDatas.Distinct().ToList()[0].BMemberName;
+                n.BMemberPhone = orderDatas.Distinct().ToList()[0].BMemberPhone;
+                n.OrderISerialId = orderDatas.Distinct().ToList()[0].OrderISerialId;
+                n.PickUpDate = orderDatas.Distinct().ToList()[0].PickUpDate;
+                n.PickUpTime = orderDatas.Distinct().ToList()[0].PickUpTime;
+                n.TotalAmount = orderDatas.Distinct().ToList()[0].TotalAmount;
+                n.PickUpType = orderDatas.Distinct().ToList()[0].PickUpType;
+                n.PickUpPerson = orderDatas.Distinct().ToList()[0].PickUpPerson;
+                n.PickUpPersonPhone = orderDatas.Distinct().ToList()[0].PickUpPersonPhone;
+                n.Memo = orderDatas.Distinct().ToList()[0].Memo;
+                n.businessImgFile = orderDatas.Distinct().ToList()[0].LogoImgFileName;
+                n.businessAddress = orderDatas.Distinct().ToList()[0].Address;
+                n.PayTermCatName = orderDatas.Distinct().ToList()[0].PaymentType;
+                n.OrderState = orderDatas.Distinct().ToList()[0].OrderState;
 
                 return View(n);
             }
@@ -333,16 +354,57 @@ namespace prjMSIT145_Final.Controllers
             if (id == null)
                 return RedirectToAction("ABusinessMemberDetails");
 
-            var orderDatas = from order in _context.ViewShowFullOrders
-                             join bm in _context.BusinessImgs on order.BFid equals bm.BFid
-                             join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
-                             join payTerm in _context.PaymentTermCategories on order.PayTermCatId equals payTerm.Fid
+            //var orderDatas = from order in _context.ViewShowFullOrders
+            //                 join bm in _context.BusinessImgs on order.BFid equals bm.BFid
+            //                 join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
+            //                 join payTerm in _context.PaymentTermCategories on order.PayTermCatId equals payTerm.Fid
+            //                 join nm in _context.NormalMembers on order.NFid equals nm.Fid
+            //                 where order.OrderFid == (int)id
+            //                 select new
+            //                 {
+            //                     order.BMemberName,
+            //                     order.BMemberPhone,
+            //                     order.OrderISerialId,
+            //                     order.PickUpDate,
+            //                     order.PickUpPerson,
+            //                     order.PickUpPersonPhone,
+            //                     order.PickUpTime,
+            //                     order.PickUpType,
+            //                     order.PayTermCatId,
+            //                     order.Memo,
+            //                     order.TotalAmount,
+            //                     order.ProductName,
+            //                     order.Options,
+            //                     order.SubTotal,
+            //                     order.Qty,
+            //                     order.OrderState,
+            //                     bm.LogoImgFileName,
+            //                     bAdd.Address,
+            //                     payTerm.PaymentType,
+            //                     nm.MemberPhotoFile
+            //                 };
+
+            var orderDatas = from order in _context.Orders
+                             join f in _context.ViewShowFullOrders on order.Fid equals f.OrderFid
+                             into group7
+                             from g7 in group7.DefaultIfEmpty()
+                             join bm in _context.BusinessImgs on g7.BFid equals bm.Fid
+                             into group2
+                             from g2 in group2.DefaultIfEmpty()
+                             join b in _context.BusinessMembers on order.BFid equals b.Fid
+                             into group3
+                             from g3 in group3.DefaultIfEmpty()
+                             join pay in _context.PaymentTermCategories on order.PayTermCatId equals pay.Fid
+                             into group4
+                             from g4 in group4.DefaultIfEmpty()
                              join nm in _context.NormalMembers on order.NFid equals nm.Fid
-                             where order.OrderFid == (int)id
+                             into group5
+                             from g5 in group5.DefaultIfEmpty()
+                             where order.Fid == (int)id
                              select new
                              {
-                                 order.BMemberName,
-                                 order.BMemberPhone,
+                                 g7.BMemberPhone,
+                                 g7.BMemberName,
                                  order.OrderISerialId,
                                  order.PickUpDate,
                                  order.PickUpPerson,
@@ -352,22 +414,22 @@ namespace prjMSIT145_Final.Controllers
                                  order.PayTermCatId,
                                  order.Memo,
                                  order.TotalAmount,
-                                 order.ProductName,
-                                 order.Options,
-                                 order.SubTotal,
-                                 order.Qty,
+                                 g7.ProductName,
                                  order.OrderState,
-                                 bm.LogoImgFileName,
-                                 bAdd.Address,
-                                 payTerm.PaymentType,
-                                 nm.MemberPhotoFile
+                                 g7.Options,
+                                 g7.Qty,
+                                 g7.SubTotal,
+                                 g2.LogoImgFileName,
+                                 g3.Address,
+                                 g4.PaymentType,
+                                 g5.MemberPhotoFile
                              };
 
             if (orderDatas != null)
             {
                 CANormalMemberOrderViewModel n = new CANormalMemberOrderViewModel();
                 List<CANormalMemberOrderDetailViewModel> items = new List<CANormalMemberOrderDetailViewModel>();
-                foreach (var vsf in orderDatas)
+                foreach (var vsf in orderDatas.Distinct())
                 {
                     CANormalMemberOrderDetailViewModel detail = new CANormalMemberOrderDetailViewModel();
                     detail.productName=vsf.ProductName;
@@ -375,21 +437,21 @@ namespace prjMSIT145_Final.Controllers
                     items.Add(detail);
                 }
                 n.details = items;
-                n.BMemberName = orderDatas.ToList()[0].BMemberName;
-                n.BMemberPhone = orderDatas.ToList()[0].BMemberPhone;
-                n.OrderISerialId = orderDatas.ToList()[0].OrderISerialId;
-                n.PickUpDate = orderDatas.ToList()[0].PickUpDate;
-                n.PickUpTime = orderDatas.ToList()[0].PickUpTime;
-                n.TotalAmount = orderDatas.ToList()[0].TotalAmount;
-                n.PickUpType = orderDatas.ToList()[0].PickUpType;
-                n.PickUpPerson = orderDatas.ToList()[0].PickUpPerson;
-                n.PickUpPersonPhone = orderDatas.ToList()[0].PickUpPersonPhone;
-                n.Memo = orderDatas.ToList()[0].Memo;
-                n.businessImgFile = orderDatas.ToList()[0].LogoImgFileName;
-                n.businessAddress = orderDatas.ToList()[0].Address;
+                n.BMemberName = orderDatas.Distinct().ToList()[0].BMemberName;
+                n.BMemberPhone = orderDatas.Distinct().ToList()[0].BMemberPhone;
+                n.OrderISerialId = orderDatas.Distinct().ToList()[0].OrderISerialId;
+                n.PickUpDate = orderDatas.Distinct().ToList()[0].PickUpDate;
+                n.PickUpTime = orderDatas.Distinct().ToList()[0].PickUpTime;
+                n.TotalAmount = orderDatas.Distinct().ToList()[0].TotalAmount;
+                n.PickUpType = orderDatas.Distinct().ToList()[0].PickUpType;
+                n.PickUpPerson = orderDatas.Distinct().ToList()[0].PickUpPerson;
+                n.PickUpPersonPhone = orderDatas.Distinct().ToList()[0].PickUpPersonPhone;
+                n.Memo = orderDatas.Distinct().ToList()[0].Memo;
+                n.businessImgFile = orderDatas.Distinct().ToList()[0].LogoImgFileName;
+                n.businessAddress = orderDatas.Distinct().ToList()[0].Address;
                 n.PayTermCatName = orderDatas.ToList()[0].PaymentType;
-                n.OrderState = orderDatas.ToList()[0].OrderState;
-                n.normalImgFile= orderDatas.ToList()[0].MemberPhotoFile;
+                n.OrderState = orderDatas.Distinct().ToList()[0].OrderState;
+                n.normalImgFile= orderDatas.Distinct().ToList()[0].MemberPhotoFile;
 
                 return View(n);
             }
@@ -570,7 +632,230 @@ namespace prjMSIT145_Final.Controllers
             return Json(returnAd);
             
         }
+        public IActionResult ASetting()
+        {
+            CASettingViewModel admin = new CASettingViewModel();
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_ADMIN))
+            {
+                string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_ADMIN);
+                AdminMember member = System.Text.Json.JsonSerializer.Deserialize<AdminMember>(json);
+                if (member != null)
+                    admin.admin = member;
+            }
+            
+            return View(admin);
+        }
+        
+        public IActionResult saveAdminPwd(string data)
+        {
+            string result = "0";
+            
+            if (!string.IsNullOrEmpty(data))
+            {
+                CASettingViewModel cas = JsonConvert.DeserializeObject<CASettingViewModel>(data);
 
+                AdminMember updateItem = _context.AdminMembers.FirstOrDefault(a => a.Fid == cas.Fid);
+                updateItem.Password = cas.txtPassword;           
+
+                _context.SaveChanges();
+                result = "1";
+            }
+
+            return Content(result);
+        }
+        public IActionResult AForgotAdminPwd(string data)
+        {
+            string result = "0";
+            if (!string.IsNullOrEmpty(data))
+            {
+                CForgetPwdViewModel fm = JsonConvert.DeserializeObject<CForgetPwdViewModel>(data);
+                if (fm != null)
+                {
+                    //一般會員
+                    if (fm.memberType == "N")
+                    {                        
+                        var user = _context.NormalMembers.FirstOrDefault(u => u.Phone == fm.txtAccount && u.Email==fm.txtEmail);
+                        if (user != null)
+                        {                            
+                            var connStr= _config["ConnectionStrings:localconnection"];
+                            string token = Guid.NewGuid().ToString();
+                            string url = $"https://localhost:7266/Admin/ResetPwd?token={token}&acc={fm.txtAccount}";
+                            //todo 這裡之後換成EF
+                            #region 這裡之後換成EF
+                            using (SqlConnection conn = new SqlConnection(connStr))
+                            {
+                                conn.Open();
+                                using (SqlCommand cmd = new SqlCommand())
+                                {
+                                    cmd.Connection = conn;
+                                    cmd.CommandText = "insert into ChangeRequestPassword(Token,Account,Email) values(@Token,@Account,@Email)";
+                                    cmd.Parameters.AddWithValue("Token", token);
+                                    cmd.Parameters.AddWithValue("Account",fm.txtAccount);
+                                    cmd.Parameters.AddWithValue("Email",fm.txtEmail);
+                                    try
+                                    {
+                                        cmd.ExecuteNonQuery();
+                                        result = "success";
+                                    }
+                                    catch(Exception err)
+                                    {
+                                        result = $"error:{err.Message}";
+                                    }
+                                }
+                            }
+                            #endregion
+                            string mailBody = $"您好：<br>我們收到了您發送的忘記密碼通知。<br>" +
+                                                $"請確認是您本人發出的請求後，請在<label style='color:red'><b>10分鐘內</b></label>點擊以下網址連結到修改密碼的頁面後輸入新密碼。" +
+                                                "<br>如果您沒有發出請求，則可忽略此信。<br><br>" +
+                                                $"<a href='{url}' target='_blank'>★★★修改密碼★★★</a><br><br>" +
+                                                "<hr>" +
+                                                "<br><br>此為系統通知，請勿直接回信，謝謝";
+                            string mailSubject = $"修改密碼通知";
+                            result +=" "+sendMail(fm.txtEmail, mailBody, mailSubject);
+                            result = "1";
+                        }
+                    }
+                    //todo 網站管理者
+                    else if (fm.memberType == "A")
+                    {
+
+                    }
+                    //else if (fm.memberType == "B")
+                    //{
+
+                    //}
+                    
+
+                }
+            }
+            
+            return Content(result);
+        }
+        public IActionResult ResetPwd(string token,string acc)
+        {
+            var connStr = _config["ConnectionStrings:localconnection"];
+            string expire = "";
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "select top(1) Expire from ChangeRequestPassword where Account=@Account order by Expire desc";
+                    cmd.Parameters.AddWithValue("Account", acc);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        expire = reader["Expire"].ToString();
+                    }
+                    reader.Close();
+                }
+            }
+
+            if (expire != "")
+            {
+                if (DateTime.Now > Convert.ToDateTime(expire))
+                {
+                    return RedirectToAction("ALogin");
+                }
+                if (HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_EXPIRE))
+                {
+                    HttpContext.Session.Remove(CDictionary.SK_RESETPWD_EXPIRE);                    
+                }
+                HttpContext.Session.SetString(CDictionary.SK_RESETPWD_EXPIRE, expire);
+            }
+
+            return View();
+        }
+        public IActionResult submitResetPwd(CResetPwdViewModel reset)
+        {
+            string result = "";
+            if (reset.txtPassword == reset.txtConfirmPwd)
+            {
+                var connStr = _config["ConnectionStrings:localconnection"];
+                string expire= "";
+                if (HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_EXPIRE))
+                {
+                    expire = HttpContext.Session.GetString(CDictionary.SK_RESETPWD_EXPIRE);
+                }
+
+                if (expire != "")
+                {
+                    if (DateTime.Now < Convert.ToDateTime(expire))
+                    {
+                        NormalMember user = _context.NormalMembers.FirstOrDefault(u => u.Phone == reset.txtAccount);
+                        if (user != null)
+                        {
+                            user.Password = reset.txtPassword;
+                            _context.SaveChanges();
+
+                            using (SqlConnection conn = new SqlConnection(connStr))
+                            {
+                                conn.Open();
+                                using (SqlCommand cmd = new SqlCommand())
+                                {
+                                    cmd.Connection = conn;
+                                    cmd.CommandText = "delete from ChangeRequestPassword where Expire<=@Expire";
+                                    cmd.Parameters.AddWithValue("Expire", Convert.ToDateTime(expire));
+                                    try
+                                    {
+                                        cmd.ExecuteNonQuery();
+                                        result += "success";
+                                    }
+                                    catch(Exception err)
+                                    {
+                                        result += $"error:{err.Message}";
+                                    }
+                                    
+                                }
+                            }                            
+                        }
+                    }
+                    HttpContext.Session.Remove(CDictionary.SK_RESETPWD_EXPIRE);
+                }
+
+            }
+            
+            return Content(result);
+        }
+        private string sendMail(string email,string mailBody,string mailSubject)
+        {
+            string result = "";
+            var DemoMailServer = _config["DemoMailServer:pwd"];
+            MailMessage MyMail = new MailMessage();
+            MyMail.From = new MailAddress("ShibaAdmin@msit145shiba.com.tw", "日柴", System.Text.Encoding.UTF8);
+            MyMail.To.Add(email);
+            
+            MyMail.Subject = mailSubject;            
+            MyMail.Body = mailBody; //設定信件內容
+
+            MyMail.IsBodyHtml = true; //是否使用html格式
+
+
+            SmtpClient MySMTP = new SmtpClient();
+            MySMTP.Credentials = new System.Net.NetworkCredential("b9809004@gapps.ntust.edu.tw", DemoMailServer); //這裡要填正確的帳號跟密碼
+            MySMTP.Host = "smtp.gmail.com"; //設定smtp Server
+            MySMTP.Port = 25;
+            MySMTP.EnableSsl = true; //gmail預設開啟驗證
+
+            try
+            {
+                MySMTP.Send(MyMail);
+                //result = "success";
+                return "1";
+            }
+            catch (Exception ex)
+            {
+                //return $"error:{ex.ToString()}";
+                return "-1";
+            }
+            finally
+            {
+                MyMail.Dispose(); //釋放資源
+
+            }
+            
+        }
 
     }
 }
