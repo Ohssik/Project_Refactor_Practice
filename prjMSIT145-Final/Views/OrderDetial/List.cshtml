@@ -247,7 +247,7 @@
     </style>
 }
 
-<body class="bodyBackgroundColor">
+<div class="bodyBackgroundColor">
 
     <div class="backgroundDiv">
         <div class="main">
@@ -257,10 +257,10 @@
                     <div>
                         <select name="orderState" id="slt1">
                             <option value="">全部</option>
-                            <option value="">未接單</option>
-                            <option value="">已接單</option>
-                            <option value="">已完成</option>
-                            <option value="">取消</option>
+                            <option value="tab_1">未接單</option>
+                            <option value="tab_2">已接單</option>
+                            <option value="tab_4">已完成</option>
+                            <option value="tab_5">取消</option>
                         </select>
                     </div>
                 </div>
@@ -343,11 +343,23 @@
 
         const selCity = document.querySelector('#select1');
 
+        $(function () {
+            //全部選擇隱藏
+            $('div[id^="tab_"]').hide();
+            $('#slt1').change(function () {
+                let sltValue = $(this).val();
+                console.log(sltValue);
 
+                $('div[id^="tab_"]').hide();
+                //指定選擇顯示
+                $(sltValue).show();
+            });
+
+        });
             
         
 
     </script>
 
-</body>
+</div>
 
