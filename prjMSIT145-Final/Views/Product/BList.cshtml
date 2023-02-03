@@ -6,11 +6,8 @@
 @section Styles{
     
 	<link rel="stylesheet" href="@Url.Content("~/css/ProductList.css")">
-    <link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
-	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
-	<script src="../js/ProductList.js"> </script>
-	
+    <link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">	
+		<script src="@Url.Content("~/js/ProductList.js")"></script>
 	<style>
 		.btnDeleteCheck {
 			border: none;
@@ -112,7 +109,7 @@
 		</div>
 	</div>
 	<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />
-	<table id="table" class="table table-hover stripe ">
+	<table id="" class="table table-hover stripe " cellspacing="0">
 		<thead>
 		<th>相片</th>
 		<th>產品名稱</th>
@@ -128,7 +125,6 @@
 </div>
 
 @section Scripts{
-  
 	<script>
 		const txt = document.querySelector("#txtKeyword");
 		const tbody = document.querySelector("#tbody");
@@ -138,11 +134,11 @@
 		const btnSubmit = document.querySelector("#btnSubmit"); //編輯完成後的儲存按鈕
 		const fid = document.querySelector("#Fid");
 		const selType = document.querySelector("#selType");
-		
+
+		search();
 		//關鍵字查詢(類別與商品)
 		txt.addEventListener("input", () => search());
 
-		search();
 		async function search() {
 			let response = await fetch(`@Url.Content("~/Product/BSearch?keyword=${txt.value}")`);
 			const datas = await response.json();
@@ -159,8 +155,8 @@
 					item.isForSale = "已上架"
 				else if (item.isForSale === 2)
                     item.isForSale = "停售"
-
 							//<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/edit.png">編輯</button></a>
+				
 				result += `
 						<tr>
 						<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
@@ -172,8 +168,9 @@
 						<td>${item.unitPrice}</td>
 						<td>${item.categoryName}</td>
 						<td>${item.isForSale}</td>
-						<td>${item.memo}</td>
-						<td>
+		               <td>${item.memo}</td>
+
+								<td>
 								<button class="buteditgar" name='btnEdit'  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img src="../images/Business/edit.png">編輯</button>
 								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModel"><img src="../images/Business/garbage.png">刪除</button>
 						</td>
