@@ -20,6 +20,7 @@ namespace prjMSIT145_Final.Models
         public virtual DbSet<AdminMember> AdminMembers { get; set; } = null!;
         public virtual DbSet<BusinessImg> BusinessImgs { get; set; } = null!;
         public virtual DbSet<BusinessMember> BusinessMembers { get; set; } = null!;
+        public virtual DbSet<ChangeRequestPassword> ChangeRequestPasswords { get; set; } = null!;
         public virtual DbSet<Coupon> Coupons { get; set; } = null!;
         public virtual DbSet<Coupon2NormalMember> Coupon2NormalMembers { get; set; } = null!;
         public virtual DbSet<NormalMember> NormalMembers { get; set; } = null!;
@@ -30,6 +31,8 @@ namespace prjMSIT145_Final.Models
         public virtual DbSet<OrderSerialNumber> OrderSerialNumbers { get; set; } = null!;
         public virtual DbSet<PaymentTerm2BusiMember> PaymentTerm2BusiMembers { get; set; } = null!;
         public virtual DbSet<PaymentTermCategory> PaymentTermCategories { get; set; } = null!;
+        public virtual DbSet<ProblemAnswer> ProblemAnswers { get; set; } = null!;
+        public virtual DbSet<ProblemQuestion> ProblemQuestions { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductCategory> ProductCategories { get; set; } = null!;
         public virtual DbSet<ProductOption> ProductOptions { get; set; } = null!;
@@ -40,6 +43,15 @@ namespace prjMSIT145_Final.Models
         public virtual DbSet<ViewOrderDetailNonOptionGroupName> ViewOrderDetailNonOptionGroupNames { get; set; } = null!;
         public virtual DbSet<ViewShowFullOrder> ViewShowFullOrders { get; set; } = null!;
         public virtual DbSet<ViewShowProductList> ViewShowProductLists { get; set; } = null!;
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Data Source=ispan-msit145-shiba2.database.windows.net;Initial Catalog=ispanMsit145shiba;Persist Security Info=True;User ID=msit145Shiba;Password=sh1baMsite45");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,7 +77,9 @@ namespace prjMSIT145_Final.Models
                     .HasMaxLength(50)
                     .HasColumnName("imgName");
 
-                entity.Property(e => e.OrderBy).HasColumnName("orderBy");
+                entity.Property(e => e.OrderBy)
+                    .HasColumnName("orderBy")
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.StartTime)
                     .HasColumnType("datetime")
@@ -81,6 +95,8 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.Fid).HasColumnName("fid");
 
                 entity.Property(e => e.Account).HasMaxLength(50);
+
+                entity.Property(e => e.Email).HasMaxLength(50);
 
                 entity.Property(e => e.Password).HasMaxLength(50);
 
@@ -165,6 +181,23 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.ShopType).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<ChangeRequestPassword>(entity =>
+            {
+                entity.HasKey(e => e.Token);
+
+                entity.ToTable("ChangeRequestPassword");
+
+                entity.Property(e => e.Token).HasMaxLength(50);
+
+                entity.Property(e => e.Account).HasMaxLength(50);
+
+                entity.Property(e => e.Email).HasMaxLength(50);
+
+                entity.Property(e => e.Expire)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(dateadd(minute,(10),getdate()))");
+            });
+
             modelBuilder.Entity<Coupon>(entity =>
             {
                 entity.HasKey(e => e.Fid);
@@ -180,10 +213,12 @@ namespace prjMSIT145_Final.Models
                     .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Memo)
-                    .HasMaxLength(50)
+                    .HasMaxLength(200)
                     .HasColumnName("memo");
 
                 entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Title).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Coupon2NormalMember>(entity =>
@@ -227,7 +262,7 @@ namespace prjMSIT145_Final.Models
 
                 entity.Property(e => e.IsSuspensed)
                     .HasColumnName("isSuspensed")
-                    .HasDefaultValueSql("((0))");
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.MemberName).HasMaxLength(50);
 
@@ -356,6 +391,28 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.Fid).HasColumnName("fid");
 
                 entity.Property(e => e.PaymentType).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ProblemAnswer>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("ProblemAnswer");
+
+                entity.Property(e => e.Fid).ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<ProblemQuestion>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("ProblemQuestion");
+
+                entity.Property(e => e.AnswerFid).HasColumnName("answer_Fid");
+
+                entity.Property(e => e.Fid).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Question).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Product>(entity =>
