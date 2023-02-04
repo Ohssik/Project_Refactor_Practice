@@ -5,6 +5,8 @@
 @section Styles{
 	<link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">
 	<link rel="stylesheet" href="@Url.Content("~/css/ProductList.css")">
+	@*<link href="@Url.Content("~/vendor/datatables/dataTables.bootstrap4.min.css")" rel="stylesheet">*@
+
 	<style>
 		.btnDeleteCheck {
 			border: none;
@@ -58,7 +60,7 @@
 
 							<input id="btnSubmit" class="butt" type="submit" value="儲存" style="margin-left:20px;"/>
 						</div>
-						<select id="selType" name="OptionGroupName" style="margin:5px 0;  border-radius:5px;"></select>  @*選擇類別*@
+						<select id="selType" class="select" name="OptionGroupName" style="margin:5px 0;  border-radius:5px;"></select>  @*選擇類別*@
 
 						<hr style="border:1px dashed #000; height:1px">
 						<h6 id="h6">價格</h6>
@@ -188,5 +190,4 @@
 			}
 	</script>
 	<script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.bundle.min.js")"></script>
-
 }

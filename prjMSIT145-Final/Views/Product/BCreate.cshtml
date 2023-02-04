@@ -9,6 +9,10 @@
 }
 
 <div class="outerlayer ">
+	<button id="demo1">Demo飲料</button>
+	<button id="demo2">Demo飲料</button>
+	<button id="demo3">Demo食物</button>
+	<button id="demo4">Demo食物</button>
 	<form method="post" enctype="multipart/form-data">
 		<input type="hidden" name="BFid" value="@Model.BFid" />
 		<div class="topdiv">
@@ -29,20 +33,11 @@
 				<div class="divinputimagebutton">
 					@*<input id="btnImgCreate" class="inputimagebutton"type="button" value="新增照片">*@
 					@*<input id="btnImgDownload" class="inputimagebutton" type="button" value="下載">*@
-					<label class="inputimagebutton" for="file" style="width:80px; padding: 5px;"><input id="file" name="file" type="file" style="display:none;" />上傳檔案</label>
+					<label class="inputimagebutton" for="file" style="width:80px; padding: 5px; cursor:pointer;"><input id="file" name="file" type="file" style="display:none;" />上傳檔案</label>
 					<input id="btnImgDelete" class="inputimagebutton" type="button" value="刪除">
 				</div>
 			</div>
 		</div>
-
-		@*暫時將不使用單獨販售功能,新增產品與新增配料為同一個畫面不同View*@
-		@*<hr style="border:1px dashed #000; height:1px">
-		<h6 id="h6">是否單獨販賣餐點?</h6>
-		<label><input class="form-check-input" type="radio" name="IsForSale" value="yes" />是</label>   @*點選單獨販售與否
-		<label><input class="form-check-input" type="radio" name="IsForSale" value="no" />否</label>
-		<hr style="border:1px dashed #000; height:1px">
-		<h6 id="h6">類別</h6>*@
-
 		<select id="selType" name="CategoryName"><option>請選擇商品類別</option></select>  @*選擇類別*@
 
 		<hr style="border:1px dashed #000; height:1px">
@@ -65,12 +60,41 @@
 
 @section Scripts{
 	<script>
-		const imgShow = document.querySelector("#imgShow"); //選擇的類別
+		const imgShow = document.querySelector("#imgShow"); //選擇的照片
 		const file = document.querySelector("#file"); //新增照片
 		const btnImgDelete = document.querySelector("#btnImgDelete"); //刪除照片
 		const selType = document.querySelector("#selType"); //選擇的類別
 		const IsForSale = document.querySelector("#IsForSale"); //選擇是否上架
 		const btnSubmit = document.querySelector("#btnSubmit"); //儲存按鈕
+		const demo1 = document.querySelector("#demo1"); //demo飲料
+		const demo2 = document.querySelector("#demo2"); //demo飲料
+		const demo3 = document.querySelector("#demo3"); //demo食物
+		const demo4 = document.querySelector("#demo4"); //demo食物
+		
+		//飲料類Demo鍵
+		demo1.addEventListener("click",function(){
+			document.querySelector("#txtProductName").value = "香草奶昔";
+			document.querySelector("#txtPrice").value = "70";
+			document.querySelector("#txtMemo").value = "為確保口感,僅可少冰";
+		})
+		//飲料類Demo鍵
+		demo2.addEventListener("click", function () {
+			document.querySelector("#txtProductName").value = "酪梨布丁牛奶";
+			document.querySelector("#txtPrice").value = "80";
+			document.querySelector("#txtMemo").value = "僅少冰，建議一小時內飲用完畢。";
+		})
+		//食物類Demo鍵
+		demo3.addEventListener("click", function () {
+			document.querySelector("#txtProductName").value = "松露蛋炒飯";
+			document.querySelector("#txtPrice").value = "250";
+			document.querySelector("#txtMemo").value = "使用白米/糙米";
+		})
+		//食物類Demo鍵
+		demo4.addEventListener("click", function () {
+			document.querySelector("#txtProductName").value = "紅燒牛肉麵";
+			document.querySelector("#txtPrice").value = "150";
+			document.querySelector("#txtMemo").value = "微辣,皆為半筋半肉";
+		})
 
 		//載入所有商品類別
 		window.addEventListener("load", async function () {
@@ -120,8 +144,10 @@
 		//是否選擇了商品類別
 		btnSubmit.addEventListener("click",function(){
 			if(selType.value === "請選擇商品類別")
-			alert("請確認商品類別是否選取!");
-
+			{
+				event.preventDefault();
+				alert("請確認商品類別是否選取!");
+			}
 		})
 	</script>
 }
