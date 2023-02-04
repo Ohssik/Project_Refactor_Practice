@@ -1,0 +1,25 @@
+﻿@model prjMSIT145_Final.Models.NormalMember
+
+@{
+    ViewData["Title"] = "Emailcheck";
+}
+
+<h1>Emailcheck</h1>
+
+<h4>驗證信</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Emailcheck">
+            <input type="hidden"name="Fid"value="@Model.Fid" />
+           
+            <div class="form-group">
+                <input type="submit" value="確定" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

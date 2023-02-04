@@ -107,10 +107,41 @@ namespace prjMSIT145_Final.Controllers
                 }
                 vm.MemberPhotoFile = fileName;
             }
+            
             _context.Add(vm.member);
             _context.SaveChanges();
 
-            return Redirect("~/Home/CIndex");
+            string smtpAddress = "smtp.gmail.com";
+            //設定Port
+            int portNumber = 587;
+            bool enableSSL = true;
+            //填入寄送方email和密碼
+            string emailFrom = "a29816668@gmail.com";
+            string emailpassword = "joksdquaswjdyzpu";
+            //收信方email 可以用逗號區分多個收件人
+            string emailTo = vm.Email;
+            //主旨
+            string subject = "註冊驗證信";
+            //內容
+            string body = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={vm.Fid}";
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress(emailFrom);
+                mail.To.Add(emailTo);
+                mail.Subject = subject;
+                mail.Body = body;
+                // 若你的內容是HTML格式，則為True
+                mail.IsBodyHtml = false;
+                using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                {
+                    smtp.Credentials = new NetworkCredential(emailFrom, emailpassword);
+                    smtp.EnableSsl = enableSSL;
+                    smtp.Send(mail);
+                }
+
+
+            }
+                return Redirect("~/Home/CIndex");
           
         }
         public IActionResult Verifyaccount(CNormalMemberViewModel vm)
@@ -126,6 +157,29 @@ namespace prjMSIT145_Final.Controllers
             }
           return Json ("");
         }
+
+        public IActionResult Emailcheck(int Fid)
+        {
+            NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Fid == Fid);
+           
+
+            return View(member);
+        }
+        [HttpPost]
+        public IActionResult Emailcheck(NormalMember member)
+        {
+            NormalMember x=_context.NormalMembers.FirstOrDefault(c => c.Fid==member.Fid);
+                x.IsSuspensed =0;
+                x.EmailCertified =1;
+            _context.SaveChanges();
+
+
+            return Redirect("~/Home/CIndex");
+        }
+
+
+
+
         public IActionResult memberview()
         {
             string loginmember = "";
@@ -213,7 +267,7 @@ namespace prjMSIT145_Final.Controllers
             return RedirectToAction("Edit");
 
         }
-
+        
 
 
 
