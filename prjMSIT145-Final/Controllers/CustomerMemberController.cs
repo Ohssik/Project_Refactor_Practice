@@ -41,11 +41,14 @@ namespace prjMSIT145_Final.Controllers
             {
                 if (x.Password.Equals(vm.txtPassword) && x.Phone.Equals(vm.txtAccount))
                 {
-                    string json = JsonSerializer.Serialize(x);
-                    HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json);
-                    //return RedirectToAction("Edit");
-                    //return RedirectToAction("Index");
-                    return Redirect("~/Home/CIndex");
+                    if (x.IsSuspensed == 0) {
+                        string json = JsonSerializer.Serialize(x);
+                        HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json);
+
+                        return Redirect("~/Home/CIndex");
+                    }
+                   
+                    return View();
                 }
             }
             return View();
@@ -158,11 +161,14 @@ namespace prjMSIT145_Final.Controllers
           return Json ("");
         }
 
-        public IActionResult Emailcheck(int Fid)
+        public IActionResult Emailcheck(int? Fid)
         {
             NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Fid == Fid);
-           
-
+            if (Fid == null || member==null)
+            {
+                return Redirect("~/Home/CIndex");
+            }
+            
             return View(member);
         }
         [HttpPost]

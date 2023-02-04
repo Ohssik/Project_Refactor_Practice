@@ -3,22 +3,33 @@
 @{
     ViewData["Title"] = "Emailcheck";
 }
+     @section Styles{
+    <link rel="stylesheet" href="~/css/Customer_css/Emailcheck.css">
 
-<h1>Emailcheck</h1>
 
-<h4>驗證信</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+     }
+
+
+
+<div class="wrap">
+   
         <form asp-action="Emailcheck">
+         <div class="cardcontent">
             <input type="hidden"name="Fid"value="@Model.Fid" />
-           
-            <div class="form-group">
-                <input type="submit" value="確定" class="btn btn-primary" />
+    
+            <div class="h1div">
+            <h1>會員驗證信</h1>
             </div>
+            <div class="pdiv">
+            <p>請按下確定鈕開通會員資格</p>
+            </div>
+            <div class="subdiv">
+                <input type="submit" value="確定" class="submitbtn" />
+            </div>
+        </div>
         </form>
+    
     </div>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
