@@ -30,8 +30,8 @@ namespace prjMSIT145_Final.ViewModels
         }
         public int? Fid
         {
-            get { return _order.Fid; }
-            set { _order.Fid = value; }
+            get { return _order.OrderFid; }
+            set { _order.OrderFid = (int)value; }
         }
         public int? NFid
         {

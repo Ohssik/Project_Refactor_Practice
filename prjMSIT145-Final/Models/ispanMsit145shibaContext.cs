@@ -21,6 +21,10 @@ namespace prjMSIT145_Final.Models
         public virtual DbSet<BusinessImg> BusinessImgs { get; set; } = null!;
         public virtual DbSet<BusinessMember> BusinessMembers { get; set; } = null!;
         public virtual DbSet<ChangeRequestPassword> ChangeRequestPasswords { get; set; } = null!;
+        public virtual DbSet<Chat2User> Chat2Users { get; set; } = null!;
+        public virtual DbSet<ChatMessage> ChatMessages { get; set; } = null!;
+        public virtual DbSet<Chatroom> Chatrooms { get; set; } = null!;
+        public virtual DbSet<ChatroomUser> ChatroomUsers { get; set; } = null!;
         public virtual DbSet<Coupon> Coupons { get; set; } = null!;
         public virtual DbSet<Coupon2NormalMember> Coupon2NormalMembers { get; set; } = null!;
         public virtual DbSet<NormalMember> NormalMembers { get; set; } = null!;
@@ -43,15 +47,6 @@ namespace prjMSIT145_Final.Models
         public virtual DbSet<ViewOrderDetailNonOptionGroupName> ViewOrderDetailNonOptionGroupNames { get; set; } = null!;
         public virtual DbSet<ViewShowFullOrder> ViewShowFullOrders { get; set; } = null!;
         public virtual DbSet<ViewShowProductList> ViewShowProductLists { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=ispan-msit145-shiba2.database.windows.net;Initial Catalog=ispanMsit145shiba;Persist Security Info=True;User ID=msit145Shiba;Password=sh1baMsite45");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -164,7 +159,7 @@ namespace prjMSIT145_Final.Models
 
                 entity.Property(e => e.IsSuspensed)
                     .HasColumnName("isSuspensed")
-                    .HasDefaultValueSql("((1))");
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.MemberAccount).HasMaxLength(50);
 
@@ -196,6 +191,68 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.Expire)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(dateadd(minute,(10),getdate()))");
+            });
+
+            modelBuilder.Entity<Chat2User>(entity =>
+            {
+                entity.HasKey(e => e.Fid);
+
+                entity.ToTable("Chat2User");
+
+                entity.Property(e => e.Fid).HasColumnName("fid");
+
+                entity.HasOne(d => d.Chat)
+                    .WithMany(p => p.Chat2Users)
+                    .HasForeignKey(d => d.Chatid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Chat2User_Chatroom");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Chat2Users)
+                    .HasForeignKey(d => d.Userid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Chat2User_ChatroomUser");
+            });
+
+            modelBuilder.Entity<ChatMessage>(entity =>
+            {
+                entity.HasKey(e => e.Fid);
+
+                entity.ToTable("ChatMessage");
+
+                entity.Property(e => e.Fid).HasColumnName("fid");
+
+                entity.Property(e => e.SendTime).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Chat)
+                    .WithMany(p => p.ChatMessages)
+                    .HasForeignKey(d => d.Chatid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ChatMessage_Chatroom");
+
+                entity.HasOne(d => d.Sender)
+                    .WithMany(p => p.ChatMessages)
+                    .HasForeignKey(d => d.Senderid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ChatMessage_ChatroomUser");
+            });
+
+            modelBuilder.Entity<Chatroom>(entity =>
+            {
+                entity.HasKey(e => e.Chatid);
+
+                entity.ToTable("Chatroom");
+
+                entity.Property(e => e.ChatName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ChatroomUser>(entity =>
+            {
+                entity.ToTable("ChatroomUser");
+
+                entity.Property(e => e.LastOnlineTime).HasColumnType("datetime");
+
+                entity.Property(e => e.UserType).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Coupon>(entity =>

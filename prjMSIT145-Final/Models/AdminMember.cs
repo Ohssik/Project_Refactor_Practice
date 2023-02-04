@@ -10,5 +10,6 @@ namespace prjMSIT145_Final.Models
         public string? Password { get; set; }
         public int? RoleLevel { get; set; }
         public string? Email { get; set; }
+        public int? ChatroomUserid { get; set; }
     }
 }

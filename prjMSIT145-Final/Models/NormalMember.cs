@@ -18,5 +18,6 @@ namespace prjMSIT145_Final.Models
         public string? MemberPhotoFile { get; set; }
         public int? IsSuspensed { get; set; }
         public int? EmailCertified { get; set; }
+        public int? ChatroomUserid { get; set; }
     }
 }

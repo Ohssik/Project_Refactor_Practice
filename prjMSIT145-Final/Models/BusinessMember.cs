@@ -22,5 +22,6 @@ namespace prjMSIT145_Final.Models
         public int? EmailCertified { get; set; }
         public string? Gps { get; set; }
         public int? IsOpened { get; set; }
+        public int? ChatroomUserid { get; set; }
     }
 }
