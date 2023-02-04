@@ -3,8 +3,7 @@
 	ViewData["Title"] = "BList";
 }
 @section Styles{
-	<script src="../js/ProductList.js"> </script>
-	<link rel="stylesheet" href="../css/ProductList.css">
+	<link rel="stylesheet" href="@Url.Content("~/css/ProductList.css")">
 	<link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">
 
 	<style>
@@ -82,7 +81,7 @@
 		</div>
 	</div>
 	<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />
-	<table id="table" class="table table-hover stripe">
+	<table id="table_id" class="table table-hover stripe">
 		<thead>
 			@*<th>相片</th>*@
 		<th>配料名稱</th>
@@ -97,6 +96,7 @@
 </div>
 
 @section Scripts{
+
 	<script>
 		const tbody = document.querySelector("#tbody");
 		const txt = document.querySelector("#txtKeyword");  //關鍵字
@@ -111,9 +111,10 @@
 
 		list();
 		async function list() {
-			const response = await fetch(`@Url.Content("~/AddMaterial/BSearch?keyword=${txt.value}")`);
+			
+			const response = await fetch(`@Url.Content("~/AddMaterial/BSearch")`);
 			const data = await response.json();
-			//console.log(data)
+			//console.log(data)?keyword=${txt.value}
 			let result = document.createDocumentFragment();
 			result = "";
 			data.forEach(function (item, index) {
@@ -135,6 +136,11 @@
 							</tr>`
 			});
 			tbody.innerHTML = result;
+
+			////套用bootstrap,dataTable功能
+			$(document).ready(function () {
+				$('#table_id').DataTable();
+			});
 			//確定刪除配料
 			btnDelete.forEach(function (click) {
 				click.addEventListener("click",function(){
@@ -149,20 +155,26 @@
 			//點選編輯按鈕
 			btnEdit.forEach(function(btn){
 				btn.addEventListener("click",function(){
+					loadGroup();
 					const Fid = document.querySelector("#Fid");
 					const txtOptionName = document.querySelector("#txtOptionName");
 					const txtPrice = document.querySelector("#txtPrice");
 
 					const cell = this.parentElement.parentElement;
 
-					loadGroup();
+					
 					Fid.value = cell.children[0].value;
 					txtOptionName.value  = cell.children[3].innerHTML;
 					selType.innerHTML = `<option>${cell.children[5].innerHTML}</option>`;
 					txtPrice.value = cell.children[4].innerHTML.substring(1);
 				})
 			})
-			//載入配料類別
+			
+
+		
+		}
+		
+		//載入配料類別
 			async function loadGroup(){
 				const response = await fetch("@Url.Content("~/Type/BOptionGroup")");
 				const datas = await response.json();
@@ -173,7 +185,9 @@
 					frag += `<option>${item.optionGroupName}</option>`
 				})
 				selType.innerHTML += frag;
+				console.log("click");
 			}
-		}
 	</script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
 }
