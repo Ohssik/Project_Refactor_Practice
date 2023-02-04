@@ -222,8 +222,8 @@
     </footer>
     @*<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>*@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="@Url.Content("~/vendor/jquery/jquery.min.js")"></script>
@@ -242,8 +242,7 @@
     <!-- Page level custom scripts -->
     <script src="@Url.Content("~/js/demo/datatables-demo.js")"></script>
 
-
-                    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 </html>
