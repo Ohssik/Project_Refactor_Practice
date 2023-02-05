@@ -81,6 +81,7 @@ namespace prjMSIT145_Final.Controllers
 		//商品類別刪除
 		public ActionResult BItemTypeDelete(ProductCategory proC, int? id)
 		{
+			//若商品中有使用此類別則一併刪除
 			if (id != null)
 			{
 				proC = _context.ProductCategories.FirstOrDefault(o => o.Fid == id);
@@ -133,9 +134,16 @@ namespace prjMSIT145_Final.Controllers
 		}
 		public ActionResult BMaterialTypeDelete(int? id)
 		{
+			//若商品中有使用此類別則一併刪除
 			if (id != null)
 			{
 				var data = _context.ProductOptionGroups.FirstOrDefault(o => o.Fid == id);
+				if(_context.ProductOptions.Any(o=>o.OptionGroupFid == id))
+				{
+					var op = _context.ProductOptions.Where(o => o.OptionGroupFid == id);
+					_context.ProductOptions.RemoveRange(op);
+				}
+				
 				_context.ProductOptionGroups.Remove(data);
 				_context.SaveChanges();
 			}

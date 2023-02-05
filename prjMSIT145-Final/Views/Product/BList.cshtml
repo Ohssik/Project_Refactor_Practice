@@ -1,4 +1,4 @@
-﻿@*@model prjMSIT145_Final.ViewModel.CProductsViewModel*@
+﻿@model prjMSIT145_Final.ViewModel.CProductsViewModel
 @{
 	Layout = "_BusinessLayout";
 	ViewData["Title"] = "BList";
@@ -62,6 +62,7 @@
 						<h6 id="h6">相片</h6>
 						<div class="divimage">
 							<div>
+								<input type="hidden" name="Photo" id="Photo" value=""/>
 								<img id="imgShow" class="inputimage" src="" />
 							</div>
 							<div>
@@ -127,8 +128,6 @@
 @section Scripts{
 
 	<script>
-		
-
 		const txt = document.querySelector("#txtKeyword");
 		const tbody = document.querySelector("#tbody");
 		const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
@@ -144,7 +143,7 @@
 		//txt.addEventListener("input", () => search());?keyword=${txt.value}
 
 		async function search() {
-			let response = await fetch(`@Url.Content("~/Product/BSearch")`);
+			let response = await fetch(`@Url.Content("~/Product/BItemList")`);
 			const datas = await response.json();
 			let result = document.createDocumentFragment();
 			result = "";
@@ -159,7 +158,6 @@
 					item.isForSale = "已上架"
 				else if (item.isForSale === 2)
                     item.isForSale = "停售"
-							//<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/edit.png">編輯</button></a>
 				
 				result += `
 						<tr>
@@ -172,18 +170,16 @@
 						<td>${item.unitPrice}</td>
 						<td>${item.categoryName}</td>
 						<td>${item.isForSale}</td>
-		               <td>${item.memo}</td>
+		                <td>${item.memo}</td>
 
-								<td>
-								<button class="buteditgar" name='btnEdit'  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img src="../images/Business/edit.png">編輯</button>
-								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModel"><img src="../images/Business/garbage.png">刪除</button>
+						<td>
+							<button class="buteditgar" name='btnEdit'  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img src="../images/Business/edit.png">編輯</button>
+							<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModel"><img src="../images/Business/garbage.png">刪除</button>
 						</td>
 						</tr>
 						`
 			});
 			tbody.innerHTML = result;
-			
-		
 		
 			//刪除
 			btnDelete.forEach(function (click) {
@@ -207,8 +203,9 @@
 					const txtPrice = document.querySelector("#txtPrice"); //價錢
 					const txtMemo = document.querySelector("#txtMemo"); //備註
 					const cell = this.parentElement.parentElement;  //tr內的值
-
+					console.log(imgShow)
 					txtProductName.value = cell.children[4].innerHTML;
+					document.querySelector("#Photo").value = cell.children[3].firstElementChild.getAttribute("src").substring()
 					imgShow.setAttribute("src",cell.children[3].firstElementChild.getAttribute("src"));
 					selType.innerHTML = `<option>${cell.children[6].innerHTML}</option>`;
 					txtPrice.value = cell.children[5].innerHTML;
@@ -219,11 +216,8 @@
 			//套用bootstrap,dataTable功能
 			$(document).ready(function () {
 				$('#table_id').DataTable();
-				
-			
 			});
 		}
-		
 
 		//載入所有商品類別
 		async function loadCategory() {
@@ -237,7 +231,6 @@
 					frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
 			})
 			selType.innerHTML += frag;
-			//console.log(selType)
 		}
 		//上傳照片
 		file.addEventListener("change", function () {
