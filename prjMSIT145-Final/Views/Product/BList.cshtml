@@ -128,8 +128,6 @@
 @section Scripts{
 
 	<script>
-		
-
 		const txt = document.querySelector("#txtKeyword");
 		const tbody = document.querySelector("#tbody");
 		const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
@@ -138,14 +136,14 @@
 		const btnSubmit = document.querySelector("#btnSubmit"); //編輯完成後的儲存按鈕
 		const fid = document.querySelector("#Fid");
 		const selType = document.querySelector("#selType");
-		const photo = document.querySelector("#Photo"); //目前的照片名稱
+
 		search();
 		
 		//關鍵字查詢(類別與商品)
 		//txt.addEventListener("input", () => search());?keyword=${txt.value}
 
 		async function search() {
-			let response = await fetch(`@Url.Content("~/Product/BSearch")`);
+			let response = await fetch(`@Url.Content("~/Product/BItemList")`);
 			const datas = await response.json();
 			let result = document.createDocumentFragment();
 			result = "";
@@ -160,7 +158,6 @@
 					item.isForSale = "已上架"
 				else if (item.isForSale === 2)
                     item.isForSale = "停售"
-							//<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/edit.png">編輯</button></a>
 				
 				result += `
 						<tr>
@@ -173,18 +170,16 @@
 						<td>${item.unitPrice}</td>
 						<td>${item.categoryName}</td>
 						<td>${item.isForSale}</td>
-		               <td>${item.memo}</td>
+		                <td>${item.memo}</td>
 
-								<td>
-								<button class="buteditgar" name='btnEdit'  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img src="../images/Business/edit.png">編輯</button>
-								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModel"><img src="../images/Business/garbage.png">刪除</button>
+						<td>
+							<button class="buteditgar" name='btnEdit'  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img src="../images/Business/edit.png">編輯</button>
+							<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModel"><img src="../images/Business/garbage.png">刪除</button>
 						</td>
 						</tr>
 						`
 			});
 			tbody.innerHTML = result;
-			
-		
 		
 			//刪除
 			btnDelete.forEach(function (click) {
@@ -202,15 +197,15 @@
 			btnEdit.forEach(function(btn){
 				btn.addEventListener("click", function(){
 					loadCategory();
-
+					console.log("click");
 					const txtProductName = document.querySelector("#txtProductName");  //產品名
 					const imgShow = document.querySelector("#imgShow"); //照片
 					const txtPrice = document.querySelector("#txtPrice"); //價錢
 					const txtMemo = document.querySelector("#txtMemo"); //備註
 					const cell = this.parentElement.parentElement;  //tr內的值
-					
+					console.log(imgShow)
 					txtProductName.value = cell.children[4].innerHTML;
-					photo.value = cell.children[3].firstElementChild.getAttribute("src").substring(10);
+					document.querySelector("#Photo").value = cell.children[3].firstElementChild.getAttribute("src").substring()
 					imgShow.setAttribute("src",cell.children[3].firstElementChild.getAttribute("src"));
 					selType.innerHTML = `<option>${cell.children[6].innerHTML}</option>`;
 					txtPrice.value = cell.children[5].innerHTML;
@@ -223,7 +218,6 @@
 				$('#table_id').DataTable();
 			});
 		}
-		
 
 		//載入所有商品類別
 		async function loadCategory() {
@@ -251,7 +245,6 @@
 		btnImgDelete.addEventListener("click", function () {
 			file.outerHTML = file.outerHTML;
 			imgShow.setAttribute("src", "../images/Business/upload.png");
-			photo.value = null;
 		})
 		//送出時確認商品類別及狀態是否選取
 		btnSubmit.addEventListener("click", function (event) {
