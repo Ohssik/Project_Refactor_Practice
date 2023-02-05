@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace prjMSIT145_Final.Controllers
 {
-    public class TypeController : Controller
+	public class TypeController : Controller
 	{
 		private readonly ispanMsit145shibaContext _context;
 		public TypeController(ispanMsit145shibaContext context)
@@ -15,37 +15,46 @@ namespace prjMSIT145_Final.Controllers
 		//商品類別
 		public ActionResult BCategoryList()
 		{
-			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-			BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-			var proC = _context.ProductCategories.Where(o => o.BFid == member.Fid).OrderBy(o => o.CategoryName);
-			List<ProductCategory> list = new List<ProductCategory>();
-			foreach (var d in proC)
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
 			{
-				if (d.CategoryName != null)
+				string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+				BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+				var proC = _context.ProductCategories.Where(o => o.BFid == member.Fid).OrderBy(o => o.CategoryName);
+				List<ProductCategory> list = new List<ProductCategory>();
+				foreach (var d in proC)
 				{
-					ProductCategory vm = new ProductCategory();
-					vm = d;
-					if (!list.Any(o => o.CategoryName == vm.CategoryName))
-						list.Add(vm);
+					if (d.CategoryName != null)
+					{
+						ProductCategory vm = new ProductCategory();
+						vm = d;
+						if (!list.Any(o => o.CategoryName == vm.CategoryName))
+							list.Add(vm);
+					}
 				}
+				return Json(list);
 			}
-			return Json(list);
+
 		}
 		//配料類別
 		public ActionResult BOptionGroup()
 		{
-			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-			BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-			var data = (_context.ProductOptionGroups.Where(b => b.BFid == member.Fid)).OrderBy(o => o.OptionGroupName);
-			List<ProductOptionGroup> list = new List<ProductOptionGroup>();
-			foreach (var d in data)
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
 			{
-				ProductOptionGroup gp = new ProductOptionGroup();
-				gp = d;
-				if (!list.Any(o => o.OptionGroupName == gp.OptionGroupName))
-					list.Add(gp);
+				string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+				BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+				var data = (_context.ProductOptionGroups.Where(b => b.BFid == member.Fid)).OrderBy(o => o.OptionGroupName);
+				List<ProductOptionGroup> list = new List<ProductOptionGroup>();
+				foreach (var d in data)
+				{
+					ProductOptionGroup gp = new ProductOptionGroup();
+					gp = d;
+					if (!list.Any(o => o.OptionGroupName == gp.OptionGroupName))
+						list.Add(gp);
+				}
+				return Json(list);
 			}
-			return Json(list);
+			else
+				return RedirectToAction("Blogin", "BusinessMember");
 		}
 		//商品類別新修
 		public IActionResult BItemTypeAddnEdit()
@@ -59,7 +68,8 @@ namespace prjMSIT145_Final.Controllers
 				proC.BFid = member.Fid;
 				return View(proC);
 			}
-			return RedirectToAction("BLogin", "BusinessMember");
+			else
+				return RedirectToAction("BLogin", "BusinessMember");
 		}
 		//按下submit
 		public ActionResult BItemTypeSubmit(ProductCategory proC)
@@ -111,7 +121,8 @@ namespace prjMSIT145_Final.Controllers
 				optGp.BFid = member.Fid;
 				return View(optGp);
 			}
-			return RedirectToAction("BLogin", "BusinessMember");
+			else
+				return RedirectToAction("BLogin", "BusinessMember");
 		}
 
 		public ActionResult BMaterialTypeSubmit(ProductOptionGroup optGp)
@@ -138,12 +149,12 @@ namespace prjMSIT145_Final.Controllers
 			if (id != null)
 			{
 				var data = _context.ProductOptionGroups.FirstOrDefault(o => o.Fid == id);
-				if(_context.ProductOptions.Any(o=>o.OptionGroupFid == id))
+				if (_context.ProductOptions.Any(o => o.OptionGroupFid == id))
 				{
 					var op = _context.ProductOptions.Where(o => o.OptionGroupFid == id);
 					_context.ProductOptions.RemoveRange(op);
 				}
-				
+
 				_context.ProductOptionGroups.Remove(data);
 				_context.SaveChanges();
 			}
