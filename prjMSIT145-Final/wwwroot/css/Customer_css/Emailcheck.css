@@ -14,8 +14,8 @@
 
 h1 {
     font-weight: bold;
-   
-    margin-bottom: 10px;
+    margin-top:10px;
+    margin-bottom: 15px;
 }
 
 .pdiv {
@@ -24,8 +24,8 @@ h1 {
 
 p {
     font-weight: bold;
-    font-size: 22px;
-    margin-bottom:10px;
+    font-size: 20px;
+    margin-bottom:15px;
 }
 
 .subdiv {
@@ -33,9 +33,23 @@ p {
 }
 
 .submitbtn {
-    font-size: 24px;
+    font-size: 16px;
     background-color: blue;
     color: white;
-    border-radius: 10px;
+    border-radius: 20px;
     margin-bottom: 30px;
+    padding:5px;
 }
+.emaildiv{
+    text-align:center;
+    
+}
+.inputclass{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:15px;
+    border-radius:20px;
+    width:150px;
+    padding-left:10px;
+}
+

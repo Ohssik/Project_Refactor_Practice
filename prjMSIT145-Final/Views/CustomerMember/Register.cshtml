@@ -36,7 +36,7 @@
         </span>
                 <div class="divhint">
                     <div class="div1">
-                            <input id="MemberName" type="text" class="input" value="@ViewBag.Name" name="MemberName" autofocus />
+                            <input id="MemberName" type="text" class="input" value="@ViewBag.Name" name="MemberName"  />
                         
                     </div>
                         <span id="namecorrect" class="spanerrormessage"></span>
@@ -89,6 +89,7 @@
                                 <i style="margin-top:10px;margin-left:-20px;" class="far fa-eye" id="togglePassword2"></i>
                     </div>
                     <span id="password2correct" class="spanerrormessage"></span>
+
                 </div>
 
         <div class="text4">性別</div><br>
@@ -147,7 +148,7 @@
         </span>
         <div class="display">
             <div class="div2">
-                                <select type="text " id="city" class="input"  name="AddressCity">
+                                <select type="text " id="city" class="input"  name="AddressCity" >
                                     <option>@ViewBag.city</option>
                 </select>
             </div>
@@ -164,6 +165,8 @@
                        
         </div>
                     </div>
+                <input type="button" class="democorrect" id="democorrectid" value="democorrect" />
+                <input type="button" class="demoerror" id="demoerrorid" value="demoerror" />
                 </div>
     </div>
         </div>
@@ -291,7 +294,7 @@
             }
             if(passwordval.length>=6){
 
-                re = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/)
+                re = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/);
                   
                  if(re.test(passwordval)){
                     submitbtn.removeAttribute('disabled');
@@ -362,7 +365,33 @@
                 alert(data);
             }
            });
-       
+
+
+        document.getElementById("democorrectid").addEventListener('click',()=>{
+            document.getElementById("MemberName").value="麥當勞";
+            document.getElementById("Phone").value="09111111111";
+            document.getElementById("Email").value="a29803385@hotmail.com";
+            document.getElementById("Password").value="aA1234";
+            document.getElementById("Password2").value="aA1234";
+            document.getElementById("city").innerHTML = "<option>高雄市</option>";
+            document.getElementById("area").innerHTML = "<option>前鎮區</option>";
+            document.getElementById("radioboy").setAttribute("checked","checked");
+
+        });
+
+        document.getElementById("demoerrorid").addEventListener('click', () => {
+            document.getElementById("MemberName").value = "";
+            document.getElementById("Phone").value = "";
+            document.getElementById("Email").value = "";
+            document.getElementById("Password").value = "A123456";
+            document.getElementById("Password2").value = "A1234";
+            
+
+        });
+
+
+
+
 
 
             

@@ -21,7 +21,10 @@
             <h1>會員驗證信</h1>
             </div>
             <div class="pdiv">
-            <p>請按下確定鈕開通會員資格</p>
+            <p>請輸入正確驗證碼</p>
+            </div>
+            <div class="emaildiv">
+            <input type="text" class="inputclass" name="EmailCertified"/>
             </div>
             <div class="subdiv">
                 <input type="submit" value="確定" class="submitbtn" />
@@ -33,4 +36,16 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+   @* @{
+        if (@ViewBag.errortxext != "")
+        {
+            @:alert(@ViewBag.errortxext);
+        }
+
+
+    }*@
+
+
+
 }
