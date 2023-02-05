@@ -46,7 +46,7 @@
     display: flex;
     justify-content:space-around;
 }
-p{
+.p{
     font-weight: bold;
 }
 .divinputimagebutton {
@@ -59,13 +59,13 @@ p{
     color: white;
     border-radius: 10px;
 }
-textarea{
+.textarea{
     width: 500px;
     height: 150px;
     background-color: gainsboro;
     border-radius: 10px;
 }
-select{
+.select{
     width: 200px;
     border-radius: 5px;
 }

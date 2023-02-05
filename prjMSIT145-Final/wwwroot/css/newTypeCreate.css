@@ -3,11 +3,11 @@
 }
 .box{
     box-sizing: border-box;
-    width:50%;
+    width:40%;
 }
 .mainDiv {
-width:70%;
-margin: 30px auto;
+width:80%;
+margin: 0 auto;
 }
 .leftBorder{
 border-left: 2px dashed gray;
@@ -15,7 +15,7 @@ border-left: 2px dashed gray;
 .leftTxt{
 border: none;
 background-color:transparent;
-width:250px;
+width:50%;
 /* width:70%; */
 }
 .leftmargin{
@@ -33,7 +33,7 @@ margin: 20px 10px 5px 30px;
 margin:20px 0 5px 5px;
 }
 .rightDiv{
-width:70%;
+width:60%;
 padding: 0 0 0 10px;
 
 }
