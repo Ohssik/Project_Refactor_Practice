@@ -36,45 +36,55 @@
 
 @using (Html.BeginForm())
 {
-
     <div class="wrap" id="wrap">
         <div class="Content">
 
             <div class="Head">
                 <p class="toptitle">歡迎使用線上訂餐系統</p>
                 <p class="toptitle2">請選擇登入/註冊方式，通過驗證後即可使用</p>
-                <input type="button" onclick=location.href="@Url.Content("~/CustomerMember/Register")" class="btn" value="使用手機註冊" />
+                <div>
+                    <input type="button" onclick=location.href="@Url.Content("~/CustomerMember/Register")" class="btnregister divbutton" value="註冊" />
+                </div>
             </div>
-            <div>
+            <div class="textinput">
 
                 <div class="text">
+
                     <img src="@Url.Content("~/images/Customer/Member/call.png")" class="img"></img>
-                    <input type="text" placeholder="手機號碼" class="text2" name="txtAccount" autofocus />
+                    <input  type="text" placeholder="手機號碼" class="text2" name="txtAccount" value=""autofocus />
                 </div>
                 <p class="detail">只支援台灣手機號碼</p>
                 <div class="text">
+
                     <img src="@Url.Content("~/images/Customer/Member/key.png")" class="img"></img>
                     <input id="Password" type="password" placeholder="密碼" class="text2" name="txtPassword" />
-                    <i style="margin-left:-100px;margin-top:10px;" class="far fa-eye" id="togglePassword"></i>
-                @*    <img src="@Url.Content("~/images/Customer/Member/hide.png")" class="img"></img>*@
+                    <i style="margin-left:-26px;margin-top:7px;" class="far fa-eye" id="togglePassword"></i>
+                    <span id="passwordcorrect" class="spanerrormessage"></span>
+                    
+
                 </div>
-               
-                <p class="detail">6-64位英數混合，英文需區分大小寫</p>
-                <input type="submit" value="登入" class="login" />
-                <div class="display">
-                    <img src="@Url.Content("~/images/Customer/Member/question.png")" class="img"></img>
-                    <p class="text3"><span id="forgotPwd">忘記密碼</span></p>
-                </div>
-                <div class="dashed"></div>
-                <div>
-                    <span class="text3">登入即代表您同意</span>
-                    <span class="text4">使用者條款</span>
-                    <span class="text3">和</span>
-                    <span class="text4">隱私權條款</span>
-                </div>
+
+                <p class="detail2">英文大小寫含數字共6位</p>
+            </div>
+
+            <input id="submitid" type="submit" value="登入" class="login" />
+            <div class="display">
+
+                <img src="@Url.Content("~/images/Customer/Member/question.png")" class="img2"></img>
+
+                <p class="text3"><a href="#" class="forgotspan" id="forgotPwd">忘記密碼</a></p>
+            </div>
+            <div class="dashed"></div>
+            <div>
+                <span class="text3">登入即代表您同意</span>
+                <span class="text4">使用者條款</span>
+                <span class="text3">和</span>
+                <span class="text4">隱私權條款</span>
             </div>
         </div>
+
     </div>
+    
 
 
 
@@ -117,6 +127,53 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
+        document.getElementById("Password").addEventListener("blur", checkPassword);
+
+        var submitbtn = document.getElementById("submitid");
+
+        function checkPassword() {
+            var passwordobj = document.getElementById("Password");
+            var spnpasswordobj = document.getElementById("passwordcorrect");
+            var passwordval = passwordobj.value;
+
+            if (passwordval == "") {
+                spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+
+                return;
+            }
+            else {
+                spnpasswordobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+            if (passwordval.length < 6) {
+                spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
+                submitbtn.setAttribute('disabled', 'disabled');
+
+                return;
+            }
+            else {
+                spnpasswordobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+            if (passwordval.length >= 6) {
+
+                re = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/)
+
+                if (re.test(passwordval)) {
+                    submitbtn.removeAttribute('disabled');
+                    spnpasswordobj.innerHTML = "";
+                }
+                else {
+                    spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
+                    submitbtn.setAttribute('disabled', 'disabled');
+                    return;
+                }
+
+
+            }
+        };
+
 
         const passwordicon = document.querySelector("#togglePassword");
         const password = document.querySelector("#Password");
