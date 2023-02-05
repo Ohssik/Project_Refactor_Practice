@@ -36,6 +36,9 @@
                                 @Html.DisplayNameFor(model => model.IsUsed)
                             </th>
                             <th>
+                                @Html.DisplayNameFor(model => model.Title)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.Memo)
                             </th>
                             <th>
@@ -66,9 +69,12 @@
                                     @{
                                         if (item.IsUsed > 0)
                                         {
-                                                                                                 @:V
+                                                          @:V
                                         }
                                     }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Title)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Memo)
@@ -115,8 +121,13 @@
                                placeholder="">
                     </div>
                     <div class="form-group">
+                        <label for="Title">標題</label>
+                        <input type="text" class="form-control" id="Title" name="Title" value=""
+                               placeholder="">
+                    </div>
+                    <div class="form-group">
                         <label for="Memo">備註</label>
-                        <input type="text" class="form-control" id="Memo" name="Memo" placeholder="">
+                        <textarea type="text" class="form-control" id="Memo" name="Memo" placeholder=""></textarea>
                     </div>
                     <div class="form-group">
                         <label for="NmemberID">所屬會員ID</label>
@@ -139,12 +150,54 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label"></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseMsg">確定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmDele" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">確定要刪除嗎?</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnYes">確定</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnNo">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts{
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>        
             $('.nav-item').eq(3).addClass('active').siblings().removeClass('active');
         let addModal = new bootstrap.Modal(document.getElementById('addModal'), {
             keyboard: false
+        });
+        let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
+            keyboard: false
+        });
+        let confirmDele = new bootstrap.Modal(document.getElementById('confirmDele'), {
+            keyboard: false
+        });
+
+        
+            
+        $('#btnCloseMsg').click(function () {
+            $('#msgAlert>label').text('');            
+            location.reload(true);
         });
         $('[name=btnUpdate]').click(function(){
             addModal.show();
@@ -169,6 +222,7 @@
                             Fid: id, 
                             Price: $('#Price').val(),
                             Memo: $('#Memo').val(),
+                            Title: $('#Title').val(),
                             IsUsed: $('#IsUsed').val(),
                             NmemberID: $('#NmemberID').val()
                         })
@@ -177,9 +231,11 @@
                     success: function (msg) {
                         //console.log(`msg=${msg}`);
                         if (msg == 1){
-                            alert("修改成功");
+                            //alert("修改成功");                            
                             addModal.hide();
-                            location.reload();
+                            $('#msgAlert label').text('修改成功');
+                            msgAlert.show();
+                            //location.reload();
                         }
                             
                     }
@@ -198,6 +254,7 @@
                         data: JSON.stringify({
                             Fid: 0,
                             Price: $('#Price').val(),
+                            Title: $('#Title').val(),
                             Memo: $('#Memo').val(),
                             IsUsed: $('#IsUsed').val(),
                             NmemberID: $('#NmemberID').val()
@@ -206,9 +263,11 @@
                     dataType: "json"
                 }).done(function (data) {
                     if(data==1){
-                        alert("新增成功");
+                        //alert("新增成功");
                         addModal.hide();
-                        location.reload();
+                        $('#msgAlert label').text('新增成功');
+                        msgAlert.show();
+                        //location.reload();
                     }
                         
                     
@@ -217,10 +276,6 @@
 
             }
 
-            //$('#addModal').modal('hide');
-            //let setTimeoutID=setTimeout(()=>{
-            //    location.reload();
-            //},1000);
             
         })
 
@@ -230,13 +285,15 @@
             // alert('編輯')
             const Fid = $(this).parents('tr').find('td:nth-child(1)').text().trim();
             const Price = $(this).parents('tr').find('td:nth-child(3)').text().trim();
-            const Memo = $(this).parents('tr').find('td:nth-child(5)').text().trim();
-            const NmemberID = $(this).parents('tr').find('td:nth-child(7)').text().trim();
+            const Title = $(this).parents('tr').find('td:nth-child(5)').text().trim();
+            const Memo = $(this).parents('tr').find('td:nth-child(6)').text().trim();
+            const NmemberID = $(this).parents('tr').find('td:nth-child(8)').text().trim();
             let IsUsed = $(this).parents('tr').find('td:nth-child(4)').text().trim();
             IsUsed = IsUsed != '' ? 1 : 0;
 
             $('#Fid').val(Fid);
             $('#Price').val(Price);
+            $('#Title').val(Title);
             $('#Memo').val(Memo);
             $('#IsUsed').val(IsUsed);
             $('#NmemberID').val(NmemberID);
@@ -245,27 +302,26 @@
         });
 
         //刪除
+        let id;
         $('#dataTable>tbody').on('click', 'button:nth-child(2)', function () {
-            if (confirm('確定要刪除嗎?')) {
-                const id = $(this).parents('tr').find('td:first-child').text().trim();
-
-                $.ajax({
-                    url: `@Url.Content("~/Coupon/ACouponDelete/")${ id}`,
-                    type: 'GET'
-                
-                }).done(function (data) {
-                    alert("刪除成功");
-                    addModal.hide();
-                    location.reload();
-                });
-
-                //let setTimeoutID = setTimeout(() => {
-                //    location.reload();
-                //}, 500);
-            }else
-                return false;
+            id = $(this).parents('tr').find('td:first-child').text().trim();
+            confirmDele.show();
+            
         });
+        $('#btnYes').click(function () {                        
+            $.ajax({
+                url: `@Url.Content("~/Coupon/ACouponDelete/")${id}`,
+                type: 'GET'
 
+            }).done(function (data) {                
+                $('#msgAlert label').text('刪除成功');
+                msgAlert.show();
+                //location.reload();
+            });
+        });
+        $('#btnNo').click(function () {
+            confirmDele.hide();
+        });
 
         function clearData() {
             $('input').val("")

@@ -24,6 +24,9 @@
         #exampleModalLabel{
             font-size:1.5em;
         }
+        #forgotPwd{
+            cursor: pointer;
+        }
     </style>
 }
     <div style="width:100%; display:flex;">
@@ -81,6 +84,7 @@
 
 
 }
+@*忘記密碼發信Modal*@
 <div class="modal fade" id="sendMail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -101,6 +105,7 @@
 
             </div>
             <div class="modal-footer">
+                <span class="text-danger" id="pwdInvalid"></span>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>
                 <button type="button" class="btn btn-primary" id="btnSend">送出</button>
             </div>
@@ -108,6 +113,21 @@
     </div>
 </div>
 
+@*代替alert的Modal*@
+<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label"></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseMsg">確定</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @{
@@ -117,22 +137,25 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
+        $(function () {
+            const passwordicon = document.querySelector("#togglePassword");
+            const password = document.querySelector("#Password");
 
-        const passwordicon = document.querySelector("#togglePassword");
-        const password = document.querySelector("#Password");
+            passwordicon.addEventListener("click", () => {
 
-        passwordicon.addEventListener("click", () => {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
 
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-
-            passwordicon.classList.toggle('fa-eye-slash');
-        });
+                passwordicon.classList.toggle('fa-eye-slash');
+            });
 
 
 
-        $(function(){
+        
             let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
+                keyboard: false
+            });
+            let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
                 keyboard: false
             });
             $('#btnCancel').click(function () {
@@ -143,6 +166,8 @@
             $('#btnSend').click(function () {
 
                 $(this).attr('disabled', 'disabled');
+                if ($('[name=txtAccount]').val() == '' || $('[name=txtEmail]').val() == '')
+                    return false;
 
                 $.ajax({
                     url: `@Url.Content("~/Admin/AForgotAdminPwd")`,
@@ -157,19 +182,26 @@
                     dataType: "json",
                     success: function (msg) {
                         console.log(`msg=${msg}`);
+                        if (`${msg}`.indexOf('success success') > -1) {
+                            $('[name=txtAccount]').val('');
+                            $('[name=txtEmail]').val('');
+                            sendMail.hide();
+                            $('#msgAlert label').text('發信成功，請到信箱收取修改密碼通知信');
+                            msgAlert.show();
+                        } else {
+                            $('#pwdInvalid').text(msg);
 
-                        $('[name=txtAccount]').val('');
-                        $('[name=txtEmail]').val('');
-                        alert('發信成功');
-                        sendMail.hide();
-
+                        }
+                        $('#btnSend').removeAttr('disabled');
                     }
                 });
             });
             $('#forgotPwd').click(function () {
                 sendMail.show();
                 $('#btnSend').removeAttr('disabled');
-                $('[name=txtAccount]').val('0911111112');
+                $('#msgAlert label').text('');
+                $('#pwdInvalid').text('');
+                $('[name=txtAccount]').val('0986543125');
                 $('[name=txtEmail]').val('rmtorh@hotmail.com');
 
             });

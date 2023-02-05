@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace prjMSIT145_Final.Controllers
 {
@@ -17,47 +19,7 @@ namespace prjMSIT145_Final.Controllers
         {           
             return View();
         }
-        private List<CACouponViewModel> _list()
-        {
-            List<CACouponViewModel> list = new List<CACouponViewModel>();
-
-            var coupons = from c in _context.Coupons
-                          join cn in _context.Coupon2NormalMembers on c.Fid equals cn.CouponId
-                          into sGroup
-                          from s in sGroup.DefaultIfEmpty()
-                          join n in _context.NormalMembers on s.MemberId equals n.Fid
-                          into sg2
-                          from sg in sg2.DefaultIfEmpty()
-                          select new
-                          {
-                              c.Fid,
-                              c.Price,
-                              c.CouponCode,
-                              c.Memo,
-                              c.IsUsed,
-                              NmemberID = s.MemberId,
-                              NmemberName = sg.MemberName
-                          };
-
-            if (coupons != null)
-            {
-                foreach (var c in coupons.ToList())
-                {
-                    CACouponViewModel cvm = new CACouponViewModel();
-                    cvm.Fid = c.Fid;
-                    cvm.Price = c.Price;
-                    cvm.CouponCode = c.CouponCode;
-                    cvm.Memo = c.Memo;
-                    cvm.IsUsed = c.IsUsed;
-                    cvm.NmemberID = c.NmemberID;
-                    cvm.NmemberName = c.NmemberName;
-                    list.Add(cvm);
-                }
-
-            }
-
-            return list;
-        }
+        
         public IActionResult ACouponList()
         {
             List<CACouponViewModel> list = new List<CACouponViewModel>();            
@@ -74,6 +36,7 @@ namespace prjMSIT145_Final.Controllers
                               c.Fid,
                               c.Price,
                               c.CouponCode,
+                              c.Title,
                               c.Memo,
                               c.IsUsed,
                               NmemberID = s.MemberId,
@@ -89,6 +52,7 @@ namespace prjMSIT145_Final.Controllers
                     cvm.Price = c.Price;
                     cvm.CouponCode = c.CouponCode;
                     cvm.Memo = c.Memo;
+                    cvm.Title = c.Title;
                     cvm.IsUsed = c.IsUsed;
                     cvm.NmemberID=c.NmemberID;
                     cvm.NmemberName=c.NmemberName;
@@ -113,6 +77,7 @@ namespace prjMSIT145_Final.Controllers
                     {
                         coup.Price = cac.Price;
                         coup.Memo = cac.Memo;
+                        coup.Title = cac.Title;
                         coup.IsUsed = cac.IsUsed;
                         
                         Coupon2NormalMember c2n = _context.Coupon2NormalMembers.FirstOrDefault(c => c.CouponId==cac.Fid);
@@ -136,6 +101,7 @@ namespace prjMSIT145_Final.Controllers
                     Coupon newCoup = new Coupon();                    
                     newCoup.Price = cac.Price;
                     newCoup.Memo = cac.Memo;
+                    newCoup.Title = cac.Title;
                     newCoup.IsUsed = cac.IsUsed;
                     newCoup.CouponCode=Guid.NewGuid().ToString().Substring(0,10);
                     _context.Coupons.Add(newCoup);
@@ -205,10 +171,11 @@ namespace prjMSIT145_Final.Controllers
                                       c2n.CouponId,
                                       c.Title,
                                       c.Price,
-                                      c.Memo
+                                      c.Memo,
+                                      c2n.Fid
 
                                   };
-                    foreach(var c in coupons)
+                    foreach(var c in coupons.OrderByDescending(c=>c.Fid))
                     {
                         CACouponViewModel cac = new CACouponViewModel();
                         cac.Fid = (int)c.CouponId;
@@ -222,6 +189,63 @@ namespace prjMSIT145_Final.Controllers
                 }
             }
             return View(list.AsEnumerable());
+        }
+        
+        public IActionResult CSubmitCouponExchange(string data)
+        {            
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+                return Json("尚未登入會員");
+
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            NormalMember user = JsonConvert.DeserializeObject<NormalMember>(json);
+            Coupon coup = _context.Coupons.FirstOrDefault(c => c.CouponCode.Equals(data));
+            var coupInfo = from c in _context.Coupons
+                          join cn in _context.Coupon2NormalMembers on c.Fid equals cn.CouponId
+                          into sGroup
+                          from s in sGroup.DefaultIfEmpty()
+                          join n in _context.NormalMembers on s.MemberId equals n.Fid
+                          into sg2
+                          from sg in sg2.DefaultIfEmpty()
+                          where c.CouponCode==data
+                          select new
+                            {
+                                c.Fid,
+                                c.Price,
+                                c.CouponCode,
+                                c.Memo,
+                                c.Title,
+                                c.IsUsed,
+                                NmemberID = s.MemberId,
+                                NmemberName = sg.MemberName
+                            };
+            if (user!=null)
+            {
+                if (coup==null || coup.IsUsed!=1)                
+                    return Json("優惠券代碼錯誤");                                
+                                    
+                if (!string.IsNullOrEmpty(coupInfo.ToList()[0].NmemberName))
+                    return Json("優惠券已被兌換過");
+
+                Coupon2NormalMember c2n = new Coupon2NormalMember();
+                c2n.MemberId=user.Fid;
+                c2n.CouponId=coup.Fid;
+                _context.Coupon2NormalMembers.Add(c2n);
+                try
+                {
+                    _context.SaveChanges();
+                }
+                catch (Exception err)
+                {
+                    return Json($"error:{err.Message}");
+                }
+
+                return Json(coup);
+                                    
+                    
+            }
+
+            return NoContent();
+                
         }
         public IActionResult CSimpleLogin(CLoginViewModel login)
         {
@@ -239,6 +263,10 @@ namespace prjMSIT145_Final.Controllers
                     result = "-1";
             }
             return Content(result);
+        }
+        public IActionResult CCoupons2Member()
+        {
+            return View();
         }
     }
 }

@@ -1,0 +1,138 @@
+﻿@model IEnumerable<prjMSIT145_Final.ViewModels.CACouponViewModel>
+@{
+    ViewData["Title"] = "我的券夾";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@section Styles{    
+    <link href="~/css/customer_css/cbsonlyclass.css" rel="stylesheet" />
+    <style>
+        @*券左半邊*@
+        .exch.row.coupon.coupon-avatar {            
+            /*border-right: 2px dashed #dedede;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            overflow: hidden;
+            flex: 10 1 200px;
+            -webkit-mask-position: top left,top right,bottom left,bottom right;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: 51% 51%;
+            -webkit-mask-image: radial-gradient(circle at top left,transparent 0,transparent 0px,#000 0),
+            radial-gradient(circle at top right,transparent 0,transparent 10px,#000 0),
+            radial-gradient(circle at bottom left,transparent 0,transparent 0px,#000 0),
+            radial-gradient(circle at bottom right,transparent 0,transparent 10px,#000 0);
+            mask-image: radial-gradient(circle at top left,transparent 0,transparent 0px,#000 0),
+            radial-gradient(circle at top right,transparent 0,transparent 10px,#000 0),
+            radial-gradient(circle at bottom left,transparent 0,transparent 0px,#000 0),
+            radial-gradient(circle at bottom right,transparent 0,transparent 10px,#000 0);*/
+        }
+        @*券右半邊*@
+        .coupon-info {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            flex: 1.2 0 60px;
+            -webkit-mask-position: top left,top right,bottom left,bottom right;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: 51% 51%;
+            -webkit-mask-image: radial-gradient(circle at top left,transparent 0,transparent 10px,#000 0),
+            radial-gradient(circle at top right,transparent 0,transparent 0px,#000 0),
+            radial-gradient(circle at bottom left,transparent 0,transparent 10px,#000 0),
+            radial-gradient(circle at bottom right,transparent 0,transparent 0px,#000 0);
+            mask-image: radial-gradient(circle at top left,transparent 0,transparent 10px,#000 0),
+            radial-gradient(circle at top right,transparent 0,transparent 0px,#000 0),
+            radial-gradient(circle at bottom left,transparent 0,transparent 10px,#000 0),
+            radial-gradient(circle at bottom right,transparent 0,transparent 0px,#000 0);
+        }
+
+        .form-group:nth-child(1){
+            border-right: 2px dashed #dedede;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            overflow: hidden;
+            flex: 10 1 200px;
+            -webkit-mask-position: top left,top right,bottom left,bottom right;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: 51% 51%;
+            -webkit-mask-image: radial-gradient(circle at top left,transparent 0,transparent 0px,#000 0),
+            radial-gradient(circle at top right,transparent 0,transparent 10px,#000 0),
+            radial-gradient(circle at bottom left,transparent 0,transparent 0px,#000 0),
+            radial-gradient(circle at bottom right,transparent 0,transparent 10px,#000 0);
+            mask-image: radial-gradient(circle at top left,transparent 0,transparent 0px,#000 0),
+            radial-gradient(circle at top right,transparent 0,transparent 10px,#000 0),
+            radial-gradient(circle at bottom left,transparent 0,transparent 0px,#000 0),
+            radial-gradient(circle at bottom right,transparent 0,transparent 10px,#000 0);
+        }
+        .form-group:nth-child(2){
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            flex: 1.2 0 60px;
+            -webkit-mask-position: top left,top right,bottom left,bottom right;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: 51% 51%;
+            -webkit-mask-image: radial-gradient(circle at top left,transparent 0,transparent 10px,#000 0),
+            radial-gradient(circle at top right,transparent 0,transparent 0px,#000 0),
+            radial-gradient(circle at bottom left,transparent 0,transparent 10px,#000 0),
+            radial-gradient(circle at bottom right,transparent 0,transparent 0px,#000 0);
+            mask-image: radial-gradient(circle at top left,transparent 0,transparent 10px,#000 0),
+            radial-gradient(circle at top right,transparent 0,transparent 0px,#000 0),
+            radial-gradient(circle at bottom left,transparent 0,transparent 10px,#000 0),
+            radial-gradient(circle at bottom right,transparent 0,transparent 0px,#000 0);
+        }
+
+        .exch.row{
+        width:50%;
+        margin:30px auto;
+        /*border: 0.5px solid gray*/
+        background-color:rgb(254,249,226);
+        border-radius:10px;
+        }
+        .exch.row.coupon{
+            width:40%;
+        }
+        .exch.col-md-4{
+            margin:10px auto;
+            width:90%;
+            text-align:center;
+            display:flex;
+        }
+        
+        .hr{
+            width:95%;
+            margin:20px auto;
+            /*margin:20px 0;*/
+            border: 1px solid rgb(213,213,213);
+        }
+        .hr.dotted{
+            border-style:dotted;
+        }
+        .exch.col-md-4>div{
+            margin:10px;            
+        }
+
+        .exch.col-md-4 button{
+            margin-top:10px;
+        }
+    </style>
+}
+@section Scripts{
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(function(){
+
+        });
+    </script>
+}
+<div>
+    <div class="exch row coupon coupon-avatar">
+        <div class="exch col-md-4 ">
+            <div class="form-group">
+                    <p class="control-label">我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容我是內容</p>
+            </div>
+                                                                                                                        
+            <div class="form-group">
+                <h2 class="control-label">20元</h2>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
