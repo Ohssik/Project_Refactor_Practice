@@ -177,15 +177,8 @@ namespace prjMSIT145_Final.Controllers
 					}
 					pro.Photo = fileName;
 				}
-				else
-				{
-					string oldPath = _host.WebRootPath + $"\\images\\{pro.Photo}";
-					if (System.IO.File.Exists(oldPath))
-					{
-						System.IO.File.Delete(oldPath);
-					}
+				else if (vm.Photo == null)
 					pro.Photo = null;
-				}
 				pro.IsForSale = vm.IsForSale;
 				pro.CategoryFid = proC.Fid;
 				pro.ProductName = vm.ProductName;

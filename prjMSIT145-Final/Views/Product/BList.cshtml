@@ -1,4 +1,4 @@
-﻿@*@model prjMSIT145_Final.ViewModel.CProductsViewModel*@
+﻿@model prjMSIT145_Final.ViewModel.CProductsViewModel
 @{
 	Layout = "_BusinessLayout";
 	ViewData["Title"] = "BList";
@@ -62,6 +62,7 @@
 						<h6 id="h6">相片</h6>
 						<div class="divimage">
 							<div>
+								<input type="hidden" name="Photo" id="Photo" value=""/>
 								<img id="imgShow" class="inputimage" src="" />
 							</div>
 							<div>
@@ -137,7 +138,7 @@
 		const btnSubmit = document.querySelector("#btnSubmit"); //編輯完成後的儲存按鈕
 		const fid = document.querySelector("#Fid");
 		const selType = document.querySelector("#selType");
-
+		const photo = document.querySelector("#Photo"); //目前的照片名稱
 		search();
 		
 		//關鍵字查詢(類別與商品)
@@ -201,14 +202,15 @@
 			btnEdit.forEach(function(btn){
 				btn.addEventListener("click", function(){
 					loadCategory();
-					console.log("click");
+
 					const txtProductName = document.querySelector("#txtProductName");  //產品名
 					const imgShow = document.querySelector("#imgShow"); //照片
 					const txtPrice = document.querySelector("#txtPrice"); //價錢
 					const txtMemo = document.querySelector("#txtMemo"); //備註
 					const cell = this.parentElement.parentElement;  //tr內的值
-
+					
 					txtProductName.value = cell.children[4].innerHTML;
+					photo.value = cell.children[3].firstElementChild.getAttribute("src").substring(10);
 					imgShow.setAttribute("src",cell.children[3].firstElementChild.getAttribute("src"));
 					selType.innerHTML = `<option>${cell.children[6].innerHTML}</option>`;
 					txtPrice.value = cell.children[5].innerHTML;
@@ -219,8 +221,6 @@
 			//套用bootstrap,dataTable功能
 			$(document).ready(function () {
 				$('#table_id').DataTable();
-				
-			
 			});
 		}
 		
@@ -237,7 +237,6 @@
 					frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
 			})
 			selType.innerHTML += frag;
-			//console.log(selType)
 		}
 		//上傳照片
 		file.addEventListener("change", function () {
@@ -252,6 +251,7 @@
 		btnImgDelete.addEventListener("click", function () {
 			file.outerHTML = file.outerHTML;
 			imgShow.setAttribute("src", "../images/Business/upload.png");
+			photo.value = null;
 		})
 		//送出時確認商品類別及狀態是否選取
 		btnSubmit.addEventListener("click", function (event) {
