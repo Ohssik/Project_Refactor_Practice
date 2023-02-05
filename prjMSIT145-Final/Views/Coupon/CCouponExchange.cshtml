@@ -66,13 +66,17 @@
             let simpleLogin = new bootstrap.Modal(document.getElementById('simpleLogin'), {
                 keyboard: false
             });
+            let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
+                keyboard: false
+            });
         @{
             if (!Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
             {
-                            @:simpleLogin.show();$('#btnSend').removeAttr('disabled');                    
+                    @:simpleLogin.show(); $('#btnSend').removeAttr('disabled'); $('[name=txtAccount]').focus();
             }
         }
 
+        //footer一直搞不定= =
             $('.Copyright').removeClass('fixed_footer');
             $(window).scrollTop(1);
             let scrollTop = $(window).scrollTop();
@@ -85,8 +89,67 @@
 
             }
             $(window).scrollTop(0);
+        //footer
 
+            $('#btnCloseMsg').click(function () {
+                $('#msgAlert>label').text('');     
+                return false;
+                //location.reload(true);                
+            });
+            
+            $('#btnSubmit').click(function(){
+                let CouponCode = $('[name=CouponCode]').val();
+                if (CouponCode.trim()=='')
+                    return false;
 
+                $.ajax({
+                    url: `@Url.Content("~/Coupon/CSubmitCouponExchange/")`,
+                    type: 'post',
+                    data:{
+                        data: CouponCode
+                    },
+                    success: function (msg) {
+                        console.log(msg);
+                        
+                        if (msg == '優惠券代碼錯誤'){
+                            $('#msgAlert label').text(msg);
+                            msgAlert.show();
+                            return false;
+                        }
+                        if (msg == '尚未登入會員') {
+                            $('#msgAlert label').text(msg);
+                            msgAlert.show();
+                            return false;
+                        }
+                        if (msg == '優惠券已被兌換過') {
+                            $('#msgAlert label').text(msg);
+                            msgAlert.show();
+                            return false;
+                        }
+                        if(`${msg}`.indexOf('error')>-1){
+                            console.log(msg);
+                            return false;
+                        }
+                        let price = Math.trunc(msg.price);
+                        let newCoup = `<div class="exch row coupon">
+                                            <div class="exch col-md-4">
+                                                <div class="form-group">
+                                                    <h2 class="control-label">${msg.title}</h2>
+                                                </div>
+                                                <div class="form-group">
+                                                    <p class="control-label">${msg.memo}</p>
+                                                    <button class="btn btn-danger">折價 ${price} 元</button>
+                                                </div>
+                                            </div>
+                                        </div>`;
+
+                        $('.hr.dotted').after(newCoup);
+                        
+                    }
+                }).done(function (data) {
+                    
+                });
+            });
             $('#btnCancel').click(function () {
                 $('#btnSend').removeAttr('disabled');
                 $('[name=txtAccount]').val('');
@@ -141,35 +204,36 @@
         </div>
         <div class="form-group" id="CouponCode">
             <input type="text" name="CouponCode" class="form-control" />
-            <button class="btn btn-secondary">送出</button>
+            <button class="btn btn-secondary" id="btnSubmit">送出</button>
         </div>   
             
     </div>
     
 </div>
     <hr class="hr dotted" />
+<div id="coupons2member">
     @{
     string price = "";
     foreach(var item in Model){
         price = ((decimal)item.Price).ToString("###,###");
-    <div class="exch row coupon">
-                            <div class="exch col-md-4">
-                                <div class="form-group">
-                                    <h2 class="control-label">@item.Title</h2>                        
-                                </div>
-                                
-                                <div class="form-group">
-                                    <p class="control-label">@item.Memo</p>
+            <div class="exch row coupon">
+                <div class="exch col-md-4">
+                    <div class="form-group">
+                        <h2 class="control-label">@item.Title</h2>                        
+                    </div>
+                                                                                                                        
+                    <div class="form-group">
+                        <p class="control-label">@item.Memo</p>
 
-                                <button class="btn btn-danger">折價 @price 元</button>
-                                </div>
-                            </div>
-    </div>
+                    <button class="btn btn-danger">折價 @price 元</button>
+                    </div>
+                </div>
+            </div>
         }
     }
-    
+</div>
 
-    <div class="modal fade" id="simpleLogin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="simpleLogin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <form name="loginForm">
@@ -185,7 +249,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">密碼</label>
-                        <input class="form-control" id="pwd" name="txtPassword" />
+                        <input class="form-control" id="pwd" name="txtPassword" type="password"/>
                     </div>
 
                 </div>
@@ -201,4 +265,18 @@
     </div>
 </div>
 
+<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label"></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseMsg">確定</button>
+            </div>
+        </div>
+    </div>
+</div>
 

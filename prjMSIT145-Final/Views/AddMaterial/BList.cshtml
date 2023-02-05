@@ -3,9 +3,9 @@
 	ViewData["Title"] = "BList";
 }
 @section Styles{
-	<script src="../js/ProductList.js"> </script>
-	<link rel="stylesheet" href="../css/ProductList.css">
 	<link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">
+	<link rel="stylesheet" href="@Url.Content("~/css/ProductList.css")">
+	@*<link href="@Url.Content("~/vendor/datatables/dataTables.bootstrap4.min.css")" rel="stylesheet">*@
 
 	<style>
 		.btnDeleteCheck {
@@ -23,6 +23,7 @@
 			font-size: 15px;
 			background-color: transparent;
 		}
+
 	</style>
 }
 @*刪除按鈕彈窗*@
@@ -59,7 +60,7 @@
 
 							<input id="btnSubmit" class="butt" type="submit" value="儲存" style="margin-left:20px;"/>
 						</div>
-						<select id="selType" name="OptionGroupName" style="margin:5px 0;  border-radius:5px;"></select>  @*選擇類別*@
+						<select id="selType" class="select" name="OptionGroupName" style="margin:5px 0;  border-radius:5px;"></select>  @*選擇類別*@
 
 						<hr style="border:1px dashed #000; height:1px">
 						<h6 id="h6">價格</h6>
@@ -74,21 +75,19 @@
 	@*列表*@
 	<div class="top">
 		<div>
-			<h2 id="h2">配料</h2>
+			<h3 id="h2">配料</h3>
 		</div>
 		<div class="topbutton">
 			<a href="@Url.Content("~/AddMaterial/BCreate")"><input class="insertbutton" type="button" value="+新增配料"/></a>
 			<a href="@Url.Content("~/Type/BMaterialTypeAddnEdit")"><input style="width:150px; margin-left:5px;" class="insertbutton" type="button" value="新增/編輯類別"/></a>
 		</div>
 	</div>
-	<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />
-	<table id="table" class="table table-hover stripe">
+	@*<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />*@
+	<table id="table_id" class="table table-hover stripe">
 		<thead>
-			@*<th>相片</th>*@
 		<th>配料名稱</th>
 		<th>配料價格</th>
 		<th>配料類別</th>
-			@*<th>類別備註</th>*@
 		<th>選項</th>
 		</thead>
 		<tbody id="tbody">
@@ -96,24 +95,27 @@
 	</table>
 </div>
 
+
 @section Scripts{
+	
 	<script>
 		const tbody = document.querySelector("#tbody");
-		const txt = document.querySelector("#txtKeyword");  //關鍵字
+		//const txt = document.querySelector("#txtKeyword");  //關鍵字
 		const btnDelete = document.getElementsByName("btnDelete") //點擊刪除配料
 		const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
 		const linkDelete = document.querySelector("#linkDelete"); //確定刪除配料
 		const selType = document.querySelector("#selType"); //配料類別
-
+		const txtPrice = document.querySelector("#txtPrice");
 
 		//關鍵字查詢(類別與商品)
-		txt.addEventListener("input", () => list());
+		//txt.addEventListener("input", () => list());
 
 		list();
 		async function list() {
-			const response = await fetch(`@Url.Content("~/AddMaterial/BSearch?keyword=${txt.value}")`);
+			
+			const response = await fetch(`@Url.Content("~/AddMaterial/BSearch")`);
 			const data = await response.json();
-			//console.log(data)
+			//console.log(data)?keyword=${txt.value}
 			let result = document.createDocumentFragment();
 			result = "";
 			data.forEach(function (item, index) {
@@ -121,20 +123,19 @@
 				result += `
 							<tr>
 							<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
-							<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
-							<input type='hidden'  id='${item.optionGroupFid}' name='${item.optionGroupFid}' value='${item.optionGroupFid}'/>
 
 							<td>${item.optionName}</td>
 							<td>$${item.unitPrice}</td>
-							<td id='${item.optionGroupName}' name="OptionGroupName">${item.optionGroupName}</td>
-
+							<td >${item.optionGroupName}</td>
 							<td>
 								<button class="buteditgar" name='btnEdit' data-bs-toggle="modal"  data-bs-target="#btnEditModal"><img src="../images/Business/edit.png">編輯</button>
 								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModal"><img src="../images/Business/garbage.png">刪除</button>
-					        <td>
+					        </td>
 							</tr>`
 			});
 			tbody.innerHTML = result;
+
+			
 			//確定刪除配料
 			btnDelete.forEach(function (click) {
 				click.addEventListener("click",function(){
@@ -149,20 +150,32 @@
 			//點選編輯按鈕
 			btnEdit.forEach(function(btn){
 				btn.addEventListener("click",function(){
+					loadGroup();
 					const Fid = document.querySelector("#Fid");
 					const txtOptionName = document.querySelector("#txtOptionName");
 					const txtPrice = document.querySelector("#txtPrice");
 
 					const cell = this.parentElement.parentElement;
 
-					loadGroup();
+					
 					Fid.value = cell.children[0].value;
-					txtOptionName.value  = cell.children[3].innerHTML;
-					selType.innerHTML = `<option>${cell.children[5].innerHTML}</option>`;
-					txtPrice.value = cell.children[4].innerHTML.substring(1);
+					txtOptionName.value  = cell.children[1].innerHTML;
+					selType.innerHTML = `<option>${cell.children[3].innerHTML}</option>`;
+					txtPrice.value = cell.children[2].innerHTML.substring(1);
 				})
 			})
-			//載入配料類別
+			////套用bootstrap,dataTable功能
+			//$(document).ready(function () {
+			
+			//});
+			window.addEventListener("load",function(){
+				
+
+			})
+			$("#table_id").DataTable();
+		}
+		
+		//載入配料類別
 			async function loadGroup(){
 				const response = await fetch("@Url.Content("~/Type/BOptionGroup")");
 				const datas = await response.json();
@@ -173,7 +186,8 @@
 					frag += `<option>${item.optionGroupName}</option>`
 				})
 				selType.innerHTML += frag;
+				console.log("click");
 			}
-		}
 	</script>
+	<script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.bundle.min.js")"></script>
 }

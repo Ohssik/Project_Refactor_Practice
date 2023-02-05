@@ -67,7 +67,7 @@ namespace prjMSIT145_Final.Controllers
                     string mailSubject = $"帳號{changeType}通知";
 
                     string result = sendMail(mail.txtRecipient, mailBody, mailSubject);
-                    return Content(result);
+                    return Json(result);
                 }
                                     
             }
@@ -669,158 +669,270 @@ namespace prjMSIT145_Final.Controllers
             if (!string.IsNullOrEmpty(data))
             {
                 CForgetPwdViewModel fm = JsonConvert.DeserializeObject<CForgetPwdViewModel>(data);
-                if (fm != null)
+                
+                //一般會員
+                if (fm.memberType == "N")
                 {
-                    //一般會員
-                    if (fm.memberType == "N")
-                    {                        
-                        var user = _context.NormalMembers.FirstOrDefault(u => u.Phone == fm.txtAccount && u.Email==fm.txtEmail);
-                        if (user != null)
-                        {                            
-                            var connStr= _config["ConnectionStrings:localconnection"];
-                            string token = Guid.NewGuid().ToString();
-                            string url = $"https://localhost:7266/Admin/ResetPwd?token={token}&acc={fm.txtAccount}";
-                            //todo 這裡之後換成EF
-                            #region 這裡之後換成EF
-                            using (SqlConnection conn = new SqlConnection(connStr))
-                            {
-                                conn.Open();
-                                using (SqlCommand cmd = new SqlCommand())
-                                {
-                                    cmd.Connection = conn;
-                                    cmd.CommandText = "insert into ChangeRequestPassword(Token,Account,Email) values(@Token,@Account,@Email)";
-                                    cmd.Parameters.AddWithValue("Token", token);
-                                    cmd.Parameters.AddWithValue("Account",fm.txtAccount);
-                                    cmd.Parameters.AddWithValue("Email",fm.txtEmail);
-                                    try
-                                    {
-                                        cmd.ExecuteNonQuery();
-                                        result = "success";
-                                    }
-                                    catch(Exception err)
-                                    {
-                                        result = $"error:{err.Message}";
-                                    }
-                                }
-                            }
-                            #endregion
-                            string mailBody = $"您好：<br>我們收到了您發送的忘記密碼通知。<br>" +
-                                                $"請確認是您本人發出的請求後，請在<label style='color:red'><b>10分鐘內</b></label>點擊以下網址連結到修改密碼的頁面後輸入新密碼。" +
-                                                "<br>如果您沒有發出請求，則可忽略此信。<br><br>" +
-                                                $"<a href='{url}' target='_blank'>★★★修改密碼★★★</a><br><br>" +
-                                                "<hr>" +
-                                                "<br><br>此為系統通知，請勿直接回信，謝謝";
-                            string mailSubject = $"修改密碼通知";
-                            result +=" "+sendMail(fm.txtEmail, mailBody, mailSubject);
-                            result = "1";
-                        }
-                    }
-                    //todo 網站管理者
-                    else if (fm.memberType == "A")
-                    {
-
-                    }
-                    //else if (fm.memberType == "B")
-                    //{
-
-                    //}
+                    var user = _context.NormalMembers.FirstOrDefault(u => u.Phone == fm.txtAccount && u.Email==fm.txtEmail);
+                    if (user == null)
+                        return Json("登入帳號或信箱不符");
                     
-
+                    result=setForgetPwdMail(fm);                        
+                    
                 }
+                //todo 網站管理者
+                else if (fm.memberType == "A")
+                {
+                    var user = _context.AdminMembers.FirstOrDefault(u => u.Account == fm.txtAccount && u.Email==fm.txtEmail);
+                    if (user == null)
+                        return Json("登入帳號或信箱不符");
+
+                    result=setForgetPwdMail(fm);
+                        #region ADO.NET測試
+                        //using (SqlConnection conn = new SqlConnection(connStr))
+                        //{
+                        //    conn.Open();
+                        //    using (SqlCommand cmd = new SqlCommand())
+                        //    {
+                        //        cmd.Connection = conn;
+                        //        cmd.CommandText = "insert into ChangeRequestPassword(Token,Account,Email) values(@Token,@Account,@Email)";
+                        //        cmd.Parameters.AddWithValue("Token", token);
+                        //        cmd.Parameters.AddWithValue("Account", fm.txtAccount);
+                        //        cmd.Parameters.AddWithValue("Email", fm.txtEmail);
+                        //        try
+                        //        {
+                        //            cmd.ExecuteNonQuery();
+                        //            result = "success";
+                        //        }
+                        //        catch (Exception err)
+                        //        {
+                        //            result = $"error:{err.Message}";
+                        //        }
+                        //    }
+                        //}
+                        #endregion
+                        
+                }
+                
             }
             
-            return Content(result);
+            return Json(result);
         }
-        public IActionResult ResetPwd(string token,string acc)
+
+        private string setForgetPwdMail(CForgetPwdViewModel fm)
         {
-            var connStr = _config["ConnectionStrings:localconnection"];
-            string expire = "";
-            using (SqlConnection conn = new SqlConnection(connStr))
+            string result;            
+            string token = Guid.NewGuid().ToString();
+            string url = $"https://localhost:7266/Admin/ResetPwd?token={token}&acc={fm.txtAccount}&tp={fm.memberType}";
+
+            #region ADO.NET測試
+            //var connStr = _config["ConnectionStrings:localconnection"];
+            //using (SqlConnection conn = new SqlConnection(connStr))
+            //{
+            //    conn.Open();
+            //    using (SqlCommand cmd = new SqlCommand())
+            //    {
+            //        cmd.Connection = conn;
+            //        cmd.CommandText = "insert into ChangeRequestPassword(Token,Account,Email) values(@Token,@Account,@Email)";
+            //        cmd.Parameters.AddWithValue("Token", token);
+            //        cmd.Parameters.AddWithValue("Account", fm.txtAccount);
+            //        cmd.Parameters.AddWithValue("Email", fm.txtEmail);
+            //        try
+            //        {
+            //            cmd.ExecuteNonQuery();
+            //            result = "success";
+            //        }
+            //        catch (Exception err)
+            //        {
+            //            result = $"error:{err.Message}";
+            //        }
+            //    }
+            //}
+            #endregion
+            ChangeRequestPassword request = new ChangeRequestPassword();
+            request.Token=token;
+            request.Account=fm.txtAccount;
+            request.Email=fm.txtEmail;
+            request.Expire=DateTime.Now.AddMinutes(10);
+            _context.ChangeRequestPasswords.Add(request);
+            try
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand())
-                {
-                    cmd.Connection = conn;
-                    cmd.CommandText = "select top(1) Expire from ChangeRequestPassword where Account=@Account order by Expire desc";
-                    cmd.Parameters.AddWithValue("Account", acc);
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        expire = reader["Expire"].ToString();
-                    }
-                    reader.Close();
-                }
+                _context.SaveChanges();
+                result = "success";
+            }
+            catch (Exception err)
+            {
+                result = $"error:{err.Message}";
             }
 
-            if (expire != "")
-            {
-                if (DateTime.Now > Convert.ToDateTime(expire))
-                {
-                    return RedirectToAction("ALogin");
-                }
-                if (HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_EXPIRE))
-                {
-                    HttpContext.Session.Remove(CDictionary.SK_RESETPWD_EXPIRE);                    
-                }
-                HttpContext.Session.SetString(CDictionary.SK_RESETPWD_EXPIRE, expire);
-            }
+            string mailBody = $"您好：<br>我們收到了您發送的忘記密碼通知。<br>" +
+                                $"請確認是您本人發出的請求後，請在<label style='color:red'><b>10分鐘內</b></label>點擊以下網址連結到修改密碼的頁面後輸入新密碼。" +
+                                "<br>如果您沒有發出請求，則可忽略此信。<br><br>" +
+                                $"<a href='{url}' target='_blank'>★★★修改密碼★★★</a><br><br>" +
+                                "<hr>" +
+                                "<br><br>此為系統通知，請勿直接回信，謝謝";
+            string mailSubject = $"修改密碼通知";
+            result +=" "+sendMail(fm.txtEmail, mailBody, mailSubject);
+            return result;
+        }
+
+        public IActionResult ResetPwd(string token,string acc,string tp)
+        {
+            string expire = "";
+            #region ADO.NET測試
+            //var connStr = _config["ConnectionStrings:localconnection"];            
+            //using (SqlConnection conn = new SqlConnection(connStr))
+            //{
+            //    conn.Open();
+            //    using (SqlCommand cmd = new SqlCommand())
+            //    {
+            //        cmd.Connection = conn;
+            //        cmd.CommandText = "select top(1) Expire from ChangeRequestPassword where Account=@Account order by Expire desc";
+            //        cmd.Parameters.AddWithValue("Account", acc);
+            //        SqlDataReader reader = cmd.ExecuteReader();
+            //        while (reader.Read())
+            //        {
+            //            expire = reader["Expire"].ToString();
+            //        }
+            //        reader.Close();
+            //    }
+            //}
+            #endregion
+
+            ChangeRequestPassword request = _context.ChangeRequestPasswords.FirstOrDefault(r => r.Token==token);
+            if(request!=null)            
+                expire = request.Expire.ToString();            
+
+            if (expire == "" || DateTime.Now > Convert.ToDateTime(expire))
+                return RedirectToAction("ALogin");
+
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_EXPIRE))                
+                HttpContext.Session.Remove(CDictionary.SK_RESETPWD_EXPIRE);                    
+                
+            HttpContext.Session.SetString(CDictionary.SK_RESETPWD_EXPIRE, expire);
 
             return View();
+            
         }
         public IActionResult submitResetPwd(CResetPwdViewModel reset)
         {
             string result = "";
             if (reset.txtPassword == reset.txtConfirmPwd)
-            {
-                var connStr = _config["ConnectionStrings:localconnection"];
+            {                
                 string expire= "";
-                if (HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_EXPIRE))
-                {
+                if (HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_EXPIRE))                
                     expire = HttpContext.Session.GetString(CDictionary.SK_RESETPWD_EXPIRE);
-                }
 
                 if (expire != "")
                 {
-                    if (DateTime.Now < Convert.ToDateTime(expire))
+                    DateTime expireTime = Convert.ToDateTime(expire);
+                    if (DateTime.Now < expireTime)
                     {
-                        NormalMember user = _context.NormalMembers.FirstOrDefault(u => u.Phone == reset.txtAccount);
-                        if (user != null)
+                        if (reset.tp.ToUpper()=="N")
                         {
-                            user.Password = reset.txtPassword;
-                            _context.SaveChanges();
-
-                            using (SqlConnection conn = new SqlConnection(connStr))
+                            NormalMember user = _context.NormalMembers.FirstOrDefault(u => u.Phone == reset.txtAccount);
+                            if (user != null)
                             {
-                                conn.Open();
-                                using (SqlCommand cmd = new SqlCommand())
+                                user.Password = reset.txtPassword;
+                                try
                                 {
-                                    cmd.Connection = conn;
-                                    cmd.CommandText = "delete from ChangeRequestPassword where Expire<=@Expire";
-                                    cmd.Parameters.AddWithValue("Expire", Convert.ToDateTime(expire));
-                                    try
-                                    {
-                                        cmd.ExecuteNonQuery();
-                                        result += "success";
-                                    }
-                                    catch(Exception err)
-                                    {
-                                        result += $"error:{err.Message}";
-                                    }
-                                    
+                                    _context.SaveChanges();
+                                    result += "success";
                                 }
-                            }                            
+                                catch (Exception err)
+                                {
+                                    result += $"error:{err.Message}";
+                                }
+
+                                #region ADO.NET測試
+                                //var connStr = _config["ConnectionStrings:localconnection"];
+                                //using (SqlConnection conn = new SqlConnection(connStr))
+                                //{
+                                //    conn.Open();
+                                //    using (SqlCommand cmd = new SqlCommand())
+                                //    {
+                                //        cmd.Connection = conn;
+                                //        cmd.CommandText = "delete from ChangeRequestPassword where Expire<=@Expire";
+                                //        cmd.Parameters.AddWithValue("Expire", Convert.ToDateTime(expire));
+                                //        try
+                                //        {
+                                //            cmd.ExecuteNonQuery();
+                                //            result += "success";
+                                //        }
+                                //        catch(Exception err)
+                                //        {
+                                //            result += $"error:{err.Message}";
+                                //        }
+
+                                //    }
+                                //}
+                                #endregion
+
+                                result+= " "+deleteChangePwdRequest(expireTime, reset.token, reset.txtAccount);
+
+                            }
+                            else
+                                result="error:Wrong Account";
                         }
+                        else if (reset.tp.ToUpper()=="A")
+                        {
+                            AdminMember user = _context.AdminMembers.FirstOrDefault(u => u.Account == reset.txtAccount);
+                            if (user != null)
+                            {
+                                user.Password = reset.txtPassword;
+                                try
+                                {
+                                    _context.SaveChanges();
+                                    result += "success";
+                                }
+                                catch (Exception err)
+                                {
+                                    result += $"error:{err.Message}";
+                                }
+
+                                result+= " "+deleteChangePwdRequest(expireTime, reset.token, reset.txtAccount);
+
+                            }
+                            else
+                                result="error:Wrong Account";
+                        }
+
                     }
                     HttpContext.Session.Remove(CDictionary.SK_RESETPWD_EXPIRE);
                 }
+                else
+                    result="error:Link Expired";
 
             }
             
-            return Content(result);
+            return Json(result);
         }
-        private string sendMail(string email,string mailBody,string mailSubject)
+
+        private string deleteChangePwdRequest(DateTime expireTime,string token,string acc)
         {
             string result = "";
+            ChangeRequestPassword request = _context.ChangeRequestPasswords.FirstOrDefault(r =>r.Token==token);
+            if (request!=null)
+            {
+                var deleteItem = _context.ChangeRequestPasswords.Where(r => r.Account==acc);
+                _context.ChangeRequestPasswords.RemoveRange(deleteItem.ToList());
+                try
+                {
+                    _context.SaveChanges();
+                    result += "success";
+                }
+                catch (Exception err)
+                {
+                    result += $"error:{err.Message}";
+                }
+
+            }
+
+            return result;
+        }
+
+        private string sendMail(string email,string mailBody,string mailSubject)
+        {            
             var DemoMailServer = _config["DemoMailServer:pwd"];
             MailMessage MyMail = new MailMessage();
             MyMail.From = new MailAddress("ShibaAdmin@msit145shiba.com.tw", "日柴", System.Text.Encoding.UTF8);
@@ -828,31 +940,28 @@ namespace prjMSIT145_Final.Controllers
             
             MyMail.Subject = mailSubject;            
             MyMail.Body = mailBody; //設定信件內容
-
             MyMail.IsBodyHtml = true; //是否使用html格式
 
-
             SmtpClient MySMTP = new SmtpClient();
+            //MySMTP.UseDefaultCredentials = true;
             MySMTP.Credentials = new System.Net.NetworkCredential("b9809004@gapps.ntust.edu.tw", DemoMailServer); //這裡要填正確的帳號跟密碼
             MySMTP.Host = "smtp.gmail.com"; //設定smtp Server
-            MySMTP.Port = 25;
+            MySMTP.Port = /*587*/25;
             MySMTP.EnableSsl = true; //gmail預設開啟驗證
+            
 
             try
             {
-                MySMTP.Send(MyMail);
-                //result = "success";
-                return "1";
+                MySMTP.Send(MyMail);                
+                return "success";
             }
             catch (Exception ex)
             {
-                //return $"error:{ex.ToString()}";
-                return "-1";
+                return $"Mail error:{ex.ToString()}";                
             }
             finally
             {
                 MyMail.Dispose(); //釋放資源
-
             }
             
         }

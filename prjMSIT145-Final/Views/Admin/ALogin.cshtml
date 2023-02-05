@@ -71,23 +71,45 @@
 
                 </div>
                 <div class="modal-footer">
+                    <span class="text-danger" id="pwdInvalid"></span>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>
                     <button type="button" class="btn btn-primary" id="btnSend">送出</button>
                 </div>
             </div>
         </div>
     </div>
+<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label"></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseMsg">確定</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts{
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
             keyboard: false
         });
+        let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
+            keyboard: false
+        });
+        
         $('#btnCancel').click(function () {
             $('#btnSend').removeAttr('disabled');
+            $('#msgAlert label').text('');
             $('[name=txtAccount]').val('');
             $('[name=txtEmail]').val('');
         });
         $('#btnSend').click(function () {
+            
             if ($('[name=txtAccount]').val()=='' || $('[name=txtEmail]').val()=='')
                 return false;
 
@@ -100,16 +122,23 @@
                     data: JSON.stringify({
                         txtAccount: $('[name = txtAccount]').val(),
                         txtEmail: $('[name = txtEmail]').val(),
-                        memberType: 'N'
+                        memberType: 'A'
                     }),
                 },
                 dataType: "json",
                 success: function (msg) {
                     console.log(`msg=${msg}`);
-                    
-                    $('[name=txtAccount]').val('');
-                    $('[name=txtEmail]').val('');
-                    sendMail.hide();
+                    if(`${msg}`.indexOf('success success')>-1){
+                        $('[name=txtAccount]').val('');
+                        $('[name=txtEmail]').val('');
+                        sendMail.hide();
+                        $('#msgAlert label').text('發信成功，請到信箱收取修改密碼通知信');
+                        msgAlert.show();
+                    }else{
+                        $('#pwdInvalid').text(msg);
+                        
+                    }
+                    $('#btnSend').removeAttr('disabled');
 
                 }
             });
@@ -117,13 +146,15 @@
         $('#forgotPwd').click(function(){            
             sendMail.show();
             $('#btnSend').removeAttr('disabled');
-            $('[name=txtAccount]').val('0911111112');
+            $('#msgAlert label').text('');
+            $('#pwdInvalid').text('');
+            $('[name=txtAccount]').val('admin');
             $('[name=txtEmail]').val('rmtorh@hotmail.com');
             
         });
         $('#btnDemo').click(function(){
             $('input[name=Account]').val('admin');
-            $('input[name=Password]').val('adminnnn');
+            $('input[name=Password]').val('adminnnnn');
         });
 
         $('#btnSubmit').click(function(event){            

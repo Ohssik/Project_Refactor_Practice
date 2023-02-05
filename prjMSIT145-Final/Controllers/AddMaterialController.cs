@@ -43,8 +43,8 @@ namespace prjMSIT145_Final.Controllers
 									 proC.OptionGroupName,
 									 proC.Memo
 								 }).Where(p => p.BFid == member.Fid).OrderBy(b => b.OptionGroupName);
-					if (keyword != null)
-						datas = datas.Where(k => k.OptionName.Contains(keyword) || k.OptionGroupName.Contains(keyword)).OrderBy(o => o.OptionGroupName);
+					//if (keyword != null)
+					//	datas = datas.Where(k => k.OptionName.Contains(keyword) || k.OptionGroupName.Contains(keyword)).OrderBy(o => o.OptionGroupName);
 
 					List<CProductOptionViewModel> materialList = new List<CProductOptionViewModel>();
 					foreach (var data in datas)
@@ -65,11 +65,16 @@ namespace prjMSIT145_Final.Controllers
 		}
 		public ActionResult BCreate()
 		{
-			string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-			BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-			CProductOptionViewModel vm = new CProductOptionViewModel();
-			vm.BFid = member.Fid;
-			return View(vm);
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+			{
+				string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+				BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+				CProductOptionViewModel vm = new CProductOptionViewModel();
+				vm.BFid = member.Fid;
+				return View(vm);
+			}
+			else
+				return RedirectToAction("Blogin", "BusinessMember");
 		}
 		[HttpPost]
 		public ActionResult BCreate(CProductOptionViewModel vm)
@@ -102,16 +107,21 @@ namespace prjMSIT145_Final.Controllers
 		//[HttpPost]
 		public ActionResult BEdit(CProductOptionViewModel vm)
 		{
-			ProductOptionGroup optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName);
-			ProductOption opt = _context.ProductOptions.FirstOrDefault(o => o.Fid == vm.Fid);
-			if (optGp != null && opt != null)
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
 			{
-				opt.UnitPrice = Convert.ToDecimal(vm.UnitPrice);
-				opt.OptionName = vm.OptionName;
-				opt.OptionGroupFid = optGp.Fid;
-				_context.SaveChanges();
+				ProductOptionGroup optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName);
+				ProductOption opt = _context.ProductOptions.FirstOrDefault(o => o.Fid == vm.Fid);
+				if (optGp != null && opt != null)
+				{
+					opt.UnitPrice = Convert.ToDecimal(vm.UnitPrice);
+					opt.OptionName = vm.OptionName;
+					opt.OptionGroupFid = optGp.Fid;
+					_context.SaveChanges();
+				}
+				return RedirectToAction("BList");
 			}
-			return RedirectToAction("BList");
+			else
+				return RedirectToAction("Blogin", "BusinessMember");
 		}
 		public ActionResult BDelete(ProductOption opt, int? id)
 		{

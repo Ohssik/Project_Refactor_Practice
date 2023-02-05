@@ -1,14 +1,16 @@
 .wrap{
    
     width:1800px;
-    margin: 200px auto;
+    margin: 50px auto;
     display: flex;
     text-align:center;
     justify-items:center;
+
 }
 .card30 {
     margin-left: 40px;
     margin-bottom: 40px;
+    position:relative;
 }
 
 
@@ -26,12 +28,12 @@
     border-color: transparent;
     width: 636px;
     border-radius: 20px;
-    /* margin:50px auto;*/
     border-collapse: collapse;
     text-align: center;
     padding: 10px;
     margin: 0 auto;
-  
+    box-shadow: 6px 6px 6px rgba(20%,20%,40%,0.5),inset 1px 1px 4px 2px rgba(20%,20%,40%,0.5);
+   
 }
 .necessspan {
     color: red;
@@ -65,8 +67,7 @@
 }
 .input {
     width: 180px;
-    margin: auto;
- 
+    padding-left:10px;
     background-color: transparent;
     font-size: 14px;
     border-radius: 10px;
@@ -206,4 +207,22 @@
     margin-top:-80px;
 
 
+}
+.democorrect{
+    position: absolute;
+    bottom: 20px;
+    right: 100px;
+    color: white;
+    background-color: blue;
+    border-radius:20px;
+    width:60px;
+}
+.demoerror {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    background-color: red;
+    border-radius: 20px;
+    width:60px;
 }

@@ -6,8 +6,7 @@
 @section Styles{
     
 	<link rel="stylesheet" href="@Url.Content("~/css/ProductList.css")">
-    <link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">	
-		<script src="@Url.Content("~/js/ProductList.js")"></script>
+    <link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">
 	<style>
 		.btnDeleteCheck {
 			border: none;
@@ -63,6 +62,7 @@
 						<h6 id="h6">相片</h6>
 						<div class="divimage">
 							<div>
+								<input type="hidden" name="Photo" id="Photo" value=""/>
 								<img id="imgShow" class="inputimage" src="" />
 							</div>
 							<div>
@@ -100,16 +100,17 @@
 	
 	@*列表*@
 	<div class="top">
-		<div>
-			<h2 id="h2">餐點</h2>
+		<div style="height:50px;">
+			<h3 id="h2">餐點</h3>
 		</div>
 		<div class="topbutton">
 			<a href="@Url.Content("~/Product/BCreate")"><input class="insertbutton" type="button" value="+新增餐點" id="btnCreateProduct" /></a>
 			<a href="@Url.Content("~/Type/BItemTypeAddnEdit")" style="margin-left:20px;"><input class="insertbutton" type="button" value="新增/編輯類別" /></a>
 		</div>
 	</div>
-	<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />
-	<table id="" class="table table-hover stripe " cellspacing="0">
+	@*<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />*@
+
+	<table id="table_id" class="table table-hover stripe" style="width:100%;">
 		<thead>
 		<th>相片</th>
 		<th>產品名稱</th>
@@ -125,6 +126,7 @@
 </div>
 
 @section Scripts{
+
 	<script>
 		const txt = document.querySelector("#txtKeyword");
 		const tbody = document.querySelector("#tbody");
@@ -136,11 +138,12 @@
 		const selType = document.querySelector("#selType");
 
 		search();
+		
 		//關鍵字查詢(類別與商品)
-		txt.addEventListener("input", () => search());
+		//txt.addEventListener("input", () => search());?keyword=${txt.value}
 
 		async function search() {
-			let response = await fetch(`@Url.Content("~/Product/BSearch?keyword=${txt.value}")`);
+			let response = await fetch(`@Url.Content("~/Product/BItemList")`);
 			const datas = await response.json();
 			let result = document.createDocumentFragment();
 			result = "";
@@ -155,7 +158,6 @@
 					item.isForSale = "已上架"
 				else if (item.isForSale === 2)
                     item.isForSale = "停售"
-							//<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/edit.png">編輯</button></a>
 				
 				result += `
 						<tr>
@@ -168,16 +170,17 @@
 						<td>${item.unitPrice}</td>
 						<td>${item.categoryName}</td>
 						<td>${item.isForSale}</td>
-		               <td>${item.memo}</td>
+		                <td>${item.memo}</td>
 
-								<td>
-								<button class="buteditgar" name='btnEdit'  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img src="../images/Business/edit.png">編輯</button>
-								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModel"><img src="../images/Business/garbage.png">刪除</button>
+						<td>
+							<button class="buteditgar" name='btnEdit'  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img src="../images/Business/edit.png">編輯</button>
+							<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModel"><img src="../images/Business/garbage.png">刪除</button>
 						</td>
 						</tr>
 						`
 			});
 			tbody.innerHTML = result;
+		
 			//刪除
 			btnDelete.forEach(function (click) {
 				click.addEventListener("click", function () {
@@ -194,14 +197,15 @@
 			btnEdit.forEach(function(btn){
 				btn.addEventListener("click", function(){
 					loadCategory();
-
+					console.log("click");
 					const txtProductName = document.querySelector("#txtProductName");  //產品名
 					const imgShow = document.querySelector("#imgShow"); //照片
 					const txtPrice = document.querySelector("#txtPrice"); //價錢
 					const txtMemo = document.querySelector("#txtMemo"); //備註
 					const cell = this.parentElement.parentElement;  //tr內的值
-
+					console.log(imgShow)
 					txtProductName.value = cell.children[4].innerHTML;
+					document.querySelector("#Photo").value = cell.children[3].firstElementChild.getAttribute("src").substring()
 					imgShow.setAttribute("src",cell.children[3].firstElementChild.getAttribute("src"));
 					selType.innerHTML = `<option>${cell.children[6].innerHTML}</option>`;
 					txtPrice.value = cell.children[5].innerHTML;
@@ -209,7 +213,12 @@
 					fid.value =cell.children[0].value;
 				})
 			})
+			//套用bootstrap,dataTable功能
+			$(document).ready(function () {
+				$('#table_id').DataTable();
+			});
 		}
+
 		//載入所有商品類別
 		async function loadCategory() {
 			const request = await fetch(`@Url.Content("~/Type/BCategoryList")`);
@@ -222,7 +231,6 @@
 					frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
 			})
 			selType.innerHTML += frag;
-			console.log(selType)
 		}
 		//上傳照片
 		file.addEventListener("change", function () {
@@ -250,4 +258,6 @@
 			}
 		})
 	</script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
 }
