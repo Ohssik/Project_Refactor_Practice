@@ -216,9 +216,12 @@
 </section>
 
 <!-- FormArea -->
-<form asp-controller="" asp-action="" method="post" enctype="multipart/form-data">
+<form asp-controller="Home" asp-action="CAddtoCart" method="post" enctype="multipart/form-data">
+    <input type="text" name="OFid" id="OFid" value="@Model[0].OrderID" />
     <input type="text" name="BFid" id="BFid" value="@Model[0].BusinessMemberDetailList[0].Fid" />
     <input type="text" name="PFid" id="PFid" value="無變化" />
+    <input type="text" name="TotalAmount" id="TotalAmount" value="無變化" />
+    <input type="text" name="Qty" id="Qty" value="無變化" />
     <div style="height:500px;width:500px;background-color:aqua;"></div>
     <!-- Modal -->
     <div class="modal fade" id="OptionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -250,14 +253,14 @@
 
                 <div class="modal-footer">
                     <div class="DisplayColumn">
-                        <p class="TotalPrice">總金額：︁<span class="TotalPrice"> 60 </span>元</p>
+                        <p class="TotalPrice">總金額：︁<span class="TotalPrice" id="Total"> 60 </span>元</p>
                         <div class="DisplayFlex">
-                            <div class="Minusbtn">-</div>
-                            <div class="Countbtn">99</div>
-                            <div class="Plusbtn">+</div>
+                            <div class="Minusbtn CursorPointer" id="Minus">-</div>
+                            <div class="Countarea CursorDefault" id="Count">99</div>
+                            <div class="Plusbtn CursorPointer" id="Plus">+</div>
                         </div>
                     </div>
-                    <button type="button" class="Submitbtn">加入購物車</button>
+                    <button type="submit" class="Submitbtn">加入購物車</button>
                 </div>
 
             </div>
@@ -269,35 +272,72 @@
 @section Scripts{
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        let OptionDisplayArea = document.getElementById('OptionDisplayArea');
 
-        @foreach (var item1 in Model[0].ProductClassList)
-        {
-            @if (item1.ProductsList.Count != 0)
+        let BasePriceRecord = 0;
+        let BasePrice = 0;
+        let TotalPrice = 0;
+        let OrderNumber = 1;
+        let ModalBody = document.getElementById('OptionDisplayArea');
+
+        @{
+            foreach (var ProductClass in Model[0].ProductClassList)
             {
-                @foreach (var item2 in item1.ProductsList)
+                @if (ProductClass.ProductsList.Count != 0)
                 {
-                    @if (item2.IsForSale == 1)
+                    @foreach (var Product in ProductClass.ProductsList)
                     {
-                        @:document.getElementById("Prod @(item2.Fid)").addEventListener("click", function () {
-                        @:document.getElementById("PFid").value=@(item2.Fid);
-                        @:document.getElementById("ProductTitle").innerHTML="@(item2.ProductName)";
-                        @:getOptiondatas();
-                        @:});
+                        @if (Product.IsForSale == 1)
+                        {
+                            //-----------------Modal-Header
+                            @:document.getElementById("Prod @(Product.Fid)").addEventListener("click", function () {
+                            @:document.getElementById("PFid").value=@(Product.Fid);
+                            @:document.getElementById("ProductTitle").innerHTML="@(Product.ProductName)";
+                            //-----------------Modal-Body
+                            @:getOptiondatas();
+                            //-----------------Modal-Footer
+                            @:BasePriceRecord ="@(Product.UnitPrice)";
+                            @:BasePrice = BasePriceRecord;
+                            @:document.getElementById("Total").innerHTML="@(Product.UnitPrice)";
+                            @:document.getElementById("TotalAmount").value="@(Product.UnitPrice)";
+                            @:document.getElementById("Count").innerHTML= "1";
+                            @:document.getElementById("Qty").value = "1";
+                            @:});
+                        }
                     }
                 }
             }
         }
 
-            async function getOptiondatas() {
-                const response = await fetch("@Url.Content("~/Home/CShowProductOption?PFid=1")");
-                const datas = await response.json();
-                STRdatas = JSON.stringify(datas);
-                console.log(datas);
-                console.log(datas[0]);
-                console.log(datas[0].ProductBasicInfoList[0].fid);
-                //OptionDisplayArea.innerHTML += STRdatas;
-            }
+            document.getElementById("Minus").addEventListener("click", function () {
+                OrderNumber--;
+                if (OrderNumber < 1)
+                    OrderNumber = 1;
+                document.getElementById("Count").innerHTML = OrderNumber;
+                document.getElementById("Qty").value = OrderNumber;
+                TotalPrice = BasePrice * OrderNumber;
+                document.getElementById("Total").innerHTML = TotalPrice;
+                document.getElementById("TotalAmount").value = TotalPrice;
+            });
+
+        document.getElementById("Plus").addEventListener("click", function () {
+            OrderNumber++;
+            if (OrderNumber > 99)
+                OrderNumber = 99;
+            document.getElementById("Count").innerHTML = OrderNumber;
+            document.getElementById("Qty").value = OrderNumber;
+            TotalPrice = BasePrice * OrderNumber;
+            document.getElementById("Total").innerHTML = TotalPrice;
+            document.getElementById("TotalAmount").value = TotalPrice;
+        });
+
+        async function getOptiondatas(PFid) {
+            const response = await fetch(`"@Url.Content("~/Home/CShowProductOption?PFid=${PFid}")"`);
+            const datas = await response.json();
+            console.log(datas[0].productBasicInfoList);
+            console.log(datas[0].productBasicInfoList[0].photo);
+            //OptionDisplayArea.innerHTML += STRdatas;
+        }
+
     </script>
 }
 

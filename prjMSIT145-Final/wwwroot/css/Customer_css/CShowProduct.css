@@ -301,14 +301,15 @@
     background-color: #9F4E27;
 }
 
-.Countbtn {
+.Countarea {
     border-top: 2px solid #9F4E27;
     border-bottom: 2px solid #9F4E27;
     font-size: 20px;
     font-weight: 500;
     color: #9F4E27;
     font-family: Arial;
-    padding:2px 50px;
+    padding: 2px 50px;
+    width: 180px;
 }
 
 .Plusbtn {

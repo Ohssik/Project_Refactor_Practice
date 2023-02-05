@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient.Server;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Packaging.Signing;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -31,9 +34,9 @@ namespace prjMSIT145_Final.Controllers
                 OpenTime = BM.OpenTime,
                 CloseTime = BM.CloseTime,
                 Address = BM.Address,
-                IsSuspensed=BM.IsSuspensed,
-                Gps=BM.Gps,
-                IsOpened=BM.IsOpened,
+                IsSuspensed = BM.IsSuspensed,
+                Gps = BM.Gps,
+                IsOpened = BM.IsOpened,
                 LogoImgFileName = BI.LogoImgFileName,
                 SighImgFileName = BI.SighImgFileName,
             }).OrderBy(BM => BM.FID);
@@ -43,7 +46,7 @@ namespace prjMSIT145_Final.Controllers
                 {
                     Fid = item.FID,
                     MemberName = item.MemberName,
-                    OpenTime = Convert.ToString(item.OpenTime).Substring(0,5),
+                    OpenTime = Convert.ToString(item.OpenTime).Substring(0, 5),
                     CloseTime = Convert.ToString(item.CloseTime).Substring(0, 5),
                     Address = item.Address,
                     IsSuspensed = item.IsSuspensed,
@@ -57,7 +60,7 @@ namespace prjMSIT145_Final.Controllers
             return View(CUtility.BusinessMemberList);
         }
 
-        public IActionResult CShowProduct(int? BFid,int? NFid,int? OrderFid)
+        public IActionResult CShowProduct(int? BFid, int? OrderFid)
         {
             if (BFid == null)
                 return RedirectToAction("CIndex");
@@ -67,7 +70,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 FID = BM.Fid,
                 MemberName = BM.MemberName,
-                Phone=BM.Phone,
+                Phone = BM.Phone,
                 OpenTime = BM.OpenTime,
                 CloseTime = BM.CloseTime,
                 Address = BM.Address,
@@ -77,7 +80,7 @@ namespace prjMSIT145_Final.Controllers
                 IsOpened = BM.IsOpened,
                 LogoImgFileName = BI.LogoImgFileName,
                 BannerImgFileName1 = BI.BannerImgFileName1,
-            }).Where(BM=>BM.FID ==BFid).OrderBy(BM => BM.FID);
+            }).Where(BM => BM.FID == BFid).OrderBy(BM => BM.FID);
             foreach (var item in BusinessMemberdatas)
             {
                 BusinessMemberDetailList.Add(new VBusinessMemberDetailViewModel
@@ -96,24 +99,24 @@ namespace prjMSIT145_Final.Controllers
                     BannerImgFileName1 = item.BannerImgFileName1,
                 });
             }
-            if (BusinessMemberDetailList.Count==0)
+            if (BusinessMemberDetailList.Count == 0)
                 return RedirectToAction("CIndex");
-            if (BusinessMemberDetailList[0].IsSuspensed!=0 || BusinessMemberDetailList[0].IsOpened!=1)
+            if (BusinessMemberDetailList[0].IsSuspensed != 0 || BusinessMemberDetailList[0].IsOpened != 1)
                 return RedirectToAction("CIndex");
             CUtility.BusinessMemberDetailList = BusinessMemberDetailList;
             #endregion
             #region 取得該店家付款方式資訊至集合
             List<VPaymenttermViewModel> PaymenttermList = new List<VPaymenttermViewModel>();
             var Paymenttermdatas = from P in _context.PaymentTerm2BusiMembers
-                           join B in _context.BusinessMembers on P.BFid equals B.Fid
-                           join A in _context.PaymentTermCategories on P.PayTermCatId equals A.Fid
-                           where P.BFid == BFid
-                           orderby P.Fid
-                           select new
-                           {
-                               BFid=P.BFid,
-                               PaymentType=A.PaymentType,
-                           };
+                                   join B in _context.BusinessMembers on P.BFid equals B.Fid
+                                   join A in _context.PaymentTermCategories on P.PayTermCatId equals A.Fid
+                                   where P.BFid == BFid
+                                   orderby P.Fid
+                                   select new
+                                   {
+                                       BFid = P.BFid,
+                                       PaymentType = A.PaymentType,
+                                   };
             string PayWay = "";
             int ListCount = Paymenttermdatas.ToList().Count;
             if (ListCount != 0)
@@ -185,20 +188,20 @@ namespace prjMSIT145_Final.Controllers
             List<VProductClassViewModel> ProductClassList = new List<VProductClassViewModel>();
             int BFID = (int)BFid;
             var ProductClassdatas = from P in _context.ProductCategories
-                                where P.BFid == BFID
-                                orderby P.Fid
-                                select new
-                                {
-                                    FID = P.Fid,
-                                    CategoryName = P.CategoryName
-                                };
+                                    where P.BFid == BFID
+                                    orderby P.Fid
+                                    select new
+                                    {
+                                        FID = P.Fid,
+                                        CategoryName = P.CategoryName
+                                    };
             List<TProductClassTemp> ProductClassTempList = new List<TProductClassTemp>();
             foreach (var item in ProductClassdatas)
             {
                 ProductClassTempList.Add(new TProductClassTemp
                 {
-                    Fid=item.FID,
-                    CategoryName=item.CategoryName,
+                    Fid = item.FID,
+                    CategoryName = item.CategoryName,
                 });
             }
             foreach (var item1 in ProductClassTempList)
@@ -247,9 +250,16 @@ namespace prjMSIT145_Final.Controllers
             }
             CUtility.ProductClassList = ProductClassList;
             #endregion
+            #region 取得訂單編號
+            if (OrderFid == null)
+                CUtility.OrderID = 0;
+            else
+                CUtility.OrderID = (int)OrderFid;
+            #endregion
             #region 判斷是否為加點，並計算各產品已點數量
-            if (OrderFid != 0 && OrderFid != null)
+            if (OrderFid > 0)
             {
+                #region 判斷訂單編號是否有效，及是否已完成
                 var Orderdatas = from O in _context.Orders
                                  where O.Fid == OrderFid
                                  select new
@@ -262,8 +272,10 @@ namespace prjMSIT145_Final.Controllers
                 string isFinished = Orderdatas.ToList()[0].OrderState;
                 if (isFinished != "0")
                     return RedirectToAction("CIndex");
+                #endregion
                 var OrderItemdatas = from OI in _context.OrderItems
                                      where OI.OrderFid == OrderFid
+                                     orderby OI.Fid
                                      select new
                                      {
                                          Fid = OI.Fid,
@@ -279,15 +291,13 @@ namespace prjMSIT145_Final.Controllers
                               };
                 for (int i = 0; i < CUtility.ProductClassList.Count; i++)
                 {
-                    int num1 = i;
-                    for (int j = 0; j < CUtility.ProductClassList[num1].ProductsList.Count; j++)
+                    for (int j = 0; j < CUtility.ProductClassList[i].ProductsList.Count; j++)
                     {
-                        int num2 = j;
                         foreach (var item in ReCount)
                         {
-                            if (item.ProductID == CUtility.ProductClassList[num1].ProductsList[num2].Fid)
+                            if (item.ProductID == CUtility.ProductClassList[i].ProductsList[j].Fid)
                             {
-                                CUtility.ProductClassList[num1].ProductsList[num2].OrdetAmount = Convert.ToInt32(item.TotalAmount);
+                                CUtility.ProductClassList[i].ProductsList[j].OrdetAmount = Convert.ToInt32(item.TotalAmount);
                             }
                         }
                     }
@@ -298,18 +308,18 @@ namespace prjMSIT145_Final.Controllers
             int regionlength_1 = 0;
             int regionlength_2 = 0;
             int regionlength_3 = 0;
-            foreach(var item in CUtility.ProductClassList)
+            foreach (var item in CUtility.ProductClassList)
             {
-                if(regionlength_1 <= regionlength_2 && regionlength_1 <= regionlength_3)
+                if (regionlength_1 <= regionlength_2 && regionlength_1 <= regionlength_3)
                 {
                     int tempLength = 0;
-                    if(item.ProductsList.Count!=0)
+                    if (item.ProductsList.Count != 0)
                         tempLength += 52;
                     tempLength += (item.ProductsList.Count * 60);
                     regionlength_1 += tempLength;
                     item.PlayregionID = 1;
                 }
-                else if(regionlength_2 < regionlength_1 && regionlength_2 <= regionlength_3)
+                else if (regionlength_2 < regionlength_1 && regionlength_2 <= regionlength_3)
                 {
                     int tempLength = 0;
                     if (item.ProductsList.Count != 0)
@@ -329,33 +339,31 @@ namespace prjMSIT145_Final.Controllers
                 }
             }
             #endregion
-            List<VCUtilityViewModel> CUL= new List<VCUtilityViewModel>();
+            List<VCUtilityViewModel> CUL = new List<VCUtilityViewModel>();
             CUL.Add(new VCUtilityViewModel
             {
                 BusinessMemberDetailList = CUtility.BusinessMemberDetailList,
                 PaymenttermList = CUtility.PaymenttermList,
                 ProductClassList = CUtility.ProductClassList,
+                OrderID = CUtility.OrderID,
             });
             return View(CUL);
         }
 
-        public IActionResult CShowProductOption(int? PFid, int? NFid, int? OrderFid)
+        public IActionResult CShowProductOption(int? PFid)
         {
-            int BasePrice = 0; //根據點選配料變動
-            int BasePriceRecord = 0;
-            int TotalPrice = 0;
             #region 取得點選產品的基礎資訊
-            List<VProductBasicInfoViewModel> ProductBasicInfoList= new List<VProductBasicInfoViewModel>();
+            List<VProductBasicInfoViewModel> ProductBasicInfoList = new List<VProductBasicInfoViewModel>();
             var ProductInfodatas = from P in _context.Products
-                              where P.Fid == PFid
-                              select new
-                              {
-                                  Fid = P.Fid,
-                                  ProductName = P.ProductName,
-                                  UnitPrice = P.UnitPrice,
-                                  Memo=P.Memo,
-                                  Photo = P.Photo,
-                              };
+                                   where P.Fid == PFid
+                                   select new
+                                   {
+                                       Fid = P.Fid,
+                                       ProductName = P.ProductName,
+                                       UnitPrice = P.UnitPrice,
+                                       Memo = P.Memo,
+                                       Photo = P.Photo,
+                                   };
             foreach (var item in ProductInfodatas)
             {
                 ProductBasicInfoList.Add(new VProductBasicInfoViewModel
@@ -367,7 +375,7 @@ namespace prjMSIT145_Final.Controllers
                     Photo = item.Photo,
                 });
             }
-            CUtility.ProductBasicInfoList= ProductBasicInfoList;
+            CUtility.ProductBasicInfoList = ProductBasicInfoList;
             #endregion
             #region 取得商品配料類別資訊至集合
             List<VOptionGroupViewModel> OptionGroupList = new List<VOptionGroupViewModel>();
@@ -378,9 +386,9 @@ namespace prjMSIT145_Final.Controllers
                                    orderby P.Fid
                                    select new
                                    {
-                                       Fid= OG.Fid,
-                                       OptionGroupName= OG.OptionGroupName,
-                                       IsMultiple=OG.IsMultiple,
+                                       Fid = OG.Fid,
+                                       OptionGroupName = OG.OptionGroupName,
+                                       IsMultiple = OG.IsMultiple,
                                    };
             List<TOptionGroupTemp> OptionGroupTempList = new List<TOptionGroupTemp>();
             foreach (var item in OptionGroupDatas)
@@ -439,57 +447,121 @@ namespace prjMSIT145_Final.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddtoCart()
+        public IActionResult CAddtoCart(FormCollection NewOrder, int? NFid)
         {
-            #region 將新訂單寫入資料庫
-            _context.Orders.Add(new Order
+            NFid = 1;
+            int SNIDCount = 0;
+            if (NFid != 0)  //是否有登入會員
             {
-                NFid = 1,
-                BFid = 1,
-                //PickUpDate = ,
-                //PickUpTime = ,
-                //PickUpType = ,
-                PickUpPerson = "Test",
-                PickUpPersonPhone = "0900000000",
-                PayTermCatId= 1,
-                OrderState = "1",
-                Memo = "",
-                OrderTime = DateTime.Now,
-                TotalAmount = 99,
-                OrderISerialId = "9999009999",
-            });
-            _context.SaveChanges();
-            #endregion
-            #region 將Orderdetial寫入資料庫，並關閉表單
-            //foreach (Control item1 in flpTypeDisplay.Controls)
-            //{
-            //    foreach (Control item2 in item1.Controls[0].Controls)
-            //    {
-            //        if (item2.BackColor == Color.FromArgb(255, 128, 0))
-            //        {
-            //            int OptionID = Convert.ToInt32(item2.Name.Substring(8, 3)); //參考144行註解
-            //            int OptionGroupID = Convert.ToInt32(item2.Name.Substring(4, 3)); //參考144行註解
-            //            int Qty = Convert.ToInt32(labOrderNumber.Text);
-            //            DB.OrderDetail.Add(new OrderDetail
-            //            {
-            //                OrderItem_id = Utility.OrderitemID,
-            //                Order_fid = Utility.OrdersID,
-            //                Product_fid = Utility.ProductID,
-            //                Option_fid = OptionID,
-            //                OptionGroup_fid = OptionGroupID,
-            //                ProductName = labItemName.Text,
-            //                UnitPrice = BasePriceRecord,
-            //                Qty = Qty,
-            //                OrderDetails_Delete = "N"
-            //            });
-            //            DB.SaveChanges();
-            //        }
-            //    }
-            //}
-            //Utility.ProductCount = Convert.ToInt32(labOrderNumber.Text);
-            //this.Close();
-            #endregion
-            return RedirectToAction("CIndex");
+                if (NewOrder[NewOrder.Keys.ToList()[0]] == 0) //是否有訂單編號 (即是否為新訂單)
+                {
+                    #region 將新訂單寫入Orders
+                    var OrderSNID = from O in _context.Orders
+                                    select O.OrderISerialId;
+                    foreach (var SNID in OrderSNID)
+                    {
+                        if (SNIDCount < Convert.ToInt32(SNID))
+                            SNIDCount = Convert.ToInt32(SNID);
+                    }
+                    var NMInfo = from N in _context.NormalMembers
+                                 where N.Fid == NFid
+                                 select N;                    
+                    _context.Orders.Add(new Order
+                    {
+                        NFid = NFid,
+                        BFid = Convert.ToInt32(NewOrder[NewOrder.Keys.ToList()[1]]),
+                        PickUpDate = null,
+                        PickUpTime = null,
+                        PickUpType = null,
+                        PickUpPerson = NMInfo.ToList()[0].MemberName,
+                        PickUpPersonPhone = NMInfo.ToList()[0].Phone,
+                        PayTermCatId = null,
+                        TaxIdnum = null,
+                        OrderState = "0",
+                        Memo = "",
+                        OrderTime = DateTime.Now,
+                        TotalAmount = Convert.ToDecimal(NewOrder[NewOrder.Keys.ToList()[3]]),
+                        OrderISerialId = $"{Convert.ToString(DateTime.Now).Substring(0, 4)}{Convert.ToString(DateTime.Now).Substring(5, 2)}{Convert.ToString(SNIDCount).Substring(6, 4)}",
+                    });
+                    _context.SaveChanges();
+
+                    var OrderID = from O in _context.Orders
+                                  select O.Fid;
+                    CUtility.OrderID = OrderID.Max();
+                    #endregion
+                    #region 將新訂單產品內容寫入Orderitems
+                    _context.OrderItems.Add(new OrderItem
+                    {
+                        OrderFid = CUtility.OrderID,
+                        ProductFid = Convert.ToInt32(NewOrder[NewOrder.Keys.ToList()[2]]),
+                        Qty = Convert.ToInt32(NewOrder[NewOrder.Keys.ToList()[4]]),
+                    });
+                    _context.SaveChanges();
+
+                    var OrderitemsID = from O in _context.OrderItems
+                                       select O.Fid;
+                    CUtility.OrderitemID = OrderitemsID.Max();
+                    #endregion
+                    #region 將新訂單產品配料內容寫入OrderOptionsDetail
+                    for (int i = 5; i < NewOrder.Keys.ToList().Count; i++)
+                    {
+                        if (NewOrder[NewOrder.Keys.ToList()[i]] != "0")
+                        {
+                            _context.OrderOptionsDetails.Add(new OrderOptionsDetail
+                            {
+                                ItemFid = CUtility.OrderitemID,
+                                OptionFid = Convert.ToInt32(NewOrder[NewOrder.Keys.ToList()[i]]),
+                            });
+                            _context.SaveChanges();
+                        }
+                    }
+                    #endregion
+                }
+                else //既有訂單再新增
+                {
+                    #region 將訂單更新資訊寫入Orders
+                    var UpdateOrder = from O in _context.Orders
+                                      where O.Fid == CUtility.OrderID
+                                      select O;
+                    foreach (var item in UpdateOrder)
+                    {
+                        item.OrderTime = DateTime.Now;
+                        item.TotalAmount = item.TotalAmount + Convert.ToDecimal(NewOrder[NewOrder.Keys.ToList()[3]]);
+                    }
+                    _context.SaveChanges();
+                    #endregion
+                    #region 將既有訂單新增產品內容寫入Orderitems
+                    _context.OrderItems.Add(new OrderItem
+                    {
+                        OrderFid = CUtility.OrderID,
+                        ProductFid = Convert.ToInt32(NewOrder[NewOrder.Keys.ToList()[2]]),
+                        Qty = Convert.ToInt32(NewOrder[NewOrder.Keys.ToList()[4]]),
+                    });
+                    _context.SaveChanges();
+
+                    var OrderitemsID = from O in _context.OrderItems
+                                       select O.Fid;
+                    CUtility.OrderitemID = OrderitemsID.Max();
+                    #endregion
+                    #region 將既有訂單新增產品配料內容寫入OrderOptionsDetail
+                    for (int i = 5; i < NewOrder.Keys.ToList().Count; i++)
+                    {
+                        if (NewOrder[NewOrder.Keys.ToList()[i]] != "0")
+                        {
+                            _context.OrderOptionsDetails.Add(new OrderOptionsDetail
+                            {
+                                ItemFid = CUtility.OrderitemID,
+                                OptionFid = Convert.ToInt32(NewOrder[NewOrder.Keys.ToList()[i]]),
+                            });
+                            _context.SaveChanges();
+                        }
+                    }
+                    #endregion
+                }
+            }
+            else //未登入則轉向登入頁面
+                return Redirect("CustomerMember/Login");
+            return RedirectToAction("CShowProduct", new { BFid = Convert.ToInt32(NewOrder[NewOrder.Keys.ToList()[1]]), OrderFid =CUtility.OrderID});
         }
 
         //-------------------------------------------------------------------------------------------------
