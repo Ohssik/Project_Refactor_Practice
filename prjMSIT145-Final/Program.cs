@@ -50,7 +50,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
 
-pattern: "{controller=Home}/{action=CIndex}/{id?}");
+pattern: "{controller=OrderDetial}/{action=CartList}/{id?}");
 
 
 app.Run();
