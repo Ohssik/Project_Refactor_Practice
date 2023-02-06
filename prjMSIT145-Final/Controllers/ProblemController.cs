@@ -11,7 +11,7 @@ namespace prjMSIT145_Final.Controllers
 		{
 			_context = context;
 		}
-		public IActionResult Problem(string keyword)
+		public IActionResult PAnswer(string keyword)
 		{
 			CProblemViewModel vm = new CProblemViewModel();
 			var datas = (_context.ProblemQuestions.Join(_context.ProblemAnswers, q => q.AnswerFid, a => a.Fid, (q, a) => new
@@ -28,9 +28,9 @@ namespace prjMSIT145_Final.Controllers
 			return Json(vm);
 		}
 
-		public IActionResult ProblemView()
+		public IActionResult PQuestion()
 		{
-			return PartialView();
+			return View();
 		}
 
 	}

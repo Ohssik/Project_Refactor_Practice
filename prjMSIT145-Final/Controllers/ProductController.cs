@@ -99,22 +99,30 @@ namespace prjMSIT145_Final.Controllers
 		[HttpPost]
 		public ActionResult BCreate(CProductsViewModel vm, IFormFile file)
 		{
-			if (file != null)
+			try
 			{
-				string fileName = Guid.NewGuid().ToString() + ".jpg";
-				string uploadFile = Path.Combine(_host.WebRootPath, "images", fileName);
-				using (var fileStream = new FileStream(uploadFile, FileMode.Create))
+				if (file != null)
 				{
-					file.CopyTo(fileStream);
+					string fileName = Guid.NewGuid().ToString() + ".jpg";
+					string uploadFile = Path.Combine(_host.WebRootPath, "images", fileName);
+					using (var fileStream = new FileStream(uploadFile, FileMode.Create))
+					{
+						file.CopyTo(fileStream);
+					}
+					vm.product.Photo = fileName;
 				}
-				vm.product.Photo = fileName;
+				var proCFid = _context.ProductCategories.FirstOrDefault(o => o.CategoryName == vm.CategoryName);
+				vm.product.CategoryFid = proCFid.Fid;
+				vm.product.BFid = vm.BFid;
+				_context.Products.Add(vm.product);
+				//_context.SaveChanges();
+				return RedirectToAction("BList");
 			}
-			var proCFid = _context.ProductCategories.FirstOrDefault(o => o.CategoryName == vm.CategoryName);
-			vm.product.CategoryFid = proCFid.Fid;
-			vm.product.BFid = vm.BFid;
-			_context.Products.Add(vm.product);
-			_context.SaveChanges();
-			return RedirectToAction("BList");
+			catch
+			{
+				return RedirectToAction("Blogin", "BusinessMember");
+
+			}
 		}
 		//public ActionResult BEdit(int? id)
 		//{

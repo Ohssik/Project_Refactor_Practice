@@ -22,7 +22,7 @@ namespace prjMSIT145_Final.Controllers
 
             return RedirectToAction("Blogin", "BusinessMember");
         }
-		public ActionResult BSearch(string keyword)
+		public ActionResult BMaterialList(string keyword)
 		{
 			string json = "";
 			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
