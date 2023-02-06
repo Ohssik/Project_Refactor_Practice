@@ -7,6 +7,7 @@
 }
 .mainDiv {
 width:80%;
+height:60%;
 margin: 0 auto;
 }
 .leftBorder{
@@ -25,6 +26,7 @@ margin: 20px 10px 5px 30px;
         margin-top:30px;
     }
     .textArea {
+        border-radius:10px;
         min-width: 100%;
         min-height: 50px;
         background-color:transparent;

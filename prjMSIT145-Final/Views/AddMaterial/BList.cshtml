@@ -113,7 +113,7 @@
 		list();
 		async function list() {
 			
-			const response = await fetch(`@Url.Content("~/AddMaterial/BSearch")`);
+			const response = await fetch(`@Url.Content("~/AddMaterial/BMaterialList")`);
 			const data = await response.json();
 			let result = document.createDocumentFragment();
 			result = "";
