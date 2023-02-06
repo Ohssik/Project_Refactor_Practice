@@ -115,7 +115,6 @@
 			
 			const response = await fetch(`@Url.Content("~/AddMaterial/BSearch")`);
 			const data = await response.json();
-			//console.log(data)?keyword=${txt.value}
 			let result = document.createDocumentFragment();
 			result = "";
 			data.forEach(function (item, index) {
@@ -134,7 +133,7 @@
 							</tr>`
 			});
 			tbody.innerHTML = result;
-
+			console.log(data);
 			
 			//確定刪除配料
 			btnDelete.forEach(function (click) {

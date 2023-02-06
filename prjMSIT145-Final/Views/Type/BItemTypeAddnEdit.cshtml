@@ -122,7 +122,11 @@
 				//console.log(modalBody.value)
 			}
 			else {
-				linkDelete.addEventListener("click", function () {
+				linkDelete.addEventListener("click",async function () {
+					const request = await fetch(`@Url.Content("~/Type/BItemTypeDeleteList/${CategoryFid.value}")`);
+					const count = await request.text();
+					modalBody.innerHTML = count;
+
 					linkDelete.setAttribute("href", `@Url.Content("~/Type/BItemTypeDelete/${CategoryFid.value}")`);
 				})
 			}

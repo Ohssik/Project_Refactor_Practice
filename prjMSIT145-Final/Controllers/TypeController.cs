@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModel;
+using System.Text;
 using System.Text.Json;
 
 namespace prjMSIT145_Final.Controllers
@@ -15,25 +16,34 @@ namespace prjMSIT145_Final.Controllers
 		//商品類別
 		public ActionResult BCategoryList()
 		{
-			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+			try
 			{
-				string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-				BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-				var proC = _context.ProductCategories.Where(o => o.BFid == member.Fid).OrderBy(o => o.CategoryName);
-				List<ProductCategory> list = new List<ProductCategory>();
-				foreach (var d in proC)
+				if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
 				{
-					if (d.CategoryName != null)
+					string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+					BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+					var proC = _context.ProductCategories.Where(o => o.BFid == member.Fid).OrderBy(o => o.CategoryName);
+					List<ProductCategory> list = new List<ProductCategory>();
+					foreach (var d in proC)
 					{
-						ProductCategory vm = new ProductCategory();
-						vm = d;
-						if (!list.Any(o => o.CategoryName == vm.CategoryName))
-							list.Add(vm);
+						if (d.CategoryName != null)
+						{
+							ProductCategory vm = new ProductCategory();
+							vm = d;
+							if (!list.Any(o => o.CategoryName == vm.CategoryName))
+								list.Add(vm);
+						}
 					}
-				}
-				return Json(list);
-			}
+					return Json(list);
 
+				}
+				else
+					return RedirectToAction("Blogin", "BusinessMember");
+			}
+			catch
+			{
+				return Json("商品類別載入有誤");
+			}
 		}
 		//配料類別
 		public ActionResult BOptionGroup()
@@ -88,6 +98,17 @@ namespace prjMSIT145_Final.Controllers
 			}
 			return RedirectToAction("BItemTypeAddnEdit");
 		}
+		//刪除類別時,判斷有無產品使用此類別,並提醒使用者
+		public ActionResult BItemTypeDeleteList(int? id)
+		{
+			if (_context.Products.Any(p => p.CategoryFid == id))
+			{
+				var count = _context.Products.Where(p => p.CategoryFid == id).Count();
+				return Content($"此類別尚有\"{count}\"筆產品,若刪除類別,則產品會一併刪除,確定刪除嗎?", "text/plain", Encoding.UTF8);
+			}
+			else
+				return Content("確定刪除此類別嗎?", "text/plain", Encoding.UTF8);
+		}
 		//商品類別刪除
 		public ActionResult BItemTypeDelete(ProductCategory proC, int? id)
 		{
@@ -109,7 +130,7 @@ namespace prjMSIT145_Final.Controllers
 			}
 			return RedirectToAction("BItemTypeAddnEdit");
 		}
-		//配料類別新刪修
+		//配料類別新修
 		public IActionResult BMaterialTypeAddnEdit()
 		{
 			string json = "";
@@ -124,7 +145,7 @@ namespace prjMSIT145_Final.Controllers
 			else
 				return RedirectToAction("BLogin", "BusinessMember");
 		}
-
+		//按下儲存鈕
 		public ActionResult BMaterialTypeSubmit(ProductOptionGroup optGp)
 		{
 			if (optGp != null)
@@ -142,6 +163,17 @@ namespace prjMSIT145_Final.Controllers
 				_context.SaveChanges();
 			}
 			return RedirectToAction("BMaterialTypeAddnEdit");
+		}
+		//刪除類別時判斷有無配料使用並提醒使用者
+		public ActionResult BMaterialTypeDeleteList(int? id)
+		{
+			if (_context.ProductOptions.Any(o => o.OptionGroupFid == id))
+			{
+				var count = _context.ProductOptions.Where(o => o.OptionGroupFid == id).Count();
+				return Content($"此類別尚有\"{count}\"筆配料使用,若刪除類別會一併刪除,確定刪除嗎?", "text/plain", Encoding.UTF8);
+			}
+			else
+				return Content("確定刪除此類別嗎?", "text/plain", Encoding.UTF8);
 		}
 		public ActionResult BMaterialTypeDelete(int? id)
 		{

@@ -24,15 +24,6 @@
 			font-size: 15px;
 			background-color: transparent;
 		}
-		/*table{
-			width:100%;
-		}
-		.th{
-			width:350px
-		}
-		td{
-			width:100px
-		}*/
 	</style>
 }
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -110,7 +101,7 @@
 		async function list() {
 			const response = await fetch("@Url.Content("~/Type/BOptionGroup")");
 			const datas = await response.json();
-			console.log(datas);
+			//console.log(datas);
 
 			let result = document.createDocumentFragment();
 			result = "";
@@ -136,29 +127,33 @@
 					txt.value = name;
 					fid.value = id;
 					textArea.value = memo;
+					console.log(id);
 				})
 			})
 		}
 
 		//商品是否多選
 		isMultiple.addEventListener("click", function () {
-			
-
 			if (isMultiple.checked)
 				isMultiple.value = 1;
 			else
 				isMultiple.value = 0;
-				console.log(isMultiple);
+				//console.log(isMultiple);
 		})
 
 		//刪除
-		btnDelete.addEventListener("click", function () {
+		btnDelete.addEventListener("click",async function () {
 			console.log(fid.value)
 			if (fid.value == 0) {
 				modalBody.innerHTML = "選取要刪除的類別!";
 				linkDelete.firstElementChild.innerHTML = "確定";
 			}
 			else {
+				const request = await fetch(`@Url.Content("~/Type/BMaterialTypeDeleteList/${fid.value}")`);
+				const count = await request.text();
+				//console.log(count);
+				modalBody.innerHTML = count;
+
 				linkDelete.setAttribute("href", `@Url.Content("~/Type/BMaterialTypeDelete/${fid.value}")`);
 			}
 		})
