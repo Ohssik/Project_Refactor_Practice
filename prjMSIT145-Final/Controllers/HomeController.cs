@@ -383,7 +383,7 @@ namespace prjMSIT145_Final.Controllers
                                    join OTP in _context.OptionsToProducts on P.Fid equals OTP.ProductFid
                                    join OG in _context.ProductOptionGroups on OTP.OptionGroupFid equals OG.Fid
                                    where P.Fid == PFid
-                                   orderby P.Fid
+                                   orderby P.Fid,OG.IsMultiple
                                    select new
                                    {
                                        Fid = OG.Fid,
