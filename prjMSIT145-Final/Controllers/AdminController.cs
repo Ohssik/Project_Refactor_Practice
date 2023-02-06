@@ -680,7 +680,7 @@ namespace prjMSIT145_Final.Controllers
                     result=setForgetPwdMail(fm);                        
                     
                 }
-                //todo 網站管理者
+                //網站管理者
                 else if (fm.memberType == "A")
                 {
                     var user = _context.AdminMembers.FirstOrDefault(u => u.Account == fm.txtAccount && u.Email==fm.txtEmail);
