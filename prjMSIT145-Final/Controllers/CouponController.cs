@@ -266,6 +266,54 @@ namespace prjMSIT145_Final.Controllers
         }
         public IActionResult CCoupons2Member()
         {
+            List<CACouponViewModel> list = new List<CACouponViewModel>();
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            {
+                string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                NormalMember user = JsonConvert.DeserializeObject<NormalMember>(json);
+                
+                if (user != null)
+                {
+                    var coupons = from c2n in _context.Coupon2NormalMembers
+                                  join coup in _context.Coupons on c2n.CouponId equals coup.Fid
+                                  into cGroup
+                                  from c in cGroup.DefaultIfEmpty()
+                                  where c2n.MemberId == user.Fid /*&& c.IsUsed == 1*/
+                                  select new
+                                  {
+                                      c2n.CouponId,
+                                      c.Title,
+                                      c.Price,
+                                      c.Memo,
+                                      c.IsUsed,
+                                      c2n.Fid
+
+                                  };
+
+                    if (coupons != null)
+                    {
+                        foreach (var c in coupons.OrderByDescending(c => c.Fid))
+                        {
+                            CACouponViewModel cac = new CACouponViewModel();
+                            cac.Fid = (int)c.CouponId;
+                            cac.Title = c.Title;
+                            cac.Price = c.Price;
+                            cac.Memo = c.Memo;
+                            cac.IsUsed = c.IsUsed;
+                            cac.NmemberID = user.Fid;
+                            list.Add(cac);
+                        }
+
+                    }
+                }
+
+            }
+            return View(list);            
+        }
+
+        public IActionResult CChangeCouponOwner()
+        {
+            //todo 轉贈優惠券
             return View();
         }
     }

@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\fontawesome-free-6.2.1-web\**" />
+    <Content Remove="wwwroot\fontawesome-free-6.2.1-web\**" />
+    <EmbeddedResource Remove="wwwroot\fontawesome-free-6.2.1-web\**" />
+    <None Remove="wwwroot\fontawesome-free-6.2.1-web\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.12">
       <PrivateAssets>all</PrivateAssets>
