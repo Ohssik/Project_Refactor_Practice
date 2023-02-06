@@ -28,10 +28,10 @@
             <div class="backcolor">
                        @{
                         if (Model.MemberPhotoFile!=null){
-                             <img style="border-radius:80px" src="~/images/@Model.MemberPhotoFile" class="dog">
+                                     <img style="border-radius:80px" src="~/images/@Model.MemberPhotoFile" class="dog">
                                 }
                         else{
-                             <img style="border-radius:80px" src="@Url.Content("~/images/Customer/Member/photo.png")" class="dog">
+                                     <img style="border-radius:80px" src="@Url.Content("~/images/Customer/Member/photo.png")" class="dog">
                         }
 
                        }
@@ -56,10 +56,10 @@
                 <div class="aui-info">
                  @{ 
                     if(Model.MemberPhotoFile!=null){
-                                        <img src="~/images/@Model.MemberPhotoFile" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img" />
+                                                <img src="~/images/@Model.MemberPhotoFile" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img" />
                                 }
                        else{
-                                    <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img" />
+                                            <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img" />
                        }
 
 
@@ -81,25 +81,6 @@
                         <span id="namecorrect" class="spanerrormessage"></span>
         </div>
 
-
-       
-        <span class="text3">
-            <p class="color">*</p>
-                        <p class="text4">手機號碼<span class="necessspan">(必填)</span><span class="Formatspan">(台灣號碼)</span></p>
-        </span>
-
-        <div class="divhint">
-            <div class="div1">
-               <input type="text" class="input" name="Phone" value="@Model.Phone" id="Phone" />
-            </div>
-            <span id="phonecorrect" class="spanerrormessage"></span>
-        </div>
-
-
-
-
-
-
          <span class="text3">
              <p class="color">*</p>
                         <p class="text4">電子信箱<span class="necessspan">(必填)</span><span class="Formatspan">(信箱格式)</span></p>
@@ -116,15 +97,15 @@
         <div class="display">
             @{
                 if(Model.Gender=="1"){
-                                                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" />
-                                                            <label>女</label>
-                                                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="1" checked />
-                                                            <label>男</label>
+                                                                    <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" />
+                                                                    <label>女</label>
+                                                                    <input id = "radioboy"type = "radio" class="text5" name="Gender" value="1" checked />
+                                                                    <label>男</label>
                 }else{
-                                                            <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" checked />
-                                                            <label>女</label>
-                                                            <input id = "radioboy"type = "radio" class="text5" name="Gender" value="1"  />
-                                                            <label>男</label>
+                                                                    <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" checked />
+                                                                    <label>女</label>
+                                                                    <input id = "radioboy"type = "radio" class="text5" name="Gender" value="1"  />
+                                                                    <label>男</label>
                     }
                 }
 
@@ -139,11 +120,11 @@
                     string st;
                     st = Convert.ToDateTime(Model.Birthday).ToString("yyyy-MM-dd");
                   
-                                                    <input id="birthid" type="date" class="date" name="Birthday" value="@st"/>
+                                                            <input id="birthid" type="date" class="date" name="Birthday" value="@st"/>
               
                 }
                 else{
-                                                     <input id="birthid" type="date" class="date" name="Birthday" value=""/>
+                                                             <input id="birthid" type="date" class="date" name="Birthday" value=""/>
                 }
             
             }
@@ -171,7 +152,8 @@
                     <input type="submit" class="enter" value="修改" id="submitid"  />
 
         </div>
-                
+                <input type="button" class="democorrect" id="democorrectid" value="democorrect" />
+                <input type="button" class="demoerror" id="demoerrorid" value="demoerror" />
             </div>
         </div>
     </div>
@@ -235,23 +217,7 @@
             }
         };
 
-        document.getElementById("Phone").addEventListener("change", checkPhone);
-        function checkPhone() {
-            var phoneobj = document.getElementById("Phone");
-            var spnphoneobj = document.getElementById("phonecorrect");
-            var phoneval = phoneobj.value;
-   
-            if (phoneval == "") {
-                spnphoneobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
-                submitbtn.setAttribute('disabled', 'disabled');
-                alert("有必填欄位未填");
-                return;
-            }
-            else {
-                spnphoneobj.innerHTML = "";
-                submitbtn.removeAttribute('disabled');
-            }
-        };
+
         document.getElementById("Email").addEventListener("change", checkEmail);
         function checkEmail() {
             var emailobj = document.getElementById("Email");
@@ -269,7 +235,25 @@
                 submitbtn.removeAttribute('disabled');
             }
         };
-       
+
+        document.getElementById("democorrectid").addEventListener('click', () => {                             //DEMO鍵
+            //$("#MemberName").attr('value', '林阿宏');
+            
+            document.getElementById("MemberName").value="林阿宏"
+            document.getElementById("Email").value="a29803385@hotmai.com";
+
+            document.getElementById("radiogirl").setAttribute("checked", "checked");
+            document.getElementById("city").innerHTML = "<option>高雄市</option>";
+            document.getElementById("area").innerHTML = "<option>前鎮區</option>";
+        });
+
+        document.getElementById("demoerrorid").addEventListener('click', () => {
+            document.getElementById("MemberName").value = "";
+            document.getElementById("Email").value = "";
+            
+
+
+        });
 
 
 
@@ -278,14 +262,6 @@
 
 
 
-
-            //if(@Model.Gender=="1")
-            //{document.getElementById("radioboy").removeAttribute('checked');
-            //} 
-            //else
-            //document.getElementById("radiogirl").removeAttribute('checked');
-           
-            //document.querySelector("#birthid").date=@Model.Birthday;
 
             
     </script>

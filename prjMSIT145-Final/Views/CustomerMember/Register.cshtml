@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="~/css/Customer_css/Register.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 }
-  
- <form asp-action="Register" enctype="multipart/form-data">
+
+    <form asp-action="Register" id="Register" enctype="multipart/form-data" name="Register">
         <div class="wrap">
       <div class="card3">
             <div class="card30">
@@ -97,26 +97,26 @@
                             @{
 
                             if (ViewBag.Gender==null){
-                                <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" />
-                                <label>女</label>
-                                <input id="radioboy" type="radio" class="text5" name="Gender" value="1" />
-                                <label>男</label>
+                                                                <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" />
+                                                                <label>女</label>
+                                                                <input id="radioboy" type="radio" class="text5" name="Gender" value="1" />
+                                                                <label>男</label>
                              }
                              else{
 
                             if (ViewBag.Gender == "1")
                             {
-                                    <input id="radiogirl" type="radio" class="text5" name="Gender" value="0"  />
-                                <label>女</label>
-                                    <input id="radioboy" type="radio" class="text5" name="Gender" value="1" checked />
-                                <label>男</label>
+                                                                 <input id="radiogirl" type="radio" class="text5" name="Gender" value="0"  />
+                                                                <label>女</label>
+                                                                 <input id="radioboy" type="radio" class="text5" name="Gender" value="1" checked />
+                                                                <label>男</label>
                             }
                             else
                             {
-                                    <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" checked />
-                                <label>女</label>
-                                    <input id="radioboy" type="radio" class="text5" name="Gender" value="1"  />
-                                <label>男</label>
+                                                                    <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" checked />
+                                                                <label>女</label>
+                                                                    <input id="radioboy" type="radio" class="text5" name="Gender" value="1"  />
+                                                                <label>男</label>
                             }
                             };
                         }
@@ -132,11 +132,11 @@
                                 string st;
                                 st = Convert.ToDateTime(ViewBag.birthday).ToString("yyyy-MM-dd");
 
-                                <input id="birthid" type="date" class="date" name="Birthday" value="@st" />
+                                                                <input id="birthid" type="date" class="date" name="Birthday" value="@st" />
               
                 }
                 else{
-                                <input id="birthid" type="date" class="date" name="Birthday" value=""/>
+                                                                <input id="birthid" type="date" class="date" name="Birthday" value=""/>
                 }
             
             }
@@ -211,24 +211,90 @@
         };
 
 
-        var submitbtn = document.getElementById("submitid");
+        var submitbtn = document.getElementById("submitid");   //按鈕
 
-        document.getElementById("MemberName").addEventListener("blur", checkPwd);
-        function checkPwd() {
+        //document.getElementById("MemberName").addEventListener("blur", checkPwd);
+
+        submitbtn.addEventListener('click',()=>{
+
+            event.preventDefault();
+
             var nameobj = document.getElementById("MemberName");
             var spnameobj = document.getElementById("namecorrect");
             var nameval = nameobj.value;
-        
+
             if (nameval == "") {
                 spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
-                submitbtn.setAttribute('disabled','disabled');
+                submitbtn.setAttribute('disabled', 'disabled');
                 return;
             }
-            else{
+            else {
                 spnameobj.innerHTML = "";
                 submitbtn.removeAttribute('disabled');
+            }                                                                                  //name
+
+
+            var phoneobj = document.getElementById("Phone");
+            var spnphoneobj = document.getElementById("phonecorrect");
+            var phoneval = phoneobj.value;
+
+            if (phoneval == "") {
+                spnphoneobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+
+                return;
             }
-            };
+            else {
+                spnphoneobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }                                                                                  //phone
+
+
+            var emailobj = document.getElementById("Email");
+            var spnemailobj = document.getElementById("emailcorrect");
+            var emailval = emailobj.value;
+
+            if (emailval == "") {
+                spnemailobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+
+                return;
+            }
+            else {
+                spnemailobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');                                         //email
+            }
+
+
+
+
+
+        };
+
+
+
+
+
+
+
+
+
+        })
+        //function checkPwd() {
+        //    var nameobj = document.getElementById("MemberName");
+        //    var spnameobj = document.getElementById("namecorrect");
+        //    var nameval = nameobj.value;
+        
+        //    if (nameval == "") {
+        //        spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+        //        submitbtn.setAttribute('disabled','disabled');
+        //        return;
+        //    }
+        //    else{
+        //        spnameobj.innerHTML = "";
+        //        submitbtn.removeAttribute('disabled');
+        //    }
+        //    };
 
 
         document.getElementById("Phone").addEventListener("blur", checkPhone);
@@ -354,15 +420,25 @@
 
 
         document.getElementById("submitid").addEventListener("click", async () => {                //判斷帳號是否重複
-            const request = await fetch(`@Url.Content("~/CustomerMember/Verifyaccount")`);
-          
+               event.preventDefault();
+
+            let formData = new FormData(document.Register)
+            const request = await fetch(`@Url.Content("~/CustomerMember/Verifyaccount")`,{
+                body: formData,
+                method:"Post",
+
+            })
+            
             const data= await request.json();
-            if(data==""){
-               
-                 alert("已發送驗證信");
+           if(data==""){
+               alert("已發送驗證信");
+               document.getElementById('Register').submit();
             }
             else{
                 alert(data);
+                return;
+               
+                
             }
            });
 
