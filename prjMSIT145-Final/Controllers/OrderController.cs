@@ -68,13 +68,13 @@ namespace prjMSIT145_Final.Controllers
             CUtility.OrdersList = OrdersList;
             return View(CUtility.OrdersList);
         }
-        [HttpPost]
-        public IActionResult BList(int? orderid)
-        {
+        //[HttpPost]
+        //public IActionResult BList(int? orderid)
+        //{
            
 
-            return View();
-        }
+        //    return View();
+        //}
         //新訂單
         public IActionResult BNewList()
         {
