@@ -16,8 +16,9 @@
 	<form method="post" enctype="multipart/form-data">
 		<input type="hidden" name="BFid" value="@Model.BFid" />
 		<div class="topdiv">
-			<a href="@Url.Content("~/Product/BList")"><img class="back" src="../images/Business/backarrow.png" value=""></a>
-			<input id="txtProductName" name="ProductName" class="inputtext" type="text" placeholder=" 輸入餐點名稱....." />   @*產品名稱*@
+            <a href="@Url.Content("~/Product/BList")"><img class="back" src="../images/Business/backarrow.png"></a>
+			@*產品名稱*@
+			<input id="txtProductName" name="ProductName" class="inputtext" type="text" placeholder=" 輸入餐點名稱....." />   
 
 			<input id="btnSubmit" class="butt" type="submit" value="儲存" />
 		</div>
@@ -25,36 +26,36 @@
 		@*產品照片*@
 		<h6 id="h6">相片</h6>
 		<div class="divimage">
-			<div>
-				<img style="width:110px; height:70px;" id="imgShow" class="inputimage" src="../images/Business/photo.png"/>
+            <div id="imgShow" style="width:30%;">
+				<img style="width:90px; height:70px;" id="" class="inputimage" src="../images/Business/photo.png"/>
 			</div>
-			<div>
+			<div style="width:50%;">
 				<p>餐點照片可協助顧客訂購那些美食,<br>進而提供銷售量.</p>
 				<div class="divinputimagebutton">
-					@*<input id="btnImgCreate" class="inputimagebutton"type="button" value="新增照片">*@
-					@*<input id="btnImgDownload" class="inputimagebutton" type="button" value="下載">*@
 					<label class="inputimagebutton" for="file" style="width:80px; padding: 5px; cursor:pointer;"><input id="file" name="file" type="file" style="display:none;" />上傳檔案</label>
 					<input id="btnImgDelete" class="inputimagebutton" type="button" value="刪除">
 				</div>
 			</div>
-		</div>
-		<select id="selType" name="CategoryName"><option>請選擇商品類別</option></select>  @*選擇類別*@
+        </div>
 
+		@*選擇類別*@
+		<select id="selType" name="CategoryName" class="select"><option>請選擇商品類別</option></select>
+
+        @*產品價格*@
 		<hr style="border:1px dashed #000; height:1px">
 		<h6 id="h6">價格及販售方式</h6>
-		<span>透過自取</span><br>
 		<label for="">預設價格</label>
-		<input type="text" value="100" id="txtPrice" name="UnitPrice" />   @*產品價格*@
+		<input type="text" value="100" id="txtPrice" name="UnitPrice" class="text" />   
 		<hr style="border:1px dashed #000; height:1px">
 		<h6 id="h6">餐點是否上架</h6>
 		<div class="form-check form-switch">
 			@*checked為1=>已上架*@
-			<input name="IsForSale" class="form-check-input" type="checkbox" role="switch" id="IsForSale"/>  @*餐點上架與否*@
+			<input name="IsForSale" class="form-check-input" type="checkbox" role="switch" id="IsForSale" style="width:50px; height:20px;"/>  @*餐點上架與否*@
 			<label class="form-check-label" for="IsForSale"></label>
 		</div>
 		<hr style="border:1px dashed #000; height:1px">
 		<h6 id="h6">說明(選項)</h6>
-		<textarea placeholder=" 輸入說明.....例如豬肉產地" id="txtMemo" name="Memo">-</textarea>   @*產品備註*@
+		<textarea placeholder=" 輸入說明.....例如豬肉產地" id="txtMemo" name="Memo" class="textarea">-</textarea>   @*產品備註*@
 	</form>
 </div>
 
@@ -103,14 +104,12 @@
 			let frag = document.createDocumentFragment();
 			frag = "";
 			data.forEach(function (item, index) {
-				 //console.log(data[index].categoryName)}
 				 if(index === 0)
 				 frag+=`<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`;
 				else if (data[index].categoryName !== data[index-1].categoryName)
 			     frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
 			});
 			selType.innerHTML += frag;
-			console.log(file)
 		})
 
 		//上傳照片
@@ -118,28 +117,29 @@
 			const file = this.files[0];
 			const reader = new FileReader();
 			reader.onload = function (e) {
-				imgShow.setAttribute("src", e.target.result);
+				//imgShow.setAttribute("src", e.target.result);
+				//console.log(e.target.result);
+				//imgShow.setAttribute("style","width:130px;height:90px;")
+				imgShow.innerHTML = `<img src="${e.target.result}" style="width:150px;height:100px;"/>`
 			};
 			reader.readAsDataURL(file);
-			console.log(file);
 		})
 
 		//移除照片
 		btnImgDelete.addEventListener("click", function () {
-			file.outerHTML = file.outerHTML;
-			imgShow.setAttribute("src", "../images/photo.png");
+			//file.outerHTML = file.outerHTML;
+			//imgShow.setAttribute("src", "../images/Business/photo.png");
+			imgShow.innerHTML = `<img src="../images/Business/photo.png" style="width:90px;height:70px;"/>`
 		})
 		//商品是否上架
 		IsForSale.addEventListener("click", function () {
 
 			if (IsForSale.checked) {
-				console.log(IsForSale);
 				IsForSale.value = "1";
 			}
 			else {
 				IsForSale.value = "0";
 			}
-
 		})
 		//是否選擇了商品類別
 		btnSubmit.addEventListener("click",function(){
