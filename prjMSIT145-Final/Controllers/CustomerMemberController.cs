@@ -110,7 +110,8 @@ namespace prjMSIT145_Final.Controllers
                 }
                 vm.MemberPhotoFile = fileName;
             }
-            
+            Random rnd = new Random();
+            vm.EmailCertified = rnd.Next(10000000, 90000000);
             _context.Add(vm.member);
             _context.SaveChanges();
 
@@ -126,7 +127,7 @@ namespace prjMSIT145_Final.Controllers
             //主旨
             string subject = "註冊驗證信";
             //內容
-            string body = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={vm.Fid}";
+            string body = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={vm.Fid}, 請輸入此驗證碼{vm.EmailCertified}";
             using (MailMessage mail = new MailMessage())
             {
                 mail.From = new MailAddress(emailFrom);
@@ -175,12 +176,16 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult Emailcheck(NormalMember member)
         {
             NormalMember x=_context.NormalMembers.FirstOrDefault(c => c.Fid==member.Fid);
-                x.IsSuspensed =0;
-                x.EmailCertified =1;
-            _context.SaveChanges();
-
-
+            if (x != null && x.EmailCertified == member.EmailCertified)
+            {
+                x.IsSuspensed = 0;
+                x.EmailCertified = 1;
+                _context.SaveChanges();
+                return Redirect("~/Home/CIndex");
+            }
+            ViewBag.errortxext = "驗證碼有錯";
             return Redirect("~/Home/CIndex");
+
         }
 
 

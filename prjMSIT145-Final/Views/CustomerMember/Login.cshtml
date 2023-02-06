@@ -24,6 +24,9 @@
         #exampleModalLabel{
             font-size:1.5em;
         }
+        #forgotPwd{
+            cursor: pointer;
+        }
     </style>
 }
     <div style="width:100%; display:flex;">
@@ -36,51 +39,62 @@
 
 @using (Html.BeginForm())
 {
-
     <div class="wrap" id="wrap">
         <div class="Content">
 
             <div class="Head">
                 <p class="toptitle">歡迎使用線上訂餐系統</p>
                 <p class="toptitle2">請選擇登入/註冊方式，通過驗證後即可使用</p>
-                <input type="button" onclick=location.href="@Url.Content("~/CustomerMember/Register")" class="btn" value="使用手機註冊" />
+                <div>
+                    <input type="button" onclick=location.href="@Url.Content("~/CustomerMember/Register")" class="btnregister divbutton" value="註冊" />
+                </div>
             </div>
-            <div>
+            <div class="textinput">
 
                 <div class="text">
+
                     <img src="@Url.Content("~/images/Customer/Member/call.png")" class="img"></img>
-                    <input type="text" placeholder="手機號碼" class="text2" name="txtAccount" autofocus />
+                    <input  type="text" placeholder="手機號碼" class="text2" name="txtAccount" value=""autofocus />
                 </div>
                 <p class="detail">只支援台灣手機號碼</p>
                 <div class="text">
+
                     <img src="@Url.Content("~/images/Customer/Member/key.png")" class="img"></img>
                     <input id="Password" type="password" placeholder="密碼" class="text2" name="txtPassword" />
-                    <i style="margin-left:-100px;margin-top:10px;" class="far fa-eye" id="togglePassword"></i>
-                @*    <img src="@Url.Content("~/images/Customer/Member/hide.png")" class="img"></img>*@
+                    <i style="margin-left:-26px;margin-top:7px;" class="far fa-eye" id="togglePassword"></i>
+                    <span id="passwordcorrect" class="spanerrormessage"></span>
+                    
+
                 </div>
-               
-                <p class="detail">6-64位英數混合，英文需區分大小寫</p>
-                <input type="submit" value="登入" class="login" />
-                <div class="display">
-                    <img src="@Url.Content("~/images/Customer/Member/question.png")" class="img"></img>
-                    <p class="text3"><span id="forgotPwd">忘記密碼</span></p>
-                </div>
-                <div class="dashed"></div>
-                <div>
-                    <span class="text3">登入即代表您同意</span>
-                    <span class="text4">使用者條款</span>
-                    <span class="text3">和</span>
-                    <span class="text4">隱私權條款</span>
-                </div>
+
+                <p class="detail2">英文大小寫含數字共6位</p>
+            </div>
+
+            <input id="submitid" type="submit" value="登入" class="login" />
+            <div class="display">
+
+                <img src="@Url.Content("~/images/Customer/Member/question.png")" class="img2"></img>
+
+                <p class="text3"><a href="#" class="forgotspan" id="forgotPwd">忘記密碼</a></p>
+            </div>
+            <div class="dashed"></div>
+            <div>
+                <span class="text3">登入即代表您同意</span>
+                <span class="text4">使用者條款</span>
+                <span class="text3">和</span>
+                <span class="text4">隱私權條款</span>
             </div>
         </div>
+
     </div>
+    
 
 
 
 
 
 }
+@*忘記密碼發信Modal*@
 <div class="modal fade" id="sendMail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -101,6 +115,7 @@
 
             </div>
             <div class="modal-footer">
+                <span class="text-danger" id="pwdInvalid"></span>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>
                 <button type="button" class="btn btn-primary" id="btnSend">送出</button>
             </div>
@@ -108,6 +123,21 @@
     </div>
 </div>
 
+@*代替alert的Modal*@
+<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label"></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseMsg">確定</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @{
@@ -117,22 +147,72 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
+        $(function () {
+            const passwordicon = document.querySelector("#togglePassword");
+            const password = document.querySelector("#Password");
+        document.getElementById("Password").addEventListener("blur", checkPassword);
 
-        const passwordicon = document.querySelector("#togglePassword");
-        const password = document.querySelector("#Password");
+        var submitbtn = document.getElementById("submitid");
 
-        passwordicon.addEventListener("click", () => {
+        function checkPassword() {
+            var passwordobj = document.getElementById("Password");
+            var spnpasswordobj = document.getElementById("passwordcorrect");
+            var passwordval = passwordobj.value;
 
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
+            if (passwordval == "") {
+                spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
 
-            passwordicon.classList.toggle('fa-eye-slash');
-        });
+                return;
+            }
+            else {
+                spnpasswordobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+            if (passwordval.length < 6) {
+                spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
+                submitbtn.setAttribute('disabled', 'disabled');
+
+                return;
+            }
+            else {
+                spnpasswordobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+            if (passwordval.length >= 6) {
+
+                    re = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/);
+
+                if (re.test(passwordval)) {
+                    submitbtn.removeAttribute('disabled');
+                    spnpasswordobj.innerHTML = "";
+                }
+                else {
+                    spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
+                    submitbtn.setAttribute('disabled', 'disabled');
+                    return;
+                }
+
+
+            }
+        }
+
+
+            passwordicon.addEventListener("click", () => {
+
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+
+                passwordicon.classList.toggle('fa-eye-slash');
+            });
 
 
 
-        $(function(){
+        
             let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
+                keyboard: false
+            });
+            let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
                 keyboard: false
             });
             $('#btnCancel').click(function () {
@@ -143,6 +223,8 @@
             $('#btnSend').click(function () {
 
                 $(this).attr('disabled', 'disabled');
+                if ($('[name=txtAccount]').val() == '' || $('[name=txtEmail]').val() == '')
+                    return false;
 
                 $.ajax({
                     url: `@Url.Content("~/Admin/AForgotAdminPwd")`,
@@ -157,19 +239,26 @@
                     dataType: "json",
                     success: function (msg) {
                         console.log(`msg=${msg}`);
+                        if (`${msg}`.indexOf('success success') > -1) {
+                            $('[name=txtAccount]').val('');
+                            $('[name=txtEmail]').val('');
+                            sendMail.hide();
+                            $('#msgAlert label').text('發信成功，請到信箱收取修改密碼通知信');
+                            msgAlert.show();
+                        } else {
+                            $('#pwdInvalid').text(msg);
 
-                        $('[name=txtAccount]').val('');
-                        $('[name=txtEmail]').val('');
-                        alert('發信成功');
-                        sendMail.hide();
-
+                        }
+                        $('#btnSend').removeAttr('disabled');
                     }
                 });
             });
             $('#forgotPwd').click(function () {
                 sendMail.show();
                 $('#btnSend').removeAttr('disabled');
-                $('[name=txtAccount]').val('0911111112');
+                $('#msgAlert label').text('');
+                $('#pwdInvalid').text('');
+                $('[name=txtAccount]').val('0986543125');
                 $('[name=txtEmail]').val('rmtorh@hotmail.com');
 
             });

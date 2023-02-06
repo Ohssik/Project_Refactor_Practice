@@ -47,8 +47,8 @@
 			<a href="@Url.Content("~/Product/BList")"><img class="back" src="../images/Business/backarrow.png" value=""></a>
 			<input type="hidden" value="@Model.BFid" name="BFid" />
 			<input type="hidden" value="@Model.Fid" name="Fid" id="CategoryFid" />
-			<input class="inputtext" type="text" placeholder=" 輸入類別名稱....." name="CategoryName" />
-			<input class="butt" id="btnSubmit" type="submit" value="儲存" />
+			<input class="inputtext" type="text" placeholder=" 輸入類別名稱....." name="CategoryName" required/>
+			<input class="butt" id="btnSubmit" type="submit" value="儲存"/>
 			<input class="butt" id="btnDelete" type="button" value="刪除" data-bs-toggle="modal" data-bs-target="#exampleModal" />
 		</div>
 
@@ -73,6 +73,7 @@
 		const linkDelete = document.querySelector("#linkDelete"); //確認刪除
 		const modalBody = document.querySelector(".modal-body"); //未選擇刪除的類別,更改警告內容
 		const CategoryFid = document.querySelector("#CategoryFid"); //已存在的類別id;
+		const btnSubmit = document.querySelector("#btnSubmit");
 
 
 		list();
@@ -103,7 +104,14 @@
 				})
 			})
 		}
-
+		//送出前檢查有無輸入名稱
+		btnSubmit.addEventListener("click",function(){
+			if(txt.value === "")
+			{
+				event.preventDefault();
+				alert("請輸入類別名稱");
+			}
+		})
 		//刪除類別
 		btnDelete.addEventListener("click", async function () {
 			//console.log(CategoryFid.value);
@@ -114,10 +122,16 @@
 				//console.log(modalBody.value)
 			}
 			else {
-				linkDelete.addEventListener("click", function () {
+				linkDelete.addEventListener("click",async function () {
+					const request = await fetch(`@Url.Content("~/Type/BItemTypeDeleteList/${CategoryFid.value}")`);
+					const count = await request.text();
+					modalBody.innerHTML = count;
+
 					linkDelete.setAttribute("href", `@Url.Content("~/Type/BItemTypeDelete/${CategoryFid.value}")`);
 				})
 			}
 		});
 	</script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
 }

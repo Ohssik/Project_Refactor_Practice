@@ -1,4 +1,4 @@
-﻿@*@model prjMSIT145_Final.ViewModel.CProductsViewModel*@
+﻿@model prjMSIT145_Final.ViewModel.CProductsViewModel
 @{
 	Layout = "_BusinessLayout";
 	ViewData["Title"] = "BList";
@@ -62,12 +62,13 @@
 						<h6 id="h6">相片</h6>
 						<div class="divimage">
 							<div>
+								<input type="hidden" name="Photo" id="Photo" value=""/>
 								<img id="imgShow" class="inputimage" src="" />
 							</div>
 							<div>
 								<p>餐點照片可協助顧客訂購那些美食,<br>進而提供銷售量.</p>
 								<div class="divinputimagebutton">
-									<label class="inputimagebutton" for="file" style="width:80px; padding: 5px;"><input id="file" name="file" type="file" style="display:none;" />上傳檔案</label>
+									<label class="inputimagebutton" for="file" style="width:80px; height:70px; padding: 5px;"><input id="file" name="file" type="file" style="display:none;" />上傳檔案</label>
 									<input id="btnImgDelete" class="inputimagebutton" type="button" value="刪除">
 								</div>
 							</div>
@@ -90,7 +91,7 @@
 						</div>
 						<hr  />
 						<h6 id="h6">說明(選項)</h6>
-						<textarea  style="max-height:100px; min-height:50px; min-width:270px;" placeholder=" 輸入說明.....例如豬肉產地" id="txtMemo" name="Memo"></textarea>   @*產品備註*@
+						<textarea  style="max-height:100px; min-height:50px; width:100%; border-radius:10px;" placeholder=" 輸入說明.....例如豬肉產地" id="txtMemo" name="Memo"></textarea>   @*產品備註*@
 					</form>
 				</div>
 			</div>
@@ -127,8 +128,6 @@
 @section Scripts{
 
 	<script>
-		
-
 		const txt = document.querySelector("#txtKeyword");
 		const tbody = document.querySelector("#tbody");
 		const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
@@ -138,18 +137,20 @@
 		const fid = document.querySelector("#Fid");
 		const selType = document.querySelector("#selType");
 
-		search();
+		list();
 		
 		//關鍵字查詢(類別與商品)
 		//txt.addEventListener("input", () => search());?keyword=${txt.value}
 
-		async function search() {
-			let response = await fetch(`@Url.Content("~/Product/BSearch")`);
+		async function list() {
+			let response = await fetch(`@Url.Content("~/Product/BItemList")`);
 			const datas = await response.json();
 			let result = document.createDocumentFragment();
 			result = "";
 			datas.forEach(function (item, index) {
-				//console.log(item.fid);
+				////console.log(item.fid);
+				//		<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
+				//		<input type="hidden" name="${item.categoryFid}" value="${item.categoryFid}"/>
 				if (item.photo == null)  //沒有產品圖片就使用預設圖片
 					item.photo = "Business/upload.png";
 
@@ -159,31 +160,26 @@
 					item.isForSale = "已上架"
 				else if (item.isForSale === 2)
                     item.isForSale = "停售"
-							//<a href='@Url.Content("~/Product/BEdit/${item.fid}")'><button class="buteditgar" name='btnEdit'><img src="../images/edit.png">編輯</button></a>
 				
 				result += `
 						<tr>
 						<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
-						<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
-						<input type="hidden" name="${item.categoryFid}" value="${item.categoryFid}"/>
 
 						<td><input style='width:50px; height:50px;' type="image" src="../images/${item.photo}"></td>
 						<td>${item.productName}</td>
 						<td>${item.unitPrice}</td>
 						<td>${item.categoryName}</td>
 						<td>${item.isForSale}</td>
-		               <td>${item.memo}</td>
+		                <td>${item.memo}</td>
 
-								<td>
-								<button class="buteditgar" name='btnEdit'  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img src="../images/Business/edit.png">編輯</button>
-								<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModel"><img src="../images/Business/garbage.png">刪除</button>
+						<td>
+							<button class="buteditgar" name='btnEdit'  data-bs-toggle="modal" data-bs-target="#staticBackdrop"><img src="../images/Business/edit.png">編輯</button>
+							<button class="buteditgar" name='btnDelete' data-bs-toggle="modal" data-bs-target="#btnDeleteModel"><img src="../images/Business/garbage.png">刪除</button>
 						</td>
 						</tr>
 						`
 			});
 			tbody.innerHTML = result;
-			
-		
 		
 			//刪除
 			btnDelete.forEach(function (click) {
@@ -201,29 +197,28 @@
 			btnEdit.forEach(function(btn){
 				btn.addEventListener("click", function(){
 					loadCategory();
-					console.log("click");
+					//console.log("click");
 					const txtProductName = document.querySelector("#txtProductName");  //產品名
 					const imgShow = document.querySelector("#imgShow"); //照片
 					const txtPrice = document.querySelector("#txtPrice"); //價錢
 					const txtMemo = document.querySelector("#txtMemo"); //備註
 					const cell = this.parentElement.parentElement;  //tr內的值
 
-					txtProductName.value = cell.children[4].innerHTML;
-					imgShow.setAttribute("src",cell.children[3].firstElementChild.getAttribute("src"));
-					selType.innerHTML = `<option>${cell.children[6].innerHTML}</option>`;
-					txtPrice.value = cell.children[5].innerHTML;
-					txtMemo.innerHTML = cell.children[8].innerHTML;
+					//console.log(imgShow)
+					txtProductName.value = cell.children[2].innerHTML;
+					document.querySelector("#Photo").value = cell.children[1].firstElementChild.getAttribute("src").substring()
+					imgShow.setAttribute("src",cell.children[1].firstElementChild.getAttribute("src"));
+					selType.innerHTML = `<option>${cell.children[4].innerHTML}</option>`;
+					txtPrice.value = cell.children[3].innerHTML;
+					txtMemo.innerHTML = cell.children[6].innerHTML;
 					fid.value =cell.children[0].value;
 				})
 			})
 			//套用bootstrap,dataTable功能
 			$(document).ready(function () {
 				$('#table_id').DataTable();
-				
-			
 			});
 		}
-		
 
 		//載入所有商品類別
 		async function loadCategory() {
@@ -234,12 +229,11 @@
 			frag = "";
 			data.forEach(function (item, index) {
 				if (item.categoryName !== selType.value)
-					frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
+					frag += `<option>${item.categoryName}</option>`
 			})
 			selType.innerHTML += frag;
-			//console.log(selType)
 		}
-		//上傳照片
+		//上傳照片<input type='hidden' id='Fid' value='Fid'>
 		file.addEventListener("change", function () {
 			const file = this.files[0];
 			const reader = new FileReader();

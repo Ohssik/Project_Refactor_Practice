@@ -26,10 +26,10 @@ namespace prjMSIT145_Final.Controllers
 			}
 			catch
 			{
-				return Content("資料有誤", "text/plain", Encoding.UTF8);
+				return RedirectToAction("Blogin", "BusinessMember");
 			}
 		}
-		public ActionResult BSearch(string keyword)
+		public ActionResult BItemList(string keyword)
 		{
 			try
 			{
@@ -55,9 +55,7 @@ namespace prjMSIT145_Final.Controllers
 									 pro.CategoryFid,
 									 proC.CategoryName
 								 }).Where(p => p.BFid == member.Fid).OrderBy(b => b.CategoryFid);
-					if (keyword != null)
-						datas = datas.Where(k => k.ProductName.Contains(keyword) || k.CategoryName.Contains(keyword)).OrderBy(o => o.CategoryName);
-
+				
 					List<CProductsViewModel> list = new List<CProductsViewModel>();
 					foreach (var p in datas)
 					{
@@ -101,22 +99,30 @@ namespace prjMSIT145_Final.Controllers
 		[HttpPost]
 		public ActionResult BCreate(CProductsViewModel vm, IFormFile file)
 		{
-			if (file != null)
+			try
 			{
-				string fileName = Guid.NewGuid().ToString() + ".jpg";
-				string uploadFile = Path.Combine(_host.WebRootPath, "images", fileName);
-				using (var fileStream = new FileStream(uploadFile, FileMode.Create))
+				if (file != null)
 				{
-					file.CopyTo(fileStream);
+					string fileName = Guid.NewGuid().ToString() + ".jpg";
+					string uploadFile = Path.Combine(_host.WebRootPath, "images", fileName);
+					using (var fileStream = new FileStream(uploadFile, FileMode.Create))
+					{
+						file.CopyTo(fileStream);
+					}
+					vm.product.Photo = fileName;
 				}
-				vm.product.Photo = fileName;
+				var proCFid = _context.ProductCategories.FirstOrDefault(o => o.CategoryName == vm.CategoryName);
+				vm.product.CategoryFid = proCFid.Fid;
+				vm.product.BFid = vm.BFid;
+				_context.Products.Add(vm.product);
+				//_context.SaveChanges();
+				return RedirectToAction("BList");
 			}
-			var proCFid = _context.ProductCategories.FirstOrDefault(o => o.CategoryName == vm.CategoryName);
-			vm.product.CategoryFid = proCFid.Fid;
-			vm.product.BFid = vm.BFid;
-			_context.Products.Add(vm.product);
-			_context.SaveChanges();
-			return RedirectToAction("BList");
+			catch
+			{
+				return RedirectToAction("Blogin", "BusinessMember");
+
+			}
 		}
 		//public ActionResult BEdit(int? id)
 		//{
@@ -157,44 +163,51 @@ namespace prjMSIT145_Final.Controllers
 		//[HttpPost]
 		public ActionResult BEdit(CProductsViewModel vm, IFormFile file)
 		{
-
-			ProductCategory proC = _context.ProductCategories.FirstOrDefault(p => p.CategoryName == vm.CategoryName);
-			Product pro = _context.Products.FirstOrDefault(p => p.Fid == vm.Fid);
-			if (pro != null)
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
 			{
-				if (file != null)
+				ProductCategory proC = _context.ProductCategories.FirstOrDefault(p => p.CategoryName == vm.CategoryName);
+				Product pro = _context.Products.FirstOrDefault(p => p.Fid == vm.Fid);
+				if (pro != null)
 				{
-					string oldPath = _host.WebRootPath + $"\\images\\{pro.Photo}";
-					if (System.IO.File.Exists(oldPath))
+					if (file != null)
 					{
-						System.IO.File.Delete(oldPath);
+						string oldPath = _host.WebRootPath + $"\\images\\{pro.Photo}";
+						if (System.IO.File.Exists(oldPath))
+						{
+							System.IO.File.Delete(oldPath);
+						}
+						string fileName = Guid.NewGuid().ToString() + ".jpg";
+						string uploadFile = Path.Combine(_host.WebRootPath, "images", fileName);
+						using (var fileStream = new FileStream(uploadFile, FileMode.Create))
+						{
+							file.CopyTo(fileStream);
+						}
+						pro.Photo = fileName;
 					}
-					string fileName = Guid.NewGuid().ToString() + ".jpg";
-					string uploadFile = Path.Combine(_host.WebRootPath, "images", fileName);
-					using (var fileStream = new FileStream(uploadFile, FileMode.Create))
-					{
-						file.CopyTo(fileStream);
-					}
-					pro.Photo = fileName;
-				}
-				else
-				{
-					string oldPath = _host.WebRootPath + $"\\images\\{pro.Photo}";
-					if (System.IO.File.Exists(oldPath))
-					{
-						System.IO.File.Delete(oldPath);
-					}
-					pro.Photo = null;
-				}
-				pro.IsForSale = vm.IsForSale;
-				pro.CategoryFid = proC.Fid;
-				pro.ProductName = vm.ProductName;
-				pro.UnitPrice = vm.UnitPrice;
-				pro.Memo = vm.Memo;
+					else if (vm.Photo == null)
+						pro.Photo = null;
+					//else
+					//{
+					//	string oldPath = _host.WebRootPath + $"\\images\\{pro.Photo}";
+					//	if (System.IO.File.Exists(oldPath))
+					//	{
+					//		pro.Photo = oldPath;
+					//	}
+					//	else
+					//	pro.Photo = null;
+					//}
+					pro.IsForSale = vm.IsForSale;
+					pro.CategoryFid = proC.Fid;
+					pro.ProductName = vm.ProductName;
+					pro.UnitPrice = vm.UnitPrice;
+					pro.Memo = vm.Memo;
 
-				_context.SaveChanges();
+					_context.SaveChanges();
+				}
+				return RedirectToAction("BList");
 			}
-			return RedirectToAction("BList");
+			else
+				return RedirectToAction("Blogin", "BusinessMember");
 		}
 		public ActionResult BDelete(Product pro, int? id)
 		{
