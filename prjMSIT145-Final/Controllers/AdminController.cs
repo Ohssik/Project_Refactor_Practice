@@ -31,11 +31,8 @@ namespace prjMSIT145_Final.Controllers
             _host=host;
             _config=config;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
-        public IActionResult sendAccountLockedNotice(string data)
+        
+        public IActionResult sendAccountLockedNotice(string data)//寄送帳號停權/復權通知
         {
             var DemoMailServer = _config["DemoMailServer:pwd"];
 
@@ -61,7 +58,7 @@ namespace prjMSIT145_Final.Controllers
                         "<br><br>" +
                         $"{changeType}原因：<br>" +
                         mail.txtMessage +
-                        "<br><br>=====================================================================<br>" +
+                        "<br><br><hr><br>" +
                         "<br>此為系統通知，請勿直接回信，謝謝";
 
                     string mailSubject = $"帳號{changeType}通知";
@@ -482,7 +479,7 @@ namespace prjMSIT145_Final.Controllers
             return View(list.AsEnumerable());
         }
         
-        public IActionResult loadImgInfo(string fid)
+        public IActionResult loadImgInfo(string fid)//載入廣告圖片資訊
         {
             CAAdImg cAAdImg = new CAAdImg();
             AdImg img = _context.AdImgs.FirstOrDefault(i => i.Fid==Convert.ToInt32(fid));
@@ -497,7 +494,7 @@ namespace prjMSIT145_Final.Controllers
             return Json(cAAdImg);            
         }
         
-        public IActionResult changeAdOrderBy(string data)
+        public IActionResult changeAdOrderBy(string data)//移動廣告圖片時儲存圖片排序
         {
             string result = "0";
             List<CAAdImg> ads = null;
@@ -519,7 +516,7 @@ namespace prjMSIT145_Final.Controllers
             
             return Content(result);
         }
-        public IActionResult saveAdInfo(string data)
+        public IActionResult saveAdInfo(string data)//儲存小圖片的資訊
         {
             string result = "0";
             CAAdImg ad = null;
@@ -553,7 +550,7 @@ namespace prjMSIT145_Final.Controllers
 
             return Content(result);
         }
-        public IActionResult AaddAdImg(string data)
+        public IActionResult AaddAdImg(string data)//上傳並儲存新廣告圖片
         {            
             CAAdImg ad = null;
             AdImg returnAd = null;
@@ -576,6 +573,7 @@ namespace prjMSIT145_Final.Controllers
                 buf.Dispose();
 
                 ad.ImgName=fName;
+                ad.EndTime = DateTime.Now.AddYears(3);
                 var lastAd = _context.AdImgs.OrderBy(a => a.OrderBy).LastOrDefault();
                 int orderBy = 1;
                 if (lastAd!=null)
@@ -590,7 +588,7 @@ namespace prjMSIT145_Final.Controllers
 
             return Json(returnAd);
         }
-        public IActionResult saveSmallImgData(string data)
+        public IActionResult saveSmallImgData(string data)//上傳並儲存新小圖片
         {
             CAAdImg ad = null;
             AdImg returnAd = null;
@@ -632,7 +630,7 @@ namespace prjMSIT145_Final.Controllers
             return Json(returnAd);
             
         }
-        public IActionResult ASetting()
+        public IActionResult ASetting()//管理者帳密頁面
         {
             CASettingViewModel admin = new CASettingViewModel();
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_ADMIN))
@@ -646,7 +644,7 @@ namespace prjMSIT145_Final.Controllers
             return View(admin);
         }
         
-        public IActionResult saveAdminPwd(string data)
+        public IActionResult saveAdminPwd(string data)//修改管理者帳密
         {
             string result = "0";
             
@@ -663,7 +661,7 @@ namespace prjMSIT145_Final.Controllers
 
             return Content(result);
         }
-        public IActionResult AForgotAdminPwd(string data)
+        public IActionResult AForgotAdminPwd(string data)//忘記密碼
         {
             string result = "0";
             if (!string.IsNullOrEmpty(data))
@@ -680,7 +678,7 @@ namespace prjMSIT145_Final.Controllers
                     result=setForgetPwdMail(fm);                        
                     
                 }
-                //todo 網站管理者
+                //網站管理者
                 else if (fm.memberType == "A")
                 {
                     var user = _context.AdminMembers.FirstOrDefault(u => u.Account == fm.txtAccount && u.Email==fm.txtEmail);
@@ -719,7 +717,7 @@ namespace prjMSIT145_Final.Controllers
             return Json(result);
         }
 
-        private string setForgetPwdMail(CForgetPwdViewModel fm)
+        private string setForgetPwdMail(CForgetPwdViewModel fm)//DB建立忘記密碼請求並發信
         {
             string result;            
             string token = Guid.NewGuid().ToString();
@@ -776,7 +774,7 @@ namespace prjMSIT145_Final.Controllers
             return result;
         }
 
-        public IActionResult ResetPwd(string token,string acc,string tp)
+        public IActionResult ResetPwd(string token,string acc,string tp)//忘記密碼的重設密碼頁
         {
             string expire = "";
             #region ADO.NET測試
@@ -814,7 +812,7 @@ namespace prjMSIT145_Final.Controllers
             return View();
             
         }
-        public IActionResult submitResetPwd(CResetPwdViewModel reset)
+        public IActionResult submitResetPwd(CResetPwdViewModel reset)//忘記密碼的送出重設密碼
         {
             string result = "";
             if (reset.txtPassword == reset.txtConfirmPwd)
@@ -908,7 +906,7 @@ namespace prjMSIT145_Final.Controllers
             return Json(result);
         }
 
-        private string deleteChangePwdRequest(DateTime expireTime,string token,string acc)
+        private string deleteChangePwdRequest(DateTime expireTime,string token,string acc)//重設密碼後刪除DB的忘記密碼請求
         {
             string result = "";
             ChangeRequestPassword request = _context.ChangeRequestPasswords.FirstOrDefault(r =>r.Token==token);
@@ -931,7 +929,7 @@ namespace prjMSIT145_Final.Controllers
             return result;
         }
 
-        private string sendMail(string email,string mailBody,string mailSubject)
+        private string sendMail(string email,string mailBody,string mailSubject)//發信
         {            
             var DemoMailServer = _config["DemoMailServer:pwd"];
             MailMessage MyMail = new MailMessage();

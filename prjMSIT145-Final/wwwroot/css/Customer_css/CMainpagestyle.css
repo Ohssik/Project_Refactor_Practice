@@ -14,7 +14,7 @@
     left: 75px;
 }
 
-    .ADblock img {
+    .ADblock>img {
         width: 500px;
         height: 200px;
         position: absolute;

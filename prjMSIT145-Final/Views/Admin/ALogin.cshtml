@@ -73,6 +73,7 @@
                 <div class="modal-footer">
                     <span class="text-danger" id="pwdInvalid"></span>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>
+                    <input id="btnDemo2" type="button" value="Demo" class="btn btn-primary" />
                     <button type="button" class="btn btn-primary" id="btnSend">送出</button>
                 </div>
             </div>
@@ -148,13 +149,17 @@
             $('#btnSend').removeAttr('disabled');
             $('#msgAlert label').text('');
             $('#pwdInvalid').text('');
-            $('[name=txtAccount]').val('admin');
-            $('[name=txtEmail]').val('rmtorh@hotmail.com');
+            $('[name=txtAccount]').val('');
+            $('[name=txtEmail]').val('');
             
         });
         $('#btnDemo').click(function(){
             $('input[name=Account]').val('admin');
-            $('input[name=Password]').val('adminnnnn');
+            $('input[name=Password]').val('aDmin145');
+        });
+        $('#btnDemo2').click(function () {
+            $('[name=txtAccount]').val('admin');
+            $('[name=txtEmail]').val('rmtorh@hotmail.com');
         });
 
         $('#btnSubmit').click(function(event){            

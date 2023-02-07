@@ -24,15 +24,6 @@
 			font-size: 15px;
 			background-color: transparent;
 		}
-		/*table{
-			width:100%;
-		}
-		.th{
-			width:350px
-		}
-		td{
-			width:100px
-		}*/
 	</style>
 }
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -43,7 +34,7 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				確定要刪除嗎?
+				@*確定要刪除嗎?*@
 			</div>
 			<div class="modal-footer" style="width:100%">
 				<button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
@@ -71,22 +62,22 @@
 				<div class="form-check form-switch">
 					
 					<label class="form-check-label" for="IsMultiple">
-					<input class="form-check-input" type="checkbox" role="switch" name="IsMultiple" id="isMultiple"></label>
+					<input class="form-check-input" type="checkbox" role="switch" name="IsMultiple" id="isMultiple" style="width:50px; height:20px;"></label>
 				</div>
 				<hr style="border:1px solid #000; height:1px">
 			</div>
 			<div class="leftmargin">
 				<p>備註</p>
-				<textarea class="textArea" rows="4" name="Memo">-</textarea>
+				<textarea class="textArea" rows="4" name="Memo" style="border-radius:10px;">-</textarea>
 			</div>
 		</form>
 	</div>
 	<div class="rigthDivMargin rightDiv leftBorder">
-		<table class="table table-hove ">
+		<table class="table table-hover stripe">
 			<thead>
-			<th>類別名稱</th>
-			<th>是否多選</th>
-			<th colspan="2">備註</th>
+			<th style="width:30%;">類別名稱</th>
+			<th style="width:30%;">是否多選</th>
+			<th style="width:50%;">備註</th>
 			</thead>
 			<tbody id="tbody">
 			</tbody>
@@ -119,12 +110,14 @@
 					item.isMultiple = "否";
 				else
 					item.isMultiple = "是";
-				result += `<tr name='tr'>
-								<input type='hidden' value='${item.fid}'/>
-								<td>${item.optionGroupName}</td>
-								<td>${item.isMultiple}<td/>
-								<td  style="text-align:left">${item.memo}</td>
-								</tr>`
+				result += `
+				<tr name='tr'>
+						<input type="hidden" name="Fid" value="${item.fid}" id="${item.fid}"/>
+
+						<td>${item.optionGroupName}</td>
+						<td>${item.isMultiple}</td>
+						<td>${item.memo}</td>
+				</tr>`
 			})
 			tbody.innerHTML = result;
 
@@ -132,33 +125,37 @@
 				value.addEventListener("click", function () {
 					const id = this.children[0].value; //取得點取的資料列id
 					const name = this.cells[0].innerHTML; //取得點取的資料列名稱
-					const memo = this.cells[3].innerHTML; //取得點取的資料列備註
+					const memo = this.cells[2].innerHTML; //取得點取的資料列備註
 					txt.value = name;
 					fid.value = id;
 					textArea.value = memo;
+					console.log(value);
 				})
 			})
 		}
 
 		//商品是否多選
 		isMultiple.addEventListener("click", function () {
-			
-
 			if (isMultiple.checked)
 				isMultiple.value = 1;
 			else
 				isMultiple.value = 0;
-				console.log(isMultiple);
+				//console.log(isMultiple);
 		})
 
 		//刪除
-		btnDelete.addEventListener("click", function () {
+		btnDelete.addEventListener("click",async function () {
 			console.log(fid.value)
 			if (fid.value == 0) {
 				modalBody.innerHTML = "選取要刪除的類別!";
 				linkDelete.firstElementChild.innerHTML = "確定";
 			}
 			else {
+				const request = await fetch(`@Url.Content("~/Type/BMaterialTypeDeleteList/${fid.value}")`);
+				const count = await request.text();
+				//console.log(count);
+				modalBody.innerHTML = count;
+
 				linkDelete.setAttribute("href", `@Url.Content("~/Type/BMaterialTypeDelete/${fid.value}")`);
 			}
 		})

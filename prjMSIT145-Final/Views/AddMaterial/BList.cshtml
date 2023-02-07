@@ -51,7 +51,7 @@
 		<div class="modal-dialog modal-dialog-centered" style="max-width:30%;">
 			<div class="modal-content" style=" box-sizing:border-box; padding:20px;">
 				<div class="modal-header" style="padding:0;">
-					<form method="post" enctype="multipart/form-data" action="BEdit">
+					<form method="post" enctype="multipart/form-data" action="BEdit" style="width:100%;">
 						<input type="hidden" name="BFid"/>
 						<input type="hidden" name="Fid" id="Fid"/>
 						<div class="topdiv">
@@ -64,8 +64,8 @@
 
 						<hr style="border:1px dashed #000; height:1px">
 						<h6 id="h6">價格</h6>
-						<label for="">預設價格</label>
-						<input type="text" id="txtPrice" name="UnitPrice" style="border-radius:10px; border:1px solid; padding:0 5px;"/>   @*配料價格*@
+						<label for="txtPrice">預設價格</label>
+						<input type="text" id="txtPrice" name="UnitPrice" style="margin-bottom:15px; border-radius:10px; border:1px solid; padding:0 5px;"/>   @*配料價格*@
 					</form>
 				</div>
 			</div>
@@ -113,9 +113,8 @@
 		list();
 		async function list() {
 			
-			const response = await fetch(`@Url.Content("~/AddMaterial/BSearch")`);
+			const response = await fetch(`@Url.Content("~/AddMaterial/BMaterialList")`);
 			const data = await response.json();
-			//console.log(data)?keyword=${txt.value}
 			let result = document.createDocumentFragment();
 			result = "";
 			data.forEach(function (item, index) {
@@ -134,7 +133,7 @@
 							</tr>`
 			});
 			tbody.innerHTML = result;
-
+			console.log(data);
 			
 			//確定刪除配料
 			btnDelete.forEach(function (click) {

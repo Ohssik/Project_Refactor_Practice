@@ -9,7 +9,7 @@ namespace prjMSIT145_Final.Models
         public static List<VBusinessMemberDetailViewModel>? BusinessMemberDetailList = null;
         public static List<VPaymenttermViewModel>? PaymenttermList = null;
         public static List<VProductClassViewModel>? ProductClassList = null;
-        public static int OrderID = 0; //初值必須為0
+        public static int OrderID = 0;
         public static int OrderitemID = 0; 
         //-----------
         public static List<VProductBasicInfoViewModel>? ProductBasicInfoList = null;

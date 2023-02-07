@@ -12,8 +12,8 @@
 
 
 <div class="wrap">
-   
-        <form asp-action="Emailcheck">
+
+        <form asp-action="Emailcheck" name="Emailcheck" id="Emailcheck">
          <div class="cardcontent">
             <input type="hidden"name="Fid"value="@Model.Fid" />
     
@@ -27,7 +27,7 @@
             <input type="text" class="inputclass" name="EmailCertified"/>
             </div>
             <div class="subdiv">
-                <input type="submit" value="確定" class="submitbtn" />
+                <input type="submit"  id="submitid" value="確定" class="submitbtn" />
             </div>
         </div>
         </form>
@@ -36,16 +36,31 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        
+        document.getElementById("submitid").addEventListener('click',async ()=> {
+            event.preventDefault();
 
-   @* @{
-        if (@ViewBag.errortxext != "")
-        {
-            @:alert(@ViewBag.errortxext);
-        }
+            let formdata = new FormData(document.Emailcheck);
+            const request = await fetch(`@Url.Content("~/CustomerMember/Emailcheckword")`,{
+                body:formdata,
+                method:"Post",
+
+            })
+            const data = await request.json();
+            console.log(data);
+            if(data==""){
+                alert("已開通會員資格");
+                document.getElementById("Emailcheck").submit();
+                
+            }
+            else{
+                alert(data);
+                return;
+            }
+
+        });
 
 
-    }*@
-
-
-
+    </script>
 }

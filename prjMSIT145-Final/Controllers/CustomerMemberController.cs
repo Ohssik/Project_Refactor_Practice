@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using NuGet.Protocol;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
@@ -10,6 +11,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Security.Principal;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace prjMSIT145_Final.Controllers
 {
@@ -53,12 +55,23 @@ namespace prjMSIT145_Final.Controllers
             }
             return View();
         }
-        public ActionResult memberheadphoto()
-        {
-            
 
-            return Json(CDictionary.SK_LOGINED_USER);
+        public ActionResult loginmailverify(CLoginViewModel vm)
+        {
+            NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Phone.Equals(vm.txtAccount) && c.Password.Equals(vm.txtPassword));
+            if (x != null)
+            {
+                if (x.EmailCertified == 1)
+                {
+                    return Json("");
+                }
+                return Json("尚未開通會員資格");
+            }
+
+            return Json("此帳號不存在");
         }
+
+        
 
 
         public ActionResult Loginout()
@@ -79,7 +92,7 @@ namespace prjMSIT145_Final.Controllers
             var data = _context.NormalMembers.Select(c => c.Phone);
             foreach (var i in data)
             {
-                if (i == vm.Phone || i == "")
+                if (i == vm.Phone)
                 {
                     ViewBag.Name = vm.MemberName;
                     ViewBag.Phone = vm.Phone;
@@ -94,16 +107,41 @@ namespace prjMSIT145_Final.Controllers
                    
                 }
             }
-
-            if (vm.Birthday==null)
+            if (vm.MemberName == null && vm.Password == null)
             {
-              return Content("請輸入生日");
+                return View();
+            }
+            if (vm.Phone == null)
+            {
+                return View();
+            }
+            else
+            {
+                bool correct = Regex.IsMatch(vm.Phone, @"^09[0-9]{8}$");
+                if (!(correct))
+                {
+                    return View();
+                }
+                
+            }
+            if (vm.Email == null)
+            {
+                return View();
+            }
+            else
+            {
+                bool correct = Regex.IsMatch(vm.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+                if (!(correct))
+                {
+                    return View();
+                }
             }
             
+
             if (photo != null)
             {
                 string fileName = Guid.NewGuid().ToString() + ".jpg";
-                string filePath = Path.Combine(_eviroment.WebRootPath, "images", fileName);
+                string filePath = Path.Combine(_eviroment.WebRootPath, "images/Customer/Member", fileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     photo.CopyTo(fileStream);
@@ -148,18 +186,48 @@ namespace prjMSIT145_Final.Controllers
                 return Redirect("~/Home/CIndex");
           
         }
-        public IActionResult Verifyaccount(CNormalMemberViewModel vm)
+        public IActionResult Verifyaccount(NormalMember vm)
         {
+            if (vm.MemberName == null)
+            {
+                return Json("姓名欄位不能空值");
+            }
+            if (vm.Phone == null)
+            {
+                return Json("電話欄位不能空值");
+            }
+
+            if(vm.Email ==null)
+            {
+                return Json("Email欄位不能空值");
+            }
+            else
+            {
+
+                bool correct = Regex.IsMatch(vm.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+                if (!(correct))
+                {
+                    return Json("Email格式錯誤");
+                }
+            }
+
+            if (vm.Password ==null)
+            {
+                return Json("密碼欄位不能空值");
+            }
+            
+            
+
             var data = _context.NormalMembers.Select(c => c.Phone);
             foreach (var i in data)
             {
-                if (i == vm.Phone || i == "")
+                if (i == vm.Phone)
                 {
                     return Json("帳號重複");
                    
                 }
             }
-          return Json ("");
+            return Json("已發送驗證信");
         }
 
         public IActionResult Emailcheck(int? Fid)
@@ -183,13 +251,20 @@ namespace prjMSIT145_Final.Controllers
                 _context.SaveChanges();
                 return Redirect("~/Home/CIndex");
             }
-            ViewBag.errortxext = "驗證碼有錯";
+            
             return Redirect("~/Home/CIndex");
 
         }
+        public IActionResult Emailcheckword(NormalMember member)
+        {
+            NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Fid == member.Fid);
+            if (x != null && x.EmailCertified == member.EmailCertified)
+            {
+                return Json("");
 
-
-
+            }
+            return Json("請在信箱確認驗證碼");
+        }
 
         public IActionResult memberview()
         {
@@ -230,7 +305,7 @@ namespace prjMSIT145_Final.Controllers
                 if (memberedit.photo != null)
                 {
                     string fileName = Guid.NewGuid().ToString() + ".jpg";
-                    string filePath = Path.Combine(_eviroment.WebRootPath, "images", fileName);
+                    string filePath = Path.Combine(_eviroment.WebRootPath, "images/Customer/Member", fileName);
                     //檔案上傳到uploads資料夾中
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -242,7 +317,6 @@ namespace prjMSIT145_Final.Controllers
                           x.MemberName=memberedit.MemberName;
                           x.MemberPhotoFile=memberedit.MemberPhotoFile;
                           x.Birthday=memberedit.Birthday;
-                          x.Phone = memberedit.Phone;
                           x.Email = memberedit.Email;
                           x.Gender= memberedit.Gender;
                           x.AddressCity=memberedit.AddressCity;
@@ -279,13 +353,6 @@ namespace prjMSIT145_Final.Controllers
 
         }
         
-
-
-
-
-
-
-
 
 
         public IActionResult Forgetpassword()
@@ -334,6 +401,16 @@ namespace prjMSIT145_Final.Controllers
 
             return Content("已寄出");
         }
-
+        public IActionResult getCartOrderQty(string data)
+        {
+            if (!string.IsNullOrEmpty(data))
+            {
+                int nfid = Convert.ToInt32(data);
+                int ordersQty = _context.Orders.Where(o => o.NFid == nfid && o.OrderState=="0").Count();
+                string showQty = ordersQty > 0 ? ordersQty.ToString() : "";
+                return Json(showQty);
+            }
+            return Json("");
+        }
     }
 }

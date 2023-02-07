@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModel;
+using prjMSIT145_Final.ViewModels;
+using System.Text.Json;
 
 namespace prjMSIT145_Final.Controllers
 {
@@ -11,7 +13,7 @@ namespace prjMSIT145_Final.Controllers
 		{
 			_context = context;
 		}
-		public IActionResult Problem(string keyword)
+		public IActionResult PAnswer(string keyword)
 		{
 			CProblemViewModel vm = new CProblemViewModel();
 			var datas = (_context.ProblemQuestions.Join(_context.ProblemAnswers, q => q.AnswerFid, a => a.Fid, (q, a) => new
@@ -27,10 +29,21 @@ namespace prjMSIT145_Final.Controllers
 
 			return Json(vm);
 		}
-
-		public IActionResult ProblemView()
+		//取得使用者頭像
+		public ActionResult PUserImg()
 		{
-			return PartialView();
+            string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+			CProblemImgViewModel img = new CProblemImgViewModel();
+			if (json != null)
+				img.userImg = (JsonSerializer.Deserialize<NormalMember>(json)).MemberPhotoFile;
+			else
+				img.userImg = "";
+
+            return Json(img);
+		}
+		public IActionResult PQuestion()
+		{
+			return View();
 		}
 
 	}

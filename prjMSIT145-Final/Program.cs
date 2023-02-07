@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using prjMSIT145_Final.Models;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<ispanMsit145shibaContext>(
  options => options.UseSqlServer(
@@ -39,7 +40,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseSession();//�ҥ�Session
-
+app.MapHub<ChatHub>("/chatHub");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();

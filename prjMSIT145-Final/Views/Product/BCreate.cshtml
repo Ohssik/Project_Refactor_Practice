@@ -1,153 +1,178 @@
 ﻿@model prjMSIT145_Final.ViewModel.CProductsViewModel
 @{
-	Layout = "_BusinessLayout";
-	ViewData["Title"] = "BCreate";
+    Layout = "_BusinessLayout";
+    ViewData["Title"] = "BCreate";
 }
 @section Styles{
-	<link rel="stylesheet" href="../css/ProductCreate.css">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/ProductCreate.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 }
 
 <div class="outerlayer ">
-	<button id="demo1" class="btn btn-outline-secondary">Demo飲料</button>
-	<button id="demo2" class="btn btn-outline-secondary">Demo飲料</button>
-	<button id="demo3" class="btn btn-outline-secondary">Demo食物</button>
-	<button id="demo4" class="btn btn-outline-secondary">Demo食物</button>
-	<form method="post" enctype="multipart/form-data">
-		<input type="hidden" name="BFid" value="@Model.BFid" />
-		<div class="topdiv">
-			<a href="@Url.Content("~/Product/BList")"><img class="back" src="../images/Business/backarrow.png" value=""></a>
-			<input id="txtProductName" name="ProductName" class="inputtext" type="text" placeholder=" 輸入餐點名稱....." />   @*產品名稱*@
+    <button id="demo1" class="btn btn-outline-secondary">Demo飲料</button>
+    <button id="demo2" class="btn btn-outline-secondary">Demo飲料</button>
+    <button id="demo3" class="btn btn-outline-secondary">Demo食物</button>
+    <button id="demo4" class="btn btn-outline-secondary">Demo食物</button>
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="BFid" value="@Model.BFid" />
+        <div class="topdiv">
+            <a href="@Url.Content("~/Product/BList")"><img class="back" src="../images/Business/backarrow.png"></a>
+            @*產品名稱*@
+            <input id="txtProductName" name="ProductName" class="inputtext" type="text" placeholder=" 輸入餐點名稱....." />
 
-			<input id="btnSubmit" class="butt" type="submit" value="儲存" />
-		</div>
+            <input id="btnSubmit" class="butt" type="submit" value="儲存" />
+        </div>
 
-		@*產品照片*@
-		<h6 id="h6">相片</h6>
-		<div class="divimage">
-			<div>
-				<img style="width:110px; height:70px;" id="imgShow" class="inputimage" src="../images/Business/photo.png"/>
-			</div>
-			<div>
-				<p>餐點照片可協助顧客訂購那些美食,<br>進而提供銷售量.</p>
-				<div class="divinputimagebutton">
-					@*<input id="btnImgCreate" class="inputimagebutton"type="button" value="新增照片">*@
-					@*<input id="btnImgDownload" class="inputimagebutton" type="button" value="下載">*@
-					<label class="inputimagebutton" for="file" style="width:80px; padding: 5px; cursor:pointer;"><input id="file" name="file" type="file" style="display:none;" />上傳檔案</label>
-					<input id="btnImgDelete" class="inputimagebutton" type="button" value="刪除">
-				</div>
-			</div>
-		</div>
-		<select id="selType" name="CategoryName"><option>請選擇商品類別</option></select>  @*選擇類別*@
+        @*產品照片*@
+        <h6 id="h6">相片</h6>
+        <div class="divimage">
+            <div id="imgShow" style="width:30%;">
+                <img style="width:90px; height:70px;" class="inputimage" src="../images/Business/photo.png" />
+            </div>
+            <div style="width:50%;">
+                <p>餐點照片可協助顧客訂購那些美食,<br>進而提供銷售量.</p>
+                <div class="divinputimagebutton">
+                    <label class="inputimagebutton" for="file" style="width:80px; padding: 5px; cursor:pointer;"><input id="file" name="file" type="file" style="display:none;" />上傳檔案</label>
+                    <input id="btnImgDelete" class="inputimagebutton" type="button" value="刪除">
+                </div>
+            </div>
+        </div>
 
-		<hr style="border:1px dashed #000; height:1px">
-		<h6 id="h6">價格及販售方式</h6>
-		<span>透過自取</span><br>
-		<label for="">預設價格</label>
-		<input type="text" value="100" id="txtPrice" name="UnitPrice" />   @*產品價格*@
-		<hr style="border:1px dashed #000; height:1px">
-		<h6 id="h6">餐點是否上架</h6>
-		<div class="form-check form-switch">
-			@*checked為1=>已上架*@
-			<input name="IsForSale" class="form-check-input" type="checkbox" role="switch" id="IsForSale"/>  @*餐點上架與否*@
-			<label class="form-check-label" for="IsForSale"></label>
-		</div>
-		<hr style="border:1px dashed #000; height:1px">
-		<h6 id="h6">說明(選項)</h6>
-		<textarea placeholder=" 輸入說明.....例如豬肉產地" id="txtMemo" name="Memo">-</textarea>   @*產品備註*@
-	</form>
+        @*選擇類別*@
+        <select id="selType" name="CategoryName" class="select"><option>請選擇商品類別</option></select>
+        <span id="checkType"></span>
+        @*產品價格*@
+        <hr style="border:1px dashed #000; height:1px">
+        <h6 id="h6">價格及販售方式</h6>
+        <label for="">預設價格</label>
+        <input type="text" value="100" id="txtPrice" name="UnitPrice" class="text" />
+        <span id="checkPrice"></span>
+        <hr style="border:1px dashed #000; height:1px">
+        <h6 id="h6">餐點是否上架</h6>
+        <div class="form-check form-switch">
+            @*checked為1=>已上架*@
+            <input name="IsForSale" class="form-check-input" type="checkbox" role="switch" id="IsForSale" style="width:50px; height:20px;" />  @*餐點上架與否*@
+            <label class="form-check-label" for="IsForSale"></label>
+        </div>
+        <hr style="border:1px dashed #000; height:1px">
+        <h6 id="h6">說明(選項)</h6>
+        <textarea placeholder=" 輸入說明.....例如豬肉產地" id="txtMemo" name="Memo" class="textarea">-</textarea>   @*產品備註*@
+    </form>
 </div>
 
 @section Scripts{
-	<script>
-		const imgShow = document.querySelector("#imgShow"); //選擇的照片
-		const file = document.querySelector("#file"); //新增照片
-		const btnImgDelete = document.querySelector("#btnImgDelete"); //刪除照片
-		const selType = document.querySelector("#selType"); //選擇的類別
-		const IsForSale = document.querySelector("#IsForSale"); //選擇是否上架
-		const btnSubmit = document.querySelector("#btnSubmit"); //儲存按鈕
-		const demo1 = document.querySelector("#demo1"); //demo飲料
-		const demo2 = document.querySelector("#demo2"); //demo飲料
-		const demo3 = document.querySelector("#demo3"); //demo食物
-		const demo4 = document.querySelector("#demo4"); //demo食物
-		
-		//飲料類Demo鍵
-		demo1.addEventListener("click",function(){
-			document.querySelector("#txtProductName").value = "香草奶昔";
-			document.querySelector("#txtPrice").value = "70";
-			document.querySelector("#txtMemo").value = "為確保口感,僅可少冰";
-		})
-		//飲料類Demo鍵
-		demo2.addEventListener("click", function () {
-			document.querySelector("#txtProductName").value = "酪梨布丁牛奶";
-			document.querySelector("#txtPrice").value = "80";
-			document.querySelector("#txtMemo").value = "僅少冰，建議一小時內飲用完畢。";
-		})
-		//食物類Demo鍵
-		demo3.addEventListener("click", function () {
-			document.querySelector("#txtProductName").value = "松露蛋炒飯";
-			document.querySelector("#txtPrice").value = "250";
-			document.querySelector("#txtMemo").value = "使用白米/糙米";
-		})
-		//食物類Demo鍵
-		demo4.addEventListener("click", function () {
-			document.querySelector("#txtProductName").value = "紅燒牛肉麵";
-			document.querySelector("#txtPrice").value = "150";
-			document.querySelector("#txtMemo").value = "微辣,皆為半筋半肉";
-		})
+    <script>
+        const imgShow = document.querySelector("#imgShow"); //選擇的照片
+        const file = document.querySelector("#file"); //新增照片
+        const btnImgDelete = document.querySelector("#btnImgDelete"); //刪除照片
+        const selType = document.querySelector("#selType"); //選擇的類別
+        const IsForSale = document.querySelector("#IsForSale"); //選擇是否上架
+        const btnSubmit = document.querySelector("#btnSubmit"); //儲存按鈕
+        const txtPrice = document.querySelector("#txtPrice"); //商品價格
 
-		//載入所有商品類別
-		window.addEventListener("load", async function () {
-			const request = await fetch(`@Url.Content("~/Type/BCategoryList")`);
-			const data = await request.json();
-			let frag = document.createDocumentFragment();
-			frag = "";
-			data.forEach(function (item, index) {
-				 //console.log(data[index].categoryName)}
-				 if(index === 0)
-				 frag+=`<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`;
-				else if (data[index].categoryName !== data[index-1].categoryName)
-			     frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
-			});
-			selType.innerHTML += frag;
-			console.log(file)
-		})
+        const demo1 = document.querySelector("#demo1"); //demo飲料
+        const demo2 = document.querySelector("#demo2"); //demo飲料
+        const demo3 = document.querySelector("#demo3"); //demo食物
+        const demo4 = document.querySelector("#demo4"); //demo食物
 
-		//上傳照片
-		file.addEventListener("change", function () {
-			const file = this.files[0];
-			const reader = new FileReader();
-			reader.onload = function (e) {
-				imgShow.setAttribute("src", e.target.result);
-			};
-			reader.readAsDataURL(file);
-			console.log(file);
-		})
+        //飲料類Demo鍵
+        demo1.addEventListener("click", function () {
+            document.querySelector("#txtProductName").value = "香草奶昔";
+            document.querySelector("#txtPrice").value = "70";
+            document.querySelector("#txtMemo").value = "為確保口感,僅可少冰";
+        })
+        //飲料類Demo鍵
+        demo2.addEventListener("click", function () {
+            document.querySelector("#txtProductName").value = "酪梨布丁牛奶";
+            document.querySelector("#txtPrice").value = "80";
+            document.querySelector("#txtMemo").value = "僅少冰，建議一小時內飲用完畢。";
+        })
+        //食物類Demo鍵
+        demo3.addEventListener("click", function () {
+            document.querySelector("#txtProductName").value = "松露蛋炒飯";
+            document.querySelector("#txtPrice").value = "250";
+            document.querySelector("#txtMemo").value = "使用白米/糙米";
+        })
+        //食物類Demo鍵
+        demo4.addEventListener("click", function () {
+            document.querySelector("#txtProductName").value = "紅燒牛肉麵";
+            document.querySelector("#txtPrice").value = "150";
+            document.querySelector("#txtMemo").value = "微辣,皆為半筋半肉";
+        })
 
-		//移除照片
-		btnImgDelete.addEventListener("click", function () {
-			file.outerHTML = file.outerHTML;
-			imgShow.setAttribute("src", "../images/photo.png");
-		})
-		//商品是否上架
-		IsForSale.addEventListener("click", function () {
+        //載入所有商品類別
+        window.addEventListener("load", async function () {
+            const request = await fetch(`@Url.Content("~/Type/BCategoryList")`);
+            const data = await request.json();
+            let frag = document.createDocumentFragment();
+            frag = "";
+            data.forEach(function (item, index) {
+                if (index === 0)
+                    frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`;
+                else if (data[index].categoryName !== data[index - 1].categoryName)
+                    frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
+            });
+            selType.innerHTML += frag;
+        })
 
-			if (IsForSale.checked) {
-				console.log(IsForSale);
-				IsForSale.value = "1";
-			}
-			else {
-				IsForSale.value = "0";
-			}
+        //上傳照片
+        file.addEventListener("change", function () {
+            const file = this.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                //imgShow.setAttribute("src", e.target.result);
+                //console.log(e.target.result);
+                //imgShow.setAttribute("style","width:130px;height:90px;")
+                imgShow.innerHTML = `<img src="${e.target.result}" style="width:150px;height:100px;"/>`
+            };
+            reader.readAsDataURL(file);
+        })
 
-		})
-		//是否選擇了商品類別
-		btnSubmit.addEventListener("click",function(){
-			if(selType.value === "請選擇商品類別")
-			{
-				event.preventDefault();
-				alert("請確認商品類別是否選取!");
-			}
-		})
-	</script>
+        //移除照片
+        btnImgDelete.addEventListener("click", function () {
+            //file.outerHTML = file.outerHTML;
+            //imgShow.setAttribute("src", "../images/Business/photo.png");
+            imgShow.innerHTML = `<img src="../images/Business/photo.png" style="width:90px;height:70px;"/>`
+        })
+        //商品是否上架
+        IsForSale.addEventListener("click", function () {
+
+            if (IsForSale.checked) {
+                IsForSale.value = "1";
+            }
+            else {
+                IsForSale.value = "0";
+            }
+        })
+        //是否選擇了商品類別
+        btnSubmit.addEventListener("click", function () {
+            console.log(selType.value)
+            if (selType.value === "請選擇商品類別") {
+                event.preventDefault();
+                document.querySelector("#checkType").innerHTML = `<span style="margin-left:10px; font-size:17px;"><img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別</span>`;
+            }
+            else
+                document.querySelector("#checkType").innerHTML = "";
+
+            if (!(txtPrice.value >= 0 || txtPrice.value <= 100000000))
+                event.preventDefault();
+        })
+
+        //驗證類別是否選擇
+        selType.addEventListener("change", function () {
+            if (selType.value === "請選擇商品類別") {
+                event.preventDefault();
+                document.querySelector("#checkType").innerHTML = `<span style="margin-left:10px; font-size:17px;"><img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別</span>`;
+            }
+            else
+                document.querySelector("#checkType").innerHTML = "";
+        })
+        //驗證價格是否為int
+        txtPrice.addEventListener("blur", function () {
+            if (!(txtPrice.value >= 0 || txtPrice.value <= 100000000))
+                document.querySelector("#checkPrice").innerHTML = `<span style="margin-left:10px; font-size:17px;"><img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請輸入數字</span>`;
+            else
+                document.querySelector("#checkPrice").innerHTML = "";
+        })
+    </script>
 }
