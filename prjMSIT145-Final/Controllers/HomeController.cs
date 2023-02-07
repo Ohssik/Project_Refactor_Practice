@@ -564,6 +564,23 @@ namespace prjMSIT145_Final.Controllers
             return RedirectToAction("CShowProduct", new { BFid = Convert.ToInt32(NewOrder[NewOrder.Keys.ToList()[1]]), OrderFid =CUtility.OrderID});
         }
 
+        
+        public IActionResult CgetAdImgList()//抓廣告輪播圖的資料
+        {
+            List<AdImg> list = new List<AdImg>();
+            var ads = from ad in _context.AdImgs
+                        where ad.OrderBy > 0
+                        orderby ad.OrderBy
+                        select ad;
+
+            foreach(var ad in ads)
+            {
+                list.Add(ad);
+            }
+            return Json(list);
+
+        }
+
         //-------------------------------------------------------------------------------------------------
         public IActionResult Privacy()
         {
