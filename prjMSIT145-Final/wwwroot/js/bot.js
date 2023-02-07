@@ -4,6 +4,8 @@ const txt = document.querySelector("#txt"); //輸入框
 const btnSubmit = document.querySelector("#btnSubmit"); //送出
 const tr = document.querySelectorAll("tr");
 const resultDiv = document.querySelector("#resultDiv");
+const azureLogo = document.querySelector(".azureLogo"); //按鈕
+const logoDiv = document.querySelector(".logoDiv");
 
 let msg = "";
 // 點選常見問題
@@ -17,6 +19,7 @@ tr.forEach(function (td) {
 
 //按下送出鈕
 btnSubmit.addEventListener("click", async function () {
+    
 
     //使用者頭像
     const response = await fetch("/Problem/PUserImg");
@@ -63,3 +66,26 @@ btnSubmit.addEventListener("click", async function () {
 
     txt.value = "";
 });
+
+document.addEventListener("scroll", function () {
+    let top = document.documentElement.scrollTop; //頁面目前所在高度
+    let hight = document.documentElement.scrollHeight;  //頁面總長
+    console.log("top : "+top)
+    console.log("top1 : " + hight)
+    console.log(top % 10);
+    if (top >= 1470) {
+        azureLogo.setAttribute("style", "bottom:80px;");
+        logoDiv.setAttribute("style", "bottom:80px");
+    }
+    else {
+ azureLogo.setAttribute("style", "bottom:30px");
+        logoDiv.setAttribute("style", "bottom:30px");
+    }
+    //if (top % 10 === 0) {
+       
+    //    //azureLogo.setAttribute("class", "step");
+    //    //if (azureLogo.getElementsByClassName("step")) {
+
+    //    //}
+    //}
+})
