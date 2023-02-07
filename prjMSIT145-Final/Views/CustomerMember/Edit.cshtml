@@ -28,7 +28,7 @@
             <div class="backcolor">
                        @{
                         if (Model.MemberPhotoFile!=null){
-                                     <img style="border-radius:80px" src="~/images/@Model.MemberPhotoFile" class="dog">
+                            <img style="border-radius:80px" src="~/images/Customer/Member/@Model.MemberPhotoFile" class="dog">
                                 }
                         else{
                                      <img style="border-radius:80px" src="@Url.Content("~/images/Customer/Member/photo.png")" class="dog">
@@ -56,7 +56,7 @@
                 <div class="aui-info">
                  @{ 
                     if(Model.MemberPhotoFile!=null){
-                                                <img src="~/images/@Model.MemberPhotoFile" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img" />
+                                <img src="~/images/Customer/Member/@Model.MemberPhotoFile" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img" />
                                 }
                        else{
                                             <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img" />
