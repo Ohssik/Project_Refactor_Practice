@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -11,9 +12,11 @@ namespace prjMSIT145_Final.Controllers
     public class CouponController : Controller
     {
         private readonly ispanMsit145shibaContext _context;
-        public CouponController(ispanMsit145shibaContext context)
+        private readonly IConfiguration _config;
+        public CouponController(ispanMsit145shibaContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
         public IActionResult Index()
         {           
@@ -311,10 +314,101 @@ namespace prjMSIT145_Final.Controllers
             return View(list);            
         }
 
-        public IActionResult CChangeCouponOwner()
+        public IActionResult CChangeCouponOwner(string data)
         {
             //todo 轉贈優惠券
-            return View();
+            if (!string.IsNullOrEmpty(data))
+            {
+                CChangeCouponOwnerViewModel cco = JsonConvert.DeserializeObject<CChangeCouponOwnerViewModel>(data);
+                string result = "";
+                if (cco != null)
+                {
+                    NormalMember member = _context.NormalMembers.FirstOrDefault(m => m.Fid == cco.receiverNfid);
+                    if (member == null)
+                        return Json("error:Receiver Member ID not exist");
+                    
+                    string[] coups = cco.coupList.Split(',');
+                    List<int> coupIds = new List<int>();
+                    foreach (string cid in coups)
+                    {
+                        int num = Convert.ToInt32(cid);
+                        coupIds.Add(num);
+                    }
+
+                    if (coupIds.Count == 0)
+                        return Json("error:Coupon list is empty");
+
+                    foreach (int id in coupIds)
+                    {
+                        Coupon2NormalMember c2n = _context.Coupon2NormalMembers.FirstOrDefault(c => c.CouponId == id && c.MemberId == cco.giverNfid);
+                        if (c2n == null)
+                            return Json($"error:CouponID:{id} not belong to NmemberID:{cco.giverNfid}");
+
+                        c2n.MemberId = cco.receiverNfid;
+                        try
+                        {
+                            _context.SaveChanges();
+
+                        }
+                        catch (Exception err)
+                        {
+                            return Json($"CouponID:{id} update error:{err.Message} ");
+                        }
+
+                    }
+
+
+                    if (string.IsNullOrEmpty(member.Email))
+                        return Json("error:Member Email address is empty");
+                    
+                    string mailBody = $"{member.MemberName} 先生/小姐 您好:<br>此信件為通知有人轉贈優惠券給您，您可在登入後至「會員中心」>「我的券夾」查看，謝謝。" +
+                        $"<br><br>對方傳達給您的悄悄話:<br>" +
+                        $"<label style='color:orange'>{cco.txtMessage}</label>"+
+                        $"<br><br><hr><br>" +
+                        $"此為系統通知信，請勿直接回信，謝謝。";
+                    result = "success " + sendMail(member.Email, mailBody, "優惠券轉贈通知");
+
+
+                    return Json(result);
+                }
+
+            }
+            return NoContent();
+        }
+
+        private string sendMail(string email, string mailBody, string mailSubject)
+        {
+            var DemoMailServer = _config["DemoMailServer:pwd"];
+            MailMessage MyMail = new MailMessage();
+            MyMail.From = new MailAddress("ShibaAdmin@msit145shiba.com.tw", "日柴", System.Text.Encoding.UTF8);
+            MyMail.To.Add(email);
+
+            MyMail.Subject = mailSubject;
+            MyMail.Body = mailBody; //設定信件內容
+            MyMail.IsBodyHtml = true; //是否使用html格式
+
+            SmtpClient MySMTP = new SmtpClient();
+            //MySMTP.UseDefaultCredentials = true;
+            MySMTP.Credentials = new System.Net.NetworkCredential("b9809004@gapps.ntust.edu.tw", DemoMailServer); //這裡要填正確的帳號跟密碼
+            MySMTP.Host = "smtp.gmail.com"; //設定smtp Server
+            MySMTP.Port = /*587*/25;
+            MySMTP.EnableSsl = true; //gmail預設開啟驗證
+
+
+            try
+            {
+                MySMTP.Send(MyMail);
+                return "success";
+            }
+            catch (Exception ex)
+            {
+                return $"Mail error:{ex.ToString()}";
+            }
+            finally
+            {
+                MyMail.Dispose(); //釋放資源
+            }
+
         }
     }
 }

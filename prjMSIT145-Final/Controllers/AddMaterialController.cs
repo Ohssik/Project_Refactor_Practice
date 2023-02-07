@@ -17,7 +17,7 @@ namespace prjMSIT145_Final.Controllers
 
 		public IActionResult BList()
         {
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
                 return View();
 
             return RedirectToAction("Blogin", "BusinessMember");
@@ -25,9 +25,9 @@ namespace prjMSIT145_Final.Controllers
 		public ActionResult BMaterialList(string keyword)
 		{
 			string json = "";
-			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
-				json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+				json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
 				BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
 				
 					var datas = (from pro in _context.ProductOptions
@@ -65,9 +65,9 @@ namespace prjMSIT145_Final.Controllers
 		}
 		public ActionResult BCreate()
 		{
-			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
-				string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+				string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
 				BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
 				CProductOptionViewModel vm = new CProductOptionViewModel();
 				vm.BFid = member.Fid;
@@ -107,7 +107,7 @@ namespace prjMSIT145_Final.Controllers
 		//[HttpPost]
 		public ActionResult BEdit(CProductOptionViewModel vm)
 		{
-			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
 				ProductOptionGroup optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName);
 				ProductOption opt = _context.ProductOptions.FirstOrDefault(o => o.Fid == vm.Fid);
