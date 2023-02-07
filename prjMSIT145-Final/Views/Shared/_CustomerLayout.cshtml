@@ -34,6 +34,7 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
+    <div id="shell">
     <header class="Navigationbar_Index">
         <nav>
             <ul class="Navigationbar_Direct">
@@ -95,38 +96,22 @@
     @await RenderSectionAsync("UpperScripts", required: false)
     <script>
         $(function(){
-        //{
-        //    if(Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)){
-        //            document.getElementById("alink").innerHTML = '<li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content("~/images/Customer/Navigation/person 32x32.png")"/><p>&emsp;會員中心</p></a></li><li><a id="loginout" href="">登出</a></li>';
-        //}
-        //};
-        
+
+            let windowHeight = $(window).height();
+            let shellHeight = $('#shell').height();           
             
-            $(window).scrollTop(1);
-            let scrollTop = $(window).scrollTop();
-            console.log(`scrollTop_lay=${scrollTop}`);
-            if ($(window).scrollTop() > 0) {
+            if (windowHeight < shellHeight) {
                 $('.Copyright').removeClass('fixed_footer');
 
             } else {
                 $('.Copyright').addClass('fixed_footer');
 
             }
-            //$(window).scrollTop(0);
-
-        //document.getElementById("aloginout").addEventListener("click",()=>{
-        //    if(confirm("確定要登出?")==false){
-        //        return;
-        //    }
-                
-        //});
-        
-
-            
-
+                        
         });
 
     </script>
     @await RenderSectionAsync("Scripts", required: false)
+    </div>
 </body>
 </html>
