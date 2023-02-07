@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using NuGet.Protocol;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
@@ -340,6 +341,16 @@ namespace prjMSIT145_Final.Controllers
 
             return Content("已寄出");
         }
-
+        public IActionResult getCartOrderQty(string data)
+        {
+            if (!string.IsNullOrEmpty(data))
+            {
+                int nfid = Convert.ToInt32(data);
+                int ordersQty = _context.Orders.Where(o => o.NFid == nfid && o.OrderState=="0").Count();
+                string showQty = ordersQty > 0 ? ordersQty.ToString() : "";
+                return Json(showQty);
+            }
+            return Json("");
+        }
     }
 }

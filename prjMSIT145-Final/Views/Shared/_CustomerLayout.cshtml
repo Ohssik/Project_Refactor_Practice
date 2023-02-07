@@ -28,7 +28,25 @@
             left: 0px;
             right: 0px;
         }
-       
+       #cartOrdersQty{
+           color:red;           
+           font-size:1.2em;
+            font-weight:bold;
+       }        
+         #cartOrdersQtyDiv{
+            display:inline;
+            background-color:white;
+            border-radius:50%;
+            padding:5px;
+           /* width:50px;
+            height:50px;*/
+            position:absolute;
+            top:0px;
+            right:-5px;
+         }
+          .Navigationbar_Direct>li:nth-child(2){
+              position:relative;
+          }
     </style>
     
     @await RenderSectionAsync("Styles", required: false)
@@ -39,7 +57,25 @@
         <nav>
             <ul class="Navigationbar_Direct">
                 <li><a asp-area="" asp-controller="Home" asp-action="CIndex">訂購</a></li>
-                <li><a asp-area="" asp-controller="Order" asp-action="CCartList">購物車</a></li>
+                <li><a asp-area="" asp-controller="Order" asp-action="CCartList">購物車</a>
+                        @{
+                            string nfid = "";
+                            if (Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+                            {
+                                string json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
+                                NormalMember x = JsonSerializer.Deserialize<NormalMember>(json);
+                                
+                                if (x != null)
+                                {
+                                    nfid = x.Fid.ToString();                                    
+                                }                               
+                            }
+                            @*購物車顯示訂單數量*@
+                            //<div id="cartOrdersQtyDiv">
+                            //    <span class="text-danger" data-nfid="@nfid" id="cartOrdersQty"></span>
+                            //</div>                            
+                        }                    
+                </li>
                 <li><a asp-area="" asp-controller="OrderDetial" asp-action="List">訂單</a></li>
                 <li><a asp-area="" asp-controller="Coupon" asp-action="CCouponExchange">兌換專區</a></li>
                 <li><a asp-area="" asp-controller="Home" asp-action="CIndex">客服信箱</a></li>
@@ -60,18 +96,18 @@
                         //<li><a href=@Url.Action("Edit","CustomerMember")><img src="~/images/@x.MemberPhotoFile" style="width:55px" /><p>&emsp;會員中心</p></a></li>
                           if(x.MemberPhotoFile!=null){
 
-                                                                    <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content($"~/images/{x.MemberPhotoFile}")" style="width:55px;border-radius:30px" /><span class="spaname">@membername</span><p>&emsp;會員中心</p></a></li>
+                                                                                                                                                                                        <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content($"~/images/{x.MemberPhotoFile}")" style="width:55px;border-radius:30px" /><span class="spaname">@membername</span><p>&emsp;會員中心</p></a></li>
                           
                           }
                           else{
-                                                                    <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content("~/images/Customer/Member/photo.png")" style="width:55px;border-radius:30px" /><p>&emsp;會員中心</p></a></li>
+                                                                                                                                                                                        <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content("~/images/Customer/Member/photo.png")" style="width:55px;border-radius:30px" /><p>&emsp;會員中心</p></a></li>
                           }
                             //<li><a id="aloginout" href=@Url.Action("Loginout","CustomerMember", null,new {onclick="return confirm('確定要刪除嗎?')"})><p>登出</p></a></li>
 
-                                                                  <li><p style="margin-top:28px;">@Html.ActionLink("登出", "Loginout","CustomerMember", null,new {onclick="return confirm('確定要登出嗎?')"})</p></li>
+                                                                                                                                                                                      <li><p style="margin-top:28px;">@Html.ActionLink("登出", "Loginout","CustomerMember", null,new {onclick="return confirm('確定要登出嗎?')"})</p></li>
                           
                     }else{
-                                                                    <li><a href=@Url.Action("Login","CustomerMember")><img src="@Url.Content("~/images/Customer/Navigation/person 32x32.png")" /><p>&emsp;登入 / 註冊</p></a></li>
+                                                                                                                                                                                        <li><a href=@Url.Action("Login","CustomerMember")><img src="@Url.Content("~/images/Customer/Navigation/person 32x32.png")" /><p>&emsp;登入 / 註冊</p></a></li>
                     }
                 }
                
@@ -84,6 +120,7 @@
 
     <main>
         @RenderBody()
+            
     </main>
 
     <footer class="Copyright">
@@ -96,7 +133,22 @@
     @await RenderSectionAsync("UpperScripts", required: false)
     <script>
         $(function(){
-        
+            let nfid= $('#cartOrdersQty').data('nfid');
+            console.log(`nfid=${nfid}`);
+            if (nfid > 0 || nfid != ''){
+                    $.ajax({
+                        url: `@Url.Content("~/CustomerMember/getCartOrderQty")`,
+                        type: 'post',
+                        data: {
+                            data: nfid
+                        },
+                        dataType: 'json',
+                        success: function (msg) {
+                            $('#cartOrdersQty').text(msg);
+                        }
+                    });
+            }
+            
             let shellHeight = $('#shell').height();
             let windowHeight = $(window).height();            
 
