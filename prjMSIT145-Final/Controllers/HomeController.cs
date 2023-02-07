@@ -447,13 +447,13 @@ namespace prjMSIT145_Final.Controllers
         }
 
         [HttpPost]
-        public IActionResult CAddtoCart(FormCollection NewOrder, int? NFid)
+        public IActionResult CAddtoCart(IFormCollection NewOrder, int? NFid)
         {
             NFid = 1;
             int SNIDCount = 0;
             if (NFid != 0)  //是否有登入會員
             {
-                if (NewOrder[NewOrder.Keys.ToList()[0]] == 0) //是否有訂單編號 (即是否為新訂單)
+                if (NewOrder[NewOrder.Keys.ToList()[0]] == "0") //是否有訂單編號 (即是否為新訂單)
                 {
                     #region 將新訂單寫入Orders
                     var OrderSNID = from O in _context.Orders
@@ -463,9 +463,13 @@ namespace prjMSIT145_Final.Controllers
                         if (SNIDCount < Convert.ToInt32(SNID))
                             SNIDCount = Convert.ToInt32(SNID);
                     }
+                    if (SNIDCount.ToString().Substring(4, 2) != DateTime.Now.ToString("MM"))
+                        SNIDCount = Convert.ToInt32($"{Convert.ToString(DateTime.Now).Substring(0, 4)}{DateTime.Now.ToString("MM")}0000");
                     var NMInfo = from N in _context.NormalMembers
                                  where N.Fid == NFid
-                                 select N;                    
+                                 select N;
+                    string PickUpPerson = NMInfo.ToList()[0].MemberName;
+                    string PickUpPersonPhone = NMInfo.ToList()[0].Phone;
                     _context.Orders.Add(new Order
                     {
                         NFid = NFid,
@@ -473,15 +477,15 @@ namespace prjMSIT145_Final.Controllers
                         PickUpDate = null,
                         PickUpTime = null,
                         PickUpType = null,
-                        PickUpPerson = NMInfo.ToList()[0].MemberName,
-                        PickUpPersonPhone = NMInfo.ToList()[0].Phone,
+                        PickUpPerson = PickUpPerson,
+                        PickUpPersonPhone = PickUpPersonPhone,
                         PayTermCatId = null,
                         TaxIdnum = null,
                         OrderState = "0",
                         Memo = "",
                         OrderTime = DateTime.Now,
                         TotalAmount = Convert.ToDecimal(NewOrder[NewOrder.Keys.ToList()[3]]),
-                        OrderISerialId = $"{Convert.ToString(DateTime.Now).Substring(0, 4)}{Convert.ToString(DateTime.Now).Substring(5, 2)}{Convert.ToString(SNIDCount).Substring(6, 4)}",
+                        OrderISerialId = $"{Convert.ToString(DateTime.Now).Substring(0, 4)}{DateTime.Now.ToString("MM")}{Convert.ToString(SNIDCount+1).Substring(6, 4)}",
                     });
                     _context.SaveChanges();
 
@@ -503,7 +507,7 @@ namespace prjMSIT145_Final.Controllers
                     CUtility.OrderitemID = OrderitemsID.Max();
                     #endregion
                     #region 將新訂單產品配料內容寫入OrderOptionsDetail
-                    for (int i = 5; i < NewOrder.Keys.ToList().Count; i++)
+                    for (int i = 5; i < NewOrder.Keys.ToList().Count-1; i++)
                     {
                         if (NewOrder[NewOrder.Keys.ToList()[i]] != "0")
                         {
@@ -544,7 +548,7 @@ namespace prjMSIT145_Final.Controllers
                     CUtility.OrderitemID = OrderitemsID.Max();
                     #endregion
                     #region 將既有訂單新增產品配料內容寫入OrderOptionsDetail
-                    for (int i = 5; i < NewOrder.Keys.ToList().Count; i++)
+                    for (int i = 5; i < NewOrder.Keys.ToList().Count-1; i++)
                     {
                         if (NewOrder[NewOrder.Keys.ToList()[i]] != "0")
                         {

@@ -115,7 +115,7 @@ namespace prjMSIT145_Final.Controllers
 				vm.product.CategoryFid = proCFid.Fid;
 				vm.product.BFid = vm.BFid;
 				_context.Products.Add(vm.product);
-				//_context.SaveChanges();
+				_context.SaveChanges();
 				return RedirectToAction("BList");
 			}
 			catch

@@ -12,7 +12,8 @@
 }
 
 .topdiv {
-    height: 100px;
+    height: 80px;
+    width:100%;
     margin-bottom: 10px;
     margin-top: 50px;
     border-bottom: 1px gray solid;
@@ -24,7 +25,7 @@
 .inputtext {
     border-width: 0;
     font-size: 20px;
-    width: 600px;
+    width: 100%;
     background-color: transparent;
 }
 
@@ -36,7 +37,7 @@
 
 .butt {
     border-radius: 10px;
-    margin-left: 35px;
+    /*margin-left: 20px;*/
     width: 50px;
     background-color: black;
     color: white;
@@ -54,6 +55,7 @@
 .divimage {
     display: flex;
     justify-content: space-around;
+    width:100%;
 }
 
 .p {
@@ -69,6 +71,7 @@
     background-color: black;
     color: white;
     border-radius: 10px;
+    height: 40px;
 }
 
 .text {
@@ -85,5 +88,5 @@
 .select {
     width: 200px;
     border-radius: 5px;
-    margin:20px 0 10px 0;
+    margin:30px 0 10px 0;
 }

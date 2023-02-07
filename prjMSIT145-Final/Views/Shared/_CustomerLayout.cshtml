@@ -8,6 +8,9 @@
     <link rel="shortcut icon" href="~/images/Customer/shiba.ico" />
     <link href="~/css/Customer_css/CNavigation.css" rel="stylesheet" />
     <link href="~/css/Customer_css/CFooterstyle.css" rel="stylesheet" />
+    <link href="~/css/Customer_css/bot.css" rel="stylesheet" />
+    <link href="~/css/Customer_css/CBSonlyClass.css" rel="stylesheet" />
+
     @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/prjMSIT145_Final.styles.css" asp-append-version="true" />*@
@@ -34,6 +37,7 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
+    <div id="shell">
     <header class="Navigationbar_Index">
         <nav>
             <ul class="Navigationbar_Direct">
@@ -80,53 +84,142 @@
             </ul>*@
         </nav>
     </header>
-
+     
     <main>
         @RenderBody()
     </main>
+        @*Azure機器人*@
+        <div class="azureLogo"
+             data-bs-toggle="collapse"
+             data-bs-target="#azure"
+             aria-expanded="false"
+             aria-controls="collapseExample">
+            <img src="@Url.Content("~/images/Problem/AzureBot.png")" alt="DailyLogo" />
+        </div>
+        <div class="azure collapse" id="azure">
+            <div class="card card-body ">
+                <iframe src='https://webchat.botframework.com/embed/msit14501daily-bot?s=sBZOKBWuvAU.FFRe_6cBbQ1LCnnx85WWa4mkmpEfJqewEceFCfWMPMw' style='min-width: 400px;max-width:400px; min-height: 690px;'></iframe>
+            </div>
+        </div>
 
+        <!-- 要把collapse 加入id=collapseExample的class裡 -->
+        <!-- 手動刻 -->
+        <div class="logoDiv"
+             data-bs-toggle="collapse"
+             data-bs-target="#collapseExample"
+             aria-expanded="false"
+             aria-controls="collapseExample">
+            <img src="@Url.Content("~/images/Problem/DailyBot.png")" alt="DailyLogo" />
+        </div>
+
+        <div class="logo collapse" id="collapseExample">
+            <div class="card card-body">
+                <!-- 以下自己刻 -->
+                <div class="msgDiv scroll">
+                    <div class="display serviceDiv">
+                        <div class="imgDiv"><img src="~/images/Problem/dailyLogo.png" /></div>
+                        <div class="serviceMsg">
+                            你好，請輸入問題，以便為您解答!
+                            <div class="qDiv">
+                                <p>&nbsp;常見問題:</p>
+                                <table class="table table-hover">
+                                    <tr><td>變更或取消訂單</td></tr>
+                                    <tr><td>收到的商品有誤</td></tr>
+                                    <tr><td>沒收到優惠券</td></tr>
+                                    <tr><td>信用卡退款</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="resultDiv">
+                        @*<div class="display userDiv">
+                        <div class="userMsg">信用卡退款</div>
+                        <div class="imgDiv"><img src="images/user.png" alt="" /></div>
+                        </div>*@
+                    </div>
+                </div>
+
+                <div class="txtDiv display">
+                    <input type="text" id="txt" />
+                    <button id="btnSubmit" type="button"><img src="~/images/Problem/send.png" /></button>
+                </div>
+            </div>
+        </div>
     <footer class="Copyright">
         <a asp-area="" asp-controller="Home" asp-action="CIndex"><img class="Footer_Logo" src="~/images/Customer/Navigation/shibaLogo_row1.png" /></a>
         <p><a asp-area="" asp-controller="Home" asp-action="CIndex">&copy;&ensp;2023&ensp;ShibaDaily&ensp;臺灣</a></p>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        @*<script src="~/js/bot.js"></script>*@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @*<script src="~/js/site.js" asp-append-version="true"></script>*@
     @await RenderSectionAsync("UpperScripts", required: false)
     <script>
         $(function(){
-        //{
-        //    if(Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)){
-        //            document.getElementById("alink").innerHTML = '<li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content("~/images/Customer/Navigation/person 32x32.png")"/><p>&emsp;會員中心</p></a></li><li><a id="loginout" href="">登出</a></li>';
-        //}
-        //};
-        
+
+            let windowHeight = $(window).height();
+            let shellHeight = $('#shell').height();           
             
-            $(window).scrollTop(1);
-            let scrollTop = $(window).scrollTop();
-            console.log(`scrollTop_lay=${scrollTop}`);
-            if ($(window).scrollTop() > 0) {
+            if (windowHeight < shellHeight) {
                 $('.Copyright').removeClass('fixed_footer');
 
             } else {
                 $('.Copyright').addClass('fixed_footer');
 
             }
-            //$(window).scrollTop(0);
+                        
+        });
+        const msgDiv = document.querySelector(".msgDiv"); //對話框
+        const userImg = document.querySelector("#userImg"); //客戶頭像
+        const txt = document.querySelector("#txt"); //輸入框
+        const btnSubmit = document.querySelector("#btnSubmit"); //送出
+        const tr = document.querySelectorAll("tr");
+        const resultDiv = document.querySelector("#resultDiv");
 
-        //document.getElementById("aloginout").addEventListener("click",()=>{
-        //    if(confirm("確定要登出?")==false){
-        //        return;
-        //    }
-                
-        //});
-        
-
-            
-
+        let msg = "";
+        // 點選常見問題
+        tr.forEach(function (td) {
+            td.addEventListener("click", function () {
+                console.log(this.firstElementChild.innerHTML);
+                msg = this.firstElementChild.innerHTML;
+                txt.value = msg;
+            });
         });
 
+        //按下送出鈕
+        btnSubmit.addEventListener("click", async function () {
+            if (txt.value === "") {
+                alert("請輸入內容")
+
+                return false;
+            }
+            let fragForUser = document.createDocumentFragment();
+            let fragForService = document.createDocumentFragment();
+
+            const request = await fetch(`@Url.Content("~/Problem/PAnswer?keyword=${txt.value}")`);
+            const data = await request.json();
+            console.log(data)
+            fragForService = `<div class="display serviceDiv">
+                                                                           <div class="imgDiv"><img src="@Url.Content("~/images/Problem/dailyLogo.png")" alt="ServiceImg" /></div>
+                                                                                <div class="serviceMsg">
+                                                                                      ${data.answer}
+                                                                                  </div>
+                                                                            </div>
+                                                                        </div>`;
+
+            fragForUser = `<div class="display userDiv">
+                                                                    <div class="userMsg">${txt.value}</div>
+                                                                        <div class="imgDiv"><img src="@Url.Content("~/images/Problem/user.png")" alt="UserImg" /></div>
+                                                                    </div>`;
+
+            resultDiv.innerHTML += fragForUser;
+            resultDiv.innerHTML += fragForService;
+            msgDiv.scrollTop = msgDiv.scrollHeight;
+
+            txt.value = "";
+        });
     </script>
-    @await RenderSectionAsync("Scripts", required: false)
+        @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
