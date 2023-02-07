@@ -10,9 +10,13 @@
 
   <ItemGroup>
     <Compile Remove="wwwroot\fontawesome-free-6.2.1-web\**" />
+    <Compile Remove="wwwroot\upload\**" />
     <Content Remove="wwwroot\fontawesome-free-6.2.1-web\**" />
+    <Content Remove="wwwroot\upload\**" />
     <EmbeddedResource Remove="wwwroot\fontawesome-free-6.2.1-web\**" />
+    <EmbeddedResource Remove="wwwroot\upload\**" />
     <None Remove="wwwroot\fontawesome-free-6.2.1-web\**" />
+    <None Remove="wwwroot\upload\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,8 +26,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
-
-    <Folder Include="wwwroot\upload\" />
   </ItemGroup>
 
 </Project>
