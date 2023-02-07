@@ -189,7 +189,8 @@
                     if (re.test(passwordval)) {
                       
                         spnpasswordobj.innerHTML = "";
-                        document.getElementById('Login').submit();
+                        logincheck();
+                       
                     }
                     else {
                         spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
@@ -203,37 +204,61 @@
            
            });
            
-            document.getElementById("submitid").addEventListener('click',async ()=>{
-                    event.preventDefault();
+            //document.getElementById("submitid").addEventListener('click',async ()=>{
+            //        event.preventDefault();
 
-                let formdata = new FormData(document.Loginname);
+            //    let formdata = new FormData(document.Loginname);
 
-                const request = await fetch(`@Url.Content("~/CustomerMember/loginmailverify")`,{
+            //    const request = await fetch(`@Url.Content("~/CustomerMember/loginmailverify")`,{
                 
-                    body:formdata,
-                    method:"Post",
+            //        body:formdata,
+            //        method:"Post",
 
-                    })
-                const data=await request.json();
-                console.log(data);
-                    if (data == "此帳號不存在") {
-                        alert("此帳號不存在")
-                        return;
-                    }
-                else if(data=="尚未開通會員資格"){
+            //        })
+            //    const data=await request.json();
+            //    console.log(data);
+            //        if (data == "此帳號不存在") {
+            //            alert("此帳號不存在")
+            //            return;
+            //        }
+            //    else if(data=="尚未開通會員資格"){
 
-                    alert("尚未開通會員資格")
-                    return;
-                }
-                else{
-                document.getElementById("Login").submit();
-                }
+            //        alert("尚未開通會員資格")
+            //        return;
+            //    }
+            //    else{
+            //    document.getElementById("Login").submit();
+            //    }
                     
 
 
-                });   
+            //    });
+       async function logincheck (){
            
 
+            let formdata = new FormData(document.Loginname);
+
+            const request = await fetch(`@Url.Content("~/CustomerMember/loginmailverify")`, {
+
+                body: formdata,
+                method: "Post",
+
+            })
+            const data = await request.json();
+            console.log(data);
+            if (data == "此帳號不存在") {
+                alert("此帳號不存在")
+                return;
+            }
+            else if (data == "尚未開通會員資格") {
+
+                alert("尚未開通會員資格")
+                return;
+            }
+            else {
+                document.getElementById("Login").submit();
+            }
+                };
 
 
 
@@ -249,7 +274,9 @@
 
 
 
-        $(function () {
+
+
+        $(function () {                                                              //忘記密碼
 
             let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
                 keyboard: false
