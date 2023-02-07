@@ -37,8 +37,9 @@
     </div>
 
 
-@using (Html.BeginForm())
-{
+@*@using (Html.BeginForm())
+{*@
+    <form asp-action="Login" id="Login" name="Loginname">
     <div class="wrap" id="wrap">
         <div class="Content">
 
@@ -88,12 +89,12 @@
 
     </div>
     
+    </form>
 
 
 
 
-
-}
+@*}*@
 @*忘記密碼發信Modal*@
 <div class="modal fade" id="sendMail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -147,68 +148,109 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        $(function () {
-            const passwordicon = document.querySelector("#togglePassword");
+       
+
+            const passwordicon = document.querySelector("#togglePassword");               
             const password = document.querySelector("#Password");
-        document.getElementById("Password").addEventListener("blur", checkPassword);
 
         var submitbtn = document.getElementById("submitid");
 
-        function checkPassword() {
+        
+
+        passwordicon.addEventListener("click", () => {                                //密碼圖示轉換
+
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            passwordicon.classList.toggle('fa-eye-slash');
+        });
+
+
+
+
+
+            submitbtn.addEventListener("click",()=>{
+              
+              event.preventDefault();
+
             var passwordobj = document.getElementById("Password");
             var spnpasswordobj = document.getElementById("passwordcorrect");
             var passwordval = passwordobj.value;
 
-            if (passwordval == "") {
-                spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
-                submitbtn.setAttribute('disabled', 'disabled');
-
-                return;
-            }
-            else {
-                spnpasswordobj.innerHTML = "";
-                submitbtn.removeAttribute('disabled');
-            }
-            if (passwordval.length < 6) {
+            if (passwordval == "" || passwordval.length < 6) {
                 spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
-                submitbtn.setAttribute('disabled', 'disabled');
-
                 return;
-            }
-            else {
-                spnpasswordobj.innerHTML = "";
-                submitbtn.removeAttribute('disabled');
-            }
-            if (passwordval.length >= 6) {
+             }
+             else{
+                if (passwordval.length >= 6) {
 
                     re = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/);
 
-                if (re.test(passwordval)) {
-                    submitbtn.removeAttribute('disabled');
-                    spnpasswordobj.innerHTML = "";
+                    if (re.test(passwordval)) {
+                      
+                        spnpasswordobj.innerHTML = "";
+                        document.getElementById('Login').submit();
+                    }
+                    else {
+                        spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
+                       
+                        return;
+                    }
+
+
                 }
-                else {
-                    spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
-                    submitbtn.setAttribute('disabled', 'disabled');
+                }
+           
+           });
+           
+            document.getElementById("submitid").addEventListener('click',async ()=>{
+                    event.preventDefault();
+
+                let formdata = new FormData(document.Loginname);
+
+                const request = await fetch(`@Url.Content("~/CustomerMember/loginmailverify")`,{
+                
+                    body:formdata,
+                    method:"Post",
+
+                    })
+                const data=await request.json();
+                console.log(data);
+                    if (data == "此帳號不存在") {
+                        alert("此帳號不存在")
+                        return;
+                    }
+                else if(data=="尚未開通會員資格"){
+
+                    alert("尚未開通會員資格")
                     return;
                 }
+                else{
+                document.getElementById("Login").submit();
+                }
+                    
 
 
-            }
-        }
-
-
-            passwordicon.addEventListener("click", () => {
-
-                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-                password.setAttribute('type', type);
-
-                passwordicon.classList.toggle('fa-eye-slash');
-            });
+                });   
+           
 
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $(function () {
+
             let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
                 keyboard: false
             });

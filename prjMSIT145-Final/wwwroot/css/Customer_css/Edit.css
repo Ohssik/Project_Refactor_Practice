@@ -57,8 +57,9 @@
     position: relative;
 }
 .card30{
+    position:relative;
     margin-left:40px;
-    margin-bottom:40px;
+    margin-bottom:40px;  
 }
 .divhint {
     display: flex;
@@ -255,4 +256,23 @@
 .Formatspan{
     font-size: 10px;
     color: darkgray;
+}
+.democorrect {
+    position: absolute;
+    bottom: 20px;
+    right: 100px;
+    color: white;
+    background-color: blue;
+    border-radius: 20px;
+    width: 60px;
+}
+
+.demoerror {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    background-color: red;
+    border-radius: 20px;
+    width: 60px;
 }

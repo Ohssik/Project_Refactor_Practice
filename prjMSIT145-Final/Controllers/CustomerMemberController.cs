@@ -53,12 +53,23 @@ namespace prjMSIT145_Final.Controllers
             }
             return View();
         }
-        public ActionResult memberheadphoto()
-        {
-            
 
-            return Json(CDictionary.SK_LOGINED_USER);
+        public ActionResult loginmailverify(CLoginViewModel vm)
+        {
+            NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Phone.Equals(vm.txtAccount) && c.Password.Equals(vm.txtPassword));
+            if (x != null)
+            {
+                if (x.EmailCertified == 1)
+                {
+                    return Json("");
+                }
+                return Json("尚未開通會員資格");
+            }
+
+            return Json("此帳號不存在");
         }
+
+        
 
 
         public ActionResult Loginout()
@@ -93,11 +104,6 @@ namespace prjMSIT145_Final.Controllers
                     return View();
                    
                 }
-            }
-
-            if (vm.Birthday==null)
-            {
-              return Content("請輸入生日");
             }
             
             if (photo != null)
@@ -148,18 +154,18 @@ namespace prjMSIT145_Final.Controllers
                 return Redirect("~/Home/CIndex");
           
         }
-        public IActionResult Verifyaccount(CNormalMemberViewModel vm)
+        public IActionResult Verifyaccount(NormalMember vm)
         {
             var data = _context.NormalMembers.Select(c => c.Phone);
             foreach (var i in data)
             {
-                if (i == vm.Phone || i == "")
+                if (i == vm.Phone)
                 {
                     return Json("帳號重複");
                    
                 }
             }
-          return Json ("");
+            return Json("");
         }
 
         public IActionResult Emailcheck(int? Fid)
@@ -183,13 +189,20 @@ namespace prjMSIT145_Final.Controllers
                 _context.SaveChanges();
                 return Redirect("~/Home/CIndex");
             }
-            ViewBag.errortxext = "驗證碼有錯";
+            
             return Redirect("~/Home/CIndex");
 
         }
+        public IActionResult Emailcheckword(NormalMember member)
+        {
+            NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Fid == member.Fid);
+            if (x != null && x.EmailCertified == member.EmailCertified)
+            {
+                return Json("");
 
-
-
+            }
+            return Json("請在信箱確認驗證碼");
+        }
 
         public IActionResult memberview()
         {
@@ -279,13 +292,6 @@ namespace prjMSIT145_Final.Controllers
 
         }
         
-
-
-
-
-
-
-
 
 
         public IActionResult Forgetpassword()

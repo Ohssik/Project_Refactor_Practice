@@ -162,18 +162,18 @@
 .PhotoandName {
     display: flex;
     justify-content: flex-start;
-    align-items:center;
+    align-items: center;
 }
 
     .PhotoandName img {
-        width:40px;
-        height:40px;
+        width: 40px;
+        height: 40px;
     }
 
     .PhotoandName p {
         font-size: 20px;
         font-weight: bold;
-        margin-left:10px;
+        margin-left: 10px;
     }
 
 .AmountBall {
@@ -187,7 +187,7 @@
     color: #FFFFFF;
     margin-left: 10px;
     font-size: 16px;
-    font-family:Carlito;
+    font-family: Carlito;
 }
 
 .producttext {
@@ -217,7 +217,7 @@
 
 
 
-/*以下為Modal使用CSS*/
+/*---------------------以下為Modal使用CSS---------------------*/
 .ModalTitle {
     color: #9F4E27;
 }
@@ -237,7 +237,7 @@
 .NeedChoose {
     color: magenta;
     font-size: 20px;
-    font-weight:300;
+    font-weight: 300;
 }
 
 .OptionsArea {
@@ -256,7 +256,7 @@
     padding: 10px;
     border-radius: 5px;
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -266,23 +266,27 @@
     }
 
     .Optiondiv p {
-        color:#FFFFFF;
-        font-size:20px;
-        font-weight:600;
+        color: #FFFFFF;
+        font-size: 20px;
+        font-weight: 600;
     }
 
+.NChoosedOptiondiv {
+    background-color: #e9cbbc;
+}
+
 .DisplayColumn {
-    display:flex;
-    flex-direction:column;
-    justify-content:space-around;
-    width:250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 250px;
 }
 
 .TotalPrice {
     color: #000000;
     font-size: 18px;
     font-weight: 500;
-    margin-bottom:5px;
+    margin-bottom: 5px;
 }
 
 .DisplayFlex {
@@ -309,7 +313,8 @@
     color: #9F4E27;
     font-family: Arial;
     padding: 2px 50px;
-    width: 180px;
+    width: 40px;
+    text-align: center;
 }
 
 .Plusbtn {

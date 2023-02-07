@@ -12,7 +12,8 @@ namespace prjMSIT145_Final.Models
         }
 
         public int ChatroomUserid { get; set; }
-        public string? UserType { get; set; }
+        public int? UserType { get; set; }
+        public int? Memberfid { get; set; }
         public string? ConnectionId { get; set; }
         public DateTime? LastOnlineTime { get; set; }
 
