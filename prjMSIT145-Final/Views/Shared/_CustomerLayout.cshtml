@@ -32,17 +32,30 @@
             right: 0px;
         }
        #cartOrdersQty{
-           color:red;           
+           /*color:red;           
            font-size:1.2em;
-            font-weight:bold;
+            font-weight:bold;*/
+
+         width: 20px;
+         height: 20px;
+         line-height: 20px;  /* 数值与height相同，使数字垂直居中 */
+         text-align: center;  /* 使数字水平居中 */
+         background-color: red;
+         color: white;
+         font-size: 12px;
+         font-weight: 700;
+         border-radius: 50%;  /*使正方形变圆形，矩形变椭圆形 */
+         position: relative;
+         bottom: 60px;
+         left: 90px;
        }        
          #cartOrdersQtyDiv{
             display:inline;
             background-color:white;
             border-radius:50%;
             padding:5px;
-           /* width:50px;
-            height:50px;*/
+            width:50px;
+            height:50px;
             position:absolute;
             top:0px;
             right:-5px;
@@ -50,6 +63,7 @@
           .Navigationbar_Direct>li:nth-child(2){
               position:relative;
           }
+
     </style>
     
     @await RenderSectionAsync("Styles", required: false)
@@ -60,7 +74,7 @@
         <nav>
             <ul class="Navigationbar_Direct">
                 <li><a asp-area="" asp-controller="Home" asp-action="CIndex">訂購</a></li>
-                <li><a asp-area="" asp-controller="Order" asp-action="CCartList">購物車</a>
+                <li>
                         @{
                             string nfid = "";
                             if (Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
@@ -74,10 +88,11 @@
                                 }                               
                             }
                             @*購物車顯示訂單數量*@
-                            //<div id="cartOrdersQtyDiv">
-                            //    <span class="text-danger" data-nfid="@nfid" id="cartOrdersQty"></span>
-                            //</div>                            
-                        }                    
+                            <div id="cartOrdersQty" data-nfid="@nfid">1</div>
+                            @*<span class="text-danger" data-nfid="@nfid" id="cartOrdersQty"></span>*@
+                                                    
+                        } 
+                        <a asp-area="" asp-controller="Order" asp-action="CCartList">購物車</a>
                 </li>
                 <li><a asp-area="" asp-controller="OrderDetial" asp-action="List">訂單</a></li>
                 <li><a asp-area="" asp-controller="Coupon" asp-action="CCouponExchange">兌換專區</a></li>
