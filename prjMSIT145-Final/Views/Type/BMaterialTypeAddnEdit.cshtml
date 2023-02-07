@@ -112,10 +112,12 @@
 					item.isMultiple = "是";
 				result += `
 				<tr name='tr'>
-								<td>${item.optionGroupName}</td>
-								<td>${item.isMultiple}</td>
-								<td>${item.memo}</td>
-								</tr>`
+						<input type="hidden" name="Fid" value="${item.fid}" id="${item.fid}"/>
+
+						<td>${item.optionGroupName}</td>
+						<td>${item.isMultiple}</td>
+						<td>${item.memo}</td>
+				</tr>`
 			})
 			tbody.innerHTML = result;
 
@@ -123,11 +125,11 @@
 				value.addEventListener("click", function () {
 					const id = this.children[0].value; //取得點取的資料列id
 					const name = this.cells[0].innerHTML; //取得點取的資料列名稱
-					const memo = this.cells[3].innerHTML; //取得點取的資料列備註
+					const memo = this.cells[2].innerHTML; //取得點取的資料列備註
 					txt.value = name;
 					fid.value = id;
 					textArea.value = memo;
-					//console.log(id);
+					console.log(value);
 				})
 			})
 		}

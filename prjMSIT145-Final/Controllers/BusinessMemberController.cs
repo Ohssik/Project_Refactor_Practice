@@ -40,7 +40,7 @@ namespace prjMSIT145_Final.Controllers
                         //    _context.SaveChanges();
                         //}
                         string json = JsonSerializer.Serialize(b);
-                        HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json);
+                        HttpContext.Session.SetString(CDictionary.SK_LOGINED_Business, json);
 
                         return RedirectToAction("BList", "Order");
                     }

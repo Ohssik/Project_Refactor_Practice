@@ -80,9 +80,9 @@ namespace prjMSIT145_Final.Controllers
         {
             string state = "1";
             string json = "";
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
             {
-               json= HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+               json= HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
                BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
               var order = _context.Orders.Where(o => o.BFid == member.Fid && o.OrderState == state);
                 var Datas = order.Join(_context.NormalMembers, o => o.NFid, n => n.Fid, (o, n) => new
@@ -137,9 +137,9 @@ namespace prjMSIT145_Final.Controllers
         {
             string state = "2";
             string json = "";
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
             {
-                json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
                 BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
                 var order = _context.Orders.Where(o => o.BFid == member.Fid && (o.OrderState == state || o.OrderState == "3"));
                 var Datas = order.Join(_context.NormalMembers, o => o.NFid, n => n.Fid, (o, n) => new
@@ -194,9 +194,9 @@ namespace prjMSIT145_Final.Controllers
         {
             string state = "4";
             string json = "";
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
             {
-                json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+                json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
                 BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
                 var order = _context.Orders.Where(o => o.BFid == member.Fid &&( o.OrderState == state ||o.OrderState =="5" || o.OrderState == "6") );
                 var Datas = order.Join(_context.NormalMembers, o => o.NFid, n => n.Fid, (o, n) => new
