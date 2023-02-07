@@ -73,13 +73,16 @@
                                 </div>
                             </div>
                         </div>
-
-                        <select id="selType" name="categoryName" style="border-radius:5px;"><option></option></select>  @*選擇類別*@
-
+                        <div style="margin:10px 0 0 50px;">
+                            @*選擇類別*@
+                            <select id="selType" name="categoryName" style="border-radius:5px; width:150px;"><option></option></select>
+                            <span id="checkType" style="margin-left:10px; font-size:17px;"></span>
+                        </div>
+                        @*產品價格*@
                         <hr />
                         <h6 id="h6">價格及販售方式</h6>
                         <label for="txtPrice">預設價格</label>
-                        <input type="text" id="txtPrice" name="UnitPrice" style="border-radius:10px;" required />   @*產品價格*@
+                        <input type="text" id="txtPrice" name="UnitPrice" style="border-radius:10px;" required />   
                         <hr />
                         <h6 id="h6">餐點狀態</h6>
                         <div>
@@ -128,7 +131,7 @@
 @section Scripts{
 
     <script>
-        const txt = document.querySelector("#txtKeyword");
+        //const txt = document.querySelector("#txtKeyword");
         const tbody = document.querySelector("#tbody");
         const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
         const btnDelete = document.getElementsByName("btnDelete"); //刪除按鈕
@@ -266,19 +269,18 @@
             imgShow.setAttribute("style", "width: 90px; height: 70px;");
         })
         //送出時確認商品類別及狀態是否選取
-        btnSubmit.addEventListener("click", function (event) {
-            if (selType.value == "請選擇商品類別") {
-                event.preventDefault();
-                alert("請確認商品類別是否選取!")
-            }
-            if (!IsForSale0.checked && !IsForSale1.checked && !IsForSale2.checked) {
-                event.preventDefault();
-                document.querySelector("#checkSale").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style = "width:30px;" />請選擇產品狀態`;
-            }
-            else
-                document.querySelector("#checkSale").innerHTML = ``;
-        })
-
+        //btnSubmit.addEventListener("click", function (event) {
+        //    if (selType.value === "請選擇商品類別") {
+        //        event.preventDefault();
+        //        document.querySelector("#checkType").innerHTML =  `<img src="@Url.Content("~/images/Business/warning.png")" style = "width:30px;" />請確認商品類別是否選取!`;
+        //    }
+        //    if (!IsForSale0.checked && !IsForSale1.checked && !IsForSale2.checked) {
+        //        event.preventDefault();
+        //        document.querySelector("#checkSale").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style = "width:30px;" />請選擇產品狀態`;
+        //    }
+        //    else
+        //        document.querySelector("#checkSale").innerHTML = ``;
+        //})
     </script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
