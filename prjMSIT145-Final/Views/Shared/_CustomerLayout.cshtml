@@ -31,7 +31,25 @@
             left: 0px;
             right: 0px;
         }
-       
+       #cartOrdersQty{
+           color:red;           
+           font-size:1.2em;
+            font-weight:bold;
+       }        
+         #cartOrdersQtyDiv{
+            display:inline;
+            background-color:white;
+            border-radius:50%;
+            padding:5px;
+           /* width:50px;
+            height:50px;*/
+            position:absolute;
+            top:0px;
+            right:-5px;
+         }
+          .Navigationbar_Direct>li:nth-child(2){
+              position:relative;
+          }
     </style>
     
     @await RenderSectionAsync("Styles", required: false)
@@ -42,7 +60,25 @@
         <nav>
             <ul class="Navigationbar_Direct">
                 <li><a asp-area="" asp-controller="Home" asp-action="CIndex">訂購</a></li>
-                <li><a asp-area="" asp-controller="Order" asp-action="CCartList">購物車</a></li>
+                <li><a asp-area="" asp-controller="Order" asp-action="CCartList">購物車</a>
+                        @{
+                            string nfid = "";
+                            if (Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+                            {
+                                string json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
+                                NormalMember x = JsonSerializer.Deserialize<NormalMember>(json);
+                                
+                                if (x != null)
+                                {
+                                    nfid = x.Fid.ToString();                                    
+                                }                               
+                            }
+                            @*購物車顯示訂單數量*@
+                            //<div id="cartOrdersQtyDiv">
+                            //    <span class="text-danger" data-nfid="@nfid" id="cartOrdersQty"></span>
+                            //</div>                            
+                        }                    
+                </li>
                 <li><a asp-area="" asp-controller="OrderDetial" asp-action="List">訂單</a></li>
                 <li><a asp-area="" asp-controller="Coupon" asp-action="CCouponExchange">兌換專區</a></li>
                 <li><a asp-area="" asp-controller="Home" asp-action="CIndex">客服信箱</a></li>
@@ -63,18 +99,18 @@
                         //<li><a href=@Url.Action("Edit","CustomerMember")><img src="~/images/@x.MemberPhotoFile" style="width:55px" /><p>&emsp;會員中心</p></a></li>
                           if(x.MemberPhotoFile!=null){
 
-                            <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content($"~/images/{x.MemberPhotoFile}")" style="width:55px;border-radius:30px" /><span class="spaname">@membername</span><p>&emsp;會員中心</p></a></li>
+                                                                                                                                                                                        <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content($"~/images/{x.MemberPhotoFile}")" style="width:55px;border-radius:30px" /><span class="spaname">@membername</span><p>&emsp;會員中心</p></a></li>
                           
                           }
                           else{
-                            <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content("~/images/Customer/Member/photo.png")" style="width:55px;border-radius:30px" /><p>&emsp;會員中心</p></a></li>
+                                                                                                                                                                                        <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content("~/images/Customer/Member/photo.png")" style="width:55px;border-radius:30px" /><p>&emsp;會員中心</p></a></li>
                           }
                             //<li><a id="aloginout" href=@Url.Action("Loginout","CustomerMember", null,new {onclick="return confirm('確定要刪除嗎?')"})><p>登出</p></a></li>
 
-                          <li><p style="margin-top:28px;">@Html.ActionLink("登出", "Loginout","CustomerMember", null,new {onclick="return confirm('確定要登出嗎?')"})</p></li>
+                                                                                                                                                                                      <li><p style="margin-top:28px;">@Html.ActionLink("登出", "Loginout","CustomerMember", null,new {onclick="return confirm('確定要登出嗎?')"})</p></li>
                           
                     }else{
-                            <li><a href=@Url.Action("Login","CustomerMember")><img src="@Url.Content("~/images/Customer/Navigation/person 32x32.png")" /><p>&emsp;登入 / 註冊</p></a></li>
+                                                                                                                                                                                        <li><a href=@Url.Action("Login","CustomerMember")><img src="@Url.Content("~/images/Customer/Navigation/person 32x32.png")" /><p>&emsp;登入 / 註冊</p></a></li>
                     }
                 }
                
@@ -87,18 +123,24 @@
      
     <main>
         @RenderBody()
+            
     </main>
+       
+    <footer class="Copyright">
+        <a asp-area="" asp-controller="Home" asp-action="CIndex"><img class="Footer_Logo" src="~/images/Customer/Navigation/shibaLogo_row1.png" /></a>
+        <p><a asp-area="" asp-controller="Home" asp-action="CIndex">&copy;&ensp;2023&ensp;ShibaDaily&ensp;臺灣</a></p>
+    </footer>
         @*Azure機器人*@
         <div class="azureLogo"
              data-bs-toggle="collapse"
              data-bs-target="#azure"
              aria-expanded="false"
              aria-controls="collapseExample">
-            <img src="@Url.Content("~/images/Problem/AzureBot.png")" alt="DailyLogo" />
+            <img src="@Url.Content("~/images/Problem/DailyBot.png")" alt="DailyLogo" />
         </div>
         <div class="azure collapse" id="azure">
             <div class="card card-body ">
-                <iframe src='https://webchat.botframework.com/embed/msit14501daily-bot?s=sBZOKBWuvAU.FFRe_6cBbQ1LCnnx85WWa4mkmpEfJqewEceFCfWMPMw' style='min-width: 400px;max-width:400px; min-height: 690px;'></iframe>
+                <iframe src='https://webchat.botframework.com/embed/msit14501daily-bot?s=sBZOKBWuvAU.FFRe_6cBbQ1LCnnx85WWa4mkmpEfJqewEceFCfWMPMw' style='min-width: 380px;max-width:380px; min-height: 730px; border:none;'></iframe>
             </div>
         </div>
 
@@ -123,10 +165,10 @@
                             <div class="qDiv">
                                 <p>&nbsp;常見問題:</p>
                                 <table class="table table-hover">
-                                    <tr><td>變更或取消訂單</td></tr>
-                                    <tr><td>收到的商品有誤</td></tr>
-                                    <tr><td>沒收到優惠券</td></tr>
-                                    <tr><td>信用卡退款</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">變更或取消訂單</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">收到的商品有誤</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">沒收到優惠券</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">信用卡退款</td></tr>
                                 </table>
                             </div>
                         </div>
@@ -145,80 +187,44 @@
                 </div>
             </div>
         </div>
-    <footer class="Copyright">
-        <a asp-area="" asp-controller="Home" asp-action="CIndex"><img class="Footer_Logo" src="~/images/Customer/Navigation/shibaLogo_row1.png" /></a>
-        <p><a asp-area="" asp-controller="Home" asp-action="CIndex">&copy;&ensp;2023&ensp;ShibaDaily&ensp;臺灣</a></p>
-    </footer>
-
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        @*<script src="~/js/bot.js"></script>*@
+
+        <script src="~/js/bot.js"></script>  @*機器人Js檔*@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     @*<script src="~/js/site.js" asp-append-version="true"></script>*@
     @await RenderSectionAsync("UpperScripts", required: false)
     <script>
         $(function(){
-
-            let windowHeight = $(window).height();
-            let shellHeight = $('#shell').height();           
+            let nfid= $('#cartOrdersQty').data('nfid');
+            console.log(`nfid=${nfid}`);
+            if (nfid > 0 || nfid != ''){
+                    $.ajax({
+                        url: `@Url.Content("~/CustomerMember/getCartOrderQty")`,
+                        type: 'post',
+                        data: {
+                            data: nfid
+                        },
+                        dataType: 'json',
+                        success: function (msg) {
+                            $('#cartOrdersQty').text(msg);
+                        }
+                    });
+            }
             
+            let shellHeight = $('#shell').height();
+            let windowHeight = $(window).height();            
+
             if (windowHeight < shellHeight) {
                 $('.Copyright').removeClass('fixed_footer');
-
-            } else {
+            }
+            else{
                 $('.Copyright').addClass('fixed_footer');
+            }         
 
-            }
-                        
-        });
-        const msgDiv = document.querySelector(".msgDiv"); //對話框
-        const userImg = document.querySelector("#userImg"); //客戶頭像
-        const txt = document.querySelector("#txt"); //輸入框
-        const btnSubmit = document.querySelector("#btnSubmit"); //送出
-        const tr = document.querySelectorAll("tr");
-        const resultDiv = document.querySelector("#resultDiv");
-
-        let msg = "";
-        // 點選常見問題
-        tr.forEach(function (td) {
-            td.addEventListener("click", function () {
-                console.log(this.firstElementChild.innerHTML);
-                msg = this.firstElementChild.innerHTML;
-                txt.value = msg;
-            });
         });
 
-        //按下送出鈕
-        btnSubmit.addEventListener("click", async function () {
-            if (txt.value === "") {
-                alert("請輸入內容")
 
-                return false;
-            }
-            let fragForUser = document.createDocumentFragment();
-            let fragForService = document.createDocumentFragment();
-
-            const request = await fetch(`@Url.Content("~/Problem/PAnswer?keyword=${txt.value}")`);
-            const data = await request.json();
-            console.log(data)
-            fragForService = `<div class="display serviceDiv">
-                                                                           <div class="imgDiv"><img src="@Url.Content("~/images/Problem/dailyLogo.png")" alt="ServiceImg" /></div>
-                                                                                <div class="serviceMsg">
-                                                                                      ${data.answer}
-                                                                                  </div>
-                                                                            </div>
-                                                                        </div>`;
-
-            fragForUser = `<div class="display userDiv">
-                                                                    <div class="userMsg">${txt.value}</div>
-                                                                        <div class="imgDiv"><img src="@Url.Content("~/images/Problem/user.png")" alt="UserImg" /></div>
-                                                                    </div>`;
-
-            resultDiv.innerHTML += fragForUser;
-            resultDiv.innerHTML += fragForService;
-            msgDiv.scrollTop = msgDiv.scrollHeight;
-
-            txt.value = "";
-        });
     </script>
         @await RenderSectionAsync("Scripts", required: false)
 </body>
