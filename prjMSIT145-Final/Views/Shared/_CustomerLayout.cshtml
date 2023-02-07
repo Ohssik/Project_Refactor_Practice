@@ -93,10 +93,6 @@
                         string  json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
                         NormalMember x = JsonSerializer.Deserialize<NormalMember>(json);
                         string membername = x.MemberName.Substring(1, 2);
-                        //<li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content("~/images/Customer/Navigation/person 32x32.png")"/><p>&emsp;會員中心</p></a></li><li><a id="loginout" href="">登出</a></li>
-                        //<li><a href=@Url.Action("Edit","CustomerMember")><img src=`@Url.Content("~/images/${@x.MemberPhotoFile}")` /><p>&emsp;會員中心</p></a></li>
-                        //<li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content(`~/images/${@x.MemberPhotoFile}`)" /><p>&emsp;會員中心</p></a></li>
-                        //<li><a href=@Url.Action("Edit","CustomerMember")><img src="~/images/@x.MemberPhotoFile" style="width:55px" /><p>&emsp;會員中心</p></a></li>
                           if(x.MemberPhotoFile!=null){
 
                                 <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content($"~/images/Customer/Member/{x.MemberPhotoFile}")" style="width:55px;border-radius:30px" /><span class="spaname">@membername</span><p>&emsp;會員中心</p></a></li>

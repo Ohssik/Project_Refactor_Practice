@@ -301,7 +301,12 @@ namespace prjMSIT145_Final.Controllers
            
             if (memberedit!= null)
             {
+                if(memberedit.MemberName==null || memberedit.Email == null)
+                {
+                    return View(memberedit);
+                }
                 NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Fid == memberedit.Fid);
+                
                 if (memberedit.photo != null)
                 {
                     string fileName = Guid.NewGuid().ToString() + ".jpg";
@@ -333,7 +338,28 @@ namespace prjMSIT145_Final.Controllers
                 return RedirectToAction("login");
             }
             
-    }
+         }
+        public IActionResult Editverify(CNormalMemberViewModel vm)
+        {
+            if (vm.member == null)
+            {
+                return Json("名子不能空值");
+            };
+            if (vm.Email==null)
+            {
+                return Json("信箱不能空值");
+            }
+            else { 
+                bool correct = Regex.IsMatch(vm.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            if (!(correct))
+                         {
+                return Json("Email格式錯誤");
+                        }
+            };
+            return Json("修改完成"); 
+
+        }
+
         public IActionResult Alterpassword()
         {
             string loginmember = "";
