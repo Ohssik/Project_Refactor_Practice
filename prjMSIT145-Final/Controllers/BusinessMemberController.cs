@@ -2,6 +2,7 @@
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModel;
 using System.Diagnostics.Metrics;
+using System.Linq;
 using System.Text.Json;
 
 
@@ -16,6 +17,8 @@ namespace prjMSIT145_Final.Controllers
         }
         public IActionResult Blogin()
         {
+            ViewBag.emailmessage = "";
+            ViewBag.passwordmessage = "";
             return View();
         }
         [HttpPost]
@@ -45,6 +48,14 @@ namespace prjMSIT145_Final.Controllers
                         return RedirectToAction("BList", "Order");
                     }
                 }
+                BusinessMember Email = _context.BusinessMembers.FirstOrDefault(b => b.Email.Equals(cLoginViewModel.fEmail));
+                if (Email == null)
+                {
+                  ViewBag.emailmessage = "找不到用戶Email";
+                    return View();
+                }
+               
+                ViewBag.passwordmessage = "密碼錯誤";
                 return View();
             }
             Gmail gmail = new Gmail();
@@ -52,10 +63,22 @@ namespace prjMSIT145_Final.Controllers
             return View();
 
         }
+        
+        public IActionResult RegisterVerification(string? Email)
+        {
+            BusinessMember b = _context.BusinessMembers.FirstOrDefault(b => b.Email.Equals(Email));
+            if (b==null)
+            {
+
+                return Json("這個Email可以使用");
+
+            }
+            return Json("這個Email已被使用");
+
+        }
 
 
-
-        public IActionResult Register(string? email)
+        public  IActionResult Register(string? email)
         {
             ViewBag.email = email;
             return PartialView();

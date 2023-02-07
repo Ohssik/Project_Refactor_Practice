@@ -14,15 +14,17 @@
             <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="fEmail" value="">
           <label for="floatingInput">Email</label>
         </div>
-        <div class="form-floating">
-            <div id="divPassword" class="">
+        <div>
+            <label class="p-2 m-2 text-danger" id="emailmessage">@ViewBag.emailmessage</label>
+        </div>
+        <div>
+            <div class="form-floating" id="divPassword" >
             <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="fPassword" value="">
             <label for="floatingPassword" id="labPassWord" class="">密碼</label>
             </div>
-           
-            <button class="d-none"  id="btnNextstep">下一步</button>
+            <button class="d-none"  id="btnNextstep"  type="button">送出註冊信件</button>
         </div>
-
+        <label class="p-2 m-2 text-danger" id="passwordmessage">@ViewBag.passwordmessage</label>
         <div class="checkbox mb-3">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
@@ -30,14 +32,11 @@
         </div>
         <div class="container">
             <div class="row ">
-            <button class=" btn btn-lg btn-primary col-5 p-2" id="btnLogin" type="submit">登入</button>
+                <button class=" btn btn-lg btn-primary col-5 p-2" id="btnLogin" type="button">登入</button>
             <div class="col-1"></div>
-             <button class=" btn btn-lg btn-primary  col-5  p-2" id="btnRegister" type="button">註冊</button>
+                <button class=" btn btn-lg btn-primary  col-5  p-2" id="btnRegister" type="button">註冊</button>
             </div>
-          
         </div>
-      
-        
       </form>
     </main>
 
@@ -45,39 +44,121 @@
  <script>
         const btnRegister = document.getElementById("btnRegister");
         const btnLogin    = document.getElementById("btnLogin");
-        const PassWordInput = document.getElementById("divPassword");
+        const PassWordInputdiv = document.getElementById("divPassword");
+        const PassWordInput = document.getElementById("floatingPassword");
         const btnNextstep = document.getElementById("btnNextstep");
         const emailinput = document.getElementById("floatingInput");
-
-        btnRegister.addEventListener('click',function(){
-            PassWordInput.setAttribute("class","d-none");
-            btnLogin.setAttribute("type", "button");
-            btnNextstep.setAttribute('class', "btn btn-lg btn-primary w-100");
-            emailinput.setAttribute("name", 'fEmailRegister');
-
-
-
+        const passwordmessage = document.getElementById("passwordmessage");
+        const emailmessage = document.getElementById("emailmessage");
+        //驗證字串
+        const emailRule = /^\w+((-\w+)|(\.\w+))*\@@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+        var Registerok ="";
+      
+        //focus時刪除紅色的字
+        floatingInput.addEventListener('focus',function emailfocus () {
+        emailmessage.innerHTML="";
+        }); 
+        //focus時刪除紅色的字
+        PassWordInputdiv.addEventListener('focus',function PassWordfocus() {
+        passwordmessage.innerHTML = "";
         });
+
+       
+
         btnLogin.addEventListener('click',function(e){
-            if (PassWordInput.className == "d-none")
+            if (PassWordInputdiv.className == "d-none")
             {
-                PassWordInput.setAttribute("class", "");
+                PassWordInputdiv.setAttribute("class", "form-floating");
                  btnNextstep.setAttribute('class', "d-none");
                 emailinput.setAttribute("name", 'fEmail');
 
             }
             else
             {
-             btnLogin.setAttribute("type", "submit");
+                if (emailinput.value == "") {
+                  emailmessage.innerHTML = "Email不能為空";
+                  return;
+                }
+                if (PassWordInput.value == "") {
+                   passwordmessage.innerHTML = "密碼不能為空";
+                  return;
+                }
+                
+              btnLogin.setAttribute("type", "submit");
             }
-
+         
            
         });
+
+
+
+        //email空白(Email不能為空)
        
+
+        //按下註冊時
+        btnRegister.addEventListener('click', function () {
+            //刪除紅色的字
+            passwordmessage.innerHTML = "";
+            emailmessage.innerHTML = "";
+            
+            //把密碼輸入隱藏
+            PassWordInputdiv.setAttribute("class", "d-none");
+            //SHOW出下一步按鈕
+            btnNextstep.setAttribute('class', "btn btn-lg btn-primary w-100");
+            //改變傳回後端時的資料
+            emailinput.setAttribute("name", 'fEmailRegister');
+
+
+            //檢查Email
+            emailinput.addEventListener("input", async function () {
+                //檢查格式
+                if ((emailinput.value).search(emailRule) == -1) {
+                    emailmessage.setAttribute("class", "p-2 m-2 text-danger");
+                    emailmessage.innerText = "Email格式不正確";
+                    Registerok = "";
+                    return;
+                }
+                //檢查重複
+                const RegisterVerification = await fetch(`@Url.Content("~/BusinessMember/RegisterVerification/?Email=${emailinput.value}")`);
+                console.log(RegisterVerification);
+                const result = await RegisterVerification.json();
+
+                if (result != "這個Email可以使用") {
+                    emailmessage.setAttribute("class", "p-2 m-2 text-danger");
+                    emailmessage.innerText = result;
+                    Registerok = "";
+                    return;
+                }
+
+                //驗證都有過後才送出
+                emailmessage.setAttribute("class", "p-2 m-2 text-success");
+                emailmessage.innerText = result;
+                Registerok = "ok";
+
+
+            })
+
+        });
+        btnNextstep.addEventListener('click', function () {
+             
+            if (emailinput.value == "") 
+            {
+                  emailmessage.innerHTML = "Email不能為空";
+                  return;
+            }
+            console.log(Registerok)
+            if (Registerok == "ok")
+            {
+                btnNextstep.setAttribute("type", "sibmit")
+                alert("信件已送出"); 
+            }
+
+
+              
+            
+        })
+
         
-
-
-
 
 
 
