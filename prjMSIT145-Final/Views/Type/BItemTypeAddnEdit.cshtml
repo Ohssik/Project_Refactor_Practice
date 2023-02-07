@@ -1,137 +1,147 @@
 ﻿@model prjMSIT145_Final.Models.ProductCategory;
 @section Styles{
-	<link rel="stylesheet" href="../css/ProductCategoryCreate.css">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-	<style>
-		.btnDeleteCheck {
-			border: none;
-			width: 15%;
-			color: orange;
-			font-size: 15px;
-			background-color: transparent;
-		}
+    <link rel="stylesheet" href="../css/ProductCategoryCreate.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <style>
+        .btnDeleteCheck {
+            border: none;
+            width: 15%;
+            color: orange;
+            font-size: 15px;
+            background-color: transparent;
+        }
 
-		.btnDeleteCancel {
-			border: none;
-			width: 15%;
-			color: black;
-			font-size: 15px;
-			background-color: transparent;
-		}
-	</style>
+        .btnDeleteCancel {
+            border: none;
+            width: 15%;
+            color: black;
+            font-size: 15px;
+            background-color: transparent;
+        }
+    </style>
 }
 @{
-	Layout = "_BusinessLayout";
-	ViewData["Title"] = "BItemTypeAddnEdit";
+    Layout = "_BusinessLayout";
+    ViewData["Title"] = "BItemTypeAddnEdit";
 }
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header" style="width:100%">
-				<h5 class="modal-title" id="exampleModalLabel">提醒</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				確定要刪除嗎?
-			</div>
-			<div class="modal-footer" style="width:100%">
-				<button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
-				<a id="linkDelete"><button style="width:70px;" class="btnDeleteCheck" data-bs-dismiss="modal">刪除</button></a>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="width:100%">
+                <h5 class="modal-title" id="exampleModalLabel">提醒</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                確定要刪除嗎?
+            </div>
+            <div class="modal-footer" style="width:100%">
+                <button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
+                <a id="linkDelete"><button style="width:70px;" class="btnDeleteCheck" data-bs-dismiss="modal">刪除</button></a>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="outerlayer ">
-	<form enctype="application/x-www-form-urlencoded" method="post" action="BItemTypeSubmit">
-		<div class="topdiv">
-			<a href="@Url.Content("~/Product/BList")"><img class="back" src="../images/Business/backarrow.png" value=""></a>
-			<input type="hidden" value="@Model.BFid" name="BFid" />
-			<input type="hidden" value="@Model.Fid" name="Fid" id="CategoryFid" />
-			<input class="inputtext" type="text" placeholder=" 輸入類別名稱....." name="CategoryName" required/>
-			<input class="butt" id="btnSubmit" type="submit" value="儲存"/>
-			<input class="butt" id="btnDelete" type="button" value="刪除" data-bs-toggle="modal" data-bs-target="#exampleModal" />
-		</div>
+    <button id="demo1" class="btn btn-outline-secondary">Demo類別1</button>
+    <button id="demo2" class="btn btn-outline-secondary">Demo類別1_new</button>
+    <button id="demo3" class="btn btn-outline-secondary">Dem類別2</button>
 
-
-		<div>
-			<table id="table" class="table table-hover stripe">
-				<thead>
-				<th colspan="3">類別名稱</th>
-				</thead>
-				<tbody id="tbody">
-				</tbody>
-			</table>
-		</div>
-	</form>
+    <form enctype="application/x-www-form-urlencoded" method="post" action="BItemTypeSubmit">
+        <div class="topdiv">
+            <a href="@Url.Content("~/Product/BList")"><img class="back" src="../images/Business/backarrow.png" value=""></a>
+            <input type="hidden" value="@Model.BFid" name="BFid" />
+            <input type="hidden" value="@Model.Fid" name="Fid" id="CategoryFid" />
+            <input class="inputtext" type="text" placeholder=" 輸入類別名稱....." name="CategoryName" required />
+            <input class="butt" id="btnSubmit" type="submit" value="儲存" />
+            <input class="butt" id="btnDelete" type="button" value="刪除" data-bs-toggle="modal" data-bs-target="#exampleModal" />
+        </div>
+        <div>
+            <table id="table" class="table table-hover stripe">
+                <thead>
+                <th colspan="3">類別名稱</th>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+            </table>
+        </div>
+    </form>
 </div>
 @section Scripts{
-	<script>
-		const txt = document.querySelector(".inputtext"); //類別名稱
-		const tbody = document.querySelector("#tbody"); //表格資料
-		const CategoryName = document.getElementsByName("categoryName"); //資料行
-		const btnDelete = document.querySelector("#btnDelete"); //點擊刪除
-		const linkDelete = document.querySelector("#linkDelete"); //確認刪除
-		const modalBody = document.querySelector(".modal-body"); //未選擇刪除的類別,更改警告內容
-		const CategoryFid = document.querySelector("#CategoryFid"); //已存在的類別id;
-		const btnSubmit = document.querySelector("#btnSubmit");
+    <script>
+        const txt = document.querySelector(".inputtext"); //類別名稱
+        const tbody = document.querySelector("#tbody"); //表格資料
+        const CategoryName = document.getElementsByName("categoryName"); //資料行
+        const btnDelete = document.querySelector("#btnDelete"); //點擊刪除
+        const linkDelete = document.querySelector("#linkDelete"); //確認刪除
+        const modalBody = document.querySelector(".modal-body"); //未選擇刪除的類別,更改警告內容
+        const CategoryFid = document.querySelector("#CategoryFid"); //已存在的類別id;
+        const btnSubmit = document.querySelector("#btnSubmit"); //送出鈕
 
+        document.querySelector("#demo1").addEventListener("click", function () {
+            txt.value = "三明治類";
+        })
+        document.querySelector("#demo2").addEventListener("click", function () {
+            txt.value = "現烤三明治類";
+        })
+        document.querySelector("#demo3").addEventListener("click",function(){
+            txt.value = "飲料類";
+        })
 
-		list();
-		async function list() {
-			const response = await fetch("@Url.Content("~/Type/BCategoryList")");
-			const datas = await response.json();
-			console.log(datas);
-			let result = document.createDocumentFragment();
-			result = "";
-			datas.forEach(function (item, index) {
-				result += `<tr colspan='3' name='categoryName'>
-							<input type="hidden" name="Fid" value="${item.fid}" id="${item.fid}"/>
-							<input type="hidden" name="BFid" value="${item.bFid}"/>
+        list();
+        async function list() {
+            const response = await fetch("@Url.Content("~/Type/BCategoryList")");
+            const datas = await response.json();
+            console.log(datas);
+            let result = document.createDocumentFragment();
+            result = "";
+            datas.forEach(function (item, index) {
+                result += `<tr colspan='3' name='categoryName'>
+                                    <input type="hidden" name="Fid" value="${item.fid}" id="${item.fid}"/>
+                                    <input type="hidden" name="BFid" value="${item.bFid}"/>
 
-							<td>${item.categoryName}</td>
-							</tr>`
-			})
-			tbody.innerHTML = result;
+                                    <td>${item.categoryName}</td>
+                                    </tr>`
+            })
+            tbody.innerHTML = result;
 
-			//取得點選到的類別名稱及id
-			CategoryName.forEach(function (data) {
-				data.addEventListener("click", async function () {
-					const id = this.children[0].value;
-					const name = this.cells[0].innerHTML;
-					//console.log(id);
-					txt.value = name;
-					CategoryFid.value = id;
-				})
-			})
-		}
-		//送出前檢查有無輸入名稱
-		btnSubmit.addEventListener("click",function(){
-			if(txt.value === "")
-			{
-				event.preventDefault();
-				alert("請輸入類別名稱");
-			}
-		})
-		//刪除類別
-		btnDelete.addEventListener("click", async function () {
-			//console.log(CategoryFid.value);
+            //取得點選到的類別名稱及id
+            CategoryName.forEach(function (data) {
+                data.addEventListener("click", async function () {
+                    const id = this.children[0].value;
+                    const name = this.cells[0].innerHTML;
+                    //console.log(id);
+                    txt.value = name;
+                    CategoryFid.value = id;
+                })
+            })
+        }
+        //送出前檢查有無輸入名稱
+        btnSubmit.addEventListener("click", function () {
+            if (txt.value === "") {
+                event.preventDefault();
+                alert("請輸入類別名稱");
+            }
+        })
+        //刪除類別
+        btnDelete.addEventListener("click", async function () {
+            //console.log(CategoryFid.value);
 
-			if (CategoryFid.value == 0) {
-				modalBody.innerHTML = "請選擇要刪除的類別!";
-				linkDelete.firstElementChild.innerHTML = "確定";
-				//console.log(modalBody.value)
-			}
-			else {
-				linkDelete.addEventListener("click",async function () {
-					const request = await fetch(`@Url.Content("~/Type/BItemTypeDeleteList/${CategoryFid.value}")`);
-					const count = await request.text();
-					modalBody.innerHTML = count;
+            if (CategoryFid.value == 0) {
+                modalBody.innerHTML = "請選擇要刪除的類別!";
+                linkDelete.firstElementChild.innerHTML = "確定";
+                //console.log(modalBody.value)
+            }
+            else {
+                linkDelete.addEventListener("click", async function () {
+                    const request = await fetch(`@Url.Content("~/Type/BItemTypeDeleteList/${CategoryFid.value}")`);
+                    const count = await request.text();
+                    modalBody.innerHTML = count;
 
-					linkDelete.setAttribute("href", `@Url.Content("~/Type/BItemTypeDelete/${CategoryFid.value}")`);
-				})
-			}
-		});
-	</script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+                    linkDelete.setAttribute("href", `@Url.Content("~/Type/BItemTypeDelete/${CategoryFid.value}")`);
+                })
+            }
+        });
+    </script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 }

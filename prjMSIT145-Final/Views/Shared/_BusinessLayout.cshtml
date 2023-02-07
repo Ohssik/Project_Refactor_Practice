@@ -176,7 +176,7 @@
 									</a>
 									<div class="dropdown-divider"></div>
 									*@
-									<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+									<a class="dropdown-item" href="@Url.Action("Blogin","BusinessMember")" data-toggle="modal" data-target="#logoutModal">
 										<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
 										Logout
 									</a>
@@ -205,9 +205,9 @@
 			&copy; 2023 - prjMSIT145_Final - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 		</div>
 	</footer>
-	@*<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+	@*<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>*@
+	@*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+	@*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
 	<script src="~/js/site.js" asp-append-version="true"></script>
 
 	<!-- Bootstrap core JavaScript-->
@@ -226,8 +226,10 @@
 
 	<!-- Page level custom scripts -->
 	<script src="@Url.Content("~/js/demo/datatables-demo.js")"></script>
-
+  @*  <script src="@Url.Content("~/js/signalr/dist/browser/signalr.js")"></script>
+    <script src="@Url.Content("~/js/ChatRoom.js")"></script>*@
+	
 	@await RenderSectionAsync("Scripts", required: false)
-
+  
 </body>
 </html>

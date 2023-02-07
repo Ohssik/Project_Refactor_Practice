@@ -18,9 +18,9 @@ namespace prjMSIT145_Final.Controllers
 		{
 			try
 			{
-				if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+				if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 				{
-					string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+					string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
 					BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
 					var proC = _context.ProductCategories.Where(o => o.BFid == member.Fid).OrderBy(o => o.CategoryName);
 					List<ProductCategory> list = new List<ProductCategory>();
@@ -48,9 +48,9 @@ namespace prjMSIT145_Final.Controllers
 		//配料類別
 		public ActionResult BOptionGroup()
 		{
-			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
-				string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+				string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
 				BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
 				var data = (_context.ProductOptionGroups.Where(b => b.BFid == member.Fid)).OrderBy(o => o.OptionGroupName);
 				List<ProductOptionGroup> list = new List<ProductOptionGroup>();
@@ -70,9 +70,9 @@ namespace prjMSIT145_Final.Controllers
 		public IActionResult BItemTypeAddnEdit()
 		{
 			string json = "";
-			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
-				json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+				json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
 				BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
 				ProductCategory proC = new ProductCategory();
 				proC.BFid = member.Fid;
@@ -134,9 +134,9 @@ namespace prjMSIT145_Final.Controllers
 		public IActionResult BMaterialTypeAddnEdit()
 		{
 			string json = "";
-			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
-				json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+				json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
 				BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
 				ProductOptionGroup optGp = new ProductOptionGroup();
 				optGp.BFid = member.Fid;

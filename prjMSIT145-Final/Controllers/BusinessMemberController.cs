@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿    using Microsoft.AspNetCore.Mvc;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModel;
+using System.Diagnostics.Metrics;
 using System.Text.Json;
 
 
@@ -28,8 +29,19 @@ namespace prjMSIT145_Final.Controllers
                 {
                     if (b.Email.Equals(cLoginViewModel.fEmail) && b.Password.Equals(cLoginViewModel.fPassword))
                     {
+                        //if (b.ChatroomUserid == null)
+                        //{
+                        //    ChatroomUser chatroomUser = new ChatroomUser();
+                        //    chatroomUser.UserType = 0;//0是客戶 1是商家 2 是平台 欄位改成INT
+                        //    chatroomUser.Memberfid = b.Fid;
+                        //    _context.SaveChanges();
+                        //    var member = _context.ChatroomUsers.FirstOrDefault(u => u.UserType = 0 && u.Memberfid = b.Fid);
+                        //    b.ChatroomUserid = member.ChatroomUserid;
+                        //    _context.SaveChanges();
+                        //}
                         string json = JsonSerializer.Serialize(b);
-                        HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json);
+                        HttpContext.Session.SetString(CDictionary.SK_LOGINED_Business, json);
+
                         return RedirectToAction("BList", "Order");
                     }
                 }
@@ -51,7 +63,8 @@ namespace prjMSIT145_Final.Controllers
         [HttpPost]
         public IActionResult Register(BusinessMember member)
         {
-           _context.BusinessMembers.Add(member);
+           
+            _context.BusinessMembers.Add(member);
             _context.SaveChanges();
 
             return PartialView();

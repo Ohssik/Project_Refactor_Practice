@@ -19,7 +19,7 @@ namespace prjMSIT145_Final.Controllers
 		{
 			try
 			{
-				if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+				if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 					return View();
 				return RedirectToAction("Blogin", "BusinessMember");
 
@@ -34,9 +34,9 @@ namespace prjMSIT145_Final.Controllers
 			try
 			{
 				string json = "";
-				if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+				if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 				{
-					json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+					json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
 					BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
 
 					//_context.ProductCategories.Where(p => p.BFid == login.Business_fId).Join(_context.Products, proC => proC.Fid, pro => pro.CategoryFid, (proC, pro) => new
@@ -83,9 +83,9 @@ namespace prjMSIT145_Final.Controllers
 		public ActionResult BCreate()
 		{
 			string json = "";
-			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
-				json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+				json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
 				BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
 				CProductsViewModel vm = new CProductsViewModel();
 				vm.BFid = member.Fid;
@@ -115,7 +115,7 @@ namespace prjMSIT145_Final.Controllers
 				vm.product.CategoryFid = proCFid.Fid;
 				vm.product.BFid = vm.BFid;
 				_context.Products.Add(vm.product);
-				//_context.SaveChanges();
+				_context.SaveChanges();
 				return RedirectToAction("BList");
 			}
 			catch
@@ -163,7 +163,7 @@ namespace prjMSIT145_Final.Controllers
 		//[HttpPost]
 		public ActionResult BEdit(CProductsViewModel vm, IFormFile file)
 		{
-			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
 				ProductCategory proC = _context.ProductCategories.FirstOrDefault(p => p.CategoryName == vm.CategoryName);
 				Product pro = _context.Products.FirstOrDefault(p => p.Fid == vm.Fid);
