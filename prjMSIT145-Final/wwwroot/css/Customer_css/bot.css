@@ -1,0 +1,143 @@
+﻿
+.azureLogo {
+    width: 70px;
+    height: 60px;
+    position: fixed;
+    bottom:30px;
+    left: 40px;
+    /*transform-style:preserve-3d;
+    transform: rotateX(30deg);  /*20deg
+    filter: drop-shadow(5px 10px 5px rgba(0,0,0,0.5));
+       /*opacity:90%; //透明度 30%*/
+}
+
+    .azureLogo img {
+        width: 100%;
+        height: 100%;
+    }
+
+.azure {
+    position: fixed;
+    left: 40px;
+    top: 40px;
+    margin-top: 50px;
+}
+/* 腳掌印 */
+.logoDiv {
+    width: 70px;
+    height: 60px;
+    position: fixed;
+    bottom: 30px;
+    left: 150px;
+    filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.3))
+}
+
+    .logoDiv img {
+        width: 100%;
+        height: 100%;
+    }
+
+.logo {
+    position: fixed;
+    left: 40px;
+    top: 40px;
+    background-color: white;
+}
+/* 平台及使用者頭像 */
+.imgDiv {
+    min-width: 50px;
+    height: 50px;
+    margin: 0 5px;
+    border-radius: 50%;
+}
+
+    .imgDiv img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+
+.scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.display {
+    display: flex;
+    /* align-items:center; */
+}
+/* 對話框 */
+.msgDiv {
+    min-height: 690px;
+    max-height: 690px;
+    max-width: 380px;
+    min-width: 380px;
+    border-bottom:1px solid lightgray;
+}
+
+#collapseExample {
+    margin-top: 50px;
+}
+/* 平台 */
+.serviceDiv {
+    max-width: 280px;
+    min-width: 280px;
+    /* background-color: antiquewhite; */
+}
+
+.serviceMsg {
+    word-wrap: break-word;
+    /* word-break: break-all; */
+    font-size: 13px;
+}
+
+    .serviceMsg p {
+        color: sienna;
+        font-size: 20px;
+        margin: 2px;
+    }
+
+.qDiv {
+    margin: 5px 0;
+    border: 1px solid rgb(216, 216, 216);
+    box-sizing: border-box;
+    padding: 0 5px;
+    border-radius: 5px;
+}
+/* 使用者 */
+.userDiv {
+    width: 365px;
+    justify-content: right;
+    margin: 10px 0;
+}
+
+.userMsg {
+    word-wrap: break-word;
+    font-size: 13px;
+    box-sizing: border-box;
+    padding: 15px 0;
+    /* background-color: aqua; */
+}
+/* 輸入框 */
+.txtDiv {
+    margin: 10px 0 0 5px;
+    background-color: transparent;
+    width: 100%;
+}
+
+    .txtDiv input {
+        width: 90%;
+    }
+
+    .txtDiv button {
+        height: 30px;
+        width: 40px;
+        border: none;
+        margin-left: 5px;
+        background-color: transparent;
+    }
+
+    .txtDiv img {
+        height: 100%;
+        width: 100%;
+    }

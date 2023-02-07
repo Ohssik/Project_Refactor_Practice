@@ -8,7 +8,7 @@
      <table class="table table-dark table-striped  text-center">
         <thead>
           <tr>
-            <th class="col align-middle">編號</th>
+            <th class="col-1 align-middle">編號</th>
             <td class="col-4 align-middle">訂單號</td>
             <td class="col-2 align-middle">顧客名</td>
             <td class="col-2 align-middle">總價</td>
@@ -27,7 +27,7 @@
              <td id="Fid" hidden>@Html.DisplayFor(modelItem => item.Fid)</td>
              <th class=" col-1 align-middle">#@count</th>
             <td class="col-4 align-middle">@Html.DisplayFor(modelItem => item.OrderISerialId)</td>
-            <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.BFid)</td>
+                    <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.NmbName)</td>
             <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.TotalAmount)</td>
             <td class="col-3 align-middle">
                             @Html.ActionLink("餐點完成", "BEditStateApi", new {State=item.OrderState,nextState="3",orderid=item.Fid  },new{@class="btn btn-success"})

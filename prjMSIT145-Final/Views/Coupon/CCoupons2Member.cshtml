@@ -126,6 +126,15 @@
         .mb-3 input{
             width:95%;
         }
+        .mb-3 textarea{
+            width:95%;
+        }
+        #exampleModalLabel{
+            font-size:1.2em;
+        }
+        #coupInvalid{
+            text-align:center;
+        }
     </style>
 }
 @section Scripts{
@@ -133,29 +142,45 @@
     <script>
         $(function(){
             $('#btnSendCoup').hide();
+            
             let showCoupDetail = new bootstrap.Modal(document.getElementById('showCoupDetail'), {
                 keyboard: false
             });
             let sendCoup = new bootstrap.Modal(document.getElementById('sendCoup'), {
                 keyboard: false
             });
-            $('#btnSendCoup').click(function(){
-                sendCoup.show();
+            let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
+                keyboard: false
+            });
+            $('#btnSendCoup').click(function(){                
+                let txtGiverNfid=$('.checkMark').data('nfid');
                 let coupList='';
+                
                 $('.checkMark').each(function(){
                     if ($(this).attr('src').indexOf('checked.png')>-1){
                         coupList += $(this).data('cid')+',';                        
                     }
                 });
+                if (coupList == '')
+                {                   
+                    $('#coupInvalid').text('請選擇至少一張優惠券');                    
+                    return false;
+                }
                 $('#txtCfid').val(coupList.substring(0, coupList.length-1));
+                $('#txtGiverNfid').val(txtGiverNfid);
+
+                sendCoup.show();
+                $('#btnSend').removeAttr('disabled');
+                $('span.text-danger').text('');
+                $('[name=txtAccount]').val('');
+                $('[name=txtMessage]').val('');
             });
             $('.showCoupons:nth-child(2)').on('click', '.checkMark',function(){
                 let btnText = $(this).attr('src');
                 if (btnText.indexOf('radio-button.png') > -1) {
-                        $(this).attr('src', '@Url.Content("~/images/Coupon/checked.png")');
+                    $(this).attr('src', '@Url.Content("~/images/Coupon/checked.png")');
                         //$(this).off('mouseenter');
-                        //$(this).off('mouseleave');
-                        
+                        //$(this).off('mouseleave');                        
                 }
                 else if (btnText.indexOf('checked.png') > -1) {
                     $(this).attr('src', '@Url.Content("~/images/Coupon/radio-button.png")');
@@ -175,6 +200,8 @@
 
             $('#btnChangeCoup').click(function(){
                 let btnText = $(this).text();
+                $('#coupInvalid').text('');
+
                 if(btnText=='優惠券轉贈'){
                     $('#btnSendCoup').show();
                     $(this).text('取消轉贈');
@@ -193,8 +220,7 @@
                 let value=$(this).val();
                 if(value==0){
                     $('[name="coupon"]').show();                    
-                }
-                   
+                }                   
                 else if(value==1){
                     $('[name="coupon"][data-used=1]').show().siblings('[name="coupon"][data-used=0]').hide();                    
                 }                   
@@ -216,6 +242,53 @@
                 $('.modal-header label').text('');
                 showCoupDetail.hide();
             });
+
+            $('#btnSend').click(function(){
+                let coupList=$('#txtCfid').val();
+                $(this).attr('disabled','disabled');
+                $('span.text-danger').text('');
+                $.ajax({
+                    url:`@Url.Content("~/Coupon/CChangeCouponOwner/")`,
+                    type:'post',
+                    data:{
+                        data:JSON.stringify({
+                            coupList: coupList,
+                            giverNfid: $('#txtGiverNfid').val().trim(),
+                            receiverNfid: $('[name=txtAccount]').val().trim(),
+                            txtMessage: $('[name=txtMessage]').val()
+                        })
+                    },
+                    dataType:'json',
+                    success:function(msg){
+                        console.log(msg);
+                        if (`${msg}`.indexOf('success success')>-1){
+                            $('[name=txtAccount]').val('');
+                            $('[name=txtMessage]').val('');
+                            $('[name=txtCfid]').val('');
+                            $('#txtGiverNfid').val('');
+                            sendCoup.hide();
+                            $('#msgAlert label').text('轉贈成功，已發信通知對方'/*msg*/);
+                            msgAlert.show();
+                        }
+                        else if (`${msg}`.indexOf('Receiver Member ID not exist') > -1){
+                            $('span.text-danger').text('對方ID不存在');
+                            //return false;
+                        }
+                        
+                        $('#btnSend').removeAttr('disabled');
+                    }
+                });
+            });
+            $('#btnCloseMsg2').click(function () {
+                $('#msgAlert>label').text('');                     
+                location.reload(true);                
+            });
+            $('#btnClose').click(function () {
+                $('[name=txtAccount]').val('');
+                $('[name=txtMessage]').val('');
+                $('[name=txtCfid]').val('');
+                $('#txtGiverNfid').val('');
+            });
         });
     </script>
 }
@@ -228,10 +301,9 @@
                 <option value="1">可使用</option>
                 </select>                
             </div>
-        </div>
+        </div>        
         <div class="col-3">
-            <button class="btn btn-primary" id="btnChangeCoup">優惠券轉贈</button>
-            
+            <button class="btn btn-primary" id="btnChangeCoup">優惠券轉贈</button>            
         </div>
 </div>
 <div class="showCoupons">
@@ -241,40 +313,43 @@
         foreach(var item in Model){
             price = ((decimal)item.Price).ToString("###,###");
             showShortMemo = item.Memo;
-                                                                                                @if (showShortMemo.Length > 50)
+            @if (showShortMemo.Length > 50)
             {
                 showShortMemo = showShortMemo.Substring(0, 50)+"   ......more";
             }
-                                                                                                <div class="exch row coupon" name="coupon" data-cid="@item.Fid" data-used="@item.IsUsed">
-                                                                                                                                                                                                                                                        
-                                                                                                    <div class="exch col-md-4 ">
-                                                                                                                                                                                                                                        
-                                                                                                        <div class="form-group">
-                                                                                                                                                                                                                                                                
-                                                                                                            <h3 name="lblTitle">@item.Title</h3>
-                                                                                                            <p class="control-label">@showShortMemo</p>
-                                                                                                            <input type="hidden" name="txtMemo" value="@item.Memo"/>
-                                                                                                        </div>
-                                                                                                        <div class="form-group">
-                                                                                                        <img class="checkMark" data-cid="@item.Fid" src="@Url.Content("~/images/Coupon/radio-button.png")">
-                                                                                                        <h2 name="lblPrice" class="control-label">@price 元 </h2>
-                                                                                                        @if(item.IsUsed==1)
+
+            <div class="exch row coupon" name="coupon" data-cid="@item.Fid" data-used="@item.IsUsed">
+                                                                                                                                                                                                                                                                                                                                                                                                
+                <div class="exch col-md-4 ">
+                                                                                                                                                                                                                                                                                                                                                                                
+                    <div class="form-group">
+                                                                                                                                                                                                                                                                                                                                                                                                        
+                        <h3 name="lblTitle">@item.Title</h3>
+                        <p class="control-label">@showShortMemo</p>
+                        <input type="hidden" name="txtMemo" value="@item.Memo"/>
+                    </div>
+                    <div class="form-group">
+                    <img class="checkMark" data-cid="@item.Fid" data-nfid="@item.NmemberID" src="@Url.Content("~/images/Coupon/radio-button.png")">
+                    <h2 name="lblPrice" class="control-label">@price 元 </h2>
+                    @if(item.IsUsed==1)
                     {
-                                                                                                            <button class="btn btn-success isUsed">可使用</button>
+                        <button class="btn btn-success isUsed">可使用</button>
                     }
                     else{
-                                                                                                            <button class="btn btn-secondary isUsed">已使用</button>
+                        <button class="btn btn-secondary isUsed">已使用</button>
                     }
-                                                                                                                                                                                                                                                                                                                                                                            
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+                    </div>
+                </div>
+            </div>
         }
     }    
 </div>
+
 <div class="bottomBar">
     <button class="btn btn-primary" id="btnSendCoup">轉贈優惠券</button>
 </div>
+<h3 class="text-danger" id="coupInvalid"></h3>
 <div class="modal fade" id="showCoupDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -298,26 +373,40 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">轉贈優惠券</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btnClose"></button>
             </div>
             <div class="modal-body">
 
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">請輸入會員ID</label>
                     <input type="text" class="form-control" id="recipient-name" name="txtAccount" value="">
+                    <span class="text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label for="message-text" class="col-form-label">悄悄話</label>
-                    <input class="form-control" id="message-text" name="txtMessage" />
+                    <textarea class="form-control" id="message-text" name="txtMessage"></textarea>
                     <input class="form-control" id="txtCfid" name="txtCfid" type="hidden"/>
+                    <input class="form-control" id="txtGiverNfid" name="txtGiverNfid" type="hidden"/>
                 </div>
 
             </div>
-            <div class="modal-footer">
-                <span class="text-danger" id="pwdInvalid"></span>                
+            <div class="modal-footer">                             
                 <button type="button" class="btn btn-primary" id="btnSend">送出</button>
             </div>
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label"></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseMsg2">確定</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -76,20 +76,7 @@
             }
         }
 
-        //footer一直搞不定= =
-            $('.Copyright').removeClass('fixed_footer');
-            $(window).scrollTop(1);
-            let scrollTop = $(window).scrollTop();
-            console.log(`scrollTop=${scrollTop}`);
-            if ($(window).scrollTop() > 0) {                
-                $('.Copyright').removeClass('fixed_footer');
-
-            } else {
-                $('.Copyright').addClass('fixed_footer');
-
-            }
-            $(window).scrollTop(0);
-        //footer
+        
 
             $('#btnCloseMsg').click(function () {
                 $('#msgAlert>label').text('');     
@@ -239,7 +226,7 @@
             <form name="loginForm">
                 <div class="modal-header">
                     <p class="modal-title" id="exampleModalLabel">請先登入</p>
-                    
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btnCancel"></button>
                 </div>
                 <div class="modal-body">
 
@@ -255,7 +242,7 @@
                 </div>
                 <div class="modal-footer">
                         <span class="text-danger" id="pwdInvalid"></span>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>
+                    @*<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>*@
                     <button type="button" class="btn btn-primary" id="btnSend">送出</button>
                         
                 </div>

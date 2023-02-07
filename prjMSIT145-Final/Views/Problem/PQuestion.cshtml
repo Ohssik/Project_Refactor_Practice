@@ -1,4 +1,4 @@
-﻿@{
+﻿@*@{
     Layout = "_CustomerLayout";
 
     ViewData["Title"] = "ProblemView";
@@ -146,7 +146,7 @@
     </style>
         }
 @*Azure機器人*@
-<div class="azureLogo"
+@*<div class="azureLogo"
      data-bs-toggle="collapse"
      data-bs-target="#azure"
      aria-expanded="false"
@@ -193,7 +193,7 @@
                 <div class="userMsg">信用卡退款</div>
                 <div class="imgDiv"><img src="images/user.png" alt="" /></div>
                 </div>*@
-            </div>
+          @*  </div>
         </div>
 
         <div class="txtDiv display">
@@ -201,10 +201,10 @@
             <button id="btnSubmit" type="button"><img src="~/images/Problem/send.png" /></button>
         </div>
     </div>
-</div>
+</div>*@
 @*根據登入的使用者不同更改頭像,變數=>userImg*@
 @section Scripts{
-    <script>
+ @*   <script>
         const msgDiv = document.querySelector(".msgDiv"); //對話框
         const userImg = document.querySelector("#userImg"); //客戶頭像
         const txt = document.querySelector("#txt"); //輸入框
@@ -255,6 +255,6 @@
             txt.value = "";
         });
     </script>
-    <script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.bundle.min.js")"></script>*@
 
-        }
+      }
