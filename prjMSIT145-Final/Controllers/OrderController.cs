@@ -76,10 +76,10 @@ namespace prjMSIT145_Final.Controllers
         [HttpPost]
         public IActionResult BList(int? orderid)
         {
-           
 
-        //    return View();
-        //}
+
+            return View();
+        }
         //新訂單
         public IActionResult BNewList()
         {
