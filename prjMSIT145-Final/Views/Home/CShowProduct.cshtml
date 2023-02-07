@@ -347,23 +347,25 @@
                 if (OptionsAreaList[i].getAttribute("id").substring(0, 1) == "S") {
                     for (let j = 0, maxCH = document.getElementsByClassName("OptionsArea")[i].children.length; j < maxCH; j += 2) {
                         OptionsAreaList[i].children[j].addEventListener("click", function () {
-
-                            for (let k = 0, max2 = OptionsAreaList[i].children.length; k < max2; k += 2) {
-                                OptionsAreaList[i].children[k + 1].value = "0";
-                                OptionsAreaList[i].children[k].setAttribute("class", "Optiondiv NChoosedOptiondiv CursorPointer");
-                                //if (OptionsAreaList[i].children[k].children.length > 1) {
-                                //    if (OptionsAreaList[i].children[k].children[1].innerHTML.split(" ")[0].substring(0, 1) == "-") {
-                                //        BasePrice -= parseInt(OptionsAreaList[i].children[k].children[1].innerHTML.split(" ")[0].substring(1), 10);
-                                //    } else {
-                                //        BasePrice -= -parseInt(OptionsAreaList[i].children[k].children[1].innerHTML.split(" ")[0].substring(1), 10);
-                                //    }
-                                //    TotalPrice = BasePrice * OrderNumber;
-                                //    document.getElementById("Total").innerHTML = TotalPrice;
-                                //    document.getElementById("TotalAmount").value = TotalPrice;
-                                //}
-                            }
-
                             if (OptionsAreaList[i].children[j + 1].value == 0) {
+
+                                for (let k = 0, max2 = OptionsAreaList[i].children.length; k < max2; k += 2) {
+                                    if (OptionsAreaList[i].children[k + 1].value != "0"){
+                                        OptionsAreaList[i].children[k + 1].value = "0";
+                                        OptionsAreaList[i].children[k].setAttribute("class", "Optiondiv NChoosedOptiondiv CursorPointer");
+                                        if (OptionsAreaList[i].children[k].children.length > 1) {
+                                            if (OptionsAreaList[i].children[k].children[1].innerHTML.split(" ")[0].substring(0, 1) == "-") {
+                                                BasePrice -= -parseInt(OptionsAreaList[i].children[k].children[1].innerHTML.split(" ")[0].substring(1), 10);
+                                            } else {
+                                                BasePrice -= parseInt(OptionsAreaList[i].children[k].children[1].innerHTML.split(" ")[0].substring(1), 10);
+                                            }
+                                            TotalPrice = BasePrice * OrderNumber;
+                                            document.getElementById("Total").innerHTML = TotalPrice;
+                                            document.getElementById("TotalAmount").value = TotalPrice;
+                                        }
+                                    }
+                                }
+
                                 OptionsAreaList[i].children[j + 1].value = `${OptionsAreaList[i].children[j].getAttribute("id")}`;
                                 OptionsAreaList[i].children[j].setAttribute("class", "Optiondiv CursorPointer");
                                 if (OptionsAreaList[i].children[j].children.length > 1) {
