@@ -48,6 +48,7 @@ namespace prjMSIT145_Final.Models
         public virtual DbSet<ViewShowFullOrder> ViewShowFullOrders { get; set; } = null!;
         public virtual DbSet<ViewShowProductList> ViewShowProductLists { get; set; } = null!;
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AdImg>(entity =>
@@ -251,8 +252,6 @@ namespace prjMSIT145_Final.Models
                 entity.ToTable("ChatroomUser");
 
                 entity.Property(e => e.LastOnlineTime).HasColumnType("datetime");
-
-                entity.Property(e => e.UserType).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Coupon>(entity =>

@@ -93,12 +93,13 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     @*<script src="~/js/site.js" asp-append-version="true"></script>*@
-    
+    @await RenderSectionAsync("UpperScripts", required: false)
     <script>
         $(function(){
         
             let shellHeight = $('#shell').height();
             let windowHeight = $(window).height();            
+
             if (windowHeight < shellHeight) {
                 $('.Copyright').removeClass('fixed_footer');
             }
