@@ -97,26 +97,32 @@
                             @{
 
                             if (ViewBag.Gender==null){
-                                                                <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" />
-                                                                <label>女</label>
-                                                                <input id="radioboy" type="radio" class="text5" name="Gender" value="1" />
-                                                                <label>男</label>
-                             }
+                                <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" />
+                                <label>女</label>
+                                <input id="radioboy" type="radio" class="text5" name="Gender" value="1" />
+                                <label>男</label>
+
+
+
+                            }
                              else{
 
                             if (ViewBag.Gender == "1")
                             {
-                                                                 <input id="radiogirl" type="radio" class="text5" name="Gender" value="0"  />
-                                                                <label>女</label>
-                                                                 <input id="radioboy" type="radio" class="text5" name="Gender" value="1" checked />
-                                                                <label>男</label>
-                            }
+                                    <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" />
+                                    <label>女</label>
+                                    <input id="radioboy" type="radio" class="text5" name="Gender" value="1" checked />
+                                    <label>男</label>
+
+
+                                }
                             else
                             {
-                                                                    <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" checked />
-                                                                <label>女</label>
-                                                                    <input id="radioboy" type="radio" class="text5" name="Gender" value="1"  />
-                                                                <label>男</label>
+                                    <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" checked />
+                                    <label>女</label>
+                                    <input id="radioboy" type="radio" class="text5" name="Gender" value="1" />
+                                    <label>男</label>
+                                
                             }
                             };
                         }
@@ -132,12 +138,13 @@
                                 string st;
                                 st = Convert.ToDateTime(ViewBag.birthday).ToString("yyyy-MM-dd");
 
-                                                                <input id="birthid" type="date" class="date" name="Birthday" value="@st" />
+                                <input id="birthid" type="date" class="date" name="Birthday" value="@st" />
               
-                }
-                else{
-                                                                <input id="birthid" type="date" class="date" name="Birthday" value=""/>
-                }
+                            }
+                        else{
+
+                           <input id="birthid" type="date" class="date" name="Birthday" value=""/>
+                            }
             
             }
                            
@@ -211,114 +218,75 @@
         };
 
 
-        var submitbtn = document.getElementById("submitid");   //按鈕
+        var submitbtn = document.getElementById("submitid");    //名子
 
-        //document.getElementById("MemberName").addEventListener("blur", checkPwd);
-
-        submitbtn.addEventListener('click',()=>{
-
-            event.preventDefault();
-
+        document.getElementById("MemberName").addEventListener("change", checkPwd);
+   
+        function checkPwd() {
             var nameobj = document.getElementById("MemberName");
             var spnameobj = document.getElementById("namecorrect");
             var nameval = nameobj.value;
-
-            if (nameval == "") {
+            re = new RegExp(/[\u4e00-\u9fa5]{3,4}/, "gi");
+            if (nameval =="") {
                 spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
-                submitbtn.setAttribute('disabled', 'disabled');
+                submitbtn.setAttribute('disabled','disabled');
                 return;
+             }
+            else{
+                if(re.test(nameval)){
+                        spnameobj.innerHTML = "";
+                        submitbtn.removeAttribute('disabled');
+                        return;
+                }
+                else{
+                        spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
+                        submitbtn.setAttribute('disabled', 'disabled');
+                        return;
+                };
             }
-            else {
-                spnameobj.innerHTML = "";
-                submitbtn.removeAttribute('disabled');
-            }                                                                                  //name
+            
+            };
 
 
-            var phoneobj = document.getElementById("Phone");
-            var spnphoneobj = document.getElementById("phonecorrect");
-            var phoneval = phoneobj.value;
-
-            if (phoneval == "") {
-                spnphoneobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
-                submitbtn.setAttribute('disabled', 'disabled');
-
-                return;
-            }
-            else {
-                spnphoneobj.innerHTML = "";
-                submitbtn.removeAttribute('disabled');
-            }                                                                                  //phone
-
-
-            var emailobj = document.getElementById("Email");
-            var spnemailobj = document.getElementById("emailcorrect");
-            var emailval = emailobj.value;
-
-            if (emailval == "") {
-                spnemailobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
-                submitbtn.setAttribute('disabled', 'disabled');
-
-                return;
-            }
-            else {
-                spnemailobj.innerHTML = "";
-                submitbtn.removeAttribute('disabled');                                         //email
-            }
-
-
-
-
-
-        };
-
-
-
-
-
-
-
-
-
-        })
-        //function checkPwd() {
-        //    var nameobj = document.getElementById("MemberName");
-        //    var spnameobj = document.getElementById("namecorrect");
-        //    var nameval = nameobj.value;
-        
-        //    if (nameval == "") {
-        //        spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
-        //        submitbtn.setAttribute('disabled','disabled');
-        //        return;
-        //    }
-        //    else{
-        //        spnameobj.innerHTML = "";
-        //        submitbtn.removeAttribute('disabled');
-        //    }
-        //    };
-
-
-        document.getElementById("Phone").addEventListener("blur", checkPhone);
+        document.getElementById("Phone").addEventListener("change", checkPhone);                 //電話
+      
         function checkPhone() {
             var phoneobj = document.getElementById("Phone");
             var spnphoneobj = document.getElementById("phonecorrect");
             var phoneval = phoneobj.value;
+            re = new RegExp(/^09[0-9]{8}$/);
 
             if (phoneval == "") {
-                spnphoneobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
-                submitbtn.setAttribute('disabled', 'disabled');
-              
-                return;
+                    spnphoneobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                    submitbtn.setAttribute('disabled', 'disabled');
+                    return;
             }
-            else {
-                spnphoneobj.innerHTML = "";
-                submitbtn.removeAttribute('disabled');
+            else{
+                if (re.test(phoneval)){
+                     spnphoneobj.innerHTML = "";
+                            submitbtn.removeAttribute('disabled');
+                            return;
+                }
+                else {
+                       
+                     spnphoneobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
+                    submitbtn.setAttribute('disabled', 'disabled');
+                    }
+
+
+
             }
+                
+           
+          
         };
-        document.getElementById("Email").addEventListener("blur", checkEmail);
+        document.getElementById("Email").addEventListener("change", checkEmail);
+   
         function checkEmail() {
             var emailobj = document.getElementById("Email");
             var spnemailobj = document.getElementById("emailcorrect");
             var emailval = emailobj.value;
+           
 
             if (emailval == "") {
                 spnemailobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
@@ -331,8 +299,8 @@
                 submitbtn.removeAttribute('disabled');
             }
         };
-
-        document.getElementById("Password").addEventListener("blur", checkPassword);
+       
+        document.getElementById("Password").addEventListener("change", checkPassword);                //密碼
         function checkPassword() {
             var passwordobj = document.getElementById("Password");
             var spnpasswordobj = document.getElementById("passwordcorrect");
@@ -375,8 +343,9 @@
 
             }
         };
-        document.getElementById("Password2").addEventListener("blur",checkPassword2);
-         function checkPassword2(){
+        document.getElementById("Password2").addEventListener("change",checkPassword2);
+      
+         function checkPassword2(){                                                              //確認密碼
             var pass1=document.getElementById("Password");
             var pass2=document.getElementById("Password2");
             var spnpassword2 = document.getElementById("password2correct");
@@ -389,12 +358,7 @@
                  submitbtn.removeAttribute('disabled');
                 spnpassword2.innerHTML = "";
              }
-
-
-
-
-
-         };
+           };
          
         const passwordicon = document.querySelector("#togglePassword");                 //顯示密碼
         const password = document.querySelector("#Password");
@@ -429,12 +393,33 @@
 
             })
             
-            const data= await request.json();
-           if(data==""){
+           const data= await request.json();
+           if(data=="已發送驗證信"){
                alert("已發送驗證信");
                document.getElementById('Register').submit();
             }
+            else if (data == "姓名欄位不能空值") {
+                document.getElementById("namecorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+            }
+            else if (data == "密碼欄位不能空值") {
+                document.getElementById("passwordcorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+            }
+            else if (data == "Email欄位不能空值") {
+                document.getElementById("emailcorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+            }
+            else if (data == "Email格式錯誤") {
+                document.getElementById("emailcorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/> Email格式錯誤";
+            }
+
+            else if (data == "電話欄位不能空值") {
+
+                document.getElementById("phonecorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+            }
+           
+
+
             else{
+                document.getElementById("phonecorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>電話重複";
                 alert(data);
                 return;
                
@@ -444,14 +429,20 @@
 
 
         document.getElementById("democorrectid").addEventListener('click',()=>{
+           
             document.getElementById("MemberName").value="麥當勞";
-            document.getElementById("Phone").value="09111111111";
+            document.getElementById("Phone").value="0911111111";
             document.getElementById("Email").value="a29803385@hotmail.com";
             document.getElementById("Password").value="aA1234";
             document.getElementById("Password2").value="aA1234";
             document.getElementById("city").innerHTML = "<option>高雄市</option>";
             document.getElementById("area").innerHTML = "<option>前鎮區</option>";
             document.getElementById("radioboy").setAttribute("checked","checked");
+            checkPwd();
+            checkPhone();
+            checkEmail();
+            checkPassword();
+            checkPassword2();
 
         });
 
@@ -461,6 +452,12 @@
             document.getElementById("Email").value = "";
             document.getElementById("Password").value = "A123456";
             document.getElementById("Password2").value = "A1234";
+            checkPwd();
+            checkPhone();
+            checkEmail();
+            checkPassword();
+            checkPassword2();
+           
             
 
         });

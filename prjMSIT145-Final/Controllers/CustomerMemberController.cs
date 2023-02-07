@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Security.Principal;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace prjMSIT145_Final.Controllers
 {
@@ -91,7 +92,7 @@ namespace prjMSIT145_Final.Controllers
             var data = _context.NormalMembers.Select(c => c.Phone);
             foreach (var i in data)
             {
-                if (i == vm.Phone || i == "")
+                if (i == vm.Phone)
                 {
                     ViewBag.Name = vm.MemberName;
                     ViewBag.Phone = vm.Phone;
@@ -106,11 +107,41 @@ namespace prjMSIT145_Final.Controllers
                    
                 }
             }
+            if (vm.MemberName == null && vm.Password == null)
+            {
+                return View();
+            }
+            if (vm.Phone == null)
+            {
+                return View();
+            }
+            else
+            {
+                bool correct = Regex.IsMatch(vm.Phone, @"^09[0-9]{8}$");
+                if (!(correct))
+                {
+                    return View();
+                }
+                
+            }
+            if (vm.Email == null)
+            {
+                return View();
+            }
+            else
+            {
+                bool correct = Regex.IsMatch(vm.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+                if (!(correct))
+                {
+                    return View();
+                }
+            }
             
+
             if (photo != null)
             {
                 string fileName = Guid.NewGuid().ToString() + ".jpg";
-                string filePath = Path.Combine(_eviroment.WebRootPath, "images", fileName);
+                string filePath = Path.Combine(_eviroment.WebRootPath, "images/Customer/Member", fileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     photo.CopyTo(fileStream);
@@ -157,6 +188,36 @@ namespace prjMSIT145_Final.Controllers
         }
         public IActionResult Verifyaccount(NormalMember vm)
         {
+            if (vm.MemberName == null)
+            {
+                return Json("姓名欄位不能空值");
+            }
+            if (vm.Phone == null)
+            {
+                return Json("電話欄位不能空值");
+            }
+
+            if(vm.Email ==null)
+            {
+                return Json("Email欄位不能空值");
+            }
+            else
+            {
+
+                bool correct = Regex.IsMatch(vm.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+                if (!(correct))
+                {
+                    return Json("Email格式錯誤");
+                }
+            }
+
+            if (vm.Password ==null)
+            {
+                return Json("密碼欄位不能空值");
+            }
+            
+            
+
             var data = _context.NormalMembers.Select(c => c.Phone);
             foreach (var i in data)
             {
@@ -166,7 +227,7 @@ namespace prjMSIT145_Final.Controllers
                    
                 }
             }
-            return Json("");
+            return Json("已發送驗證信");
         }
 
         public IActionResult Emailcheck(int? Fid)
@@ -244,7 +305,7 @@ namespace prjMSIT145_Final.Controllers
                 if (memberedit.photo != null)
                 {
                     string fileName = Guid.NewGuid().ToString() + ".jpg";
-                    string filePath = Path.Combine(_eviroment.WebRootPath, "images", fileName);
+                    string filePath = Path.Combine(_eviroment.WebRootPath, "images/Customer/Member", fileName);
                     //檔案上傳到uploads資料夾中
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -256,7 +317,6 @@ namespace prjMSIT145_Final.Controllers
                           x.MemberName=memberedit.MemberName;
                           x.MemberPhotoFile=memberedit.MemberPhotoFile;
                           x.Birthday=memberedit.Birthday;
-                          x.Phone = memberedit.Phone;
                           x.Email = memberedit.Email;
                           x.Gender= memberedit.Gender;
                           x.AddressCity=memberedit.AddressCity;
