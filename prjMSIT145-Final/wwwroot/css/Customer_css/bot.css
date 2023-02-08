@@ -22,14 +22,14 @@
             height:20px;
             /*transform: rotateX(70deg);*/
             opacity: 90%;
-            bottom: 80px;
+            bottom: 90px;
             filter: drop-shadow(5px 10px 5px rgba(0,0,0,0.5));
         }
         to {
-            height: 70px;
+            height: 40px;
             /*transform: rotateX(70deg);*/
             opacity: 30%;
-            bottom: 5px;
+            bottom: 30px;
             filter: drop-shadow(5px 10px 5px rgba(0,0,0,2));
         }
     }

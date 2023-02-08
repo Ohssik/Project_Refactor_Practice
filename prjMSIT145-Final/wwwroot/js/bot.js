@@ -76,7 +76,7 @@ document.addEventListener("scroll", function () {
     timer = setTimeout(function () {
         azureLogo.classList.remove("walk");
         logoDiv.classList.remove("walk");
-    }, 1000);
+    }, 500);
 
     //判斷有無此class
     if (!azureClass) {
