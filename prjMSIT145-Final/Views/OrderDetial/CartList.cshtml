@@ -159,9 +159,101 @@
         a:active {
             background-color: rgb(235, 230, 230);
         }
+
+        .input {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .inputDiv {
+            position: relative;
+            width: 100%;
+            height: 30px;
+            align-items: center;
+            top: -10px;
+            left: -10px;
+            padding: 0 10px;
+        }
+
+        .msgDiv {
+            height: 30px;
+            width: 100%;
+        }
+
+        .flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .margin {
+            margin: 5px;
+        }
+
+            .margin input {
+                height: 20px;
+            }
+
+            .margin label {
+                font-size: 15px;
+            }
+
+        .phoneBarcode {
+            height: 30px;
+            border: 1px solid gray;
+            border-radius: 10px;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .font-size{
+            color:black;
+            font-size: 16px;
+            margin:5px;
+        }
+        .mainDiv{
+            width:60%;
+            margin: 10px auto;
+        }
+        .infoDiv{
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        .marginright{
+            width:150px
+        }
+        .div{
+            border-style: solid;
+            border-width: 1px;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            box-sizing: border-box;
+            height: 30px;
+            padding: 25px 0;
+        }
+        .div:last-child{
+            border: none;
+        }
+        .topMargin{
+            margin-top: 10px;
+        }
+        .slides{
+            width: 3200px;
+            left: 0px;
+            transition: all .5s;
+        }
+        .wrapper{
+            position: relative;
+            overflow: hidden;
+            margin:0 auto;
+        }
     </style>
 }
-
+<div id="slides" class="wrapper">
 <div class="bodyBackgroundColor body_Icon_delete_Guide_fontColor body">
     <div class="mainDiv">
         <!-- 商家資訊 -->
@@ -180,14 +272,14 @@
             <p>自取 (約15分鐘)</p>
              </div>
              <h5>預計取餐時間</h5>
-             <fieldset class="Fieldset" id="pickUpTime"> 
-                <legend>取餐時間,依門市現場狀況為主</legend>
+             <fieldset class="Fieldset" id="pickUpTime">
+                    <legend class="font-size">@Convert.ToString(Model.PickUpDate).Substring(0,9) @Model.PickUpTime</legend>
              </fieldset>
              <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
              <h5>門市位置</h5>
              <a href="">
              <fieldset class="Fieldset"> 
-                <legend>請確認門市位置,點擊以地圖查看</legend>
+                <legend class="font-size">@Model.Address</legend>
                 <i class="fa-solid fa-location-dot"></i>
              </fieldset>
             </a>
@@ -296,12 +388,135 @@
         <div>
             <div class="flexAndItemsCenter bottomBtn">
                 <div><button class="btnToAdd button_Icon_Guide_BackGroundColor">繼續加點</button></div>
-                <div><button class="btnToNext">下一頁</button></div>
+                <div><button class="btnToNext" id="nextSlide">下一頁</button></div>
             </div>
         </div>
     </div>
 </div>
 
+
+<div class="mainDiv">
+    <!-- 取餐人資料 -->
+    <div class="divMargin cardBackgroundColor">
+        <div>
+            <h4>取餐人資料</h4>
+            <fieldset class="Fieldset">
+                <legend class="font-size">@Model.PickUpPerson</legend>
+
+            </fieldset>
+            <fieldset class="Fieldset">
+                <legend class="font-size">@Model.PickUpPersonPhone</legend>
+
+            </fieldset>
+            <h4>留言給店家</h4>
+            <fieldset id="msg" class="flex Fieldset">
+                <div class="msgDiv">
+                    <input class="input spanFont" type="text" placeholder="可留下備用號碼,供店家聯繫">
+                </div>
+                <!-- <div>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </div> -->
+            </fieldset>
+        </div>
+    </div>
+    <!-- 付款方式 -->
+    <div class="divMargin cardBackgroundColor">
+        <h4>付款方式</h4>
+        <div class="flexAndItemsCenter exclamationDiv">
+            <div class="exclamation">
+                <span><i class="fa-solid fa-exclamation" style="color: aquamarine;"></i></span>
+            </div>
+            <div class="spanFont">
+                欲使用環保杯，請選擇【現金】結帳，並在【留言給店家】備註。
+            </div>
+        </div>
+        <div class="flexAndItemsCenter radioDiv">
+            <div class="margin"><input type="radio" id="cash" name="pay" value="cash"></div>
+            <div class="margin"><label for="cash"><span class="spanFont">現金</span></label></div>
+        </div>
+        <div class="flexAndItemsCenter radioDiv">
+            <div class="margin"><input type="radio" id="cardit" name="pay" value="cardit"></div>
+            <div class="margin"><label for="cardit"><span class="spanFont">信用卡</span></label></div>
+        </div>
+    </div>
+    <!-- 開立發票 -->
+    <div class="divMargin cardBackgroundColor">
+        <h4>開立發票</h4>
+        <div class="flexAndItemsCenter radioDiv">
+            <div class="margin"><input type="radio" id="paperInvoice" name="invoice" checked></div>
+            <div class="margin"><label for="paperInvoice"><span class="spanFont">紙本發票</span></label></div>
+        </div>
+        <div>
+            <!-- <div class="flexAndItemsCenter radioDiv">
+                <div class="margin"><input type="radio" id="phoneInvoice" name="invoice" value="phoneInvoice"></div>
+                <div class="margin"><label for="phoneInvoice"><span class="spanFont">手機載具</span></label></div>
+
+            </div>
+            <-- 點選手機載具後跳出 -->
+            <!-- <div class="phoneBarcode">
+                <input class="input spanFont" type="text" placeholder="第一位字元為' / ' ,  英文皆為大寫">
+            </div> -->
+        </div>
+    </div>
+    <!-- 上下頁按鈕 -->
+    <div>
+        <div class="flexAndItemsCenter bottomBtn">
+            <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
+            <div><button class="btnToNext" id="nextSlide">下一頁</button></div>
+        </div>
+    </div>
+</div>
+
+<div class="mainDiv ">
+    <div class="infoDiv cardBackgroundColor">
+        <div class="flexAndItemsCenter exclamationDiv">
+            <div class="exclamation">
+                <span><i class="fa-solid fa-exclamation" style="color: aquamarine;"></i></span>
+            </div>
+            <div class="spanFont">
+                取餐時間依據各門市狀況調整
+            </div>
+        </div>
+        <div class="divMargin topMargin">
+            <h4>訂購資訊</h4>
+            <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                <div class="marginright ">訂購店家</div>
+                <div>@Model.BMemberName</div>
+            </div>
+            <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                <div class="marginright">取餐人</div>
+                <div>@Model.PickUpPerson</div>
+            </div>
+            <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                <div class="marginright">連絡電話</div>
+                <div>@Model.PickUpPersonPhone</div>
+            </div>
+            <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                <div class="marginright">取餐方式</div>
+                <div>@Model.PickUpType</div>
+            </div>
+            <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                <div class="marginright">預計取餐時間</div>
+                <div>@Convert.ToString(Model.PickUpDate).Substring(0,9) @Model.PickUpTime</div>
+            </div>
+            <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                <div class="marginright">付款方式</div>
+                <div>@Model.PayTermCatId</div>
+            </div>
+            <div class="spanFont div flexAndItemsCenter">
+                <div class="marginright">應付金額</div>
+                <div>$@Model.TotalAmount</div>
+            </div>
+        </div>
+    </div>
+    <div class="topMargin">
+        <div class="flexAndItemsCenter bottomBtn ">
+            <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
+            <div><button class="btnToNext">送出訂單</button></div>
+        </div>
+    </div>
+</div>
+</div>
 @section Scripts{
     <script>
         <script src="@Url.Content("~/js/jquery-3.6.2.js")" ></script>
@@ -323,12 +538,7 @@
                 $("#plasticPrice").text("您未加購塑膠袋");
             }
         })
-        @*滑鼠移入移出樣式*@
-        $("fieldset").hover(function(){
-            $(this).css("border-color","black")
-        },function(){
-            $(this).css("border-color","gray")
-        })
+
         @*刪除單一產品*@
         $(".deleteBtn").on("click",function(){
             $("body").after(
@@ -358,9 +568,10 @@
                         $(".delete_msgDiv").addClass("delete_none")
                     })
                     })
-                    @*點擊自取時間*@
-                    $("#pickUpTime").on("click",()=>{
-    
+
+        @*點擊自取時間*@
+        $("#pickUpTime").on("click",()=>{
+
                         $("#pickUp").append(` <<div class="pickUp_back"></div>
                 <div class="pickUp_mainDiv">
                 <div class="pickUp_fixed pickUp_pickUpDiv cardBorderColor pickUp_divBorder">
@@ -384,6 +595,22 @@
                     </div>
                 </div>
             </div>`)
+        })
+
+        let slideNum = 0;
+        let slideCount = $(".slides li").length;
+        let lastIndex = slideCount - 1;
+        console.log(slideCount);
+        
+        $("#nextSlide").click(function () {
+            slideNum++;
+            if (slideNum > lastIndex) slideNum = 0;
+            show();
+        })
+        $("#prevSlide").click(function () {
+            slideNum--;
+            if (slideNum < 0) slideNum = 2;
+            show();
         })
     </script>
 }
