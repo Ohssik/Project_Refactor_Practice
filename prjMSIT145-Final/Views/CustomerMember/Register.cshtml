@@ -185,7 +185,7 @@
     <script src="@Url.Content("~/js/NormalMemberAddress/taiwan_districts.js")"></script>
     <script>
 
-            
+        
          for (let item of data) { $("#city").append(`<option>${item.name}</option>`); }   //載入地區名
 
               $("#city").change(function ()
@@ -202,7 +202,7 @@
                 }
             }
         });
-
+      
 
         var upload = function (c, d) {                        //圖片點擊 預覽
             "use strict";
@@ -218,31 +218,24 @@
         };
 
 
-        var submitbtn = document.getElementById("submitid");    //名子
+        var submitbtn = document.getElementById("submitid");   //按鈕
 
-        document.getElementById("MemberName").addEventListener("change", checkPwd);
+        document.getElementById("MemberName").addEventListener("change", checkPwd);   //名子
    
         function checkPwd() {
             var nameobj = document.getElementById("MemberName");
             var spnameobj = document.getElementById("namecorrect");
             var nameval = nameobj.value;
-            re = new RegExp(/[\u4e00-\u9fa5]{3,4}/, "gi");
             if (nameval =="") {
                 spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
                 submitbtn.setAttribute('disabled','disabled');
                 return;
              }
             else{
-                if(re.test(nameval)){
-                        spnameobj.innerHTML = "";
-                        submitbtn.removeAttribute('disabled');
-                        return;
-                }
-                else{
-                        spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
-                        submitbtn.setAttribute('disabled', 'disabled');
-                        return;
-                };
+
+                spnameobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+                return;
             }
             
             };
@@ -286,7 +279,6 @@
             var emailobj = document.getElementById("Email");
             var spnemailobj = document.getElementById("emailcorrect");
             var emailval = emailobj.value;
-           
 
             if (emailval == "") {
                 spnemailobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
@@ -430,8 +422,8 @@
 
         document.getElementById("democorrectid").addEventListener('click',()=>{
            
-            document.getElementById("MemberName").value="麥當勞";
-            document.getElementById("Phone").value="0911111111";
+            document.getElementById("MemberName").value="林峻宏";
+            document.getElementById("Phone").value="0936212576";
             document.getElementById("Email").value="a29803385@hotmail.com";
             document.getElementById("Password").value="aA1234";
             document.getElementById("Password2").value="aA1234";
