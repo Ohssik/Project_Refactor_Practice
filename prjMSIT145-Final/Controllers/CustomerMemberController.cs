@@ -237,6 +237,10 @@ namespace prjMSIT145_Final.Controllers
             {
                 return Redirect("~/Home/CIndex");
             }
+            if (member.EmailCertified == 1)
+            {
+                return Redirect("~/Home/CIndex");
+            }
             
             return View(member);
         }
@@ -257,13 +261,15 @@ namespace prjMSIT145_Final.Controllers
         }
         public IActionResult Emailcheckword(NormalMember member)
         {
+          
+
             NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Fid == member.Fid);
             if (x != null && x.EmailCertified == member.EmailCertified)
             {
                 return Json("");
 
             }
-            return Json("請在信箱確認驗證碼");
+            return Json("驗證碼錯誤");
         }
 
         public IActionResult memberview()
