@@ -140,6 +140,11 @@
                                         <span asp-validation-for="CloseTime" class="text-danger"></span>
                                     </div>
                                 </div>
+                                <div>
+                                  <label asp-for="OpenTime" class="control-label"></label>
+                                  <input asp-for="OpenTime" class="form-control" type="time" value="08:00" id="OpenTimeinput" />
+                                  <span asp-validation-for="OpenTime" class="text-danger"></span>
+                                </div>
                                 <div class="form-group" hidden>
                                     <label asp-for="Fid" class="control-label"></label>
                                     <input asp-for="Fid" class="form-control" />

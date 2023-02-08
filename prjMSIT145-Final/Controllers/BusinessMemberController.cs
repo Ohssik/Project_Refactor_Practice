@@ -86,7 +86,7 @@ namespace prjMSIT145_Final.Controllers
         [HttpPost]
         public IActionResult Register(BusinessMember member)
         {
-           
+            
             _context.BusinessMembers.Add(member);
             _context.SaveChanges();
             BusinessImg businessImg = new BusinessImg();
@@ -99,6 +99,8 @@ namespace prjMSIT145_Final.Controllers
 
         public IActionResult BRevise()
         {
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
+                return RedirectToAction("Blogin");
             var json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
             BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
             return View(member);
