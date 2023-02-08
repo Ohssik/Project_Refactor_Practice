@@ -111,7 +111,7 @@ namespace prjMSIT145_Final.Controllers
 					}
 					vm.product.Photo = fileName;
 				}
-				var proCFid = _context.ProductCategories.FirstOrDefault(o => o.CategoryName == vm.CategoryName);
+				var proCFid = _context.ProductCategories.FirstOrDefault(o => o.CategoryName == vm.CategoryName && o.BFid == vm.BFid);
 				vm.product.CategoryFid = proCFid.Fid;
 				vm.product.BFid = vm.BFid;
 				_context.Products.Add(vm.product);
