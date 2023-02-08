@@ -165,7 +165,7 @@ namespace prjMSIT145_Final.Controllers
 		{
 			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
-				ProductCategory proC = _context.ProductCategories.FirstOrDefault(p => p.CategoryName == vm.CategoryName);
+				ProductCategory proC = _context.ProductCategories.FirstOrDefault(p => p.CategoryName == vm.CategoryName && p.BFid == vm.BFid);
 				Product pro = _context.Products.FirstOrDefault(p => p.Fid == vm.Fid);
 				if (pro != null)
 				{
