@@ -50,12 +50,13 @@
                     <input type="button" onclick=location.href="@Url.Content("~/CustomerMember/Register")" class="btnregister divbutton" value="註冊" />
                 </div>
             </div>
+            <span id="spanresponse" class="spanresponseclass"></span>
             <div class="textinput">
 
                 <div class="text">
 
                     <img src="@Url.Content("~/images/Customer/Member/call.png")" class="img"></img>
-                    <input  type="text" placeholder="手機號碼" class="text2" name="txtAccount" value=""autofocus />
+                    <input  id="phoneid" type="text" placeholder="手機號碼" class="text2" name="txtAccount" value=""autofocus />
                 </div>
                 <p class="detail">只支援台灣手機號碼</p>
                 <div class="text">
@@ -78,6 +79,10 @@
 
                 <p class="text3"><a href="#" class="forgotspan" id="forgotPwd">忘記密碼</a></p>
             </div>
+                <div class="demobtnlogin">
+                    <input type="button" class="democorrect" id="democorrectid" value="democorrect" />
+                    <input type="button" class="demoerror" id="demoerrorid" value="demoerror" />
+                </div>
             <div class="dashed"></div>
             <div>
                 <span class="text3">登入即代表您同意</span>
@@ -247,11 +252,12 @@
             const data = await request.json();
             console.log(data);
             if (data == "此帳號不存在") {
+                document.getElementById("spanresponse").innerHTML = data;
                 alert("此帳號不存在")
                 return;
             }
             else if (data == "尚未開通會員資格") {
-
+                document.getElementById("spanresponse").innerHTML = data;
                 alert("尚未開通會員資格")
                 return;
             }
@@ -260,7 +266,20 @@
             }
                 };
 
+        document.getElementById("democorrectid").addEventListener('click', () => {                             //正確DEMO鍵
+            document.getElementById("phoneid").value = "0936212576"
+            document.getElementById("Password").value = "aA12345"
+           
+           
+        });
 
+        document.getElementById("demoerrorid").addEventListener('click', () => {                                 //錯誤
+
+            document.getElementById("phoneid").value = "給一個錯誤電話";
+            document.getElementById("Password").value = "A1234";
+            
+
+        });
 
 
 

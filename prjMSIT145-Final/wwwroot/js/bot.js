@@ -70,9 +70,9 @@ btnSubmit.addEventListener("click", async function () {
 document.addEventListener("scroll", function () {
     let top = document.documentElement.scrollTop; //頁面目前所在高度
     let hight = document.documentElement.scrollHeight;  //頁面總長
-    console.log("top : "+top)
-    console.log("top1 : " + hight)
-    console.log(top % 10);
+    //console.log("top : "+top)
+    //console.log("top1 : " + hight)
+    //console.log(top % 10);
     if (top >= 1470) {
         azureLogo.setAttribute("style", "bottom:80px;");
         logoDiv.setAttribute("style", "bottom:80px");

@@ -364,18 +364,36 @@ namespace prjMSIT145_Final.Controllers
         {
             string loginmember = "";
             loginmember = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            if (loginmember != null) {
             CNormalMemberViewModel x = JsonSerializer.Deserialize<CNormalMemberViewModel>(loginmember);
             return View(x);
+            }
+            return Redirect("~/Home/CIndex");
         }
 
         [HttpPost]
         public IActionResult Alterpassword(CNormalMemberViewModel member)
         {
+            if (member.Password == null || member.Password!=member.Passwordcheck)
+            {
+                return View();
+            }
             NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Fid == member.Fid);
             x.Password=member.Password;
             _context.SaveChanges();
 
             return RedirectToAction("Edit");
+
+        }
+        public IActionResult Alterpasswordverify(CNormalMemberViewModel vm)
+        {
+
+            NormalMember x=_context.NormalMembers.FirstOrDefault(c => c.Fid == vm.Fid);
+            if (vm.OldPassword != x.Password)
+            {
+                return Json("舊密碼錯誤");
+            }
+          return Json("舊密碼正確");
 
         }
         
