@@ -80,8 +80,6 @@ document.addEventListener("scroll", function () {
 
     //判斷有無此class
     if (!azureClass) {
-        //console.log("有無此class : " + azureClass); - top
-
         azureLogo.classList.add('walk');
 
         setTimeout(function () {
@@ -89,10 +87,10 @@ document.addEventListener("scroll", function () {
         }, 500)
     }
 
-    console.log("top:" + top);
-    console.log("hight:" + hight);
-    console.log(document.body.scrollHeight);
-    console.log("clientHeight: "+document.documentElement.clientHeight);
+    //console.log("top:" + top);
+    //console.log("hight:" + hight);
+    //console.log(document.body.scrollHeight);
+    //console.log("clientHeight: "+document.documentElement.clientHeight);
     //接近頁面最底時修改定位
     if ((hight - top) <= 1000) {
         azureLogo.setAttribute("style", "bottom:80px;");
