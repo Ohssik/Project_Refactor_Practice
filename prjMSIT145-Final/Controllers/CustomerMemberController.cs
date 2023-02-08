@@ -19,10 +19,12 @@ namespace prjMSIT145_Final.Controllers
     {
         private readonly ispanMsit145shibaContext _context;
         private IWebHostEnvironment _eviroment;
-        public CustomerMemberController(ispanMsit145shibaContext context, IWebHostEnvironment eviroment)
+        private readonly IConfiguration _config;
+        public CustomerMemberController(ispanMsit145shibaContext context, IWebHostEnvironment eviroment, IConfiguration config)
         {
             _context = context;
             _eviroment = eviroment;
+            _config=config;
         }
         public IActionResult Index()
         {
@@ -466,6 +468,19 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult CCustomerServiceMailBox()
         {
             return View();
+        }
+        public IActionResult submitCustomerMail(CustomerServiceMailBoxViewModel mail)
+        {
+            var DemoMailServer = _config["DemoMailServer:pwd"];
+            CSendMail cs = new CSendMail();
+            string mailBody = $"收到了來自 {mail.txtSenderName} 先生/小姐來自網站客服信箱的意見。<br><br>詢問主題：<br>" +
+                $"<label style='color:blue'>{mail.txtMailSubject}</label><br><br>" +
+                $"詢問內容：<br>{mail.txtMailContent}<br><br>" +
+                $"來信人電話：{mail.txtPhone}<br><br>" +
+                $"來信人Email：{mail.txtEmailAddress}";
+            string mailSubject = "網站客服信箱來信";
+            string result = cs.sendMail(mail.txtEmailAddress, mailBody, mailSubject, DemoMailServer.ToString());
+            return Json(result);
         }
     }
 }
