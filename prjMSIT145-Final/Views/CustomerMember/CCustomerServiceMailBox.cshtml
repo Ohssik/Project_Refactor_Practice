@@ -1,0 +1,206 @@
+﻿@model prjMSIT145_Final.ViewModels.CustomerServiceMailBoxViewModel
+
+@{
+    ViewData["Title"] = "CCustomerServiceMailBox";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@section Styles{
+    <link href="~/css/customer_css/cbsonlyclass.css" rel="stylesheet" />
+    <style>
+        .checkForm.hidden{
+            display:none;
+        }
+        .row{
+            width:50%;
+            margin:30px auto;                      
+        }
+        .col-md-4{
+            width:100%;
+        }
+        .mailForm>.col-md-4 input{
+            width:50%;
+            display:inline;
+        }
+        .col-md-4 label{            
+            display:inline;            
+            font-weight: bold;
+        }
+        .col-md-4>form>div{
+            margin:20px 30px;
+        }
+        .col-md-4>div{
+            margin:20px 30px;
+        }
+        .form-group{
+            display:flex;            
+        }
+        .form-group>div{
+            width:15%;
+        }
+        .form-group>textarea{
+            width:85%;
+        }
+        .btn{
+            margin:10px auto;
+            width:20%;
+            padding:10px 30px;
+        }
+        .section-title {
+            font-size: 28px;
+            padding: 20px 4% 20px;
+            background-color: #f4f4f4;            
+            font-weight: bold;
+        }
+        textarea.control-label:nth-child(2){
+            border:0;
+            background-color:transparent;
+            font-weight: bold;
+        }
+        span.text-danger{
+            margin-left:5px;
+        }
+    </style>
+}
+
+<div class="row section-title">
+    聯繫我們
+</div>
+<div class="row mailForm">
+    <div class="col-md-4">
+        <form asp-action="CCustomerServiceMailBox" name="mailForm">            
+            <div class="form-group">
+                <div>
+                    <label class="text-danger">＊</label>
+                        <label asp-for="txtSenderName" class="control-label"></label>
+                </div>
+                    <input asp-for="txtSenderName" class="form-control" />
+                <span name="checkSenderName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                    <div>
+                        <label class="text-danger">＊</label>
+                        <label asp-for="txtEmailAddress" class="control-label"></label>
+                </div>
+                    <input asp-for="txtEmailAddress" class="form-control" />
+                <span name="checkEmailAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div><label class="text-danger">＊</label>
+                        <label asp-for="txtPhone" class="control-label"></label>
+                </div>
+                    <input asp-for="txtPhone" class="form-control" />
+                <span name="checkPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div><label class="text-danger">＊</label>
+                        <label asp-for="txtMailSubject" class="control-label"></label>
+                </div>
+                    <input asp-for="txtMailSubject" class="form-control" />
+                <span name="checkMailSubject" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                    <div>
+                        <label class="text-danger">＊</label>
+                        <label asp-for="txtMailContent" class="control-label"></label>
+                </div>
+                    <textarea asp-for="txtMailContent" class="form-control" rows="5"></textarea>                                       
+            </div>
+                <p name="checkMailContent" class="text-danger"></p>
+            <div class="form-group">                
+                    <button id="btnCheck" class="btn btn-dark">確認畫面</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row checkForm hidden">
+    <div class="col-md-4">            
+        <div class="form-group">                        
+            <div>
+                <label class="text-danger">＊</label>
+                <label class="control-label">姓名</label>
+            </div>
+                <label name="lblSenderName" class="control-label">Lorem</label>
+        </div>
+        <div class="form-group">            
+            <div>
+                <label class="text-danger">＊</label>
+                <label class="control-label">Email</label>
+            </div>
+            <label name="lblEmailAddress" class="control-label">
+                    'Lorem@test.com.tw'
+            </label>                
+        </div>
+        <div class="form-group">
+                <div>
+                    <label class="text-danger">＊</label>
+                    <label class="control-label">電話</label>
+                </div>            
+            <label name="lblPhone" class="control-label">
+                0912345678
+            </label>                
+        </div>
+        <div class="form-group">
+                <div>
+                    <label class="text-danger">＊</label>
+                    <label class="control-label">詢問主題</label>
+                </div>            
+            <label name="lblmailSubject" class="control-label">
+                    Lorem ipsum dolor sit amet
+            </label>                
+        </div>
+        <div class="form-group">
+            <div>
+                <label class="text-danger">＊</label>
+                <label class="control-label">詢問內容</label>
+            </div>            
+            <textarea name="lblmailContent" class="control-label" readonly rows="20">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint saepe quasi sapiente qui tempora sit id, recusandae enim consequatur? Fugiat nam vero quidem repudiandae modi laborum distinctio illum reprehenderit exercitationem.
+                    Repellendus earum, libero inventore magni natus illum nisi non delectus, a facere reiciendis aliquam enim, officiis explicabo quasi ea vero impedit recusandae porro rerum nostrum sint! Quibusdam, dignissimos consequatur. Tenetur.
+                    Fugit perspiciatis consectetur quod delectus. Accusantium itaque dicta laudantium velit tempore. Enim similique recusandae voluptate. Animi quis odio sint voluptas officiis rem dolore quibusdam magnam, maiores doloribus id facilis quisquam.
+                    Fuga expedita sapiente voluptas molestias voluptatum at ut harum nemo, sequi perferendis nisi. Nihil, quae modi quasi aut minus ratione delectus. Officia ad ab libero eaque quas, enim vero aperiam.
+                    Deserunt odio alias dolore debitis. Explicabo dolores qui pariatur impedit facere doloribus, officia adipisci officiis id ipsum corrupti. Laboriosam iste totam a expedita exercitationem, fuga quaerat quod obcaecati sit non!
+            </textarea>                
+        </div>
+        <div class="form-group">                
+                <input type="button" value="返回輸入畫面" id="btnBack" class="btn btn-light" />
+                <input type="submit" value="提交" id="btnSubmitMail" class="btn btn-dark" />
+        </div>
+           
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(function(){
+            $('#btnCheck').click(function(event){
+                event.preventDefault();
+                let SenderName=$('[name=txtSenderName]').val();
+                let EmailAddress = $('[name=txtEmailAddress]').val();
+                let Phone = $('[name=txtPhone]').val();
+                let mailSubject = $('[name=txtMailSubject]').val();
+                let mailContent = $('[name=txtMailContent]').val();
+
+                $('[name^=txt]').each(function(){
+                    let value = $(this);
+                    if (value.val().trim() == '') {
+                        value.parents('.form-group').find('[name^=check]').text('請填入正確的資料');                        
+                    }
+                    else{
+                        value.parents('.form-group').find('[name^=check]').text('');
+                    }
+                });
+
+                //$('[name=lblSenderName]').text();
+                //$('[name=lblEmailAddress]').text();
+                //$('[name=lblPhone]').text();
+                //$('[name=lblmailSubject]').text();
+                //$('[name=lblmailContent]').val();
+            });
+        });
+    </script>
+}

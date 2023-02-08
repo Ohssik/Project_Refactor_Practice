@@ -107,7 +107,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">發送忘記密碼通知</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="btnCancel" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
@@ -123,7 +123,7 @@
             </div>
             <div class="modal-footer">
                 <span class="text-danger" id="pwdInvalid"></span>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>
+                
                 <button type="button" class="btn btn-primary" id="btnSend">送出</button>
             </div>
         </div>
@@ -344,6 +344,8 @@
                 });
             });
             $('#forgotPwd').click(function () {
+                $('[name=txtAccount]').val('');
+                $('[name=txtEmail]').val('');
                 sendMail.show();
                 $('#btnSend').removeAttr('disabled');
                 $('#msgAlert label').text('');

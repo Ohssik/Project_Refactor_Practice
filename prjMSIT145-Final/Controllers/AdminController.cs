@@ -802,7 +802,13 @@ namespace prjMSIT145_Final.Controllers
                 expire = request.Expire.ToString();            
 
             if (expire == "" || DateTime.Now > Convert.ToDateTime(expire))
-                return RedirectToAction("ALogin");
+            {
+                if (tp.ToUpper() == "A") ;
+                    return RedirectToAction("ALogin");
+                if (tp.ToUpper() == "N") ;
+                    return RedirectToAction("Login", "CustomerMember");
+            }
+                
 
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_EXPIRE))                
                 HttpContext.Session.Remove(CDictionary.SK_RESETPWD_EXPIRE);                    
