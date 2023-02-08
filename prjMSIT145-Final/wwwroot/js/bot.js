@@ -4,6 +4,8 @@ const txt = document.querySelector("#txt"); //輸入框
 const btnSubmit = document.querySelector("#btnSubmit"); //送出
 const tr = document.querySelectorAll("tr");
 const resultDiv = document.querySelector("#resultDiv");
+let azureLogo = document.querySelector("#azureLogo"); //按鈕
+let logoDiv = document.querySelector("#logoDiv");
 
 let msg = "";
 // 點選常見問題
@@ -17,6 +19,7 @@ tr.forEach(function (td) {
 
 //按下送出鈕
 btnSubmit.addEventListener("click", async function () {
+
 
     //使用者頭像
     const response = await fetch("/Problem/PUserImg");
@@ -63,3 +66,38 @@ btnSubmit.addEventListener("click", async function () {
 
     txt.value = "";
 });
+
+let timer = null;
+document.addEventListener("scroll", function () {
+    clearTimeout(timer);
+
+    let top = document.documentElement.scrollTop; //頁面目前所在高度
+    let hight = document.documentElement.scrollHeight;  //頁面總長
+    const azureClass = azureLogo.classList.contains("walk");  //檢查是否有'walk'的class
+
+    timer = setTimeout(function () {
+        azureLogo.classList.remove("walk");
+        logoDiv.classList.remove("walk");
+
+    }, 1000);
+
+    if (!azureClass) {
+        //console.log("有無此class : " + azureClass); - top
+
+        azureLogo.classList.add('walk');
+
+        setTimeout(function () {
+            logoDiv.classList.add("walk");
+        }, 500)
+    }
+
+    console.log(top - document.querySelector(".Copyright").scrollHeight);
+    if ((top -document.querySelector(".Copyright").scrollHeight) >= 1100) {
+        azureLogo.setAttribute("style", "bottom:80px;");
+        logoDiv.setAttribute("style", "bottom:80px");
+    }
+    else {
+        azureLogo.setAttribute("style", "bottom:30px");
+        logoDiv.setAttribute("style", "bottom:30px");
+    }
+})

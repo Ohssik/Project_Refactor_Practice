@@ -89,8 +89,12 @@ namespace prjMSIT145_Final.Controllers
            
             _context.BusinessMembers.Add(member);
             _context.SaveChanges();
-
-            return PartialView();
+            BusinessImg businessImg = new BusinessImg();
+            var Newmember = _context.BusinessMembers.FirstOrDefault(m=>m.Email==member.Email);
+            businessImg.BFid = Newmember.Fid;
+            _context.BusinessImgs.Add(businessImg);
+            _context.SaveChanges();
+            return RedirectToAction("Blogin");
         }
 
 
