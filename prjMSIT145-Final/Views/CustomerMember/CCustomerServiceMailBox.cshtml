@@ -103,10 +103,9 @@
                         <label class="text-danger">＊</label>
                         <label asp-for="txtMailContent" class="control-label"></label>
                 </div>
-                    <textarea asp-for="txtMailContent" class="form-control" rows="5"></textarea>
-                    <br />
-                    <span name="checkMailContent" class="text-danger"></span>
+                    <textarea asp-for="txtMailContent" class="form-control" rows="5"></textarea>                                       
             </div>
+                <p name="checkMailContent" class="text-danger"></p>
             <div class="form-group">                
                     <button id="btnCheck" class="btn btn-dark">確認畫面</button>
             </div>
@@ -165,7 +164,7 @@
         </div>
         <div class="form-group">                
                 <input type="button" value="返回輸入畫面" id="btnBack" class="btn btn-light" />
-                <input type="submit" value="提交" id="btnSubmit" class="btn btn-dark" />
+                <input type="submit" value="提交" id="btnSubmitMail" class="btn btn-dark" />
         </div>
            
     </div>
@@ -189,10 +188,10 @@
                 $('[name^=txt]').each(function(){
                     let value = $(this);
                     if (value.val().trim() == '') {
-                        value.parents('.form-group').find('span[name^=check]').text('請填入正確的資料');                        
+                        value.parents('.form-group').find('[name^=check]').text('請填入正確的資料');                        
                     }
                     else{
-                        value.parents('.form-group').find('span[name^=check]').text('');
+                        value.parents('.form-group').find('[name^=check]').text('');
                     }
                 });
 
