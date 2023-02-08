@@ -9,6 +9,12 @@
 }
 
 <div class="outerlayer ">
+    <div style="margin:0 0 20px 200px">
+    <button id="demo1" class="btn btn-outline-secondary">Demo飲料</button>
+    <button id="demo2" class="btn btn-outline-secondary">Demo飲料</button>
+    <button id="demo3" class="btn btn-outline-secondary">Demo食物</button>
+    <button id="demo4" class="btn btn-outline-secondary">Demo食物</button>
+    </div>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="BFid" value="@Model.BFid" />
 
@@ -72,6 +78,35 @@
         const checkPrice = document.querySelector("#checkPrice");  //檢查價格是否為數字
         const checkName = document.querySelector("#checkName"); //檢查有無輸入名稱
 
+        const demo1 = document.querySelector("#demo1"); //demo飲料
+        const demo2 = document.querySelector("#demo2"); //demo飲料
+        const demo3 = document.querySelector("#demo3"); //demo食物
+        const demo4 = document.querySelector("#demo4"); //demo食物
+
+        //飲料類Demo鍵
+        demo1.addEventListener("click", function () {
+            txtOptionName.value = "香草奶昔";
+           txtPrice.value = "70";
+            checkName.innerHTML = "";
+        })
+        //飲料類Demo鍵
+        demo2.addEventListener("click", function () {
+              txtOptionName.value = "香草奶昔";
+           txtPrice.value = "70";
+            checkName.innerHTML = "";
+        })
+        //食物類Demo鍵
+        demo3.addEventListener("click", function () {
+            txtOptionName.value = "香草奶昔";
+           txtPrice.value = "70";
+            checkName.innerHTML = "";
+        })
+        //食物類Demo鍵
+        demo4.addEventListener("click", function () {
+               txtOptionName.value = "香草奶昔";
+           txtPrice.value = "70";
+            checkName.innerHTML = "";
+        })
 
         //載入所有配料類別
         window.addEventListener("load", async function () {
