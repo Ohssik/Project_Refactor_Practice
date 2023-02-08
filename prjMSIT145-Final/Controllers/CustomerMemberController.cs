@@ -438,5 +438,10 @@ namespace prjMSIT145_Final.Controllers
             }
             return Json("");
         }
+
+        public IActionResult CCustomerServiceMailBox()
+        {
+            return View();
+        }
     }
 }

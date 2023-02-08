@@ -91,7 +91,7 @@ document.addEventListener("scroll", function () {
         }, 500)
     }
 
-    console.log(top - document.querySelector(".Copyright").scrollHeight);
+    //console.log(top - document.querySelector(".Copyright").scrollHeight);
     if ((top -document.querySelector(".Copyright").scrollHeight) >= 1100) {
         azureLogo.setAttribute("style", "bottom:80px;");
         logoDiv.setAttribute("style", "bottom:80px");
