@@ -115,14 +115,14 @@ transform: rotateX(40deg);
         }*/
         from {
             height:20px;
-            transform: rotateX(70deg);
+            /*transform: rotateX(70deg);*/
             opacity: 90%;
             bottom: 80px;
             filter: drop-shadow(5px 10px 5px rgba(0,0,0,0.5));
         }
         to {
             height: 70px;
-            transform: rotateX(70deg);
+            /*transform: rotateX(70deg);*/
             opacity: 30%;
             bottom: 5px;
             filter: drop-shadow(5px 10px 5px rgba(0,0,0,2));
