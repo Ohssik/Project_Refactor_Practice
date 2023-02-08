@@ -49,8 +49,9 @@
                 <div>
                     <input type="button" onclick=location.href="@Url.Content("~/CustomerMember/Register")" class="btnregister divbutton" value="註冊" />
                 </div>
+                    <span id="spanresponse" class="spanresponseclass"></span>
             </div>
-            <span id="spanresponse" class="spanresponseclass"></span>
+          
             <div class="textinput">
 
                 <div class="text">
@@ -251,14 +252,12 @@
             })
             const data = await request.json();
             console.log(data);
-            if (data == "此帳號不存在") {
+            if (data == "帳號或密碼有錯") {
                 document.getElementById("spanresponse").innerHTML = data;
-                alert("此帳號不存在")
                 return;
             }
             else if (data == "尚未開通會員資格") {
                 document.getElementById("spanresponse").innerHTML = data;
-                alert("尚未開通會員資格")
                 return;
             }
             else {
@@ -338,6 +337,9 @@
 
                         }
                         $('#btnSend').removeAttr('disabled');
+                    },
+                    error:function(msg){
+                        console.log(`error msg=${msg}`);
                     }
                 });
             });
@@ -346,8 +348,8 @@
                 $('#btnSend').removeAttr('disabled');
                 $('#msgAlert label').text('');
                 $('#pwdInvalid').text('');
-                $('[name=txtAccount]').val('0986543125');
-                $('[name=txtEmail]').val('rmtorh@hotmail.com');
+                //$('[name=txtAccount]').val('0986543125');
+                //$('[name=txtEmail]').val('rmtorh@hotmail.com');
 
             });
         });
