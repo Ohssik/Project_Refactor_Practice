@@ -9,16 +9,19 @@
 }
 
 <div class="outerlayer ">
+    <div style="margin:0 0 20px 200px">
     <button id="demo1" class="btn btn-outline-secondary">Demo飲料</button>
     <button id="demo2" class="btn btn-outline-secondary">Demo飲料</button>
     <button id="demo3" class="btn btn-outline-secondary">Demo食物</button>
     <button id="demo4" class="btn btn-outline-secondary">Demo食物</button>
+   </div>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="BFid" value="@Model.BFid" />
         <div class="topdiv">
             <a href="@Url.Content("~/Product/BList")"><img class="back" src="../images/Business/backarrow.png"></a>
             @*產品名稱*@
             <input id="txtProductName" name="ProductName" class="inputtext" type="text" placeholder=" 輸入餐點名稱....." />
+            <span id="checkName" style="font-size:16px; width:150px;"></span>
 
             <input id="btnSubmit" class="butt" type="submit" value="儲存" />
         </div>
@@ -40,35 +43,42 @@
 
         @*選擇類別*@
         <select id="selType" name="CategoryName" class="select"><option>請選擇商品類別</option></select>
-        <span id="checkType"></span>
+        <span id="checkType" style="margin-left:10px; font-size:17px;"></span>
+
         @*產品價格*@
         <hr style="border:1px dashed #000; height:1px">
         <h6 id="h6">價格及販售方式</h6>
         <label for="">預設價格</label>
         <input type="text" value="100" id="txtPrice" name="UnitPrice" class="text" />
-        <span id="checkPrice"></span>
+        <span id="checkPrice" style="margin-left:10px; font-size:17px;"></span>
+
+        @*餐點上架與否*@
         <hr style="border:1px dashed #000; height:1px">
         <h6 id="h6">餐點是否上架</h6>
         <div class="form-check form-switch">
             @*checked為1=>已上架*@
-            <input name="IsForSale" class="form-check-input" type="checkbox" role="switch" id="IsForSale" style="width:50px; height:20px;" />  @*餐點上架與否*@
+            <input name="IsForSale" class="form-check-input" type="checkbox" role="switch" id="IsForSale" style="width:50px; height:20px;" />
             <label class="form-check-label" for="IsForSale"></label>
         </div>
+
+        @*產品備註*@
         <hr style="border:1px dashed #000; height:1px">
         <h6 id="h6">說明(選項)</h6>
-        <textarea placeholder=" 輸入說明.....例如豬肉產地" id="txtMemo" name="Memo" class="textarea">-</textarea>   @*產品備註*@
+        <textarea placeholder=" 輸入說明.....例如豬肉產地" id="txtMemo" name="Memo" class="textarea">-</textarea>
     </form>
 </div>
 
 @section Scripts{
     <script>
         const imgShow = document.querySelector("#imgShow"); //選擇的照片
-        const file = document.querySelector("#file"); //新增照片
+        const btnFile = document.querySelector("#file"); //新增照片
         const btnImgDelete = document.querySelector("#btnImgDelete"); //刪除照片
         const selType = document.querySelector("#selType"); //選擇的類別
         const IsForSale = document.querySelector("#IsForSale"); //選擇是否上架
         const btnSubmit = document.querySelector("#btnSubmit"); //儲存按鈕
         const txtPrice = document.querySelector("#txtPrice"); //商品價格
+        const checkName = document.querySelector("#checkName"); //檢查有無輸入名稱
+        const txtProductName = document.querySelector("#txtProductName");
 
         const demo1 = document.querySelector("#demo1"); //demo飲料
         const demo2 = document.querySelector("#demo2"); //demo飲料
@@ -80,24 +90,28 @@
             document.querySelector("#txtProductName").value = "香草奶昔";
             document.querySelector("#txtPrice").value = "70";
             document.querySelector("#txtMemo").value = "為確保口感,僅可少冰";
+            checkName.innerHTML = "";
         })
         //飲料類Demo鍵
         demo2.addEventListener("click", function () {
             document.querySelector("#txtProductName").value = "酪梨布丁牛奶";
             document.querySelector("#txtPrice").value = "80";
             document.querySelector("#txtMemo").value = "僅少冰，建議一小時內飲用完畢。";
+            checkName.innerHTML = "";
         })
         //食物類Demo鍵
         demo3.addEventListener("click", function () {
             document.querySelector("#txtProductName").value = "松露蛋炒飯";
             document.querySelector("#txtPrice").value = "250";
             document.querySelector("#txtMemo").value = "使用白米/糙米";
+            checkName.innerHTML = "";
         })
         //食物類Demo鍵
         demo4.addEventListener("click", function () {
             document.querySelector("#txtProductName").value = "紅燒牛肉麵";
             document.querySelector("#txtPrice").value = "150";
             document.querySelector("#txtMemo").value = "微辣,皆為半筋半肉";
+                checkName.innerHTML = "";
         })
 
         //載入所有商品類別
@@ -116,9 +130,10 @@
         })
 
         //上傳照片
-        file.addEventListener("change", function () {
-            const file = this.files[0];
+        btnFile.addEventListener("change", function () {
+            let file = this.files[0];
             const reader = new FileReader();
+
             reader.onload = function (e) {
                 //imgShow.setAttribute("src", e.target.result);
                 //console.log(e.target.result);
@@ -144,25 +159,32 @@
                 IsForSale.value = "0";
             }
         })
-        //是否選擇了商品類別
+        //送出時驗證各項
         btnSubmit.addEventListener("click", function () {
             console.log(selType.value)
             if (selType.value === "請選擇商品類別") {
                 event.preventDefault();
-                document.querySelector("#checkType").innerHTML = `<span style="margin-left:10px; font-size:17px;"><img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別</span>`;
+                document.querySelector("#checkType").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別`;
             }
             else
                 document.querySelector("#checkType").innerHTML = "";
 
             if (!(txtPrice.value >= 0 || txtPrice.value <= 100000000))
                 event.preventDefault();
+
+            if (txtProductName.value == "") {
+                event.preventDefault();
+                checkName.innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:20px;" />請輸入名稱`;
+            }
+            else
+                checkName.innerHTML = "";
         })
 
         //驗證類別是否選擇
         selType.addEventListener("change", function () {
             if (selType.value === "請選擇商品類別") {
                 event.preventDefault();
-                document.querySelector("#checkType").innerHTML = `<span style="margin-left:10px; font-size:17px;"><img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別</span>`;
+                document.querySelector("#checkType").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別`;
             }
             else
                 document.querySelector("#checkType").innerHTML = "";
@@ -170,9 +192,16 @@
         //驗證價格是否為int
         txtPrice.addEventListener("blur", function () {
             if (!(txtPrice.value >= 0 || txtPrice.value <= 100000000))
-                document.querySelector("#checkPrice").innerHTML = `<span style="margin-left:10px; font-size:17px;"><img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請輸入數字</span>`;
+                document.querySelector("#checkPrice").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請輸入數字`;
             else
                 document.querySelector("#checkPrice").innerHTML = "";
+        })
+        //驗證有無輸入名稱
+        txtProductName.addEventListener("focusout", function () {
+            if (txtProductName.value === "")
+                checkName.innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:20px;" />請輸入名稱`;
+            else
+                checkName.innerHTML = "";
         })
     </script>
 }

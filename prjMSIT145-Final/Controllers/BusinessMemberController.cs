@@ -97,6 +97,21 @@ namespace prjMSIT145_Final.Controllers
             return RedirectToAction("Blogin");
         }
 
+        public IActionResult BRevise()
+        {
+            var json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
+            BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+            return View(member);
+        }
+        [HttpPost]
+        public IActionResult BRevise(BusinessMember member)
+        {
+            _context.BusinessMembers.Update(member);
+            _context.SaveChanges();
+            return RedirectToAction("BList", "Order");
+        }
+
+
 
         public IActionResult Index()
         {

@@ -1,86 +1,165 @@
 ﻿@model prjMSIT145_Final.ViewModel.CProductOptionViewModel
 @{
-	Layout = "_BusinessLayout";
+    Layout = "_BusinessLayout";
     ViewData["Title"] = "BCreate";
 }
 @section Styles{
-	<link rel="stylesheet" href="../css/ProductCreate.css">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/ProductCreate.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 }
 
 <div class="outerlayer ">
-	<form method="post" enctype="multipart/form-data">
-		<input type="hidden" name="BFid" value="@Model.BFid"></input>
-		<div class="topdiv">
-			<a href="@Url.Content("~/AddMaterial/BList")"><img class="back" src="../images/Business/backarrow.png" value=""></a>
-			<input id="txtOptionName" name="OptionName" class="inputtext" type="text" placeholder=" 輸入配料名稱....." required/>   @*配料名稱*@
+    <div style="margin:0 0 20px 200px">
+    <button id="demo1" class="btn btn-outline-secondary">Demo飲料</button>
+    <button id="demo2" class="btn btn-outline-secondary">Demo飲料</button>
+    <button id="demo3" class="btn btn-outline-secondary">Demo食物</button>
+    <button id="demo4" class="btn btn-outline-secondary">Demo食物</button>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="BFid" value="@Model.BFid" />
 
-			<input id="btnSubmit" class="butt" type="submit" value="儲存" />
-		</div>
+        <div class="topdiv">
 
-		@*配料照片*@
-		@*<h6 id="h6">相片</h6>
-		<div class="divimage">
-			<div>
-				<input style="width:110px; height:70px;" id="imgShow" class="inputimage" type="image" src="../images/photo.png">
-			</div>
-			<div>
-				<p>餐點照片可協助顧客訂購那些美食,<br>進而提供銷售量.</p>
-				<div class="divinputimagebutton">
-					@*<input id="btnImgCreate" class="inputimagebutton"type="button" value="新增照片">*@
-					@*<input id="btnImgDownload" class="inputimagebutton" type="button" value="下載">
-					<label class="inputimagebutton" for="file" style="width:80px; padding: 5px;"><input id="file" name="file" type="file" style="display:none;" />上傳檔案</label>
-					<input id="btnImgDelete" class="inputimagebutton" type="button" value="刪除">
-				</div>
-			</div>
-		</div>*@
-		<select id="selType" class="select" name="OptionGroupName"><option>請選擇配料類別</option></select>  @*選擇類別*@
 
-		<hr style="border:1px dashed #000; height:1px">
-		<h6 id="h6">價格</h6>
-		<label for="UnitPrice">預設價格</label>
-		<input type="text" value="0" id="txtPrice" name="UnitPrice" class="text" required />   @*配料價格*@
-		@*<hr style="border:1px dashed #000; height:1px">
-		<h6 id="h6">配料</h6>
-		<div class="form-check form-switch">
-			@*checked為1=>已上架
-			<input name="IsForSale" class="form-check-input" type="checkbox" role="switch" id="IsForSale" />  @*配料可否多選
-			<label class="form-check-label" for="flexSwitchCheckDefault"></label>
-		</div>*@
-		@*<hr style="border:1px dashed #000; height:1px">
-		<h6 id="h6">說明(選項)</h6>
-		<textarea placeholder=" 輸入說明...." id="txtMemo" name="Memo"></textarea>   @*配料備註*@
-	</form>
+            <a href="@Url.Content("~/AddMaterial/BList")"><img class="back" src="../images/Business/backarrow.png" value=""></a>
+            <input id="txtOptionName" name="OptionName" class="inputtext" type="text" placeholder=" 輸入配料名稱....." />   @*配料名稱*@
+            <span id="checkName" style="font-size:16px; width:150px;"></span>
+            <input id="btnSubmit" class="butt" type="submit" value="儲存" />
+        </div>
+
+        @*配料照片*@
+        @*<h6 id="h6">相片</h6>
+        <div class="divimage">
+        <div>
+        <input style="width:110px; height:70px;" id="imgShow" class="inputimage" type="image" src="../images/photo.png">
+        </div>
+        <div>
+        <p>餐點照片可協助顧客訂購那些美食,<br>進而提供銷售量.</p>
+        <div class="divinputimagebutton">
+        @*<input id="btnImgCreate" class="inputimagebutton"type="button" value="新增照片">*@
+        @*<input id="btnImgDownload" class="inputimagebutton" type="button" value="下載">
+        <label class="inputimagebutton" for="file" style="width:80px; padding: 5px;"><input id="file" name="file" type="file" style="display:none;" />上傳檔案</label>
+        <input id="btnImgDelete" class="inputimagebutton" type="button" value="刪除">
+        </div>
+        </div>
+        </div>*@
+
+        @*選擇類別*@
+        <select id="selType" class="select" name="OptionGroupName"><option>請選擇配料類別</option></select>
+        <span id="checkType" style="margin-left:10px; font-size:17px;"></span>
+
+        @*配料價格*@
+        <hr style="border:1px dashed #000; height:1px">
+        <h6 id="h6">價格</h6>
+        <label for="UnitPrice">預設價格</label>
+        <input type="text" value="0" id="txtPrice" name="UnitPrice" class="text" />
+        <span id="checkPrice" style="margin-left:10px; font-size:17px;"></span>
+
+        @*<hr style="border:1px dashed #000; height:1px">
+        <h6 id="h6">配料</h6>
+        <div class="form-check form-switch">
+        @*checked為1=>已上架
+        <input name="IsForSale" class="form-check-input" type="checkbox" role="switch" id="IsForSale" />  @*配料可否多選
+        <label class="form-check-label" for="flexSwitchCheckDefault"></label>
+        </div>*@
+        @*<hr style="border:1px dashed #000; height:1px">
+        <h6 id="h6">說明(選項)</h6>
+        <textarea placeholder=" 輸入說明...." id="txtMemo" name="Memo"></textarea>   @*配料備註*@
+    </form>
 </div>
 
 @section Scripts{
-	<script>
-		const selType = document.querySelector("#selType"); //選擇的類別
-		const btnSubmit = document.querySelector("#btnSubmit"); //點擊儲存按鈕
-		const txtOptionName = document.querySelector("#txtOptionName"); //配料名稱
+    <script>
+        const selType = document.querySelector("#selType"); //選擇的類別
+        const btnSubmit = document.querySelector("#btnSubmit"); //點擊儲存按鈕
+        const txtOptionName = document.querySelector("#txtOptionName"); //配料名稱
+        const txtPrice = document.querySelector("#txtPrice"); //配料價格
+        const checkType = document.querySelector("#checkType"); //檢查有無選擇類別
+        const checkPrice = document.querySelector("#checkPrice");  //檢查價格是否為數字
+        const checkName = document.querySelector("#checkName"); //檢查有無輸入名稱
 
-		//載入所有配料類別
-		window.addEventListener("load",async function(){
-			const response = await fetch(`@Url.Content("~/Type/BOptionGroup")`);
-			const data =await response.json();
-			let result = document.createDocumentFragment();
-			data.forEach(function(item,index){
+        const demo1 = document.querySelector("#demo1"); //demo飲料
+        const demo2 = document.querySelector("#demo2"); //demo飲料
+        const demo3 = document.querySelector("#demo3"); //demo食物
+        const demo4 = document.querySelector("#demo4"); //demo食物
 
-				//if(index === 0)
-				//result =  `<option>${item.optionGroupName}</option>`;
-				//else if (data[index].optionGroupName !== data[index - 1].optionGroupName) {
-					result += `<option>${item.optionGroupName}</option>`;
-				//}
-			})
-			selType.innerHTML += result;
-		})
-		btnSubmit.addEventListener("click",function(){
-			if (selType.value == "請選擇配料類別") {
-				event.preventDefault();
-				alert("請確認配料類別是否選取!");
-			}
-		})
+        //飲料類Demo鍵
+        demo1.addEventListener("click", function () {
+            txtOptionName.value = "香草奶昔";
+           txtPrice.value = "70";
+            checkName.innerHTML = "";
+        })
+        //飲料類Demo鍵
+        demo2.addEventListener("click", function () {
+              txtOptionName.value = "香草奶昔";
+           txtPrice.value = "70";
+            checkName.innerHTML = "";
+        })
+        //食物類Demo鍵
+        demo3.addEventListener("click", function () {
+            txtOptionName.value = "香草奶昔";
+           txtPrice.value = "70";
+            checkName.innerHTML = "";
+        })
+        //食物類Demo鍵
+        demo4.addEventListener("click", function () {
+               txtOptionName.value = "香草奶昔";
+           txtPrice.value = "70";
+            checkName.innerHTML = "";
+        })
 
-	</script>	
+        //載入所有配料類別
+        window.addEventListener("load", async function () {
+            const response = await fetch(`@Url.Content("~/Type/BOptionGroup")`);
+            const data = await response.json();
+            let result = document.createDocumentFragment();
+            data.forEach(function (item, index) {
+                result += `<option>${item.optionGroupName}</option>`;
+            })
+            selType.innerHTML += result;
+        })
+
+        btnSubmit.addEventListener("click", function () {
+            if (selType.value == "請選擇配料類別") {
+                event.preventDefault();
+                checkType.innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別`;
+            }
+            else
+                checkType.innerHTML = "";
+
+           if (!(txtPrice.value >= 0 || txtPrice.value <= 10000)){
+                event.preventDefault();
+                checkPrice.innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請輸入數字`;
+           }
+            else
+                checkPrice.innerHTML = "";
+
+              if (txtOptionName.value == ""){
+                event.preventDefault();
+                checkName.innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:20px;" />請輸入名稱`;
+              }
+            else
+                checkName.innerHTML = "";
+
+        })
+        selType.addEventListener("change", function () {
+            if (selType.value == "請選擇配料類別")
+                checkType.innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別`;
+            else
+                checkType.innerHTML = "";
+        })
+        txtPrice.addEventListener("blur", function () {
+            if (!(txtPrice.value >= 0 || txtPrice.value <= 10000))
+                checkPrice.innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請輸入數字`;
+            else
+                checkPrice.innerHTML = "";
+        })
+        txtOptionName.addEventListener("blur", function () {
+            if (txtOptionName.value == "")
+                checkName.innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:20px;" />請輸入名稱`;
+            else
+                checkName.innerHTML = "";
+        })
+    </script>
 	}
 
