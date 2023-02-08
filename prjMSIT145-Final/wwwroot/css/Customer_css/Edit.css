@@ -1,6 +1,6 @@
 ﻿.wrap {
     width: 1800px;
-    margin: 50px auto;
+    margin: 80px auto;
     display: flex;
     text-align:center;
     justify-items:center;
@@ -190,6 +190,7 @@
     width: 157px;
     height: 65px;
     background-color: #ff5e7d;
+    
     color: whitesmoke;
     font-weight: bold;
     border-radius: 5px;

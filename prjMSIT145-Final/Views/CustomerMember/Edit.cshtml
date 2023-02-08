@@ -18,7 +18,7 @@
 
 
 
- <form asp-action="edit" enctype="multipart/form-data">
+ <form asp-action="edit" enctype="multipart/form-data" name="editform" id="editid">
 
     
   <div class="wrap">
@@ -166,7 +166,7 @@
         <script src="~/js/NormalMemberAddress/taiwan_districts.js"></script>
         <script type="text/javascript">
 
-
+             function changcity(){
                  for (let item of data) { $("#city").append(`<option>${item.name}</option>`); }
 
                   $("#city").change(function ()
@@ -183,7 +183,9 @@
                     }
                 }
             });
-            
+            };
+             changcity();    
+
             var upload= function (c,d){
                 "use strict";
                 var $c= document.querySelector(c),
@@ -197,9 +199,9 @@
                         };
             };
 
-        var submitbtn = document.getElementById("submitid");
+        var submitbtn = document.getElementById("submitid");                //按鈕
 
-        document.getElementById("MemberName").addEventListener("change", checkPwd);
+        document.getElementById("MemberName").addEventListener("change", checkPwd);                           //名子
         function checkPwd() {
             var nameobj = document.getElementById("MemberName");           
             var spnameobj = document.getElementById("namecorrect");
@@ -208,7 +210,6 @@
             if (nameval =="") {
                 spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
                 submitbtn.setAttribute('disabled', 'disabled');
-                alert("有必填欄位未填");
                 return;
             }
             else {
@@ -218,7 +219,7 @@
         };
 
 
-        document.getElementById("Email").addEventListener("change", checkEmail);
+        document.getElementById("Email").addEventListener("change", checkEmail);                              //email
         function checkEmail() {
             var emailobj = document.getElementById("Email");
             var spnemailobj = document.getElementById("emailcorrect");
@@ -227,7 +228,6 @@
             if (emailval == "") {
                 spnemailobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
                 submitbtn.setAttribute('disabled', 'disabled');
-                alert("有必填欄位未填");
                 return;
             }
             else {
@@ -236,22 +236,55 @@
             }
         };
 
-        document.getElementById("democorrectid").addEventListener('click', () => {                             //DEMO鍵
-            //$("#MemberName").attr('value', '林阿宏');
-            
-            document.getElementById("MemberName").value="林阿宏"
-            document.getElementById("Email").value="a29803385@hotmai.com";
+        submitbtn.addEventListener('click',async()=>{
 
-            document.getElementById("radiogirl").setAttribute("checked", "checked");
-            document.getElementById("city").innerHTML = "<option>高雄市</option>";
-            document.getElementById("area").innerHTML = "<option>前鎮區</option>";
+            event.preventDefault();
+            let formdata = new FormData(document.editform);
+            const request = await fetch(`@Url.Content("~/CustomerMember/Editverify")`, {
+                body: formdata,
+                method:"Post",
+            })
+            const data=await request.json();
+            
+            if(data=="修改完成"){
+                alert(data);
+                document.getElementById('editid').submit();
+            }
+            else if(data=="名子不能空值"){
+                document.getElementById("namecorrect").innerHTML ="<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+            }
+            else if (data=="信箱不能空值"){
+                document.getElementById("emailcorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+            }
+            else if(data=="Email格式錯誤"){
+               document.getElementById("emailcorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>Email格式錯誤";
+            }
+
         });
 
-        document.getElementById("demoerrorid").addEventListener('click', () => {
-            document.getElementById("MemberName").value = "";
-            document.getElementById("Email").value = "";
-            
 
+
+
+
+
+
+
+
+        document.getElementById("democorrectid").addEventListener('click', () => {                             //正確DEMO鍵
+            
+            document.getElementById("MemberName").value="林知恩"
+            document.getElementById("Email").value="a29803385@hotmai.com";
+            document.getElementById("radiogirl").setAttribute("checked", "checked");
+            checkPwd();
+            checkEmail();
+        });
+
+        document.getElementById("demoerrorid").addEventListener('click', () => {                                 //錯誤
+            document.getElementById("MemberName").value = "林小明";
+            document.getElementById("Email").value = "A123";
+            
+            checkPwd();
+            checkEmail();
 
         });
 

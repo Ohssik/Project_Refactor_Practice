@@ -37,6 +37,7 @@ namespace prjMSIT145_Final.ViewModels
             get { return _member.Password; }
             set { _member.Password = value; }
         }
+        
         [Required]
         public string? Gender
         {
@@ -84,6 +85,11 @@ namespace prjMSIT145_Final.ViewModels
             get { return _member.EmailCertified; }
             set { _member.EmailCertified = value; }
         }
+
+        public string? OldPassword { get; set; }
+
+        public string? Passwordcheck { get; set; }
+
         public IFormFile photo { get; set; }
 
 
