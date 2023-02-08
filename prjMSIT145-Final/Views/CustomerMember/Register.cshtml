@@ -295,6 +295,7 @@
         document.getElementById("Password").addEventListener("change", checkPassword);                //密碼
         function checkPassword() {
             var passwordobj = document.getElementById("Password");
+            var pass2 = document.getElementById("Password2");
             var spnpasswordobj = document.getElementById("passwordcorrect");
             var passwordval = passwordobj.value;
 
@@ -332,6 +333,12 @@
                     return;
                  }
 
+
+            }
+            if (passwordobj.value != pass2.value){
+                spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>請確認上下密碼一致";
+                submitbtn.setAttribute('disabled', 'disabled');
+                return;
 
             }
         };

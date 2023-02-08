@@ -34,7 +34,7 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="ResetPwd" name="ResetPwdForm">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>           
+                      
             <input asp-for="txtAccount" class="form-control" type="hidden" value="" />
             <input asp-for="token" class="form-control" type="hidden" value="" />
             <input asp-for="tp" class="form-control" type="hidden" value="" />
@@ -52,7 +52,7 @@
                 <input type="button" value="送出" class="btn btn-secondary" id="btnSubmit" />
 
             </div>
-                <span asp-validation-for="txtConfirmPwd" class="text-danger" id="pwdInvalid"></span>
+                <span name="txtConfirmPwd" class="text-danger" id="pwdInvalid"></span>
         </form>
     </div>
 </div>

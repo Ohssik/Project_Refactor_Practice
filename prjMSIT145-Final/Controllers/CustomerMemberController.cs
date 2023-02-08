@@ -68,7 +68,7 @@ namespace prjMSIT145_Final.Controllers
                 return Json("尚未開通會員資格");
             }
 
-            return Json("此帳號不存在");
+            return Json("帳號或密碼有錯");
         }
 
         
@@ -152,7 +152,7 @@ namespace prjMSIT145_Final.Controllers
             vm.EmailCertified = rnd.Next(10000000, 90000000);
             _context.Add(vm.member);
             _context.SaveChanges();
-
+            string url = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={vm.Fid}";
             string smtpAddress = "smtp.gmail.com";
             //設定Port
             int portNumber = 587;
@@ -165,7 +165,7 @@ namespace prjMSIT145_Final.Controllers
             //主旨
             string subject = "註冊驗證信";
             //內容
-            string body = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={vm.Fid}, 請輸入此驗證碼{vm.EmailCertified}";
+            string body =$"<a href={url}>請點此連結</a>,並回表單輸入此驗證碼{vm.EmailCertified}";
             using (MailMessage mail = new MailMessage())
             {
                 mail.From = new MailAddress(emailFrom);
@@ -173,7 +173,7 @@ namespace prjMSIT145_Final.Controllers
                 mail.Subject = subject;
                 mail.Body = body;
                 // 若你的內容是HTML格式，則為True
-                mail.IsBodyHtml = false;
+                mail.IsBodyHtml = true;
                 using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
                 {
                     smtp.Credentials = new NetworkCredential(emailFrom, emailpassword);
@@ -364,18 +364,36 @@ namespace prjMSIT145_Final.Controllers
         {
             string loginmember = "";
             loginmember = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            if (loginmember != null) {
             CNormalMemberViewModel x = JsonSerializer.Deserialize<CNormalMemberViewModel>(loginmember);
             return View(x);
+            }
+            return Redirect("~/Home/CIndex");
         }
 
         [HttpPost]
         public IActionResult Alterpassword(CNormalMemberViewModel member)
         {
+            if (member.Password == null || member.Password!=member.Passwordcheck)
+            {
+                return View();
+            }
             NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Fid == member.Fid);
             x.Password=member.Password;
             _context.SaveChanges();
 
             return RedirectToAction("Edit");
+
+        }
+        public IActionResult Alterpasswordverify(CNormalMemberViewModel vm)
+        {
+
+            NormalMember x=_context.NormalMembers.FirstOrDefault(c => c.Fid == vm.Fid);
+            if (vm.OldPassword != x.Password)
+            {
+                return Json("舊密碼錯誤");
+            }
+          return Json("舊密碼正確");
 
         }
         

@@ -127,7 +127,7 @@
 .forgotspan {
     text-decoration: none;
     font-size: 14px;
-   /* margin-right: 30px;*/
+    margin-right:20px;
 }
 
 .text3 {
@@ -151,4 +151,32 @@
      font-size: 14px;
      font-weight: bold;
      margin-left:10px;
+}
+.demobtnlogin{
+   position:relative;
+   
+}
+.democorrect {
+   position:absolute;
+    bottom: 20px;
+    right: 100px;
+    color: white;
+    background-color: blue;
+    border-radius: 20px;
+    width: 60px;
+}
+
+.demoerror {
+    position:absolute;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    background-color: red;
+    border-radius: 20px;
+    width: 60px;
+}
+.spanresponseclass{
+    color: red;
+    font-weight: bold;
+    font-size: 20px;
 }
