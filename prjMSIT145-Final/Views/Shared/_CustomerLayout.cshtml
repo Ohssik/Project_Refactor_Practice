@@ -121,11 +121,6 @@
         @RenderBody()
             
     </main>
-       
-    <footer class="Copyright">
-        <a asp-area="" asp-controller="Home" asp-action="CIndex"><img class="Footer_Logo" src="~/images/Customer/Navigation/shibaLogo_row1.png" /></a>
-        <p><a asp-area="" asp-controller="Home" asp-action="CIndex">&copy;&ensp;2023&ensp;ShibaDaily&ensp;臺灣</a></p>
-    </footer>
         @*Azure機器人*@
         <div class="azureLogo"
              id="azureLogo"
@@ -153,8 +148,8 @@
         </div>
 
 
-		<div class="logo collapse" id="collapseExample">
-			<div class="card card-body" style="">
+        <div class="logo collapse" id="collapseExample">
+            <div class="card card-body" style="">
                 <!-- 以下自己刻 -->
                 <div class="msgDiv scroll">
                     <div class="display serviceDiv">
@@ -186,6 +181,11 @@
                 </div>
             </div>
         </div>
+    <footer class="Copyright">
+        <a asp-area="" asp-controller="Home" asp-action="CIndex"><img class="Footer_Logo" src="~/images/Customer/Navigation/shibaLogo_row1.png" /></a>
+        <p><a asp-area="" asp-controller="Home" asp-action="CIndex">&copy;&ensp;2023&ensp;ShibaDaily&ensp;臺灣</a></p>
+    </footer>
+    
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
         <script src="~/js/bot.js"></script>  @*機器人Js檔*@
