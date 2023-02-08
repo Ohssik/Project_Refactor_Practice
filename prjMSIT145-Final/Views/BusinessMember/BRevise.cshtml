@@ -1,0 +1,290 @@
+﻿@model prjMSIT145_Final.Models.BusinessMember
+
+@{
+    ViewData["Title"] = "BRevise";
+    Layout = "_BusinessLayout";
+}
+
+<section class="shopinfocard" style="" >
+    <div class="shopinfoarea p-0 m-0" style="height:365px;width:480px">
+        <div class="shopinfo" style="height:280px;width:480px">
+            <img class="Shoplogo p-0 m-0" src="/images/Customer/Shopcard/Test/circlelogo.png">
+            <div>
+                <div class="shoptitle"id="showShopName" ></div>
+                <div class="infoblock">
+                    <div class="InfoArea">店家資訊</div>
+                    <div class="InfoArea">
+                        <img src="/images/Customer/ShowProduct/Ystar 16x16.png" class="p-0 m-0">
+                        <img src="/images/Customer/ShowProduct/Ystar 16x16.png" class="p-0 m-0">
+                        <img src="/images/Customer/ShowProduct/Ystar 16x16.png" class="p-0 m-0">
+                        <img src="/images/Customer/ShowProduct/Ystar 16x16.png" class="p-0 m-0">
+                        <img src="/images/Customer/ShowProduct/Ystar 16x16.png" class="p-0 m-0">
+                        <p class="p-0 m-0"></p>
+                    </div>
+                    <div class="InfoArea"><img src="/images/Customer/ShowProduct/opentime 20x20.png"><p id="showopentime" class="p-0 m-0"></p> <pclass ="p-0 m-0>~</pclass> <p id="showclosetime" class="p-0 m-0"></p> </div>
+                    <div class="InfoArea"><img src="/images/Customer/ShowProduct/phone 20x20.png"><p id="showphone" class="p-0 m-0"></p></div>
+                    <div class="InfoArea"><img src="/images/Customer/ShowProduct/address 20x20.png"><p id="showaddress" class="p-0 m-0"></p></div>
+                    <div class="InfoArea"><img src="/images/Customer/ShowProduct/paymentterm 20x20.png"><p id="showpaymentterm" class="p-0 m-0">現金、LINE PAY、信用卡</p></div>
+                </div>
+            </div>
+        </div>
+        <div class="btnbar"style="height:85px;width:480px" >
+            <div class="iconwrap">
+                <div class="icon">
+                    <img src="/images/Customer/ShowProduct/discount 24x24.png">
+                </div>
+                <div class="btntext">優惠</div>
+            </div>
+            <div class="iconwrap">
+                <div class="icon">
+                    <img src="/images/Customer/ShowProduct/take 24x24.png">
+                </div>
+                <div class="btntext">怎取餐</div>
+            </div>
+            <div class="iconwrap">
+                <div class="icon">
+                    <img src="/images/Customer/ShowProduct/search 24x24.png">
+                </div>
+                <div class="btntext">找商品</div>
+            </div>
+            <div class="iconwrap">
+                <div class="icon">
+                    <img src="/images/Customer/ShowProduct/add 24x24.png">
+                </div>
+                <div class="btntext">揪團</div>
+            </div>
+        </div>
+    </div>
+    <section class="ADarea">
+        <img class="Shopcardcover" src="/images/Customer/Shopcard/Test/shopcover.png">
+    </section>
+</section>
+<div class="p-3 m-3"></div>
+<div>
+   
+        <div class="container h-100 w-100 ">
+        <div class="row d-flex justify-content-center align-items-center h-100 ">
+                <div class="">
+              
+                            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">基本資料</h3>
+
+                            <form asp-action="BRevise">
+                                <div class="row">
+                                <div class="form-group col-6">
+                                 <label asp-for="Email" class="control-label"></label>
+                                 <input asp-for="Email" class="form-control" readonly="readonly" />
+                                 <span asp-validation-for="Email" class="text-danger"></span>
+                                 </div> 
+                                <div class="form-group col-6">
+                                  <label asp-for="Password" class="control-label"></label>
+                                  <input asp-for="Password" class="form-control" id="Passwordinput" />
+                                  <span asp-validation-for="Password" class="text-secondary" id="Passwordspan">請混合使用 8~16 個字元以上的大小寫英文字母、數字</span>
+
+                                 </div>
+                                </div>
+
+                                <div class="row">
+                                  <div class="form-group col-6">
+                                   <label asp-for="MemberName" class="control-label"></label>
+                                   <input asp-for="MemberName" class="form-control" id="MemberNameinput" />
+                                   <span asp-validation-for="MemberName" class="text-danger"></span>
+                                 </div>
+                                 <div class="form-group col-md-6 ">
+                                <label asp-for="ContactPerson" class="control-label"></label>
+                                <input asp-for="ContactPerson" class="form-control" id="ContactPersoninput" />
+                                <span asp-validation-for="ContactPerson" class="text-danger" id="ContactPersonspan"></span>
+                                 
+                                   </div>
+                                </div>
+                                
+
+                                <div class="row">
+                                    <div class="form-group col-6">
+                                        <label asp-for="ShopType" class="control-label"></label>
+                                        <input asp-for="ShopType" class="form-control" id="ShopTypeinput" />
+                                        <span asp-validation-for="ShopType" class="text-danger" id="ShopTypespan"></span>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label asp-for="Brand" class="control-label"></label>
+                                        <input asp-for="Brand" class="form-control" id="Brandinput" />
+                                        <span asp-validation-for="Brand" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label asp-for="Phone" class="control-label"></label>
+                                    <input asp-for="Phone" class="form-control" type="number" id="Phoneinput" />
+                                    <span asp-validation-for="Phone" class="text-danger" id="Phonespan"></span>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Address" class="control-label"></label>
+                                    <input asp-for="Address" class="form-control" id="Addressinput" />
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+
+                                </div>
+
+                               
+                                <div class="row">
+                                    <div class="form-group col-6">
+                                        <label asp-for="OpenTime" class="control-label"></label>
+                                        <input asp-for="OpenTime" class="form-control" type="time" value="08:00" id="OpenTimeinput" />
+                                        <span asp-validation-for="OpenTime" class="text-danger"></span>
+
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label asp-for="CloseTime" class="control-label"></label>
+                                        <input asp-for="CloseTime" class="form-control" type="time" value="20:00" id="CloseTimeinput" />
+                                        <span asp-validation-for="CloseTime" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group" hidden>
+                                    <label asp-for="Fid" class="control-label"></label>
+                                    <input asp-for="Fid" class="form-control" />
+
+                                </div>
+                                <div class="form-group" hidden>
+                                    <label asp-for="EmailCertified" class="control-label"></label>
+                                    <input asp-for="EmailCertified" class="form-control" value="0" />
+
+                                </div>
+
+                                <div class="form-group" hidden>
+                                    <label asp-for="RegisterTime" class="control-label"></label>
+                                    <input asp-for="RegisterTime" class="form-control" />
+                                    <span asp-validation-for="RegisterTime" class="text-danger"></span>
+                                </div>
+                                <div class="form-group"hidden>
+                                    <label asp-for="MemberAccount" class="control-label"></label>
+                                    <input asp-for="MemberAccount" class="form-control" />
+                                    <span asp-validation-for="MemberAccount" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                <div class="form-group" hidden>
+                                        <label asp-for="IsSuspensed" class="control-label"></label>
+                                        <input asp-for="IsSuspensed" class="form-control" />
+                                        <span asp-validation-for="IsSuspensed" class="text-danger"></span>
+                                    </div>    
+                                    <div class="form-group"hidden>
+                                        <label asp-for="EmailCertified" class="control-label"></label>
+                                        <input asp-for="EmailCertified" class="form-control" />
+                                        <span asp-validation-for="EmailCertified" class="text-danger"></span>
+                                    </div>
+                        <div class="form-group" hidden>
+                            <label asp-for="Gps" class="control-label"></label>
+                            <input asp-for="Gps" class="form-control" />
+                            <span asp-validation-for="Gps" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group" hidden>
+                            <label asp-for="ChatroomUserid" class="control-label"></label>
+                            <input asp-for="ChatroomUserid" class="form-control" />
+                            <span asp-validation-for="ChatroomUserid" class="text-danger"></span>
+                        </div>
+                                    <input id="Sibmitbutton" type="button" value="儲存" class="btn btn-primary" />
+                                    <span id="Sibmitvalidation" class="text-danger"></span>
+                                </div>
+                               
+                            </form>
+                            <div>
+                                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+@section Scripts {
+    <link href="~/css/Customer_css/CBSonlyClass.css" rel="stylesheet" />
+    <link href="~/css/Customer_css/CShowProduct.css" rel="stylesheet" />
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        //顯示相關的原素
+        const showShopName = document.getElementById("showShopName");
+        const showopentime = document.getElementById("showopentime");
+        const showclosetime = document.getElementById("showclosetime");
+        const showaddress = document.getElementById("showaddress");
+        const showpaymentterm = document.getElementById("showpaymentterm");
+        const showphone = document.getElementById("showphone");
+        //送出按鈕
+        const Sibmitbutton = document.getElementById("Sibmitbutton");
+        //input相關的原素
+        const Passwordinput = document.getElementById("Passwordinput");
+        const MemberNameinput = document.getElementById("MemberNameinput");
+        const ShopTypeinput = document.getElementById("ShopTypeinput");
+        const Brandinput = document.getElementById("Brandinput");
+        const Phoneinput = document.getElementById("Phoneinput");
+        const Addressinput = document.getElementById("Addressinput");
+        const ContactPersoninput = document.getElementById("ContactPersoninput");
+        const OpenTimeinput = document.getElementById("OpenTimeinput");
+        const CloseTimeinput = document.getElementById("CloseTimeinput");
+        //錯誤提醒
+        const Passwordspan = document.getElementById("Passwordspan");
+        const ShopTypespan = document.getElementById("ShopTypespan");
+        const Phonespan = document.getElementById("Phonespan");
+        const ContactPersonspan = document.getElementById("ContactPersonspan");
+        const Sibmitvalidation = document.getElementById("Sibmitvalidation");
+        //正規表達式
+        const Passwordvalidation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,16}$/;
+        const Phonevalidation = /^0\d{1,3}-\d{5,8}$/;
+        const CellPhonevalidation = /^09[0-9]{2}-[0-9]{6}$/;
+        const ContactPersonvalidation = /[\u4E00-\u9FFF]+/g;
+
+        var Passwordresult = "";
+        var Phoneresult = "";
+        var ShopTyperesult = "";
+        var ContactPersonrsult = "";
+        //驗證密碼
+        function Passwordtest() {
+            if (Passwordvalidation.test(Passwordinput.value)) {
+                Passwordspan.innerHTML = "請混合使用 8~16 個字元以上的大小寫英文字母、數字";
+                Passwordspan.setAttribute("class", "text-secondary");
+                Passwordresult = "ok";
+            }
+            else {
+                Passwordspan.innerHTML = "格式錯誤  請混合使用 8~16 個字元以上的大小寫英文字母、數字";
+                Passwordspan.setAttribute("class", "text-danger");
+                Passwordresult = "";
+            }
+        };
+        Passwordinput.addEventListener('change', Passwordtest);
+
+        //送出前驗證
+        Sibmitbutton.addEventListener('click',function(){
+        if (Passwordinput.value == "" || MemberNameinput.value == "" || ShopTypeinput.value == "" || Brandinput.value == "" || Phoneinput.value == ""
+            || Addressinput.value == "" || ContactPersoninput.value == "" || OpenTimeinput.value == "" || CloseTimeinput.value == "" || Passwordresult == "" ) {
+            Sibmitvalidation.innerHTML="請輸入所有選項並且確認格式";
+            return;
+            };
+            alert("儲存成功");
+            Sibmitbutton.setAttribute('type', "submit");
+
+            
+    });
+        MemberNameinput.addEventListener('change',function()
+        {
+            showShopName.innerHTML = MemberNameinput.value;
+        });
+        OpenTimeinput.addEventListener('change', function () {
+            showopentime.innerHTML = OpenTimeinput.value;
+        });
+        CloseTimeinput.addEventListener('change', function () {
+            showclosetime.innerHTML = CloseTimeinput.value;
+        });
+
+        Addressinput.addEventListener('change', function () {
+            showaddress.innerHTML = Addressinput.value;
+        });
+        Phoneinput.addEventListener('change', function () {
+            showphone.innerHTML = Phoneinput.value;
+        });
+
+
+
+
+
+    </script>
+}
