@@ -32,7 +32,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                確定要刪除嗎?
+                @*確定要刪除嗎?*@
             </div>
             <div class="modal-footer" style="width:100%">
                 <button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
@@ -141,13 +141,12 @@
                 //console.log(modalBody.value)
             }
             else {
-                linkDelete.addEventListener("click", async function () {
                     const request = await fetch(`@Url.Content("~/Type/BItemTypeDeleteList/${CategoryFid.value}")`);
                     const count = await request.text();
                     modalBody.innerHTML = count;
 
                     linkDelete.setAttribute("href", `@Url.Content("~/Type/BItemTypeDelete/${CategoryFid.value}")`);
-                })
+                
             }
         });
 
