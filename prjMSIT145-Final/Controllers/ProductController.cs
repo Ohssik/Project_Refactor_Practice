@@ -111,7 +111,7 @@ namespace prjMSIT145_Final.Controllers
 					}
 					vm.product.Photo = fileName;
 				}
-				var proCFid = _context.ProductCategories.FirstOrDefault(o => o.CategoryName == vm.CategoryName);
+				var proCFid = _context.ProductCategories.FirstOrDefault(o => o.CategoryName == vm.CategoryName && o.BFid == vm.BFid);
 				vm.product.CategoryFid = proCFid.Fid;
 				vm.product.BFid = vm.BFid;
 				_context.Products.Add(vm.product);
@@ -165,7 +165,7 @@ namespace prjMSIT145_Final.Controllers
 		{
 			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
-				ProductCategory proC = _context.ProductCategories.FirstOrDefault(p => p.CategoryName == vm.CategoryName);
+				ProductCategory proC = _context.ProductCategories.FirstOrDefault(p => p.CategoryName == vm.CategoryName && p.BFid == vm.BFid);
 				Product pro = _context.Products.FirstOrDefault(p => p.Fid == vm.Fid);
 				if (pro != null)
 				{

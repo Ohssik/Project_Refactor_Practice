@@ -79,7 +79,7 @@ namespace prjMSIT145_Final.Controllers
 		[HttpPost]
 		public ActionResult BCreate(CProductOptionViewModel vm)
 		{
-			var optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName);
+			var optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName && o.BFid == vm.BFid);
 			vm.options.OptionGroupFid = optGp.Fid;
 			
 			_context.ProductOptions.Add(vm.options);
@@ -109,7 +109,7 @@ namespace prjMSIT145_Final.Controllers
 		{
 			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
-				ProductOptionGroup optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName);
+				ProductOptionGroup optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName && o.BFid == vm.BFid);
 				ProductOption opt = _context.ProductOptions.FirstOrDefault(o => o.Fid == vm.Fid);
 				if (optGp != null && opt != null)
 				{
