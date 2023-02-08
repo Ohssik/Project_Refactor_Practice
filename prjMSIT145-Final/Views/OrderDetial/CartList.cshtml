@@ -1,6 +1,5 @@
 ﻿@model prjMSIT145_Final.ViewModels.COrderDetialViewModel
 
-
 @{
     ViewData["Title"] = "CartList";
 }
@@ -79,7 +78,7 @@
         .orderTrashAndPen {
             display: flex;
             /* position: absolute;
-                    right:20px; */
+                            right:20px; */
         }
 
             .orderTrashAndPen button {
@@ -209,23 +208,28 @@
             box-sizing: border-box;
         }
 
-        .font-size{
-            color:black;
+        .font-size {
+            color: black;
             font-size: 16px;
-            margin:5px;
+            margin: 5px;
         }
-        .mainDiv{
-            width:60%;
+
+        .mainDiv {
+            width: 1200px;
             margin: 10px auto;
+     
         }
-        .infoDiv{
+
+        .infoDiv {
             box-sizing: border-box;
             padding: 10px;
         }
-        .marginright{
-            width:150px
+
+        .marginright {
+            width: 150px
         }
-        .div{
+
+        .div {
             border-style: solid;
             border-width: 1px;
             border-top: none;
@@ -235,382 +239,426 @@
             height: 30px;
             padding: 25px 0;
         }
-        .div:last-child{
-            border: none;
-        }
-        .topMargin{
+
+            .div:last-child {
+                border: none;
+            }
+
+        .topMargin {
             margin-top: 10px;
         }
-        .slides{
-            width: 3200px;
-            left: 0px;
+
+
+        .changePage {
+            position: relative;
+            width: 1200px;
+            overflow:hidden;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .slides1 {
+            width: 3600px;
+            display: flex;
+            justify-content: flex-start;
+            position: relative;
+            margin-left: 0px;
             transition: all .5s;
         }
-        .wrapper{
+
+        .slides2 {
+            width: 3600px;
+            display: flex;
+            justify-content: flex-start;
             position: relative;
-            overflow: hidden;
-            margin:0 auto;
+            margin-left: -1200px;
+            transition: all .5s;
         }
+
+        .slides3 {
+            width: 3600px;
+            display: flex;
+            justify-content: flex-start;
+            position: relative;
+            margin-left: -2400px;
+            transition: all .5s;
+        }
+
     </style>
 }
-<div id="slides" class="wrapper">
-<div class="bodyBackgroundColor body_Icon_delete_Guide_fontColor body">
-    <div class="mainDiv">
-        <!-- 商家資訊 -->
-        <div class="flexAndItemsCenter divMargin cardBackgroundColor">
-            <div>
-            <h4 id="storeName">店家名稱</h4>
-            <h6 id="storePhone"><i class="fa-solid fa-phone"></i> @Model.BMemberPhone</h6>
-            </div>
-                <button class="storeIntro_btn">揪團</button>
-        </div>
-        <!-- 取餐方式 -->
-        <div class="divMargin cardBackgroundColor" id="pickUp">
-            <h4>取餐方式</h4>
-            <div class="pickUpMD">
-            <input type="radio" checked="true"/>
-            <p>自取 (約15分鐘)</p>
-             </div>
-             <h5>預計取餐時間</h5>
-             <fieldset class="Fieldset" id="pickUpTime">
-                    <legend class="font-size">@Convert.ToString(Model.PickUpDate).Substring(0,9) @Model.PickUpTime</legend>
-             </fieldset>
-             <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
-             <h5>門市位置</h5>
-             <a href="">
-             <fieldset class="Fieldset"> 
-                <legend class="font-size">@Model.Address</legend>
-                <i class="fa-solid fa-location-dot"></i>
-             </fieldset>
-            </a>
-        </div>
-        <!-- 會員訂購資訊 -->
-        <div class="divMargin cardBackgroundColor">
-            <div class="flexAndItemsCenter">
-                <h4>購物內容</h4>
-                <div class="orderRefresh">
-                    <!-- 觸發事件,重新整理 -->
-                <button id="btnReset">
-                    <i class="fa-solid fa-arrows-rotate"></i>重新取得訂單資訊
-                </button>
+<div class="changePage">
+  @*<form method="post" enctype="multipart/form-data">*@
+    <div class="slides1" id="slides">
+        <div class="bodyBackgroundColor body_Icon_delete_Guide_fontColor body">
+            <div class="mainDiv">
+                <!-- 商家資訊 -->
+                <div class="flexAndItemsCenter divMargin cardBackgroundColor">
+                    <div>
+                        <h4 id="storeName">店家名稱</h4>
+                        <h6 id="storePhone"><i class="fa-solid fa-phone"></i> @Model.BMemberPhone</h6>
+                    </div>
+                    <button class="storeIntro_btn">揪團</button>
                 </div>
-            </div>
-            <div class="flexAndItemsCenter">
-                <!-- *待更改會員名稱及頭像 -->
-                <div class="memberPic">
-                    <img src="~/images/main.jpg" alt="會員頭像">
+                <!-- 取餐方式 -->
+                <div class="divMargin cardBackgroundColor" id="pickUp">
+                    <h4>取餐方式</h4>
+                    <div class="pickUpMD">
+                        <input type="radio" checked="checked" name="PickUpType" value="自取" />
+                        <p>自取 (約15分鐘)</p>
+                    </div>
+                    <h5>預計取餐時間</h5>
+                    <fieldset class="Fieldset" id="pickUpTime">
+                        <legend class="font-size">@Convert.ToString(Model.PickUpDate).Substring(0,9) @Model.PickUpTime</legend>
+                    </fieldset>
+                    <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
+                    <h5>門市位置</h5>
+                    <a href="">
+                        <fieldset class="Fieldset">
+                            <legend class="font-size">@Model.Address</legend>
+                            <i class="fa-solid fa-location-dot"></i>
+                        </fieldset>
+                    </a>
                 </div>
-                <h5 id="memberName">會員名稱</h5>
-                <div class="orderAbsolteForRight">
-                    <span id="totalPrice">$ @Model.TotalAmount</span>
-                    <span id="totalQty">/ @Model.TotalQty 份</span>
-                </div>
-            </div>
-            <!-- *****動態產生*****至198行 -->
-            @foreach (var item in Model.items)
-            {
-                <div class="itemCard_padding_margin button_Icon_Guide_BackGroundColor">
-
-                    <!-- *餐點資訊,依實際點選內容增加span -->
-                    <h6>@item.ProductName</h6>
-                    <div class="flexAndItemsCenter displayBetween ">
-                        <div>
-                            <span id="itemDetailFont" class="spanFont">
-                                @foreach (var item2 in item.OptionName)
-                                {
-                                    <span><span>@item2</span> /</span>
-                                }
-                                <span><span>$@item.OptionAmount</span> /</span>
-                                <span><span>@item.Qty 份</span> </span>
-                            </span>
+                <!-- 會員訂購資訊 -->
+                <div class="divMargin cardBackgroundColor">
+                    <div class="flexAndItemsCenter">
+                        <h4>購物內容</h4>
+                        <div class="orderRefresh">
+                            <!-- 觸發事件,重新整理 -->
+                            <button id="btnReset">
+                                <i class="fa-solid fa-arrows-rotate"></i>重新取得訂單資訊
+                            </button>
                         </div>
-                        <div class="orderTrashAndPen">
-                            <!-- 設定觸發事件時更改背景顏色 -->
-                            <div class="editBtn">
-                                <button class="penBackGroundColor">
-                                    <i class="fa-solid fa-pen"></i>
-                                </button>
+                    </div>
+                    <div class="flexAndItemsCenter">
+                        <!-- *待更改會員名稱及頭像 -->
+                        <div class="memberPic">
+                            <img src="~/images/main.jpg" alt="會員頭像">
+                        </div>
+                        <h5 id="memberName">會員名稱</h5>
+                        <div class="orderAbsolteForRight">
+                            <span id="totalPrice">$ @Model.TotalAmount</span>
+                            <span id="totalQty">/ @Model.TotalQty 份</span>
+                        </div>
+                    </div>
+                    <!-- *****動態產生*****至198行 -->
+                    @foreach (var item in Model.items)
+                    {
+                        <div class="itemCard_padding_margin button_Icon_Guide_BackGroundColor">
+
+                            <!-- *餐點資訊,依實際點選內容增加span -->
+                            <h6>@item.ProductName</h6>
+                            <div class="flexAndItemsCenter displayBetween ">
+                                <div>
+                                    <span id="itemDetailFont" class="spanFont">
+                                        @foreach (var item2 in item.OptionName)
+                                        {
+                                            <span><span>@item2</span> /</span>
+                                        }
+                                        <span><span>$@item.OptionAmount</span> /</span>
+                                        <span><span>@item.Qty 份</span> </span>
+                                    </span>
+                                </div>
+                                <div class="orderTrashAndPen">
+                                    <!-- 設定觸發事件時更改背景顏色 -->
+                                    <div class="editBtn">
+                                        <button class="penBackGroundColor">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </button>
+                                    </div>
+                                    <div class="deleteBtn">
+                                        <button>
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="deleteBtn">
-                                <button>
-                                    <i class="fa-regular fa-trash-can"></i>
-                                </button>
+                        </div>
+                    }
+                </div>
+                <!-- 優惠券(可略) -->
+                <div class="divMargin cardBackgroundColor" id="offerDiv">
+                    <h4>優惠券</h4>
+                    <div>
+                        <!-- checked後才可跳出button -->
+                        <input type="radio" checked /><span class="spanFont">優惠券</span>
+                    </div>
+                    <!-- 點擊跳出可用優惠券視窗 -->
+                    <div>
+                        <!-- 失去焦點,觸發blur,優惠折扣顯示在下方計算區 -->
+                        <input type="text" id="offerTxt" />
+                    </div>
+                </div>
+                <!-- 訂單資訊 -->
+                <div class="divMargin cardBackgroundColor">
+                    <h4>訂單資訊</h4>
+                    <div class="flexAndItemsCenter orderDivBottomBorder" style="border-top: 1px solid rgb(198, 191, 191);">
+                        <div>商品&nbsp;x @Model.TotalQty</div>
+                        <div class="orderAbsolteForRight">$&nbsp;@Model.TotalAmount</div>
+                    </div>
+                    <!-- 優惠券輸入完成並確認有此券後折扣顯示於此 -->
+                    <!-- <div class="flexAndItemsCenter orderDivBottomBorder">
+                         <div >優惠券</div>
+                         <div id="offerPrice" class="orderAbsolteForRight">-$&nbsp;金額</div>
+                    </div> -->
+                    <div class="flexAndItemsCenter orderDivBottomBorder">
+                        <div>
+                            <input type="checkbox" id="plastic" name="plastic">
+                        </div>
+                        <div class="flexAndItemsCenter plasticBad">
+                            <div>
+                                <h5><label for="plastic">是否加購塑膠袋</label></h5>
+                            </div>
+                            <div>
+                                <span id="plasticPrice" class="spanFont">您未加購塑膠袋</span>
                             </div>
                         </div>
                     </div>
+                    <div class="flexAndItemsCenter orderDivBottomBorder orderFinalPrice">
+                        <div id="pay"><h4>應付金額</h4></div>
+                        <div class="orderAbsolteForRight"><h4>$&nbsp;@Model.TotalAmount</h4></div>
+                    </div>
                 </div>
-            }
-    </div>
-        <!-- 優惠券(可略) -->
-        <div class="divMargin cardBackgroundColor" id="offerDiv">
-            <h4>優惠券</h4>
+                <!-- 上下頁按鈕 -->
+                <div>
+                    <div class="flexAndItemsCenter bottomBtn">
+                        <div><button class="btnToAdd button_Icon_Guide_BackGroundColor">繼續加點</button></div>
+                        <div><button class="btnToNext" id="nextSlide">下一頁</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mainDiv">
+            <!-- 取餐人資料 -->
+            <div class="divMargin cardBackgroundColor">
+                <div>
+                    <h4>取餐人資料</h4>
+                    <fieldset class="Fieldset">
+                        <legend class="font-size">@Model.PickUpPerson</legend>
+
+                    </fieldset>
+                    <fieldset class="Fieldset">
+                        <legend class="font-size">@Model.PickUpPersonPhone</legend>
+
+                    </fieldset>
+                    <h4>留言給店家</h4>
+                    <fieldset id="msg" class="flex Fieldset">
+                        <div class="msgDiv">
+                            <input class="input spanFont" type="text" placeholder="可留下備用號碼,供店家聯繫">
+                        </div>
+                        <!-- <div>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div> -->
+                    </fieldset>
+                </div>
+            </div>
+            <!-- 付款方式 -->
+            <div class="divMargin cardBackgroundColor">
+                <h4>付款方式</h4>
+                <div class="flexAndItemsCenter exclamationDiv">
+                    <div class="exclamation">
+                        <span><i class="fa-solid fa-exclamation" style="color: aquamarine;"></i></span>
+                    </div>
+                    <div class="spanFont">
+                        欲使用環保杯，請選擇【現金】結帳，並在【留言給店家】備註。
+                    </div>
+                </div>
+                <div class="flexAndItemsCenter radioDiv">
+                    <div class="margin"><input type="radio" id="cash" name="PayTernCatId" value="1"></div>
+                    <div class="margin"><label for="cash"><span class="spanFont">現金</span></label></div>
+                </div>
+                <div class="flexAndItemsCenter radioDiv">
+                    <div class="margin"><input type="radio" id="cardit" name="PayTernCatId" value="2"></div>
+                    <div class="margin"><label for="cardit"><span class="spanFont">信用卡</span></label></div>
+                </div>
+            </div>
+            <!-- 開立發票 -->
+            <div class="divMargin cardBackgroundColor">
+                <h4>開立發票</h4>
+                <div class="flexAndItemsCenter radioDiv">
+                    <div class="margin"><input type="radio" id="paperInvoice" name="invoice" checked></div>
+                    <div class="margin"><label for="paperInvoice"><span class="spanFont">紙本發票</span></label></div>
+                </div>
+                <div>
+                    <!-- <div class="flexAndItemsCenter radioDiv">
+                        <div class="margin"><input type="radio" id="phoneInvoice" name="invoice" value="phoneInvoice"></div>
+                        <div class="margin"><label for="phoneInvoice"><span class="spanFont">手機載具</span></label></div>
+
+                    </div>
+                    <-- 點選手機載具後跳出 -->
+                    <!-- <div class="phoneBarcode">
+                        <input class="input spanFont" type="text" placeholder="第一位字元為' / ' ,  英文皆為大寫">
+                    </div> -->
+                </div>
+            </div>
+            <!-- 上下頁按鈕 -->
             <div>
-            <!-- checked後才可跳出button -->
-            <input type="radio" checked/><span class="spanFont">優惠券</span>
-            </div>
-            <!-- 點擊跳出可用優惠券視窗 -->
-            <div>
-                <!-- 失去焦點,觸發blur,優惠折扣顯示在下方計算區 -->
-                <input type="text"  id="offerTxt"/>
-            </div>
-        </div>
-        <!-- 訂單資訊 -->
-        <div class="divMargin cardBackgroundColor">
-            <h4>訂單資訊</h4>
-            <div class="flexAndItemsCenter orderDivBottomBorder" style="border-top: 1px solid rgb(198, 191, 191);">
-                <div >商品&nbsp;x @Model.TotalQty</div>
-                <div class="orderAbsolteForRight">$&nbsp;@Model.TotalAmount</div>
-           </div>
-           <!-- 優惠券輸入完成並確認有此券後折扣顯示於此 -->
-           <!-- <div class="flexAndItemsCenter orderDivBottomBorder">
-            <div >優惠券</div>
-            <div id="offerPrice" class="orderAbsolteForRight">-$&nbsp;金額</div>
-       </div> -->
-            <div class="flexAndItemsCenter orderDivBottomBorder">
-                <div>
-                    <input type="checkbox" id="plastic" name="plastic">
-                </div>
-                <div class="flexAndItemsCenter plasticBad">
-                <div>
-                    <h5><label for="plastic">是否加購塑膠袋</label></h5>
-                </div>
-                <div>
-                    <span id="plasticPrice" class="spanFont">您未加購塑膠袋</span>
-                </div>
+                <div class="flexAndItemsCenter bottomBtn">
+                    <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
+                    <div><button class="btnToNext" id="nextSlide">下一頁</button></div>
                 </div>
             </div>
-            <div class="flexAndItemsCenter orderDivBottomBorder orderFinalPrice">
-                <div id="pay"><h4>應付金額</h4></div>
-                <div class="orderAbsolteForRight"><h4>$&nbsp;@Model.TotalAmount</h4></div>
-            </div>
         </div>
-        <!-- 上下頁按鈕 -->
-        <div>
-            <div class="flexAndItemsCenter bottomBtn">
-                <div><button class="btnToAdd button_Icon_Guide_BackGroundColor">繼續加點</button></div>
-                <div><button class="btnToNext" id="nextSlide">下一頁</button></div>
-            </div>
-        </div>
-    </div>
-</div>
 
-
-<div class="mainDiv">
-    <!-- 取餐人資料 -->
-    <div class="divMargin cardBackgroundColor">
-        <div>
-            <h4>取餐人資料</h4>
-            <fieldset class="Fieldset">
-                <legend class="font-size">@Model.PickUpPerson</legend>
-
-            </fieldset>
-            <fieldset class="Fieldset">
-                <legend class="font-size">@Model.PickUpPersonPhone</legend>
-
-            </fieldset>
-            <h4>留言給店家</h4>
-            <fieldset id="msg" class="flex Fieldset">
-                <div class="msgDiv">
-                    <input class="input spanFont" type="text" placeholder="可留下備用號碼,供店家聯繫">
+        <div class="mainDiv ">
+            <div class="infoDiv cardBackgroundColor">
+                <div class="flexAndItemsCenter exclamationDiv">
+                    <div class="exclamation">
+                        <span><i class="fa-solid fa-exclamation" style="color: aquamarine;"></i></span>
+                    </div>
+                    <div class="spanFont">
+                        取餐時間依據各門市狀況調整
+                    </div>
                 </div>
-                <!-- <div>
-                    <i class="fa-solid fa-chevron-right"></i>
-                </div> -->
-            </fieldset>
-        </div>
-    </div>
-    <!-- 付款方式 -->
-    <div class="divMargin cardBackgroundColor">
-        <h4>付款方式</h4>
-        <div class="flexAndItemsCenter exclamationDiv">
-            <div class="exclamation">
-                <span><i class="fa-solid fa-exclamation" style="color: aquamarine;"></i></span>
+                <div class="divMargin topMargin">
+                    <h4>訂購資訊</h4>
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                        <div class="marginright ">訂購店家</div>
+                        <div>@Model.BMemberName</div>
+                    </div>
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                        <div class="marginright">取餐人</div>
+                        <div>@Model.PickUpPerson</div>
+                    </div>
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                        <div class="marginright">連絡電話</div>
+                        <div>@Model.PickUpPersonPhone</div>
+                    </div>
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                        <div class="marginright">取餐方式</div>
+                        <div>@Model.PickUpType</div>
+                    </div>
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                        <div class="marginright">預計取餐時間</div>
+                        <div>@Convert.ToString(Model.PickUpDate).Substring(0,9) @Model.PickUpTime</div>
+                    </div>
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                        <div class="marginright">付款方式</div>
+                        <div>@Model.PayTermCatId</div>
+                    </div>
+                    <div class="spanFont div flexAndItemsCenter">
+                        <div class="marginright">應付金額</div>
+                        <div>$@Model.TotalAmount</div>
+                    </div>
+                </div>
             </div>
-            <div class="spanFont">
-                欲使用環保杯，請選擇【現金】結帳，並在【留言給店家】備註。
-            </div>
-        </div>
-        <div class="flexAndItemsCenter radioDiv">
-            <div class="margin"><input type="radio" id="cash" name="pay" value="cash"></div>
-            <div class="margin"><label for="cash"><span class="spanFont">現金</span></label></div>
-        </div>
-        <div class="flexAndItemsCenter radioDiv">
-            <div class="margin"><input type="radio" id="cardit" name="pay" value="cardit"></div>
-            <div class="margin"><label for="cardit"><span class="spanFont">信用卡</span></label></div>
-        </div>
-    </div>
-    <!-- 開立發票 -->
-    <div class="divMargin cardBackgroundColor">
-        <h4>開立發票</h4>
-        <div class="flexAndItemsCenter radioDiv">
-            <div class="margin"><input type="radio" id="paperInvoice" name="invoice" checked></div>
-            <div class="margin"><label for="paperInvoice"><span class="spanFont">紙本發票</span></label></div>
-        </div>
-        <div>
-            <!-- <div class="flexAndItemsCenter radioDiv">
-                <div class="margin"><input type="radio" id="phoneInvoice" name="invoice" value="phoneInvoice"></div>
-                <div class="margin"><label for="phoneInvoice"><span class="spanFont">手機載具</span></label></div>
-
-            </div>
-            <-- 點選手機載具後跳出 -->
-            <!-- <div class="phoneBarcode">
-                <input class="input spanFont" type="text" placeholder="第一位字元為' / ' ,  英文皆為大寫">
-            </div> -->
-        </div>
-    </div>
-    <!-- 上下頁按鈕 -->
-    <div>
-        <div class="flexAndItemsCenter bottomBtn">
-            <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
-            <div><button class="btnToNext" id="nextSlide">下一頁</button></div>
-        </div>
-    </div>
-</div>
-
-<div class="mainDiv ">
-    <div class="infoDiv cardBackgroundColor">
-        <div class="flexAndItemsCenter exclamationDiv">
-            <div class="exclamation">
-                <span><i class="fa-solid fa-exclamation" style="color: aquamarine;"></i></span>
-            </div>
-            <div class="spanFont">
-                取餐時間依據各門市狀況調整
+            <div class="topMargin">
+                <div class="flexAndItemsCenter bottomBtn ">
+                    <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
+                    <div><button class="btnToFinish">送出訂單</button></div>
+                </div>
             </div>
         </div>
-        <div class="divMargin topMargin">
-            <h4>訂購資訊</h4>
-            <div class="spanFont div flexAndItemsCenter cardBorderColor">
-                <div class="marginright ">訂購店家</div>
-                <div>@Model.BMemberName</div>
-            </div>
-            <div class="spanFont div flexAndItemsCenter cardBorderColor">
-                <div class="marginright">取餐人</div>
-                <div>@Model.PickUpPerson</div>
-            </div>
-            <div class="spanFont div flexAndItemsCenter cardBorderColor">
-                <div class="marginright">連絡電話</div>
-                <div>@Model.PickUpPersonPhone</div>
-            </div>
-            <div class="spanFont div flexAndItemsCenter cardBorderColor">
-                <div class="marginright">取餐方式</div>
-                <div>@Model.PickUpType</div>
-            </div>
-            <div class="spanFont div flexAndItemsCenter cardBorderColor">
-                <div class="marginright">預計取餐時間</div>
-                <div>@Convert.ToString(Model.PickUpDate).Substring(0,9) @Model.PickUpTime</div>
-            </div>
-            <div class="spanFont div flexAndItemsCenter cardBorderColor">
-                <div class="marginright">付款方式</div>
-                <div>@Model.PayTermCatId</div>
-            </div>
-            <div class="spanFont div flexAndItemsCenter">
-                <div class="marginright">應付金額</div>
-                <div>$@Model.TotalAmount</div>
-            </div>
-        </div>
-    </div>
-    <div class="topMargin">
-        <div class="flexAndItemsCenter bottomBtn ">
-            <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
-            <div><button class="btnToNext">送出訂單</button></div>
-        </div>
-    </div>
-</div>
+    </div>  
+   @*</form>*@
 </div>
 @section Scripts{
-    <script>
-        <script src="@Url.Content("~/js/jquery-3.6.2.js")" ></script>
+    <script src="@Url.Content("~/js/jquery-3.6.2.js")" ></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         @*網頁重新整理*@
-        $("#btnReset").click(function(){
-            location.reload();
-        })
+            $("#btnReset").click(function () {
+                location.reload();
+            })
         @*有無加購塑膠袋*@
-        $("#plastic").click(function(){
-             let checked = $("#plastic").prop("checked");
-            if(checked){
-                console.log(checked)
-                $("#plasticPrice").text("$ 2");
-            }
-            else
-            {
-                $("#plasticPrice").text("您未加購塑膠袋");
-            }
-        })
+            $("#plastic").click(function () {
+                let checked = $("#plastic").prop("checked");
+                if (checked) {
+                    console.log(checked)
+                    $("#plasticPrice").text("$ 2");
+                }
+                else {
+                    $("#plasticPrice").text("您未加購塑膠袋");
+                }
+            })
 
         @*刪除單一產品*@
-        $(".deleteBtn").on("click",function(){
-            $("body").after(
-                `<div class="delete_back"></div>
-                <div class="delete_mainDiv">
-                    <div class="delete_msgDiv cardBorderColor">
-                        <div>
-                            <h3>提醒</h3>
+            $(".deleteBtn").on("click", function () {
+                $("body").after(
+                    `<div class="delete_back"></div>
+                        <div class="delete_mainDiv">
+                            <div class="delete_msgDiv cardBorderColor">
+                                <div>
+                                    <h3>提醒</h3>
+                                </div>
+                                <div class="delete_text">
+                                    <p>確定刪除此商品嗎</p>
+                                </div>
+                                <div class="delete_row">
+                                    <div class="delete_btn"><button id="cancel">取消</button></div>
+                                    <div class="delete_btn"><button id="delete">刪除</button></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="delete_text">
-                            <p>確定刪除此商品嗎</p>
-                        </div>
-                        <div class="delete_row">
-                            <div class="delete_btn"><button id="cancel">取消</button></div>
-                            <div class="delete_btn"><button id="delete">刪除</button></div>
-                        </div>
-                    </div>
-                </div>
-                `)
-                $("#cancel").on("click",function(){
-                        $(".delete_back").addClass("delete_none")
-                        $(".delete_msgDiv").addClass("delete_none")
+                        `)
+                $("#cancel").on("click", function () {
+                    $(".delete_back").addClass("delete_none")
+                    $(".delete_msgDiv").addClass("delete_none")
 
-                    })
-                    $(".delete_back").on("click",function(){
-                        $(".delete_back").addClass("delete_none")
-                        $(".delete_msgDiv").addClass("delete_none")
-                    })
-                    })
+                })
+                $(".delete_back").on("click", function () {
+                    $(".delete_back").addClass("delete_none")
+                    $(".delete_msgDiv").addClass("delete_none")
+                })
+            })
 
         @*點擊自取時間*@
-        $("#pickUpTime").on("click",()=>{
+            $("#pickUpTime").on("click", () => {
 
-                        $("#pickUp").append(` <<div class="pickUp_back"></div>
-                <div class="pickUp_mainDiv">
-                <div class="pickUp_fixed pickUp_pickUpDiv cardBorderColor pickUp_divBorder">
-                    <input class="pickUp_date pickUp_margin cardBorderColor pickUp_divBorder" type="date"/>
-        
-                    <div class="pickUp_timeDiv">
-                        <!-- 點選'時'或'分'時跳出可選時間之清單 -->
-                    <div id="hoursDiv" class="pickUp_time pickUp_divBorder cardBorderColor">時</div>
-                    <div id="minutesDiv" class="pickUp_time pickUp_divBorder cardBorderColor">分</div>
-                    </div>
-                    <!-- '時'與'分'清單 -->
-                    <div id="pickUp_timeUl" class="pickUp_timeUl  pickUp_hidden">
-                       <div class=" pickUp_divBorder cardBorderColor">
-                        <ul id="hours">HH
-                        </ul>
-                       </div>
-                       <div class="pickUp_divBorder cardBorderColor">
-                        <ul id="minutes">MM
-                        </ul>
-                       </div>
-                    </div>
-                </div>
-            </div>`)
+                $("#pickUp").append(` <div class="pickUp_back"></div>
+                        <div class="pickUp_mainDiv">
+                        <div class="pickUp_fixed pickUp_pickUpDiv cardBorderColor pickUp_divBorder">
+                            <input class="pickUp_date pickUp_margin cardBorderColor pickUp_divBorder" type="date"/>
+
+                            <div class="pickUp_timeDiv">
+
+                               <input id="hoursDiv" class="pickUp_time pickUp_divBorder cardBorderColor" type="time" value="時"/>
+                            
+                            </div>
+                                    <div class="delete_row">
+                                            <div class="delete_btn"><button id="delete">確認</button></div>
+                                            <div class="delete_btn"><button id="cancel">取消</button></div>
+                                        </div>
+                        </div>
+                    </div>`
+                );
+                $("#cancel").on("click", function () {
+                    $(".pickUp_back").addClass("delete_none")
+                    $(".pickUp_pickUpDiv").addClass("delete_none")
+
+                })
+                $(".pickUp_back").on("click", function () {
+                    $(".pickUp_back").addClass("delete_none")
+                    $(".pickUp_pickUpDiv").addClass("delete_none")
+                })
+            });
+
+        $(".btnToNext").click(function () {
+            
+            if (document.getElementById("slides").getAttribute("class") == "slides1"){
+                document.getElementById("slides").setAttribute("class","slides2");
+
+            }else if (document.getElementById("slides").getAttribute("class") == "slides2") {
+                document.getElementById("slides").setAttribute("class", "slides3");
+
+            };           
+        });
+
+        $(".btnToAdd").click(function () {
+            
+            if (document.getElementById("slides").getAttribute("class") == "slides3") {
+                document.getElementById("slides").setAttribute("class", "slides2");
+
+            } else if (document.getElementById("slides").getAttribute("class") == "slides2") {
+                document.getElementById("slides").setAttribute("class", "slides1");
+
+            };
+        })
+        $(".btnToFinish").click(function (){
+            window.location.href = "OrderDetial/List";
         })
 
-        let slideNum = 0;
-        let slideCount = $(".slides li").length;
-        let lastIndex = slideCount - 1;
-        console.log(slideCount);
-        
-        $("#nextSlide").click(function () {
-            slideNum++;
-            if (slideNum > lastIndex) slideNum = 0;
-            show();
-        })
-        $("#prevSlide").click(function () {
-            slideNum--;
-            if (slideNum < 0) slideNum = 2;
-            show();
-        })
     </script>
 }
