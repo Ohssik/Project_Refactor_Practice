@@ -77,5 +77,10 @@ namespace prjMSIT145_Final.ViewModel
             get { return _product.CategoryFid; }
             set { _product.CategoryFid = value; }
         }
+        public int[] productOp
+        {
+            get;
+            set;
+        }
     }
 }

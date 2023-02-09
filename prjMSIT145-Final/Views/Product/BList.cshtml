@@ -79,6 +79,15 @@
                             <select id="selType" name="CategoryName" style="border-radius:5px; width:150px;"><option></option></select>
                             <span id="checkType" style="margin-left:10px; font-size:17px;"></span>
                         </div>
+                        
+                        <hr style="border:1px dashed #000; height:1px">
+
+                        @*選擇配料類別*@
+                        <h6 id="h6">選擇配料類別</h6>
+                        <div id="chooseMaterial">
+                            @*  <label for="" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="" name="chooseMaterial" style="font-size:20px" />&ensp;單點</label>*@
+                        </div>
+
                         @*產品價格*@
                         <hr />
                         <h6 id="h6">價格及販售方式</h6>
@@ -141,6 +150,7 @@
         const imgShow = document.querySelector("#imgShow"); //照片
         const fid = document.querySelector("#Fid");
         const selType = document.querySelector("#selType");
+        const chooseMaterial = document.querySelector("#chooseMaterial"); //配料類別
 
         list();
 
@@ -253,6 +263,24 @@
                     frag += `<option>${item.categoryName}</option>`
             })
             selType.innerHTML += frag;
+
+            //載入配料類別
+            const requestMaterial = await fetch(`@Url.Content("~/Type/BOptionGroup")`);
+            const material = await requestMaterial.json();
+            let materialFrag = document.createDocumentFragment();
+            materialFrag = "";
+
+            //console.log(material)
+            material.forEach(function (item, index) {
+                materialFrag += ` <label for="${item.fid}" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="${item.fid}" id="${item.fid}" name="productOp" style="font-size:20px" />&ensp;${item.optionGroupName}</label>`
+            })
+
+            chooseMaterial.innerHTML = materialFrag;
+            document.getElementsByName("productOp").forEach(function (val) {
+                val.addEventListener("click", function () {
+                    console.log(val.value);
+                })
+            })
         }
         //上傳照片<input type='hidden' id='Fid' value='Fid'>
         file.addEventListener("change", function () {
