@@ -20,7 +20,7 @@
             {
                 <mochi-box shiba="random" class="CursorPointer" id="Order @item.Fid">
                     <div class="OrderTime">
-                        <div>@Convert.ToDateTime(item.OrderTime).ToString("MM")/@Convert.ToDateTime(item.OrderTime).ToString("dd") @Convert.ToDateTime(item.OrderTime).ToString("HH"):@Convert.ToDateTime(item.OrderTime).ToString("mm")</div>
+                        <div>@item.OrderTimeMM/@item.OrderTimedd @item.OrderTimeHH:@item.OrderTimeminute</div>
                     </div>
                     <div class="Column">
                         <div class="Flex">
@@ -30,7 +30,7 @@
                         </div>
                         <div class="Column">
                             <h4 class="ShopName">@item.MemberName</h4>
-                            <div class="TotalPrice">共 @Convert.ToInt32(item.TotalAmount) 元</div>
+                            <div class="TotalPrice">共 @item.TotalAmount 元</div>
                         </div>
                     </div>
                     <div class="Deletebtn">
@@ -47,6 +47,7 @@
     <script src="~/css/Customer_css/ShibaJump/script.js"></script>
     <script>
         let OrderDisplayArea = document.getElementById("app");
+        let NewList = "";
         @{
             foreach (var item in Model)
             {
@@ -62,30 +63,35 @@
             async function DeleteOrderdatas(OFid) {
                 const response = await fetch(`@Url.Content("~/Order/CCartDelete?OrderFid=${OFid}")`);
                 const datas = await response.json();
-                OrderDisplayArea.innerHTML = ``;
-                for(let i = 0,max = datas.length; i<max ;i++){
-                    if(datas[i].OrderState == "0"){
-                        OrderDisplayArea.innerHTML += `<mochi-box shiba="random" class="CursorPointer" id="Order ${datas[i].Fid}">
-                            <div class="OrderTime">
-                                 <div>@Convert.ToDateTime("@:${datas[i].OrderTime}").ToString("MM"))/@Convert.ToDateTime("@:${datas[i].OrderTime}").ToString("dd") @Convert.ToDateTime("@:${datas[i].OrderTime}").ToString("HH"):@Convert.ToDateTime("@:${datas[i].OrderTime}").ToString("mm")</div>
-                            </div>
-                            <div class="Column">
-                                <div class="Flex">
-                                    <div class="LogoFrame">
-                                        <img src="~/images/Customer/Shopcard/Test/circlelogo.png" />
-                                    </div>
-                                </div>
-                                <div class="Column">
-                                    <h4 class="ShopName">${datas[i]..MemberName}< /h4>
-                                    <div class="TotalPrice">共 @Convert.ToInt32("@:${datas[i].TotalAmount}") 元</div>
-                                </div>
-                            </div>
-                            <div class="Deletebtn">
-                                <img src="~/images/Customer/OrderList/delete 24x24.png" id="DEL ${datas[i].Fid}" />
-                            </div>
-                        </mochi-box>`;
-                    }
-                }                       
+                //OrderDisplayArea.innerHTML = ``;
+                //for (let i = 0, max = datas[0].ordersList.length; i < max; i++) {
+                //    console.log("123");
+                //    if (datas[0].ordersList[i].orderState == "0") {
+                //        console.log("456");
+                //        NewList += `<mochi-box shiba="random" class="CursorPointer" id="Order ${datas[0].ordersList[i].fid}">
+                //            <div class="OrderTime">
+                //                <div>${datas[0].ordersList[i].orderTimeMM}/${datas[0].ordersList[i].orderTimedd} ${datas[0].ordersList[i].orderTimeHH}:${datas[0].ordersList[i].orderTimeminute}</div>
+                //            </div>
+                //            <div class="Column">
+                //                <div class="Flex">
+                //                    <div class="LogoFrame">
+                //                        <img src="~/images/Customer/Shopcard/Test/circlelogo.png" />
+                //                    </div>
+                //                </div>
+                //                <div class="Column">
+                //                    <h4 class="ShopName">${datas[0].ordersList[i].memberName}< /h4>
+                //                    <div class="TotalPrice">共 ${datas[0].ordersList[i].totalAmount} 元</div>
+                //                </div>
+                //            </div>
+                //            <div class="Deletebtn">
+                //                <img src="~/images/Customer/OrderList/delete 24x24.png" id="DEL ${datas[0].ordersList[i].fid}" />
+                //            </div>
+                //        </mochi-box>`;
+                //    }
+                //}
+                //OrderDisplayArea.innerHTML = NewList;
+                //NewList = "";
+                location.href = "/Order/CCartList";
             }
     </script>
 }
