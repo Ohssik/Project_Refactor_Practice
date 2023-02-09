@@ -7,57 +7,18 @@
     <link href="~/css/Customer_css/CMainpagestyle.css" rel="stylesheet" />
     <link href="~/css/Customer_css/CShopcardstyle.css" rel="stylesheet" />
     <style>
-        .wrapper {
-            position: relative;
-            width: 70%;          
-            height: 95%;
-            overflow: hidden;
-            margin: 10px auto;
-        }      
-
-        ul.slides {
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            width: 4860px;
-            left: 0px;
-            transition: all .5s;
-        }
-        ul.slides.hidden{
-            transition-property:none;
-        }
-
-        ul.slides li {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            width: 540px;
-            height: 360px;
-            overflow: hidden;
-            float: left;
-        }
-
-        ul.slides li img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        ul.slides li img.hidden{
-            opacity:0;
-        }
+       
     </style>
 }
 <section class="Displayarea">
     <div class="ADblock">
         <img src="~/images/Customer/Mainpage/shibaLogo_row2.png" />
-
         @*廣告輪播*@
         <div class="wrapper">
             <ul class="slides">
                 @*<li><img class="hidden" src="@Url.Content("~/adminImg/adDisplay/001.jpg")" /></li>*@
             </ul>                
         </div>
-
     </div>
     <div class="Bone Boneposition1">
         <div class="Quickbutton">

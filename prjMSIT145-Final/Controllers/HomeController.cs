@@ -80,6 +80,7 @@ namespace prjMSIT145_Final.Controllers
                 IsOpened = BM.IsOpened,
                 LogoImgFileName = BI.LogoImgFileName,
                 BannerImgFileName1 = BI.BannerImgFileName1,
+                ChatroomUserid = BM.ChatroomUserid,
             }).Where(BM => BM.FID == BFid).OrderBy(BM => BM.FID);
             foreach (var item in BusinessMemberdatas)
             {
@@ -97,6 +98,7 @@ namespace prjMSIT145_Final.Controllers
                     IsOpened = item.IsOpened,
                     LogoImgFileName = item.LogoImgFileName,
                     BannerImgFileName1 = item.BannerImgFileName1,
+                    ChatroomUserid = item.ChatroomUserid,
                 });
             }
             if (BusinessMemberDetailList.Count == 0)
