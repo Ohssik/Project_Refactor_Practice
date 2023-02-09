@@ -12,8 +12,8 @@
     <div style="margin:0 0 20px 200px">
     <button id="demo1" class="btn btn-outline-secondary">Demo飲料</button>
     <button id="demo2" class="btn btn-outline-secondary">Demo飲料</button>
-    <button id="demo3" class="btn btn-outline-secondary">Demo食物</button>
-    <button id="demo4" class="btn btn-outline-secondary">Demo食物</button>
+    <button id="demo3" class="btn btn-outline-secondary">Demo炒飯</button>
+    <button id="demo4" class="btn btn-outline-secondary">Demo咖哩飯</button>
    </div>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="BFid" value="@Model.BFid" />
@@ -108,9 +108,9 @@
         })
         //食物類Demo鍵
         demo4.addEventListener("click", function () {
-            document.querySelector("#txtProductName").value = "紅燒牛肉麵";
+            document.querySelector("#txtProductName").value = "咖哩歐姆蛋包飯";
             document.querySelector("#txtPrice").value = "150";
-            document.querySelector("#txtMemo").value = "微辣,皆為半筋半肉";
+            document.querySelector("#txtMemo").value = "微辣";
                 checkName.innerHTML = "";
         })
 

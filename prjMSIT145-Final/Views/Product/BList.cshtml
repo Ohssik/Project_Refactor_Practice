@@ -52,6 +52,7 @@
                 <div class="modal-header" style="padding:0;">
                     <form method="post" enctype="multipart/form-data" action="BEdit" style="width:100%;">
                         <input type="hidden" id="Fid" name="Fid" />
+                        <input type="hidden" id="BFid" name="BFid" value="@Model.BFid"/>
                         <div class="topdiv">
                             <button type="button" data-bs-dismiss="modal" style="background-color:transparent ;border:none; width:30px; height:20px; position:absolute; top:20px; left:20px;"><img src="~/images/Business/exit.png" style="width:100%; height:100%;" /></button>
                             <input id="txtProductName" name="ProductName" class="inputtext" type="text" value="" required />   @*產品名稱*@
@@ -75,7 +76,7 @@
                         </div>
                         <div style="margin:10px 0 0 50px;">
                             @*選擇類別*@
-                            <select id="selType" name="categoryName" style="border-radius:5px; width:150px;"><option></option></select>
+                            <select id="selType" name="CategoryName" style="border-radius:5px; width:150px;"><option></option></select>
                             <span id="checkType" style="margin-left:10px; font-size:17px;"></span>
                         </div>
                         @*產品價格*@
@@ -169,7 +170,8 @@
 
                 result += `
                                 <tr>
-                                <input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
+                                        <input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
+                                         <input type="hidden" name="${item.categoryFid}" value="${item.fid}" id="${item.fid}"/>
 
                                 <td><input style='width:50px; height:50px;' type="image" src="../images/${item.photo}"></td>
                                 <td>${item.productName}</td>
