@@ -143,11 +143,11 @@ namespace prjMSIT145_Final.ViewModels
             get { return _order.SubTotal; }
             set { _order.SubTotal = value; }
         }
-        public int? totalQty { get; set; }
+       
 
         public List<COrderItemViewModel> items { get; set; }
 
-        
+        public int? TotalQty { get; set; }
 
     }
 }

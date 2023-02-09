@@ -571,7 +571,7 @@ namespace prjMSIT145_Final.Controllers
                 $"來信人電話：{mail.txtPhone}<br><br>" +
                 $"來信人Email：{mail.txtEmailAddress}";
             string mailSubject = "網站客服信箱來信";
-            string result = cs.sendMail(mail.txtEmailAddress, mailBody, mailSubject, DemoMailServer.ToString());
+            string result = cs.sendMail("b9809004@gapps.ntust.edu.tw", mailBody, mailSubject, DemoMailServer.ToString());
             return Json(result);
         }
     }

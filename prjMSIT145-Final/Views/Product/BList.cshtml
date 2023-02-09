@@ -79,6 +79,19 @@
                             <select id="selType" name="CategoryName" style="border-radius:5px; width:150px;"><option></option></select>
                             <span id="checkType" style="margin-left:10px; font-size:17px;"></span>
                         </div>
+                        
+                        <hr style="border:1px dashed #000; height:1px">
+
+                        @*選擇配料類別*@
+                        <div style="display:flex">
+                            <h6 id="h6">選擇配料類別</h6>
+                            <span id="checkMaterialType" style="margin-left:20px; font-size:17px;"></span>
+                        </div>
+                        <input type="hidden" id="materialCheck" />
+                        <div id="chooseMaterial">
+                            @*  <label for="" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="" name="chooseMaterial" style="font-size:20px" />&ensp;單點</label>*@
+                        </div>
+
                         @*產品價格*@
                         <hr />
                         <h6 id="h6">價格及販售方式</h6>
@@ -141,6 +154,7 @@
         const imgShow = document.querySelector("#imgShow"); //照片
         const fid = document.querySelector("#Fid");
         const selType = document.querySelector("#selType");
+        const chooseMaterial = document.querySelector("#chooseMaterial"); //配料類別
 
         list();
 
@@ -170,10 +184,10 @@
 
                 result += `
                                 <tr>
-                                       <input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
+                                   <input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
                                    <input type="hidden" name="${item.bFid}" value="${item.bFid}" id="${item.bFid}"/>
 
-                                <td><input style='width:50px; height:50px;' type="image" src="../images/${item.photo}"></td>
+                                <td><input style='width:50px; height:50px;' type="image" src="../images/${item.photo}" /></td>
                                 <td>${item.productName}</td>
                                 <td>${item.unitPrice}</td>
                                 <td>${item.categoryName}</td>
@@ -192,7 +206,6 @@
             //刪除
             btnDelete.forEach(function (click) {
                 click.addEventListener("click", function () {
-                    //console.log(this.parentElement.parentElement.firstElementChild);
                     const id = this.parentElement.parentElement.firstElementChild;
 
                     btnDeleteCheck.addEventListener("click", function () {
@@ -221,15 +234,12 @@
                     document.querySelector("#BFid").value =  cell.children[1].value;
 
                     //判斷編輯的產品目前狀態
-                    //document.getElementsByName("IsForSale").forEach(function (radio) {
-                    //    console.log(radio);
                         if (cell.children[6].innerHTML === "未上架")
                             document.querySelector("#IsForSale0").checked = true;
                         else if (cell.children[6].innerHTML === "已上架")
                             document.querySelector("#IsForSale1").checked = true;
                         else if (cell.children[6].innerHTML == "停售")
                             document.querySelector("#IsForSale2").checked = true;
-                    //})
 
                     if (imgShow.getAttribute("src") == "../images/Business/upload.png")
                         imgShow.setAttribute("style", "width: 90px; height: 70px;");
@@ -253,6 +263,19 @@
                     frag += `<option>${item.categoryName}</option>`
             })
             selType.innerHTML += frag;
+
+            //載入配料類別
+            const requestMaterial = await fetch(`@Url.Content("~/Type/BOptionGroup")`);
+            const material = await requestMaterial.json();
+            let materialFrag = document.createDocumentFragment();
+            materialFrag = "";
+
+            material.forEach(function (item, index) {
+                materialFrag += ` <label for="${item.fid}" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="${item.fid}" id="${item.fid}" name="productOp" style="font-size:20px" />&ensp;${item.optionGroupName}</label>`
+            })
+
+            chooseMaterial.innerHTML = materialFrag;
+
         }
         //上傳照片<input type='hidden' id='Fid' value='Fid'>
         file.addEventListener("change", function () {
@@ -283,6 +306,22 @@
             }
             else
                 document.querySelector("#checkSale").innerHTML = ``;
+
+            //檢查有無選取配料類別
+            document.getElementsByName("productOp").forEach(function (val) {
+                if (val.checked) {
+                    document.querySelector("#materialCheck").value = val.value;
+                    document.querySelector("#checkMaterialType").innerHTML = ``;
+                }
+            })
+            if (document.querySelector("#materialCheck").value == "" || document.querySelector("#materialCheck").value == " ") {
+                event.preventDefault();
+                document.querySelector("#checkMaterialType").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別`;
+            }
+            else
+                document.querySelector("#checkMaterialType").innerHTML = ``;
+
+            document.querySelector("#materialCheck").value = "";
         })
     </script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

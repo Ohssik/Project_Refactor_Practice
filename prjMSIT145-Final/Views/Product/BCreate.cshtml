@@ -10,11 +10,11 @@
 
 <div class="outerlayer ">
     <div style="margin:0 0 20px 200px">
-    <button id="demo1" class="btn btn-outline-secondary">Demo飲料</button>
-    <button id="demo2" class="btn btn-outline-secondary">Demo飲料</button>
-    <button id="demo3" class="btn btn-outline-secondary">Demo炒飯</button>
-    <button id="demo4" class="btn btn-outline-secondary">Demo咖哩飯</button>
-   </div>
+        <button id="demo1" class="btn btn-outline-secondary">Demo飲料</button>
+        <button id="demo2" class="btn btn-outline-secondary">Demo飲料</button>
+        <button id="demo3" class="btn btn-outline-secondary">Demo炒飯</button>
+        <button id="demo4" class="btn btn-outline-secondary">Demo咖哩飯</button>
+    </div>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="BFid" value="@Model.BFid" />
         <div class="topdiv">
@@ -44,6 +44,18 @@
         @*選擇類別*@
         <select id="selType" name="CategoryName" class="select"><option>請選擇商品類別</option></select>
         <span id="checkType" style="margin-left:10px; font-size:17px;"></span>
+
+        <hr style="border:1px dashed #000; height:1px">
+
+        @*選擇配料類別*@
+        <div style="display:flex">
+            <h6 id="h6">選擇配料類別</h6>
+            <span id="checkMaterialType" style="margin-left:20px; font-size:17px;"></span>
+        </div>
+        <input type="hidden" id="materialCheck" />
+        <div id="chooseMaterial">
+            @*  <label for="" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="" name="chooseMaterial" style="font-size:20px" />&ensp;單點</label>*@
+        </div>
 
         @*產品價格*@
         <hr style="border:1px dashed #000; height:1px">
@@ -79,6 +91,7 @@
         const txtPrice = document.querySelector("#txtPrice"); //商品價格
         const checkName = document.querySelector("#checkName"); //檢查有無輸入名稱
         const txtProductName = document.querySelector("#txtProductName");
+        const chooseMaterial = document.querySelector("#chooseMaterial"); //配料類別
 
         const demo1 = document.querySelector("#demo1"); //demo飲料
         const demo2 = document.querySelector("#demo2"); //demo飲料
@@ -111,7 +124,7 @@
             document.querySelector("#txtProductName").value = "咖哩歐姆蛋包飯";
             document.querySelector("#txtPrice").value = "150";
             document.querySelector("#txtMemo").value = "微辣";
-                checkName.innerHTML = "";
+            checkName.innerHTML = "";
         })
 
         //載入所有商品類別
@@ -127,6 +140,19 @@
                     frag += `<option><input type='hidden' id='Fid' value='Fid'>${item.categoryName}</option>`
             });
             selType.innerHTML += frag;
+
+            //載入配料類別
+            const requestMaterial = await fetch(`@Url.Content("~/Type/BOptionGroup")`);
+            const material = await requestMaterial.json();
+            let materialFrag = document.createDocumentFragment();
+            materialFrag = "";
+
+            //console.log(material)
+            material.forEach(function (item, index) {
+                materialFrag += ` <label for="${item.fid}" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="${item.fid}" id="${item.fid}" name="productOp" style="font-size:20px" />&ensp;${item.optionGroupName}</label>`
+            })
+
+            chooseMaterial.innerHTML = materialFrag;
         })
 
         //上傳照片
@@ -161,7 +187,7 @@
         })
         //送出時驗證各項
         btnSubmit.addEventListener("click", function () {
-            console.log(selType.value)
+
             if (selType.value === "請選擇商品類別") {
                 event.preventDefault();
                 document.querySelector("#checkType").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別`;
@@ -178,6 +204,22 @@
             }
             else
                 checkName.innerHTML = "";
+
+            //檢查有無選取配料類別
+            document.getElementsByName("productOp").forEach(function (val) {
+                if (val.checked) {
+                    document.querySelector("#materialCheck").value = val.value;
+                    document.querySelector("#checkMaterialType").innerHTML = ``;
+                }
+            })
+            if (document.querySelector("#materialCheck").value == "" || document.querySelector("#materialCheck").value == " ") {
+                event.preventDefault();
+                document.querySelector("#checkMaterialType").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別`;
+            }
+            else
+                document.querySelector("#checkMaterialType").innerHTML = ``;
+
+            document.querySelector("#materialCheck").value = "";
         })
 
         //驗證類別是否選擇

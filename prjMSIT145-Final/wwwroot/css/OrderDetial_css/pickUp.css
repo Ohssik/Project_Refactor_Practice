@@ -1,0 +1,78 @@
+.pickUp_back{
+    position: fixed;
+    width:100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.2);
+    top: 0;
+    left: 0;
+}
+.pickUp_mainDiv{
+    height: 100vh;
+    width: 35%;
+    display: flex;
+    align-items: center;
+    position:fixed;
+    left: 35%;
+    top: 0;
+    pointer-events: none;
+}
+.pickUp_fixed{
+    position: fixed;
+}
+.pickUp_divBorder{
+    border-style: solid;
+    border-width: 1px;
+}
+.pickUp_pickUpDiv{
+    padding: 5px 0;
+    border-radius: 10px;
+    width: 35%;
+    height:20%;
+    background-color:white;
+    padding: 15px 0;
+    pointer-events: all;
+}
+.pickUp_margin{
+    margin: 20px 0;
+}
+.pickUp_date{
+    width: 97%;
+    height: 30%;
+    margin-left: 3px;
+    padding: 0 5px;
+    box-sizing: border-box;
+}
+.pickUp_timeDiv{
+    width: 95%;
+    height: 20%;
+    display: flex;
+    cursor: pointer;
+    margin: 0 auto;
+}
+.pickUp_time{
+    width:50%;         
+    padding: 0 5px;
+    box-sizing: border-box;
+}
+.pickUp_borderNone{
+    border: none;
+}
+.pickUp_timeUl{
+    display: flex;
+    background-color: white;
+    width: 100%;
+}
+.pickUp_hidden{
+    visibility: hidden;
+}
+.pickUp_timeUl div{
+    width: 100%;
+    margin:-1px 0;
+    background-color: white;
+}
+.pickUp_timeUl ul{
+    padding: 0 10px;
+    margin: 5px 0;
+    list-style-type:none ;
+    text-align: center;
+}
