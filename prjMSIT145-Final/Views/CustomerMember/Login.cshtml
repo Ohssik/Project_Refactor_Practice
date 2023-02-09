@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Login";
+    //Layout = null;
 }
 
 
@@ -124,7 +125,7 @@
             <div class="modal-footer">
                 <span class="text-danger" id="pwdInvalid"></span>
                 
-                <button type="button" class="btn btn-primary" id="btnSend">送出</button>
+                <button type="button" class="btn btn-primary" id="btnSendRequest">送出</button>
             </div>
         </div>
     </div>
@@ -303,22 +304,24 @@
                 keyboard: false
             });
             $('#btnCancel').click(function () {
-                $('#btnSend').removeAttr('disabled');
-                $('[name=txtAccount]').val('');
+                $('#btnSendRequest').removeAttr('disabled');
+                $('#txtAccount').val('');
                 $('[name=txtEmail]').val('');
             });
-            $('#btnSend').click(function () {
-
-                $(this).attr('disabled', 'disabled');
-                if ($('[name=txtAccount]').val() == '' || $('[name=txtEmail]').val() == '')
+            $('#btnSendRequest').click(function () {
+                console.log(`here`);
+                
+                if ($('#txtAccount').val() == '' || $('[name=txtEmail]').val() == '')
                     return false;
 
+                console.log(`here111`);
+                $('#btnSendRequest').attr('disabled', 'disabled');
                 $.ajax({
                     url: `@Url.Content("~/Admin/AForgotAdminPwd")`,
                     type: "post",
                     data: {
                         data: JSON.stringify({
-                            txtAccount: $('[name = txtAccount]').val(),
+                            txtAccount: $('#txtAccount').val(),
                             txtEmail: $('[name = txtEmail]').val(),
                             memberType: 'N'
                         }),
@@ -327,7 +330,7 @@
                     success: function (msg) {
                         console.log(`msg=${msg}`);
                         if (`${msg}`.indexOf('success success') > -1) {
-                            $('[name=txtAccount]').val('');
+                            $('#txtAccount').val('');
                             $('[name=txtEmail]').val('');
                             sendMail.hide();
                             $('#msgAlert label').text('發信成功，請到信箱收取修改密碼通知信');
@@ -336,7 +339,7 @@
                             $('#pwdInvalid').text(msg);
 
                         }
-                        $('#btnSend').removeAttr('disabled');
+                        $('#btnSendRequest').removeAttr('disabled');
                     },
                     error:function(msg){
                         console.log(`error msg=${msg}`);
@@ -344,13 +347,13 @@
                 });
             });
             $('#forgotPwd').click(function () {
-                $('[name=txtAccount]').val('');
+                $('#txtAccount').val('');
                 $('[name=txtEmail]').val('');
                 sendMail.show();
-                $('#btnSend').removeAttr('disabled');
+                $('#btnSendRequest').removeAttr('disabled');
                 $('#msgAlert label').text('');
                 $('#pwdInvalid').text('');
-                //$('[name=txtAccount]').val('0986543125');
+                //$('#txtAccount').val('0986543125');
                 //$('[name=txtEmail]').val('rmtorh@hotmail.com');
 
             });

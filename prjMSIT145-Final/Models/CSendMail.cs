@@ -20,7 +20,7 @@ namespace prjMSIT145_Final.Models
             //MySMTP.UseDefaultCredentials = true;
             MySMTP.Credentials = new System.Net.NetworkCredential("b9809004@gapps.ntust.edu.tw", DemoMailServer); //這裡要填正確的帳號跟密碼
             MySMTP.Host = "smtp.gmail.com"; //設定smtp Server
-            MySMTP.Port = 25;
+            MySMTP.Port = 587;
             MySMTP.EnableSsl = true; //gmail預設開啟驗證
             try
             {
