@@ -153,8 +153,12 @@ namespace prjMSIT145_Final.Controllers
 				var data = _context.ProductOptionGroups.FirstOrDefault(o => o.Fid == optGp.Fid);
 				if (data != null)
 				{
+					if (optGp.IsMultiple == null)
+						data.IsMultiple = 0;
+					else
+						data.IsMultiple = 1;
+
 					data.OptionGroupName = optGp.OptionGroupName;
-					data.IsMultiple = optGp.IsMultiple;
 					data.Memo = optGp.Memo;
 				}
 				else
