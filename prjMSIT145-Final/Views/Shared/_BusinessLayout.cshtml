@@ -231,7 +231,7 @@
 									<div class="dropdown-divider"></div>
 									*@
 									<a class="dropdown-item" href="@Url.Action("Blogin","BusinessMember")" data-toggle="modal" data-target="#logoutModal">
-										<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+										<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" id="Logoutbtn"></i>
 										Logout
 									</a>
 								</div>
@@ -342,7 +342,10 @@
 		const chatMessageInput = document.getElementById("chatMessageInput");
 		const chatMessagebtn = document.getElementById("chatMessagebtn");
 
-
+		//登出
+		document.getElementById("Logoutbtn").addEventListener("click",function(){
+			console.log("1234")
+		})
 
 
     </script>
