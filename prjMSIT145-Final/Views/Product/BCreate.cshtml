@@ -149,11 +149,7 @@
             })
 
             chooseMaterial.innerHTML = materialFrag;
-            document.getElementsByName("productOp").forEach(function (val) {
-            val.addEventListener("click",function(){
-                console.log(val.value);
-            })
-        })
+           
         })
       
         //上傳照片
@@ -205,6 +201,13 @@
             }
             else
                 checkName.innerHTML = "";
+
+                 document.getElementsByName("productOp").forEach(function (val) {
+                     val
+            val.addEventListener("click",function(){
+                console.log(val);
+            })
+        })
         })
 
         //驗證類別是否選擇
