@@ -276,16 +276,6 @@
 
             chooseMaterial.innerHTML = materialFrag;
 
-
-            document.getElementsByName("productOp").forEach(function (val) {
-                val.addEventListener("click", function () {
-                    document.querySelector("#materialCheck").value = val.value;
-                    if (!val.checked)
-                        document.querySelector("#materialCheck").value = "";
-
-                    document.querySelector("#checkMaterialType").innerHTML = ``;
-                })
-            })
         }
         //上傳照片<input type='hidden' id='Fid' value='Fid'>
         file.addEventListener("change", function () {
@@ -317,13 +307,21 @@
             else
                 document.querySelector("#checkSale").innerHTML = ``;
 
-                //確認有無勾選配料類別
-            if (document.querySelector("#materialCheck").value == "") {
+            //檢查有無選取配料類別
+            document.getElementsByName("productOp").forEach(function (val) {
+                if (val.checked) {
+                    document.querySelector("#materialCheck").value = val.value;
+                    document.querySelector("#checkMaterialType").innerHTML = ``;
+                }
+            })
+            if (document.querySelector("#materialCheck").value == "" || document.querySelector("#materialCheck").value == " ") {
                 event.preventDefault();
-                document.querySelector("#checkMaterialType").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇配料類別`;
+                document.querySelector("#checkMaterialType").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別`;
             }
             else
                 document.querySelector("#checkMaterialType").innerHTML = ``;
+
+            document.querySelector("#materialCheck").value = "";
         })
     </script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
