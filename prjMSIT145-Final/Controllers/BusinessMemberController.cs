@@ -79,7 +79,7 @@ namespace prjMSIT145_Final.Controllers
         [HttpPost]
         public IActionResult Register(BusinessMember member)
         {
-
+            member.IsOpened = 1;
             _context.BusinessMembers.Add(member);
             _context.SaveChanges();
             BusinessImg businessImg = new BusinessImg();
