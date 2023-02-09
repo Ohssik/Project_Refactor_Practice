@@ -52,10 +52,10 @@
             <h6 id="h6">選擇配料類別</h6>
             <span id="checkMaterialType" style="margin-left:20px; font-size:17px;"></span>
         </div>
-        <input type="hidden" id="materialCheck"/>
+        <input type="hidden" id="materialCheck" />
         <div id="chooseMaterial">
-          @*  <label for="" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="" name="chooseMaterial" style="font-size:20px" />&ensp;單點</label>*@
-        </div> 
+            @*  <label for="" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="" name="chooseMaterial" style="font-size:20px" />&ensp;單點</label>*@
+        </div>
 
         @*產品價格*@
         <hr style="border:1px dashed #000; height:1px">
@@ -153,19 +153,8 @@
             })
 
             chooseMaterial.innerHTML = materialFrag;
-
-            //確認配料類別有無選取
-             document.getElementsByName("productOp").forEach(function (val) {
-                val.addEventListener("click", function () {
-                    document.querySelector("#materialCheck").value = val.value;
-                    if(!val.checked)
-                        document.querySelector("#materialCheck").value ="";
-
-                    document.querySelector("#checkMaterialType").innerHTML = ``;
-                })
-            })
         })
-      
+
         //上傳照片
         btnFile.addEventListener("change", function () {
             let file = this.files[0];
@@ -198,7 +187,7 @@
         })
         //送出時驗證各項
         btnSubmit.addEventListener("click", function () {
-            console.log(selType.value)
+
             if (selType.value === "請選擇商品類別") {
                 event.preventDefault();
                 document.querySelector("#checkType").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別`;
@@ -216,18 +205,22 @@
             else
                 checkName.innerHTML = "";
 
-                if(document.querySelector("#materialCheck").value == "")
-               {
-                   event.preventDefault();
-                document.querySelector("#checkMaterialType").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇配料類別`;
-                console.log(document.querySelector("#materialCheck").value)
-               }
-               else
+            //檢查有無選取配料類別
+            document.getElementsByName("productOp").forEach(function (val) {
+                if (val.checked) {
+                    document.querySelector("#materialCheck").value = val.value;
+                    document.querySelector("#checkMaterialType").innerHTML = ``;
+                }
+            })
+            if (document.querySelector("#materialCheck").value == "" || document.querySelector("#materialCheck").value == " ") {
+                event.preventDefault();
+                document.querySelector("#checkMaterialType").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇產品類別`;
+            }
+            else
                 document.querySelector("#checkMaterialType").innerHTML = ``;
-           
+
+            document.querySelector("#materialCheck").value = "";
         })
-
-
 
         //驗證類別是否選擇
         selType.addEventListener("change", function () {
