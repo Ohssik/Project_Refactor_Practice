@@ -1,0 +1,24 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@foreach (var item in Model.items)
+{
+    <div class="rightItemDiv margin itemCard_padding_margin button_Icon_Guide_BackGroundColor" id="AdivBody">
+
+        <!-- *餐點資訊,依實際點選內容增加span -->
+        <h6>@item.ProductName</h6>
+        <div class="flexAndItemsCenter displayBetween ">
+            <div>
+                <span id="itemDetailFont" class="spanFont">
+                    @foreach (var item2 in item.OptionName)
+                    {
+                        <span><span>@item2</span> /</span>
+                    }
+                    <span><span>$@item.OptionAmount</span> /</span>
+                    <span><span>@item.Qty 份</span> </span>
+                </span>
+            </div>
+        </div>
+    </div>
+}

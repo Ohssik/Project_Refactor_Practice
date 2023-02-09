@@ -45,9 +45,9 @@
 </div>
 @*Demo*@
 <div style="margin:0 0 20px 200px">
-	<button id="demo1" class="btn btn-outline-secondary">Demo類別1</button>
-	<button id="demo2" class="btn btn-outline-secondary">Demo類別1_new</button>
-	<button id="demo3" class="btn btn-outline-secondary">Dem類別2</button>
+	<button id="demo1" class="btn btn-outline-secondary">Demo份量</button>
+	<button id="demo2" class="btn btn-outline-secondary">Demo單點</button>
+	<button id="demo3" class="btn btn-outline-secondary">Demo冰塊</button>
 </div>
 <div class="mainDiv flex">
 	<div class="box">
@@ -67,7 +67,7 @@
 				<hr style="border:1px solid #000; height:1px">
 			</div>
 			<div class="leftmargin">
-				<span>是否可多選</span>
+				<span>是否可選擇多種配料</span>
 				<div class="form-check form-switch">
 
 					<label class="form-check-label" for="IsMultiple">
@@ -110,15 +110,16 @@
 
 		document.querySelector("#demo1").addEventListener("click", function () {
 			checkName.innerHTML = "";
-			txt.value = "三明治類";
+			txt.value = "份量";
 		})
 		document.querySelector("#demo2").addEventListener("click", function () {
 			checkName.innerHTML = "";
-			txt.value = "現烤三明治類";
+			txt.value = "單點";
 		})
 		document.querySelector("#demo3").addEventListener("click", function () {
 			checkName.innerHTML = "";
-			txt.value = "飲料類";
+			txt.value = "冰塊";
+			textArea.value = "為了保持飲品品質,冰量最多為少冰";
 		})
 
 		list();
@@ -159,6 +160,8 @@
 					if (Multiple == "是") {
 						isMultiple.checked = true;
 					}
+					else
+					isMultiple.checked = false;
 				})
 			})
 		}

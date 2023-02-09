@@ -1,4 +1,4 @@
-﻿@model prjMSIT145_Final.Models.BusinessMember
+﻿@model prjMSIT145_Final.ViewModel.CBBusinessMember
 
 @{
     ViewData["Title"] = "BRevise";
@@ -8,7 +8,7 @@
 <section class="shopinfocard" style="" >
     <div class="shopinfoarea p-0 m-0" style="height:365px;width:480px">
         <div class="shopinfo" style="height:280px;width:480px">
-            <img class="Shoplogo p-0 m-0" src="/images/Customer/Shopcard/Test/circlelogo.png">
+            <img class="Shoplogo p-0 m-0" src="/images/@Model.LogoImgFileName" id="LogoImgFile">
             <div>
                 <div class="shoptitle"id="showShopName" ></div>
                 <div class="infoblock">
@@ -56,7 +56,7 @@
         </div>
     </div>
     <section class="ADarea">
-        <img class="Shopcardcover" src="/images/Customer/Shopcard/Test/shopcover.png">
+        <img class="Shopcardcover" src="/images/@Model.SighImgFileName" id="SighImgFile">
     </section>
 </section>
 <div class="p-3 m-3"></div>
@@ -68,7 +68,7 @@
               
                             <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">基本資料</h3>
 
-                            <form asp-action="BRevise">
+                                <form asp-action="BRevise" enctype="multipart/form-data">
                                 <div class="row">
                                 <div class="form-group col-6">
                                  <label asp-for="Email" class="control-label"></label>
@@ -140,58 +140,68 @@
                                         <span asp-validation-for="CloseTime" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div>
-                                  <label asp-for="OpenTime" class="control-label"></label>
-                                  <input asp-for="OpenTime" class="form-control" type="time" value="08:00" id="OpenTimeinput" />
-                                  <span asp-validation-for="OpenTime" class="text-danger"></span>
-                                </div>
+                                @*照片相關*@
+                                 <div>
+                                  <label asp-for="LogoImgFile" class="control-label"></label>
+                        <input asp-for="LogoImgFile" class="form-control" type="file" value="file" targetID="LogoImgFile" onchange="readURL(this)" />
+                                  <span asp-validation-for="LogoImgFile" class="text-danger"></span>
+                                 </div>
+                                  <div>
+                                  <label asp-for="SighImgFile" class="control-label"></label>
+                        <input asp-for="SighImgFile" class="form-control" type="file" value="file" targetID="SighImgFile" onchange="readURL(this)" />
+                                  <span asp-validation-for="SighImgFile" class="text-danger"></span>
+                                   </div>
+                                @*   <div>
+                                  <label asp-for="BannerImg1File" class="control-label"></label>
+                        <input asp-for="BannerImg1File" class="form-control" type="file" value="" id="BannerImg1Fileinput" />
+                                  <span asp-validation-for="BannerImg1File" class="text-danger"></span>
+                                  </div>
+                                 <div>
+                                 <label asp-for="BannerImg2File" class="control-label"></label>
+                        <input asp-for="BannerImg2File" class="form-control" type="file" value="" id="BannerImg2Fileinput" />
+                                  <span asp-validation-for="BannerImg2File" class="text-danger"></span>
+                                 </div>
+                    <div>
+                        <label asp-for="BannerImg3File" class="control-label"></label>
+                        <input asp-for="BannerImg3File" class="form-control" type="file" value="08:00" id="BannerImg3Fileinput" />
+                        <span asp-validation-for="BannerImg3File" class="text-danger"></span>
+                    </div>*@
+
+
+
+
+
+
+
+
+                                @*隱藏欄位*@
                                 <div class="form-group" hidden>
                                     <label asp-for="Fid" class="control-label"></label>
                                     <input asp-for="Fid" class="form-control" />
 
-                                </div>
-                                <div class="form-group" hidden>
-                                    <label asp-for="EmailCertified" class="control-label"></label>
-                                    <input asp-for="EmailCertified" class="form-control" value="0" />
-
-                                </div>
-
-                                <div class="form-group" hidden>
-                                    <label asp-for="RegisterTime" class="control-label"></label>
-                                    <input asp-for="RegisterTime" class="form-control" />
-                                    <span asp-validation-for="RegisterTime" class="text-danger"></span>
-                                </div>
-                                <div class="form-group"hidden>
-                                    <label asp-for="MemberAccount" class="control-label"></label>
-                                    <input asp-for="MemberAccount" class="form-control" />
-                                    <span asp-validation-for="MemberAccount" class="text-danger"></span>
-                                </div>
+                                </div>          
                                 <div class="form-group">
-                                <div class="form-group" hidden>
-                                        <label asp-for="IsSuspensed" class="control-label"></label>
-                                        <input asp-for="IsSuspensed" class="form-control" />
-                                        <span asp-validation-for="IsSuspensed" class="text-danger"></span>
-                                    </div>    
-                                    <div class="form-group"hidden>
-                                        <label asp-for="EmailCertified" class="control-label"></label>
-                                        <input asp-for="EmailCertified" class="form-control" />
-                                        <span asp-validation-for="EmailCertified" class="text-danger"></span>
-                                    </div>
                         <div class="form-group" hidden>
                             <label asp-for="Gps" class="control-label"></label>
                             <input asp-for="Gps" class="form-control" />
                             <span asp-validation-for="Gps" class="text-danger"></span>
                         </div>
+                        @*img*@
+                        <div class="form-group" hidden>
+                            <label asp-for="ImgFid" class="control-label"></label>
+                            <input asp-for="ImgFid" class="form-control" />
+                            <span asp-validation-for="ImgFid" class="text-danger"></span>
+                        </div>
 
                         <div class="form-group" hidden>
-                            <label asp-for="ChatroomUserid" class="control-label"></label>
-                            <input asp-for="ChatroomUserid" class="form-control" />
-                            <span asp-validation-for="ChatroomUserid" class="text-danger"></span>
+                            <label asp-for="BFid" class="control-label"></label>
+                            <input asp-for="BFid" class="form-control" />
+                            <span asp-validation-for="BFid" class="text-danger"></span>
                         </div>
+                        @*按鈕*@
                                     <input id="Sibmitbutton" type="button" value="儲存" class="btn btn-primary" />
                                     <span id="Sibmitvalidation" class="text-danger"></span>
                                 </div>
-                               
                             </form>
                             <div>
                                 
@@ -238,10 +248,10 @@
         const CellPhonevalidation = /^09[0-9]{2}-[0-9]{6}$/;
         const ContactPersonvalidation = /[\u4E00-\u9FFF]+/g;
 
-        var Passwordresult = "";
-        var Phoneresult = "";
-        var ShopTyperesult = "";
-        var ContactPersonrsult = "";
+        var Passwordresult = "ok";
+        var Phoneresult = "ok";
+        var ShopTyperesult = "ok";
+        var ContactPersonrsult = "ok";
         //驗證密碼
         function Passwordtest() {
             if (Passwordvalidation.test(Passwordinput.value)) {
@@ -261,6 +271,18 @@
         Sibmitbutton.addEventListener('click',function(){
         if (Passwordinput.value == "" || MemberNameinput.value == "" || ShopTypeinput.value == "" || Brandinput.value == "" || Phoneinput.value == ""
             || Addressinput.value == "" || ContactPersoninput.value == "" || OpenTimeinput.value == "" || CloseTimeinput.value == "" || Passwordresult == "" ) {
+                console.log("Passwordinput.value" + Passwordinput.value)
+                console.log("MemberNameinput.value" + MemberNameinput.value)
+                console.log("Brandinput.value" + Brandinput.value)
+                console.log("Phoneinput.value" + Phoneinput.value)
+                console.log("Addressinput.value" + Addressinput.value)
+                                  console.log("ContactPersoninput.value" + ContactPersoninput.value)
+                    console.log("OpenTimeinput.value" + OpenTimeinput.value)
+                                      console.log("CloseTimeinput.value" + CloseTimeinput.value)
+                                        console.log("Passwordresult.value" + Passwordresult.value)
+
+
+
             Sibmitvalidation.innerHTML="請輸入所有選項並且確認格式";
             return;
             };
@@ -286,9 +308,30 @@
         Phoneinput.addEventListener('change', function () {
             showphone.innerHTML = Phoneinput.value;
         });
+        //照片更換
+        function readURL(input){
 
+        if(input.files && input.files[0])
+        {
 
+         var imageTagID = input.getAttribute("targetID");
 
+         var reader = new FileReader();
+
+        reader.onload = function (e) 
+        {
+
+         var img = document.getElementById(imageTagID);
+
+        img.setAttribute("src", e.target.result)
+
+       }
+
+    reader.readAsDataURL(input.files[0]);
+
+  }
+
+}
 
 
     </script>

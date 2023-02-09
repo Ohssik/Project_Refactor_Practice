@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Net;
 using prjMSIT145_Final.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace prjMSIT145_Final.Controllers
 {
@@ -29,8 +30,6 @@ namespace prjMSIT145_Final.Controllers
 
 
         }
-
-
         public IActionResult List()
         {
 
@@ -99,11 +98,9 @@ namespace prjMSIT145_Final.Controllers
 
             return View();
         }
-    
-
-    public IActionResult ListInfo(int? Fid)
-    {
-
+        public IActionResult ListInfo(int? Fid)
+         {
+            #region
             var q = from o in _context.Orders
                                join b in _context.BusinessMembers
                                on o.BFid equals b.Fid
@@ -153,7 +150,7 @@ namespace prjMSIT145_Final.Controllers
                                OptionName = p.OptionName,
                                ItemPrice = p.UnitPrice
                            };
-
+            #endregion
 
             COrderDetialViewModel vm = new COrderDetialViewModel();
 
@@ -214,7 +211,7 @@ namespace prjMSIT145_Final.Controllers
                         item2.Qty = item.ProductQty;
                         item2.OptionName = new List<string>();
                         item2.OptionPrice = 0;
-                        vm.totalQty += item.ProductQty;
+                        vm.TotalQty += item.ProductQty;
 
                         var itemOption = from o in ItemName
                                          where o.ItemFid == item.Fid
@@ -235,6 +232,171 @@ namespace prjMSIT145_Final.Controllers
 
 
             return View(vm);
+        }
+
+
+        [HttpPost]
+        public IActionResult CartList(COrderDetialViewModel vm)
+        {
+            var q = from o in _context.Orders
+                    join b in _context.BusinessMembers
+                    on o.BFid equals b.Fid
+                    join a in _context.PaymentTermCategories
+                    on o.PayTermCatId equals a.Fid
+                    where o.Fid == 1
+                    select new
+                    {
+                        Fid = o.Fid,
+                        NFid = o.NFid,
+                        BFid = o.BFid,
+                        BMemberName = b.MemberName,
+                        BMemberPhone = b.Phone,
+                        BAddress = b.Address,
+                        PickUpDate = o.PickUpDate,
+                        PickUpTime = o.PickUpTime,
+                        PickUpType = o.PickUpType,
+                        PickUpPerson = o.PickUpPerson,
+                        PickUpPersonPhone = o.PickUpPersonPhone,
+                        PayTernCatId = a.PaymentType,
+                        OrderState = o.OrderState,
+                        Memo = o.Memo,
+                        OrderTime = o.OrderTime,
+                        TotalAmount = o.TotalAmount
+
+                    };
+            foreach(var item in q)
+            {
+                vm.PickUpType = item.PickUpType;
+                vm.PickUpTime = item.PickUpTime;
+                vm.PickUpDate = item.PickUpDate;
+                vm.PayTermCatId = item.PayTernCatId;
+                vm.Memo = item.Memo;
+                vm.OrderState = item.OrderState;
+            }
+
+
+            _context.SaveChanges();
+
+            return View();
+        }
+
+        
+        public IActionResult CartList(int Fid)
+        {
+            #region   
+            var q = from o in _context.Orders
+                    join b in _context.BusinessMembers
+                    on o.BFid equals b.Fid
+                    join a in _context.PaymentTermCategories
+                    on o.PayTermCatId equals a.Fid
+                    where o.Fid == 1
+                    select new
+                    {
+                        Fid = o.Fid,
+                        NFid = o.NFid,
+                        BFid = o.BFid,
+                        BMemberName = b.MemberName,
+                        BMemberPhone = b.Phone,
+                        BAddress = b.Address,
+                        PickUpDate = o.PickUpDate,
+                        PickUpTime = o.PickUpTime,
+                        PickUpType = o.PickUpType,
+                        PickUpPerson = o.PickUpPerson,
+                        PickUpPersonPhone = o.PickUpPersonPhone,
+                        PayTernCatId = a.PaymentType,
+                        OrderState = o.OrderState,
+                        Memo = o.Memo,
+                        OrderTime = o.OrderTime,
+                        TotalAmount = o.TotalAmount
+
+                    };
+            var Pr = from o in _context.OrderItems
+                     join p in _context.Products
+                     on o.ProductFid equals p.Fid
+                     where o.OrderFid == 1
+                     select new
+                     {
+                         Fid = o.Fid,
+                         ProductName = p.ProductName,
+                         ProductQty = o.Qty,
+                         Productprice = p.UnitPrice,
+                         OrderFid = o.OrderFid
+                     };
+
+            var ItemName = from i in _context.OrderOptionsDetails
+                           join p in _context.ProductOptions
+                           on i.OptionFid equals p.Fid
+                           select new
+                           {
+                               Fid = i.Fid,
+                               ItemFid = i.ItemFid,
+                               OptionName = p.OptionName,
+                               ItemPrice = p.UnitPrice
+                           };
+            #endregion
+
+            COrderDetialViewModel vm = new COrderDetialViewModel();
+
+
+            vm.TotalQty = 0;
+
+            if (q != null)
+            {
+
+                foreach (var c in q.ToList())
+                {
+
+                    vm.OrderTime = c.OrderTime;
+                    vm.TotalAmount = c.TotalAmount;
+                    vm.PickUpPerson = c.PickUpPerson;
+                    vm.Address = c.BAddress;
+                    vm.BMemberName = c.BMemberName;
+                    vm.BMemberPhone = c.BMemberPhone;
+                    vm.Fid = c.Fid;
+                    vm.BFid = c.BFid;
+                    vm.NFid = c.NFid;
+                    vm.PickUpTime = c.PickUpTime;
+                    vm.PickUpDate = c.PickUpDate;
+                    vm.PickUpType = c.PickUpType;
+                    vm.PickUpPersonPhone = c.PickUpPersonPhone;
+                    vm.PayTermCatId = c.PayTernCatId;
+                    vm.Memo = c.Memo;
+
+                    vm.items = new List<COrderItemViewModel>();
+
+                    var orderitem = from i in Pr
+                                    where i.OrderFid == c.Fid
+                                    select i;
+                    foreach (var item in orderitem.ToList())
+                    {
+                        COrderItemViewModel item2 = new COrderItemViewModel();
+                        item2.ProductName = item.ProductName;
+                        item2.Productprice = item.Productprice;
+                        item2.Qty = item.ProductQty;
+                        item2.OptionName = new List<string>();
+                        item2.OptionPrice = 0;
+                        vm.TotalQty += item.ProductQty;
+                        
+                        var itemOption = from o in ItemName
+                                         where o.ItemFid == item.Fid
+                                         select o;
+
+                        foreach (var Option in itemOption)
+                        {
+                            item2.OptionName.Add(Option.OptionName);
+                            item2.OptionPrice += Option.ItemPrice;
+                        }
+                        vm.items.Add(item2);
+                    }
+
+
+                }
+
+            }
+
+
+            return View(vm);
+        }
+
     }
-}
 }

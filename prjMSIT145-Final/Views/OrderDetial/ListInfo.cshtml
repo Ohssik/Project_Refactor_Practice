@@ -314,25 +314,7 @@
         
         <!-- 右邊 -->
         <div class="rightDiv rightDiv_display">
-        @foreach(var item in Model.items){
-            <div class="rightItemDiv margin itemCard_padding_margin button_Icon_Guide_BackGroundColor" id="AdivBody">
-                
-                <!-- *餐點資訊,依實際點選內容增加span -->
-                    <h6>@item.ProductName</h6>
-                <div class="flexAndItemsCenter displayBetween ">
-                    <div>
-                        <span id="itemDetailFont" class="spanFont">
-                             @foreach(var item2 in item.OptionName)
-                             {
-                                <span><span>@item2</span> /</span>  
-                             }
-                                <span><span>$@item.OptionAmount</span> /</span>
-                                <span><span>@item.Qty 份</span> </span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            }
+            @Html.Partial("_ListInfo", Model)
              <div class="flexAndItemsCenter topBorder leftDiv_infoDiv">
                 <div class="leftDiv_leftSpan">
                     <span>應付金額</span>

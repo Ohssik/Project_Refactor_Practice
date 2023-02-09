@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Login";
+    //Layout = null;
 }
 
 
@@ -49,8 +50,9 @@
                 <div>
                     <input type="button" onclick=location.href="@Url.Content("~/CustomerMember/Register")" class="btnregister divbutton" value="註冊" />
                 </div>
+                    <span id="spanresponse" class="spanresponseclass"></span>
             </div>
-            <span id="spanresponse" class="spanresponseclass"></span>
+          
             <div class="textinput">
 
                 <div class="text">
@@ -106,7 +108,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">發送忘記密碼通知</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="btnCancel" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
@@ -122,8 +124,8 @@
             </div>
             <div class="modal-footer">
                 <span class="text-danger" id="pwdInvalid"></span>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>
-                <button type="button" class="btn btn-primary" id="btnSend">送出</button>
+                
+                <button type="button" class="btn btn-primary" id="btnSendRequest">送出</button>
             </div>
         </div>
     </div>
@@ -251,14 +253,12 @@
             })
             const data = await request.json();
             console.log(data);
-            if (data == "此帳號不存在") {
+            if (data == "帳號或密碼有錯") {
                 document.getElementById("spanresponse").innerHTML = data;
-                alert("此帳號不存在")
                 return;
             }
             else if (data == "尚未開通會員資格") {
                 document.getElementById("spanresponse").innerHTML = data;
-                alert("尚未開通會員資格")
                 return;
             }
             else {
@@ -268,14 +268,14 @@
 
         document.getElementById("democorrectid").addEventListener('click', () => {                             //正確DEMO鍵
             document.getElementById("phoneid").value = "0936212576"
-            document.getElementById("Password").value = "aA12345"
+            document.getElementById("Password").value = "aA1234"
            
            
         });
 
         document.getElementById("demoerrorid").addEventListener('click', () => {                                 //錯誤
 
-            document.getElementById("phoneid").value = "給一個錯誤電話";
+            document.getElementById("phoneid").value = "0958749621";
             document.getElementById("Password").value = "A1234";
             
 
@@ -304,22 +304,21 @@
                 keyboard: false
             });
             $('#btnCancel').click(function () {
-                $('#btnSend').removeAttr('disabled');
-                $('[name=txtAccount]').val('');
+                $('#btnSendRequest').removeAttr('disabled');
+                $('#txtAccount').val('');
                 $('[name=txtEmail]').val('');
             });
-            $('#btnSend').click(function () {
-
-                $(this).attr('disabled', 'disabled');
-                if ($('[name=txtAccount]').val() == '' || $('[name=txtEmail]').val() == '')
+            $('#btnSendRequest').click(function () {                                
+                if ($('#txtAccount').val() == '' || $('[name=txtEmail]').val() == '')
                     return false;
-
+                
+                $('#btnSendRequest').attr('disabled', 'disabled');
                 $.ajax({
                     url: `@Url.Content("~/Admin/AForgotAdminPwd")`,
                     type: "post",
                     data: {
                         data: JSON.stringify({
-                            txtAccount: $('[name = txtAccount]').val(),
+                            txtAccount: $('#txtAccount').val(),
                             txtEmail: $('[name = txtEmail]').val(),
                             memberType: 'N'
                         }),
@@ -328,7 +327,7 @@
                     success: function (msg) {
                         console.log(`msg=${msg}`);
                         if (`${msg}`.indexOf('success success') > -1) {
-                            $('[name=txtAccount]').val('');
+                            $('#txtAccount').val('');
                             $('[name=txtEmail]').val('');
                             sendMail.hide();
                             $('#msgAlert label').text('發信成功，請到信箱收取修改密碼通知信');
@@ -337,17 +336,22 @@
                             $('#pwdInvalid').text(msg);
 
                         }
-                        $('#btnSend').removeAttr('disabled');
+                        $('#btnSendRequest').removeAttr('disabled');
+                    },
+                    error:function(msg){
+                        console.log(`error msg=${msg}`);
                     }
                 });
             });
             $('#forgotPwd').click(function () {
+                $('#txtAccount').val('');
+                $('[name=txtEmail]').val('');
                 sendMail.show();
-                $('#btnSend').removeAttr('disabled');
+                $('#btnSendRequest').removeAttr('disabled');
                 $('#msgAlert label').text('');
                 $('#pwdInvalid').text('');
-                $('[name=txtAccount]').val('0986543125');
-                $('[name=txtEmail]').val('rmtorh@hotmail.com');
+                //$('#txtAccount').val('0986543125');
+                //$('[name=txtEmail]').val('rmtorh@hotmail.com');
 
             });
         });

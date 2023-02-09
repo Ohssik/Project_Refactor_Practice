@@ -21,14 +21,14 @@
         from {
             height:20px;
             /*transform: rotateX(70deg);*/
-            opacity: 90%;
+             opacity: 10%;
             bottom: 90px;
             filter: drop-shadow(5px 10px 5px rgba(0,0,0,0.5));
         }
         to {
             height: 40px;
             /*transform: rotateX(70deg);*/
-            opacity: 30%;
+           opacity: 90%;
             bottom: 30px;
             filter: drop-shadow(5px 10px 5px rgba(0,0,0,2));
         }
@@ -47,7 +47,7 @@
     left: 150px;
     bottom: 30px ;
     transition: 0.2s;
-    filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.3))
+    /*filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.3))*/
 }
 
     .logoDiv img {

@@ -1,0 +1,10 @@
+a:link{
+    text-decoration: none;
+    color:black;
+}
+a:hover{
+    color: gray;
+}
+a:active{
+    background-color: rgb(235, 230, 230);
+}

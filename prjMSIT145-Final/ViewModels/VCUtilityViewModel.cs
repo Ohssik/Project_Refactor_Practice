@@ -12,5 +12,7 @@
         //-----------
         public List<VProductBasicInfoViewModel>? ProductBasicInfoList { get; set; }
         public List<VOptionGroupViewModel>? OptionGroupList { get; set; }
+        //-----------
+        public List<VOrdersViewModel>? OrdersList { get; set; }
     }
 }

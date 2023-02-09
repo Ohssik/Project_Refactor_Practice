@@ -19,10 +19,12 @@ namespace prjMSIT145_Final.Controllers
     {
         private readonly ispanMsit145shibaContext _context;
         private IWebHostEnvironment _eviroment;
-        public CustomerMemberController(ispanMsit145shibaContext context, IWebHostEnvironment eviroment)
+        private readonly IConfiguration _config;
+        public CustomerMemberController(ispanMsit145shibaContext context, IWebHostEnvironment eviroment, IConfiguration config)
         {
             _context = context;
             _eviroment = eviroment;
+            _config=config;
         }
         public IActionResult Index()
         {
@@ -68,7 +70,7 @@ namespace prjMSIT145_Final.Controllers
                 return Json("尚未開通會員資格");
             }
 
-            return Json("此帳號不存在");
+            return Json("帳號或密碼有錯");
         }
 
         
@@ -152,7 +154,7 @@ namespace prjMSIT145_Final.Controllers
             vm.EmailCertified = rnd.Next(10000000, 90000000);
             _context.Add(vm.member);
             _context.SaveChanges();
-
+            string url = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={vm.Fid}";
             string smtpAddress = "smtp.gmail.com";
             //設定Port
             int portNumber = 587;
@@ -165,7 +167,7 @@ namespace prjMSIT145_Final.Controllers
             //主旨
             string subject = "註冊驗證信";
             //內容
-            string body = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={vm.Fid}, 請輸入此驗證碼{vm.EmailCertified}";
+            string body =$"<a href={url}>請點此連結</a>,並回表單輸入此驗證碼{vm.EmailCertified}";
             using (MailMessage mail = new MailMessage())
             {
                 mail.From = new MailAddress(emailFrom);
@@ -173,7 +175,7 @@ namespace prjMSIT145_Final.Controllers
                 mail.Subject = subject;
                 mail.Body = body;
                 // 若你的內容是HTML格式，則為True
-                mail.IsBodyHtml = false;
+                mail.IsBodyHtml = true;
                 using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
                 {
                     smtp.Credentials = new NetworkCredential(emailFrom, emailpassword);
@@ -237,6 +239,10 @@ namespace prjMSIT145_Final.Controllers
             {
                 return Redirect("~/Home/CIndex");
             }
+            if (member.EmailCertified == 1)
+            {
+                return Redirect("~/Home/CIndex");
+            }
             
             return View(member);
         }
@@ -257,13 +263,15 @@ namespace prjMSIT145_Final.Controllers
         }
         public IActionResult Emailcheckword(NormalMember member)
         {
+          
+
             NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Fid == member.Fid);
             if (x != null && x.EmailCertified == member.EmailCertified)
             {
                 return Json("");
 
             }
-            return Json("請在信箱確認驗證碼");
+            return Json("驗證碼錯誤");
         }
 
         public IActionResult memberview()
@@ -455,6 +463,24 @@ namespace prjMSIT145_Final.Controllers
                 return Json(showQty);
             }
             return Json("");
+        }
+
+        public IActionResult CCustomerServiceMailBox()
+        {
+            return View();
+        }
+        public IActionResult submitCustomerMail(CustomerServiceMailBoxViewModel mail)
+        {
+            var DemoMailServer = _config["DemoMailServer:pwd"];
+            CSendMail cs = new CSendMail();
+            string mailBody = $"收到了來自 {mail.txtSenderName} 先生/小姐來自網站客服信箱的意見。<br><br>詢問主題：<br>" +
+                $"<label style='color:blue'>{mail.txtMailSubject}</label><br><br>" +
+                $"詢問內容：<br>{mail.txtMailContent}<br><br>" +
+                $"來信人電話：{mail.txtPhone}<br><br>" +
+                $"來信人Email：{mail.txtEmailAddress}";
+            string mailSubject = "網站客服信箱來信";
+            string result = cs.sendMail("b9809004@gapps.ntust.edu.tw", mailBody, mailSubject, DemoMailServer.ToString());
+            return Json(result);
         }
     }
 }

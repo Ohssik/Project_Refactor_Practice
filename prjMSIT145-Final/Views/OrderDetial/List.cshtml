@@ -36,7 +36,7 @@
 
         .state {
             height: 40px;
-            width: 70px;
+            width: 90px;
             font-size: 15px;
             border-radius: 10px;
             background-color: rgb(243, 206, 206);
@@ -260,8 +260,10 @@
                             <option value="tab_">全部</option>
                             <option value="tab_1">未接單</option>
                             <option value="tab_2">已接單</option>
+                            <option value="tab_3">商家準備中</option>
                             <option value="tab_4">已完成</option>
                             <option value="tab_5">取消</option>
+                            <option value="tab_6">揪團失敗</option>
                         </select>
                     </div>
                 </div>
@@ -323,6 +325,31 @@
                                                         </div>
                                                     </div>
                             }
+                            else if (item.OrderState == "商家準備中")
+                            {
+                                <!-- *****動態產生****至140行為止 -->
+                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_3" style="margin-right:40px">
+                                    <div class="state_timeDiv">
+                                        <!-- 背景色依狀態更改: -->
+                                        <div class="state ">@Html.DisplayFor(modelItem => item.OrderState)</div>
+                                        <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="pic_Div">
+                                            <div class="pic">
+                                                <img src="images/cat.jpg" class="card-img-top" alt="..." />
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
+                                            <div class="topBorder">
+
+                                                <p class="card-text card_Guide_FontColor">共 @Html.DisplayFor(modelItem => item.TotalAmount)元</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                             else if (item.OrderState == "已完成")
                             {
                                                     <!-- *****動態產生****至140行為止 -->
@@ -374,10 +401,10 @@
                                                     </div>
                             }
                             else{
-                                                    <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid"style="margin-right:40px">
+                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_6" style="margin-right:40px">
                                                         <div class="state_timeDiv">
                                                             <!-- 背景色依狀態更改: -->
-                                                            <div class="state">@Html.DisplayFor(modelItem => item.OrderState)</div>
+                                                            <div class="state backgroundcolor5">@Html.DisplayFor(modelItem => item.OrderState)</div>
                                                             <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
                                                         </div>
                                                         <div class="column">
