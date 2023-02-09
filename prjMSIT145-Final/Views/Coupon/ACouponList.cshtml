@@ -3,7 +3,13 @@
     ViewData["Title"] = "管理者控制台/優惠券管理";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
 }
-
+@section Styles{
+    <style>
+        #dataTable img{
+            width:50%;
+        }
+    </style>
+}
 <div class="container-fluid">
     <h1 class="h3 mb-2 text-gray-800">優惠券管理</h1>
     <div class="card shadow mb-4">
@@ -69,7 +75,7 @@
                                     @{
                                         if (item.IsUsed > 0)
                                         {
-                                                          @:V
+                                                                      @:V
                                         }
                                     }
                                 </td>
@@ -86,12 +92,21 @@
                                     @Html.DisplayFor(modelItem => item.NmemberID)
                                 </td>
                                 <td>
-                                    <button name="btnUpdate" class="btn btn-info btn-circle" data-bs-target="#addModal">
-                                        <i class="fas fa-info-circle"></i>
-                                    </button>
-                                    <button class="btn btn-danger btn-circle">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    @{
+                                        if(item.IsUsed == 0 && !string.IsNullOrEmpty(item.NmemberName)){
+                                            string starPath = Url.Content("~/adminImg/star.png");
+                                                    <img src='@starPath'/>
+                                        }
+                                        else{
+                                                    <button name="btnUpdate" class="btn btn-info btn-circle" data-bs-target="#addModal">
+                                                        <i class="fas fa-info-circle"></i>
+                                                    </button>
+                                                    <button class="btn btn-danger btn-circle">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                        }
+                                    }
+                                    
                                 </td>
                             </tr>
                         }
@@ -324,7 +339,8 @@
         });
 
         function clearData() {
-            $('input').val("")
+            $('input').val("");
+            $('textarea').val("");
         }
     </script>
 
