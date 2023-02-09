@@ -176,6 +176,22 @@ namespace prjMSIT145_Final.Controllers
             return Json(CUL);
         }
 
+        public IActionResult CCartSend(int? OrderFid)
+        {
+            var SendOrder = from O in _context.Orders
+                            where O.Fid == OrderFid
+                            select O;
+            foreach (var item in SendOrder)
+            {
+                item.PickUpDate= DateTime.Now;
+                item.PickUpTime= DateTime.Now.AddMinutes(15)-DateTime.Now;
+                item.PickUpType = "自取";
+                item.PayTermCatId= 1;
+                item.OrderState = "1";
+            }
+            _context.SaveChanges();
+            return Json("");
+        }
 
         //-------------------------------------------------------B、C分界線-------------------------------------------------------//
         [HttpPost]
