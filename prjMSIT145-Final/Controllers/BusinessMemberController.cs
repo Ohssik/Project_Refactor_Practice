@@ -88,12 +88,13 @@ namespace prjMSIT145_Final.Controllers
             ChatroomUser chatroomUser = new ChatroomUser();
             chatroomUser.UserType = 1;//0是客戶 1是商家 2 是平台 欄位改成INT
             chatroomUser.Memberfid = member.Fid;
+            _context.ChatroomUsers.Add(chatroomUser);
             _context.SaveChanges();
-            member.ChatroomUserid = member.ChatroomUserid;
+            member.ChatroomUserid = chatroomUser.ChatroomUserid;
             _context.SaveChanges();
 
 
-            _context.SaveChanges();
+           
             return RedirectToAction("Blogin");
         }
 
