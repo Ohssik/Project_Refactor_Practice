@@ -172,7 +172,7 @@
            
     </div>
 </div>
-    <div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
@@ -191,8 +191,10 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
     <script>
-        $(function(){
+        $(function(){            
+
             function clearCheckForm(){
                 $('[name=lblSenderName]').text('');
                 $('[name=lblEmailAddress]').text('');
@@ -211,7 +213,8 @@
             });
 
             $('#btnSubmitMail').click(async function(event){
-                event.preventDefault();
+                event.preventDefault();                
+
                 let formData = new FormData(document.mailForm);
                 let f = await fetch(`@Url.Content("~/CustomerMember/submitCustomerMail")`, {
                     body: formData,
