@@ -273,7 +273,11 @@
 						<div class="col-8" style="background-color:#F4F5F7;">
 							@*現在對話人的名稱*@
 							<div>
-								<div class="ChatNowUser" style="padding-left:12px;">kelly</div>
+								<div id="ChatNowUser"  style="padding-left:12px;">kelly</div>
+								<div hidden>
+                                    <input value="" id="ChatNowUserid"></input>
+                                    <input value="" id="ChatNowUserChatid"></input>
+								</div>
 							</div>
 							<hr class="p-0 m-0" size="1px" align="center" width="98%" color="black">
 							<div class="" style="overflow-y:auto;overflow-x:hidden">
@@ -281,17 +285,17 @@
 							@*訊息*@
 							<div id="chatmessageDiv" class="chatroomDialogue"  >
 								@*對方*@
-								<div class="chatroomUser remote">
+								@*<div class="chatroomUser remote">
 									<div class="chatroomMessage">
 										你好~
 									</div>
-								</div>
+								</div>*@
 							   @*自己*@
-								<div class="chatroomUser local">
+								@*<div class="chatroomUser local">
 									<div class="chatroomMessage">
 										你好!
 									</div>
-								</div>
+								</div>*@
 
 							</div>
 							@*輸入訊息*@
@@ -312,14 +316,6 @@
 									<div class="col-5 p-1" id="chatOthersUserImg"><img src="~/images/4c8b3a99-bc8e-43f6-b351-44221fbd8219.jpg" width="48px" height="48px" /></div>
 									<div class="col-7 ">kelly</div>
 								</div>
-								@*輸入*@
-
-
-
-
-
-
-
 							</div>
 
 						</div>
@@ -336,13 +332,21 @@
 			&copy; 2023 - prjMSIT145_Final - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 		</div>
 	</footer>
+	@*聊天室JS*@
 	<script>
+		
+		const ChatNowUserName = document.getElementById("ChatNowUser");
+		const ChatNowUserid = document.getElementById("ChatNowUserid");
+		const ChatNowUserChatid = document.getElementById("ChatNowUserChatid");
+		const chatmessageDiv = document.getElementById("chatmessageDiv");
+		const chatMessageInput = document.getElementById("chatMessageInput");
+		const chatMessagebtn = document.getElementById("chatMessagebtn");
 
 
 
 
-
-	</script>
+    </script>
+	
 	@*<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>*@
 
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -366,10 +370,11 @@
 
 	<!-- Page level custom scripts -->
 	<script src="@Url.Content("~/js/demo/datatables-demo.js")"></script>
-  @*  <script src="@Url.Content("~/js/signalr/dist/browser/signalr.js")"></script>
-    <script src="@Url.Content("~/js/ChatRoom.js")"></script>*@
-	
+    <script src="@Url.Content("~/js/signalr/dist/browser/signalr.js")"></script>
+    <script src="@Url.Content("~/js/ChatRoom.js")"></script>
+
 	@await RenderSectionAsync("Scripts", required: false)
+	
   
 </body>
 </html>
