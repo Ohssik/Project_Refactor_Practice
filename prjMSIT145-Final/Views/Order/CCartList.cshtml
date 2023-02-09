@@ -93,6 +93,24 @@
                 //NewList = "";
                 location.href = "/Order/CCartList";
             }
+
+        @{
+            foreach (var item in Model)
+            {
+                @if (item.OrderState == "0")
+                {
+                    @:document.getElementById("Order @(item.Fid)").addEventListener("click", function () {
+                    @:SendOrderdatas(@(item.Fid));
+                    @:});
+                }
+            }
+        }
+
+            async function SendOrderdatas(OFid) {
+                const response = await fetch(`@Url.Content("~/Order/CCartSend?OrderFid=${OFid}")`);
+                const datas = await response.json();
+                location.href = "/OrderDetial/List";
+            }
     </script>
 }
 
