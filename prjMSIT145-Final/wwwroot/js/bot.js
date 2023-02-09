@@ -96,10 +96,14 @@ document.addEventListener("scroll", function () {
     if ((hight - top) <= 1000) {
         azureLogo.setAttribute("style", "bottom:80px;");
         logoDiv.setAttribute("style", "bottom:80px");
+        document.querySelector(".logo").setAttribute("style", "top:4%;")
+        document.querySelector(".azure").setAttribute("style", "top:4%;")
     }
     else {
         azureLogo.setAttribute("style", "bottom:30px");
         logoDiv.setAttribute("style", "bottom:30px");
+        document.querySelector(".logo").setAttribute("style", "top:8%;")
+        document.querySelector(".azure").setAttribute("style", "top:8%;")
     }
 })
 
@@ -107,4 +111,6 @@ document.addEventListener("scroll", function () {
 if (hight <= document.documentElement.clientHeight) {
     azureLogo.setAttribute("style", "bottom:80px;");
     logoDiv.setAttribute("style", "bottom:80px");
+    document.querySelector(".logo").setAttribute("style", "top:4%;")
+    document.querySelector(".azure").setAttribute("style", "top:4%;")
 }

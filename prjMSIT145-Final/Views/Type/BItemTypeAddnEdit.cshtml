@@ -32,7 +32,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                確定要刪除嗎?
+                @*確定要刪除嗎?*@
             </div>
             <div class="modal-footer" style="width:100%">
                 <button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
@@ -44,8 +44,8 @@
 <div class="outerlayer ">
     <div style="margin:0 0 20px 200px">
     <button id="demo1" class="btn btn-outline-secondary">Demo類別1</button>
-    <button id="demo2" class="btn btn-outline-secondary">Demo類別1_new</button>
-    <button id="demo3" class="btn btn-outline-secondary">Dem類別2</button>
+        <button id="demo2" class="btn btn-outline-secondary">Demo類別2</button>
+    @*<button id="demo3" class="btn btn-outline-secondary">Dem類別2</button>*@
     </div>
 
     <form enctype="application/x-www-form-urlencoded" method="post" action="BItemTypeSubmit">
@@ -83,16 +83,13 @@
 
         document.querySelector("#demo1").addEventListener("click", function () {
             checkName.innerHTML = "";
-            txt.value = "三明治類";
+            txt.value = "飯類";
         })
         document.querySelector("#demo2").addEventListener("click", function () {
             checkName.innerHTML = "";
-            txt.value = "現烤三明治類";
-        })
-        document.querySelector("#demo3").addEventListener("click",function(){
-            checkName.innerHTML = "";
             txt.value = "飲料類";
         })
+   
 
         list();
         async function list() {
@@ -141,13 +138,12 @@
                 //console.log(modalBody.value)
             }
             else {
-                linkDelete.addEventListener("click", async function () {
                     const request = await fetch(`@Url.Content("~/Type/BItemTypeDeleteList/${CategoryFid.value}")`);
                     const count = await request.text();
                     modalBody.innerHTML = count;
 
                     linkDelete.setAttribute("href", `@Url.Content("~/Type/BItemTypeDelete/${CategoryFid.value}")`);
-                })
+                
             }
         });
 

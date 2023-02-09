@@ -36,7 +36,7 @@
 .azure {
     position: fixed;
     left: 40px;
-    top: 40px;
+    top: 8%;
     margin-top: 50px;
 }
 /* 腳掌印 */
@@ -58,7 +58,7 @@
 .logo {
     position: fixed;
     left: 40px;
-    top: 40px;
+    top: 8%;
     background-color: white;
     height: 72%;
 }

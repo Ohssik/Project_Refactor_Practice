@@ -26,6 +26,9 @@
             <div class="emaildiv">
             <input type="text" class="inputclass" name="EmailCertified"/>
             </div>
+            <div class="messagediv">
+                <span id="spanmessageid" class="spanmessageclass">&nbsp&nbsp</span>
+            </div>
             <div class="subdiv">
                 <input type="submit"  id="submitid" value="確定" class="submitbtn" />
             </div>
@@ -51,11 +54,13 @@
             console.log(data);
             if(data==""){
                 alert("已開通會員資格");
+                document.getElementById("spanmessageid").innerHTML ="";
                 document.getElementById("Emailcheck").submit();
                 
             }
             else{
-                alert(data);
+                document.getElementById("spanmessageid").innerHTML=data;
+                //alert(data);
                 return;
             }
 

@@ -5,7 +5,8 @@
 }
 
 .Content {
-    background-color: whitesmoke;
+    /*background-color: whitesmoke;*/
+    background-color: white;
     border: solid 2px;
     border-color: transparent;
     width: 400px;
@@ -21,14 +22,16 @@
 
 
 .toptitle {
-    background-color: whitesmoke;
+    /*background-color: whitesmoke;*/
+    background-color: white;
     margin-bottom: 20px;
     font-weight: bold;
     font-size: 22px;
 }
 
 .toptitle2 {
-    background-color: whitesmoke;
+    /*  background-color: whitesmoke;*/
+    background-color: white;
     margin-bottom: 20px;
     font-size: 14px;
     color: black;
@@ -40,7 +43,7 @@
     font-size: 16px;
 }
 
-.btnregister{
+.btnregister {
     width: 120px;
     height: 40px;
     background-color: rgb(245, 77, 133);
@@ -48,12 +51,14 @@
     border-color: transparent;
     font-weight: bold;
     border-radius: 16px;
+    cursor: pointer;
 }
 
 .text {
     width: 400px;
     height: 30px;
-    background-color: whitesmoke;
+    /*background-color: whitesmoke;*/
+    background-color: white;
     font-size: 14px;
     border-radius: 3px;
     border-color: transparent;
@@ -63,11 +68,14 @@
 .text2 {
     width: 200px;
     height: 20px;
-    background-color: white;
-    font-size: 16px;
-    border-radius: 10px;
+    background-color: whitesmoke;
+    padding:2px;
+    font-size: 14px;
+    border-bottom:1px solid black;
+   /* border:1px solid dashed;*/
+    border-radius: 5px;
     border-color: transparent;
-    outline: none;
+    /*outline: none;*/
 }
 
 
@@ -108,7 +116,8 @@
     border: transparent;
     font-weight: bold;
     font-size: 16px;
-    margin-bottom:20px;
+    margin-bottom: 20px;
+    cursor: pointer;
 }
 
 .display {
