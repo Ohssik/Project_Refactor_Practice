@@ -34,16 +34,7 @@ namespace prjMSIT145_Final.Controllers
                 {
                     if (b.Email.Equals(cLoginViewModel.fEmail) && b.Password.Equals(cLoginViewModel.fPassword))
                     {
-                        //if (b.ChatroomUserid == null)
-                        //{
-                        //    ChatroomUser chatroomUser = new ChatroomUser();
-                        //    chatroomUser.UserType = 0;//0是客戶 1是商家 2 是平台 欄位改成INT
-                        //    chatroomUser.Memberfid = b.Fid;
-                        //    _context.SaveChanges();
-                        //    var member = _context.ChatroomUsers.FirstOrDefault(u => u.UserType = 0 && u.Memberfid = b.Fid);
-                        //    b.ChatroomUserid = member.ChatroomUserid;
-                        //    _context.SaveChanges();
-                        //}
+                
                         string json = JsonSerializer.Serialize(b);
                         HttpContext.Session.SetString(CDictionary.SK_LOGINED_Business, json);
 
@@ -92,9 +83,16 @@ namespace prjMSIT145_Final.Controllers
             _context.BusinessMembers.Add(member);
             _context.SaveChanges();
             BusinessImg businessImg = new BusinessImg();
-            var Newmember = _context.BusinessMembers.FirstOrDefault(m => m.Email == member.Email);
-            businessImg.BFid = Newmember.Fid;
+            businessImg.BFid = member.Fid;
             _context.BusinessImgs.Add(businessImg);
+            ChatroomUser chatroomUser = new ChatroomUser();
+            chatroomUser.UserType = 1;//0是客戶 1是商家 2 是平台 欄位改成INT
+            chatroomUser.Memberfid = member.Fid;
+            _context.SaveChanges();
+            member.ChatroomUserid = member.ChatroomUserid;
+            _context.SaveChanges();
+
+
             _context.SaveChanges();
             return RedirectToAction("Blogin");
         }
