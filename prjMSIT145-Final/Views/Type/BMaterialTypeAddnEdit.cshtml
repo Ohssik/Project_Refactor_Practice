@@ -119,6 +119,7 @@
 		document.querySelector("#demo3").addEventListener("click", function () {
 			checkName.innerHTML = "";
 			txt.value = "冰塊";
+			textArea.value = "為了保持飲品品質,冰量最多為少冰";
 		})
 
 		list();
@@ -159,6 +160,8 @@
 					if (Multiple == "是") {
 						isMultiple.checked = true;
 					}
+					else
+					isMultiple.checked = false;
 				})
 			})
 		}

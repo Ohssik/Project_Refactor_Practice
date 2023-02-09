@@ -63,6 +63,13 @@
 
 				<div class="sidebar-heading">商品管理</div>
 
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href='@Url.Content("~/AddMaterial/BList")'>
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>配料</span>
+                    </a>
+                </li>
 				<li class="nav-item">
 					<a class="nav-link"
 					   href='@Url.Content("~/Product/BList")'>
@@ -71,13 +78,7 @@
 					</a>
 				</li>
 
-				<li class="nav-item">
-					<a class="nav-link"
-					   href='@Url.Content("~/AddMaterial/BList")'>
-						<i class="fas fa-fw fa-table"></i>
-						<span>配料</span>
-					</a>
-				</li>
+				
 
 				<!-- Divider -->
 				<hr class="sidebar-divider" />
@@ -200,7 +201,7 @@
 
 					<!-- End of Topbar -->
 					<!-- Begin Page Content -->
-					<div style="padding:20px 30px;">
+					<div style="padding:20px 50px;">
 						@RenderBody()
 					</div>
 				</div>
