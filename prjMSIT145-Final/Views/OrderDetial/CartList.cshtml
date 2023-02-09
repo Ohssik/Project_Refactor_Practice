@@ -285,7 +285,10 @@
             margin-left: -2400px;
             transition: all .5s;
         }
-
+        .dateTime{
+            border:solid 0px;
+            outline: none;
+        }
     </style>
 }
 <div class="changePage">
@@ -306,11 +309,11 @@
                     <h4>取餐方式</h4>
                     <div class="pickUpMD">
                         <input type="radio" checked="checked" name="PickUpType" value="自取" />
-                        <p>自取 (約15分鐘)</p>
+                        <p>自取 </p>
                     </div>
                     <h5>預計取餐時間</h5>
                     <fieldset class="Fieldset" id="pickUpTime">
-                        <input class="Fieldset" id="change" value="" />
+                        <input class="font-size dateTime" name="change" id="change" />
                     </fieldset>
                     <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
                     <h5>門市位置</h5>
@@ -418,7 +421,8 @@
                     </div>
                     <div class="flexAndItemsCenter orderDivBottomBorder orderFinalPrice">
                         <div id="pay"><h4>應付金額</h4></div>
-                        <div class="orderAbsolteForRight"><h4>$&nbsp;@Model.TotalAmount</h4></div>
+                        <input type="text" value="@Model.TotalAmount" id="AddTotal" hidden/>
+                        <div class="orderAbsolteForRight"><h4 id="TotalAmount">$&nbsp;@Model.TotalAmount</h4></div>
                     </div>
                 </div>
                 <!-- 上下頁按鈕 -->
@@ -533,7 +537,7 @@
                     </div>
                     <div class="spanFont div flexAndItemsCenter cardBorderColor">
                         <div class="marginright">預計取餐時間</div>
-                        <div>@Convert.ToString(Model.PickUpDate).Substring(0,9) @Model.PickUpTime</div>
+                        <div ></div>
                     </div>
                     <div class="spanFont div flexAndItemsCenter cardBorderColor">
                         <div class="marginright">付款方式</div>
@@ -559,6 +563,7 @@
     <script src="@Url.Content("~/js/jquery-3.6.2.js")" ></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        let DateValue=``;
         @*網頁重新整理*@
             $("#btnReset").click(function () {
                 location.reload();
@@ -569,11 +574,18 @@
                 if (checked) {
                     console.log(checked)
                     $("#plasticPrice").text("$ 2");
+                    $("#AddTotal").val(@Model.TotalAmount+2);
+                    $("#TotalAmount").text("$ "+(@Model.TotalAmount+2));
                 }
                 else {
                     $("#plasticPrice").text("您未加購塑膠袋");
+                    $("#AddTotal").val(@Model.TotalAmount);
+                    $("#TotalAmount").text("$ " + (@Model.TotalAmount));
                 }
             })
+
+        @*選擇付款方式*@
+            
 
         @*刪除單一產品*@
             $(".deleteBtn").on("click", function () {
@@ -611,13 +623,7 @@
                 $("#pickUp").append(` <div class="pickUp_back"></div>
                         <div class="pickUp_mainDiv">
                         <div class="pickUp_fixed pickUp_pickUpDiv cardBorderColor pickUp_divBorder">
-                                    <input class="pickUp_date pickUp_margin cardBorderColor pickUp_divBorder" type="date" min="2023-02-08" value="" id=inputchangeDate/>
-
-                            <div class="pickUp_timeDiv">
-
-                               <input id="hoursDiv" class="pickUp_time pickUp_divBorder cardBorderColor" type="time" id="inputchangeTime" value=""/>
-                            
-                            </div>
+                                            <input class="pickUp_date pickUp_margin cardBorderColor pickUp_divBorder" type="datetime-local" min="2023-02-07 value="2023-02-09" id="inputchangeDate"/>
                                     <div class="delete_row">
                                                             <div class="delete_btn"><button id="enter">確認</button></div>
                                             <div class="delete_btn"><button id="cancel">取消</button></div>
@@ -626,11 +632,13 @@
                     </div>`
                 );
                 $("#enter").on("click", function () {
-                    console.log("click")
+ 
                     $(".pickUp_back").addClass("delete_none")
                     $(".pickUp_pickUpDiv").addClass("delete_none")
-                    $("#change").val("#inputchangeDate")
-                    $("#change").val("#inputchangeTime")
+   
+                    DateValue = document.getElementById("inputchangeDate").value
+                    $("#change").val(`${DateValue}`)
+                    
 
                 })
 
@@ -669,7 +677,7 @@
         $(".btnToFinish").click(function (){
             window.location.href = "OrderDetial/List";
         })
-        //選擇日期
+
          
        
     </script>
