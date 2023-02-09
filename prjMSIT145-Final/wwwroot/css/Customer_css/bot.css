@@ -95,6 +95,8 @@
     max-width: 380px;
     min-width: 380px;
     border-bottom: 1px solid lightgray;
+    box-sizing:border-box;
+    padding:10px 0;
 }
 
 #collapseExample {
