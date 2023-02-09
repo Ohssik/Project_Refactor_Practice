@@ -65,7 +65,11 @@ namespace prjMSIT145_Final.Controllers
                     OrderState = item.OrderState,
                     Memo = item.Memo,
                     OrderTime = item.OrderTime,
-                    TotalAmount = item.TotalAmount,
+                    OrderTimeMM = Convert.ToDateTime(item.OrderTime).ToString("MM"),
+                    OrderTimedd = Convert.ToDateTime(item.OrderTime).ToString("dd"),
+                    OrderTimeHH = Convert.ToDateTime(item.OrderTime).ToString("HH"),
+                    OrderTimeminute = Convert.ToDateTime(item.OrderTime).ToString("mm"),
+                    TotalAmount = Convert.ToInt32(item.TotalAmount),
                     OrderISerialId = item.OrderISerialId,
                 });
             }
@@ -155,13 +159,21 @@ namespace prjMSIT145_Final.Controllers
                     OrderState = item.OrderState,
                     Memo = item.Memo,
                     OrderTime = item.OrderTime,
-                    TotalAmount = item.TotalAmount,
+                    OrderTimeMM = Convert.ToDateTime(item.OrderTime).ToString("MM"),
+                    OrderTimedd = Convert.ToDateTime(item.OrderTime).ToString("dd"),
+                    OrderTimeHH = Convert.ToDateTime(item.OrderTime).ToString("HH"),
+                    OrderTimeminute = Convert.ToDateTime(item.OrderTime).ToString("mm"),
+                    TotalAmount = Convert.ToInt32(item.TotalAmount),
                     OrderISerialId = item.OrderISerialId,
                 });
             }
-            CUtility.OrdersList = OrdersList;
             #endregion
-            return Json(CUtility.OrdersList);
+            List<VCUtilityViewModel> CUL = new List<VCUtilityViewModel>();
+            CUL.Add(new VCUtilityViewModel
+            {
+                OrdersList = OrdersList,
+            });
+            return Json(CUL);
         }
 
 
