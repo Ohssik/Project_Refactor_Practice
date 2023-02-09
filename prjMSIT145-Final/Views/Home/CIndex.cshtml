@@ -9,10 +9,8 @@
     <style>
         .wrapper {
             position: relative;
-            width: 80%;
-           /* width: 800px;
-            height: 300px;*/
-            height: 100%;
+            width: 70%;          
+            height: 95%;
             overflow: hidden;
             margin: 10px auto;
         }      
@@ -21,17 +19,20 @@
             margin: 0;
             padding: 0;
             position: absolute;
-            width: 7200px;
+            width: 4860px;
             left: 0px;
             transition: all .5s;
+        }
+        ul.slides.hidden{
+            transition-property:none;
         }
 
         ul.slides li {
             margin: 0;
             padding: 0;
             list-style: none;
-            width: 800px;
-            height: 300px;
+            width: 540px;
+            height: 360px;
             overflow: hidden;
             float: left;
         }
@@ -41,6 +42,9 @@
             height: 100%;
             object-fit: cover;
         }
+        ul.slides li img.hidden{
+            opacity:0;
+        }
     </style>
 }
 <section class="Displayarea">
@@ -49,7 +53,8 @@
 
         @*廣告輪播*@
         <div class="wrapper">
-            <ul class="slides">                                      
+            <ul class="slides">
+                @*<li><img class="hidden" src="@Url.Content("~/adminImg/adDisplay/001.jpg")" /></li>*@
             </ul>                
         </div>
 
@@ -150,28 +155,64 @@
         $(function () { 
             let slideNum = 0;
             let slideCount = $(".slides li").length;
-            let lastIndex = slideCount - 1;
+            let lastIndex = slideCount - 1;                        
             
-            let si = setInterval(() => {
-                slideNum = ((new Date()).getSeconds()) % 9;
-                let slidemove = -800 * slideNum;
-                $('ul.slides').css('left', slidemove);
-            },1000);
-            
+            let adArr=new Array();
+            adArr.push('001.jpg');    
+            //$('ul.slides').append('<li><img src /></li>');
             $.ajax({
                     url: `@Url.Content("~/home/CgetAdImgList")`,
                     type:'post',
                     data:{},
                     dataType:'json',
                     success:function(data){
-                        //console.log(data);
+                        
                         let docFrag=document.createDocumentFragment();
                         $(data).each(function(i,value){
+                            //adArr.push(value.imgName);
                             $(docFrag).append(`<li><img src='@Url.Content("~/adminImg/adDisplay/")${value.imgName}' /></li>`);
                         });
                         $('ul.slides').append(docFrag);
+                        //console.log(adArr);
                     }                    
             });
+
+                
+                slideNum=0;
+            let si = setInterval(() => {
+                    let i = $('ul.slides>li').length+1;
+                    //console.log(i);
+                //let i = adArr.length;
+                if (i > 0)
+                {
+                    i = i - 1;
+                //    //slideNum = ((new Date()).getSeconds()) % i;
+                        if (slideNum>i){
+                            slideNum = 0;
+                        }
+                //        console.log(`slideNum=${slideNum}, adArr[slideNum]=${adArr[slideNum]}`);
+                //        $('ul.slides>li>img').fadeOut(200, function () {
+                //            $(this).attr('src', `@Url.Content("~/adminImg/adDisplay/")${adArr[slideNum]}`);
+                //        }).fadeIn(200);
+
+                //        //$('ul.slides>li>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${adArr[slideNum]}`);
+                //        $('ul.slides>li>img').removeClass('hidden');
+                //        if (adArr[slideNum]=='001.jpg'){
+                //            $('ul.slides>li>img').addClass('hidden');
+                //        }
+
+                        let slidemove = -540 * slideNum;
+                        if (slideNum == 0) {
+                            $('ul.slides').addClass('hidden');
+                        }
+                        else{
+                            $('ul.slides').removeClass('hidden');
+                        }
+                        $('ul.slides').css('left', slidemove);
+                        slideNum++;
+                }
+                    
+            }, 2000);
             
         });
     </script>

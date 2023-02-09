@@ -84,7 +84,7 @@
                 //location.reload(true);                
             });
             
-            $('#btnSubmit').click(function(){
+            $('#btnSubmitCoupEx').click(function(){
                 let CouponCode = $('[name=CouponCode]').val();
                 if (CouponCode.trim()=='')
                     return false;
@@ -191,7 +191,7 @@
         </div>
         <div class="form-group" id="CouponCode">
             <input type="text" name="CouponCode" class="form-control" />
-            <button class="btn btn-secondary" id="btnSubmit">送出</button>
+            <button class="btn btn-secondary" id="btnSubmitCoupEx">送出</button>
         </div>   
             
     </div>
@@ -252,7 +252,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">

@@ -87,6 +87,7 @@ document.addEventListener("scroll", function () {
         }, 500)
     }
 
+    
     //console.log("top:" + top);
     //console.log("hight:" + hight);
     //console.log(document.body.scrollHeight);

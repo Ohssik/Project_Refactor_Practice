@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using System.Collections.Generic;
 using prjMSIT145_Final.ViewModels;
+using System.Data;
 
 namespace prjMSIT145_Final.Controllers
 {
@@ -21,28 +22,30 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult CCartList(int? NFid)
         {
             NFid = 1;
-            if(NFid==null)
+            if (NFid == null)
                 return Redirect("/CustomerMember/Login");
             List<VOrdersViewModel> OrdersList = new List<VOrdersViewModel>();
             var Orderdatas = from O in _context.Orders
+                             join B in _context.BusinessMembers on O.BFid equals B.Fid
                              where O.NFid == NFid
                              select new
-                                 {
-                                 Fid=O.Fid,
-                                 NFid=O.NFid,
-                                 BFid=O.BFid,
-                                 PickUpDate=O.PickUpDate,
-                                 PickUpTime=O.PickUpTime,
-                                 PickUpType=O.PickUpType,
-                                 PickUpPerson=O.PickUpPerson,
-                                 PickUpPersonPhone=O.PickUpPersonPhone,
-                                 PayTermCatId=O.PayTermCatId,
-                                 TaxIdnum=O.TaxIdnum,
-                                 OrderState=O.OrderState,
-                                 Memo  = O.Memo,
-                                 OrderTime=O.OrderTime,
-                                 TotalAmount=O.TotalAmount,
-                                 OrderISerialId=O.OrderISerialId,  
+                             {
+                                 Fid = O.Fid,
+                                 NFid = O.NFid,
+                                 BFid = O.BFid,
+                                 MemberName = B.MemberName,
+                                 PickUpDate = O.PickUpDate,
+                                 PickUpTime = O.PickUpTime,
+                                 PickUpType = O.PickUpType,
+                                 PickUpPerson = O.PickUpPerson,
+                                 PickUpPersonPhone = O.PickUpPersonPhone,
+                                 PayTermCatId = O.PayTermCatId,
+                                 TaxIdnum = O.TaxIdnum,
+                                 OrderState = O.OrderState,
+                                 Memo = O.Memo,
+                                 OrderTime = O.OrderTime,
+                                 TotalAmount = O.TotalAmount,
+                                 OrderISerialId = O.OrderISerialId,
                              };
             foreach (var item in Orderdatas)
             {
@@ -51,6 +54,7 @@ namespace prjMSIT145_Final.Controllers
                     Fid = item.Fid,
                     NFid = item.NFid,
                     BFid = item.BFid,
+                    MemberName = item.MemberName,
                     PickUpDate = item.PickUpDate,
                     PickUpTime = item.PickUpTime,
                     PickUpType = item.PickUpType,
@@ -69,7 +73,96 @@ namespace prjMSIT145_Final.Controllers
             return View(CUtility.OrdersList);
         }
 
-
+        public IActionResult CCartDelete(int? OrderFid)
+        {
+            #region 取得選取購物車內之商品ID列表
+            var OrderItemsdatas = from OI in _context.OrderItems
+                                  where OI.OrderFid == OrderFid
+                                  select OI.Fid;
+            List<int> PFidsinOrder = new List<int>();
+            foreach (var item in OrderItemsdatas)
+            {
+                PFidsinOrder.Add(item);
+            }
+            #endregion
+            #region 依據商品ID列表找出所屬配料資料並刪除 (刪除OrderOptionDetial)
+            foreach (var item in PFidsinOrder)
+            {
+                var OrderOptionsDetaildatasDelete = from OOD in _context.OrderOptionsDetails
+                                                    where OOD.ItemFid == item
+                                                    select OOD;
+                _context.OrderOptionsDetails.RemoveRange(OrderOptionsDetaildatasDelete);
+                _context.SaveChanges();
+            }
+            #endregion
+            #region 依據商品ID列表找出對應資料並刪除 (刪除OrderItems)
+            foreach (var item in PFidsinOrder)
+            {
+                var OrderItemsdatasDelete = from OI in _context.OrderItems
+                                            where OI.Fid == item
+                                            select OI;
+                _context.OrderItems.RemoveRange(OrderItemsdatasDelete);
+                _context.SaveChanges();
+            }
+            #endregion
+            #region 依據選取購物車ID找出對應資料並刪除 (刪除Orders)
+            var OrderdatasDelete = from O in _context.Orders
+                                   where O.Fid == OrderFid
+                                   select O;
+            _context.Orders.RemoveRange(OrderdatasDelete);
+            _context.SaveChanges();
+            #endregion
+            #region 再次取得訂單資料
+            int NFid = 1;
+            List<VOrdersViewModel> OrdersList = new List<VOrdersViewModel>();
+            var Orderdatas = from O in _context.Orders
+                             join B in _context.BusinessMembers on O.BFid equals B.Fid
+                             where O.NFid == NFid
+                             select new
+                             {
+                                 Fid = O.Fid,
+                                 NFid = O.NFid,
+                                 BFid = O.BFid,
+                                 MemberName = B.MemberName,
+                                 PickUpDate = O.PickUpDate,
+                                 PickUpTime = O.PickUpTime,
+                                 PickUpType = O.PickUpType,
+                                 PickUpPerson = O.PickUpPerson,
+                                 PickUpPersonPhone = O.PickUpPersonPhone,
+                                 PayTermCatId = O.PayTermCatId,
+                                 TaxIdnum = O.TaxIdnum,
+                                 OrderState = O.OrderState,
+                                 Memo = O.Memo,
+                                 OrderTime = O.OrderTime,
+                                 TotalAmount = O.TotalAmount,
+                                 OrderISerialId = O.OrderISerialId,
+                             };
+            foreach (var item in Orderdatas)
+            {
+                OrdersList.Add(new VOrdersViewModel
+                {
+                    Fid = item.Fid,
+                    NFid = item.NFid,
+                    BFid = item.BFid,
+                    MemberName = item.MemberName,
+                    PickUpDate = item.PickUpDate,
+                    PickUpTime = item.PickUpTime,
+                    PickUpType = item.PickUpType,
+                    PickUpPerson = item.PickUpPerson,
+                    PickUpPersonPhone = item.PickUpPersonPhone,
+                    PayTermCatId = item.PayTermCatId,
+                    TaxIdnum = item.TaxIdnum,
+                    OrderState = item.OrderState,
+                    Memo = item.Memo,
+                    OrderTime = item.OrderTime,
+                    TotalAmount = item.TotalAmount,
+                    OrderISerialId = item.OrderISerialId,
+                });
+            }
+            CUtility.OrdersList = OrdersList;
+            #endregion
+            return Json(CUtility.OrdersList);
+        }
 
 
         //-------------------------------------------------------B、C分界線-------------------------------------------------------//
@@ -87,9 +180,9 @@ namespace prjMSIT145_Final.Controllers
             string json = "";
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
             {
-               json= HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
-               BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-              var order = _context.Orders.Where(o => o.BFid == member.Fid && o.OrderState == state);
+                json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
+                BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+                var order = _context.Orders.Where(o => o.BFid == member.Fid && o.OrderState == state);
                 var Datas = order.Join(_context.NormalMembers, o => o.NFid, n => n.Fid, (o, n) => new
                 {
                     Fid = o.Fid,
@@ -110,8 +203,8 @@ namespace prjMSIT145_Final.Controllers
                     NmbName = n.MemberName,
 
                 });
-                List <COrderViewModel> vm = new List <COrderViewModel>();
-                foreach(var o in Datas)
+                List<COrderViewModel> vm = new List<COrderViewModel>();
+                foreach (var o in Datas)
                 {
                     COrderViewModel model = new COrderViewModel();
                     model.Fid = o.Fid;
@@ -203,7 +296,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
                 BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-                var order = _context.Orders.Where(o => o.BFid == member.Fid &&( o.OrderState == state ||o.OrderState =="5" || o.OrderState == "6") );
+                var order = _context.Orders.Where(o => o.BFid == member.Fid && (o.OrderState == state || o.OrderState == "5" || o.OrderState == "6"));
                 var Datas = order.Join(_context.NormalMembers, o => o.NFid, n => n.Fid, (o, n) => new
                 {
                     Fid = o.Fid,
@@ -252,25 +345,25 @@ namespace prjMSIT145_Final.Controllers
 
         }
         //改訂單狀態
-        public IActionResult BEditStateApi(int? State,int?nextState,int?orderid)
+        public IActionResult BEditStateApi(int? State, int? nextState, int? orderid)
         {
             string _Action = "";
             if (State == 1)
             {
                 _Action = "BNewList";
             }
-            else if (State == 2|| State == 3)
+            else if (State == 2 || State == 3)
             {
                 _Action = "BList";
             }
-            else 
+            else
             {
                 _Action = "BOldList";
             }
 
             var order = _context.Orders.FirstOrDefault(o => o.Fid == orderid);
             if (order == null)
-            return RedirectToAction($"${_Action}");
+                return RedirectToAction($"${_Action}");
             order.OrderState = nextState.ToString();
             _context.SaveChanges();
             return RedirectToAction($"{_Action}");
@@ -302,16 +395,16 @@ namespace prjMSIT145_Final.Controllers
             var orderitemToProduct = _context.OrderItems.Join(_context.Products, o => o.ProductFid, p => p.Fid, (o, p) => new
             {
                 //ProductFid = o.ProductFid,
-                fid=o.Fid,
+                fid = o.Fid,
                 ProductName = p.ProductName,
                 ProductQty = o.Qty,
                 Productprice = p.UnitPrice,
                 OrderFid = o.OrderFid
-            }); 
+            });
             var ItemToName = _context.OrderOptionsDetails.Join(_context.ProductOptions, i => i.OptionFid, p => p.Fid, (i, p) => new
             {
                 Fid = i.Fid,
-                ItemId=i.ItemFid,
+                ItemId = i.ItemFid,
                 OptionName = p.OptionName,
                 ItemPrice = p.UnitPrice
             });
@@ -340,19 +433,19 @@ namespace prjMSIT145_Final.Controllers
                 vm.totalQty = 0;
                 vm.items = new List<COrderItemViewModel>();
                 //合併配料
-                
+
                 var orderitem = orderitemToProduct.Where(i => i.OrderFid == datas.Fid);
                 foreach (var items in orderitem)
                 {
-                    COrderItemViewModel itemVm= new COrderItemViewModel();
-                    itemVm.ProductName= items.ProductName;
+                    COrderItemViewModel itemVm = new COrderItemViewModel();
+                    itemVm.ProductName = items.ProductName;
                     itemVm.Productprice = items.Productprice;
                     itemVm.Qty = items.ProductQty;
                     vm.totalQty += items.ProductQty;
                     itemVm.OptionName = new List<string>();
                     itemVm.OptionPrice = 0;
-                var itemOption = ItemToName.Where(o => o.ItemId == items.fid);
-                    foreach(var Option in itemOption)
+                    var itemOption = ItemToName.Where(o => o.ItemId == items.fid);
+                    foreach (var Option in itemOption)
                     {
                         itemVm.OptionName.Add(Option.OptionName);
                         itemVm.OptionPrice += Option.ItemPrice;
@@ -361,14 +454,14 @@ namespace prjMSIT145_Final.Controllers
 
 
                 }
-                
+
 
                 list.Add(vm);
             }
 
             return Json(list);
         }
-        
+
 
     }
 }
