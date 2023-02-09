@@ -65,9 +65,7 @@ btnSubmitProblem.addEventListener("click", async function () {
 
     txt.value = "";
 });
-msgDiv.addEventListener("scroll", function () {
-    console.log( msgDiv.scrollTop)
-})
+
  let hight = document.documentElement.scrollHeight;  //需要顯示得總長
 document.addEventListener("scroll", function () {
     clearTimeout(timer);
