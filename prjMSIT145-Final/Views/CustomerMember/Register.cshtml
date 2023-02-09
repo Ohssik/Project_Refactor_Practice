@@ -97,10 +97,10 @@
                             @{
 
                             if (ViewBag.Gender==null){
-                                <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" />
-                                <label>女</label>
-                                <input id="radioboy" type="radio" class="text5" name="Gender" value="1" />
-                                <label>男</label>
+                                    <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" />
+                                    <label>女</label>
+                                    <input id="radioboy" type="radio" class="text5" name="Gender" value="1" />
+                                    <label>男</label>
 
 
 
@@ -109,19 +109,19 @@
 
                             if (ViewBag.Gender == "1")
                             {
-                                    <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" />
-                                    <label>女</label>
-                                    <input id="radioboy" type="radio" class="text5" name="Gender" value="1" checked />
-                                    <label>男</label>
+                                        <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" />
+                                        <label>女</label>
+                                        <input id="radioboy" type="radio" class="text5" name="Gender" value="1" checked />
+                                        <label>男</label>
 
 
                                 }
                             else
                             {
-                                    <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" checked />
-                                    <label>女</label>
-                                    <input id="radioboy" type="radio" class="text5" name="Gender" value="1" />
-                                    <label>男</label>
+                                        <input id="radiogirl" type="radio" class="text5" name="Gender" value="0" checked />
+                                        <label>女</label>
+                                        <input id="radioboy" type="radio" class="text5" name="Gender" value="1" />
+                                        <label>男</label>
                                 
                             }
                             };
@@ -138,12 +138,12 @@
                                 string st;
                                 st = Convert.ToDateTime(ViewBag.birthday).ToString("yyyy-MM-dd");
 
-                                <input id="birthid" type="date" class="date" name="Birthday" value="@st" />
+                                    <input id="birthid" type="date" class="date" name="Birthday" value="@st" />
               
                             }
                         else{
 
-                           <input id="birthid" type="date" class="date" name="Birthday" value=""/>
+                               <input id="birthid" type="date" class="date" name="Birthday" value=""/>
                             }
             
             }
@@ -295,6 +295,7 @@
         document.getElementById("Password").addEventListener("change", checkPassword);                //密碼
         function checkPassword() {
             var passwordobj = document.getElementById("Password");
+            var pass2 = document.getElementById("Password2");
             var spnpasswordobj = document.getElementById("passwordcorrect");
             var passwordval = passwordobj.value;
 
@@ -332,6 +333,12 @@
                     return;
                  }
 
+
+            }
+            if (passwordobj.value != pass2.value){
+                spnpasswordobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>請確認上下密碼一致";
+                submitbtn.setAttribute('disabled', 'disabled');
+                return;
 
             }
         };
@@ -422,14 +429,15 @@
 
         document.getElementById("democorrectid").addEventListener('click',()=>{
            
-            document.getElementById("MemberName").value="林峻宏";
+            document.getElementById("MemberName").value="李知恩";
             document.getElementById("Phone").value="0936212576";
             document.getElementById("Email").value="a29803385@hotmail.com";
             document.getElementById("Password").value="aA1234";
             document.getElementById("Password2").value="aA1234";
             document.getElementById("city").innerHTML = "<option>高雄市</option>";
             document.getElementById("area").innerHTML = "<option>前鎮區</option>";
-            document.getElementById("radioboy").setAttribute("checked","checked");
+            document.getElementById("radiogirl").setAttribute("checked", "checked");
+            document.getElementById("birthid").value="2012-12-06";
             checkPwd();
             checkPhone();
             checkEmail();

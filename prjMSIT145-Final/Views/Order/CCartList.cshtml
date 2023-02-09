@@ -16,27 +16,28 @@
     @{
         foreach (var item in Model)
         {
-            <mochi-box shiba="random" id="Order @item.Fid">
-                <div class="timeDiv">
-                    <div id="orderTime">@item.OrderTime</div>
-                </div>
-                <div class="column">
-                    <div class="pic_Div">
-                        <div class="pic">
-                            <img src="~/images/Customer/Shopcard/Test/circlelogo.png" class="card-img-top" alt="..." />
+            @if (item.OrderState == "0")
+            {
+                <mochi-box shiba="random" class="CursorPointer" id="Order @item.Fid">
+                    <div class="OrderTime">
+                        <div>@item.OrderTimeMM/@item.OrderTimedd @item.OrderTimeHH:@item.OrderTimeminute</div>
+                    </div>
+                    <div class="Column">
+                        <div class="Flex">
+                            <div class="LogoFrame">
+                                <img src="~/images/Customer/Shopcard/Test/circlelogo.png" />
+                            </div>
+                        </div>
+                        <div class="Column">
+                            <h4 class="ShopName">@item.MemberName</h4>
+                            <div class="TotalPrice">共 @item.TotalAmount 元</div>
                         </div>
                     </div>
-                    <div class="">
-                        <h4 class=" h4_margin">店家名稱 @item.BFid</h4>
-                        <div class="topBorder">
-                            <p class="">共 @Convert.ToInt32(item.TotalAmount) 元</p>
-                        </div>
+                    <div class="Deletebtn">
+                        <img src="~/images/Customer/OrderList/delete 24x24.png" id="DEL @item.Fid" />
                     </div>
-                </div>
-                <div class="btnDiv" id="cartDelete">
-                    <img src="~/images/Customer/Shopcard/Test/circlelogo.png" class="card-img-top" alt="..." />
-                </div>
-            </mochi-box>
+                </mochi-box>
+            }
         }
     }
 </div>
@@ -45,7 +46,53 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.min.js'></script>
     <script src="~/css/Customer_css/ShibaJump/script.js"></script>
     <script>
+        let OrderDisplayArea = document.getElementById("app");
+        let NewList = "";
+        @{
+            foreach (var item in Model)
+            {
+                @if (item.OrderState == "0")
+                {
+                    @:document.getElementById("DEL @(item.Fid)").addEventListener("click", function () {
+                    @:DeleteOrderdatas(@(item.Fid));
+                    @:});
+                }
+            }
+        }
 
+            async function DeleteOrderdatas(OFid) {
+                const response = await fetch(`@Url.Content("~/Order/CCartDelete?OrderFid=${OFid}")`);
+                const datas = await response.json();
+                //OrderDisplayArea.innerHTML = ``;
+                //for (let i = 0, max = datas[0].ordersList.length; i < max; i++) {
+                //    console.log("123");
+                //    if (datas[0].ordersList[i].orderState == "0") {
+                //        console.log("456");
+                //        NewList += `<mochi-box shiba="random" class="CursorPointer" id="Order ${datas[0].ordersList[i].fid}">
+                //            <div class="OrderTime">
+                //                <div>${datas[0].ordersList[i].orderTimeMM}/${datas[0].ordersList[i].orderTimedd} ${datas[0].ordersList[i].orderTimeHH}:${datas[0].ordersList[i].orderTimeminute}</div>
+                //            </div>
+                //            <div class="Column">
+                //                <div class="Flex">
+                //                    <div class="LogoFrame">
+                //                        <img src="~/images/Customer/Shopcard/Test/circlelogo.png" />
+                //                    </div>
+                //                </div>
+                //                <div class="Column">
+                //                    <h4 class="ShopName">${datas[0].ordersList[i].memberName}< /h4>
+                //                    <div class="TotalPrice">共 ${datas[0].ordersList[i].totalAmount} 元</div>
+                //                </div>
+                //            </div>
+                //            <div class="Deletebtn">
+                //                <img src="~/images/Customer/OrderList/delete 24x24.png" id="DEL ${datas[0].ordersList[i].fid}" />
+                //            </div>
+                //        </mochi-box>`;
+                //    }
+                //}
+                //OrderDisplayArea.innerHTML = NewList;
+                //NewList = "";
+                location.href = "/Order/CCartList";
+            }
     </script>
 }
 

@@ -43,26 +43,36 @@
 		</div>
 	</div>
 </div>
+@*Demo*@
+<div style="margin:0 0 20px 200px">
+	<button id="demo1" class="btn btn-outline-secondary">Demo份量</button>
+	<button id="demo2" class="btn btn-outline-secondary">Demo單點</button>
+	<button id="demo3" class="btn btn-outline-secondary">Demo冰塊</button>
+</div>
 <div class="mainDiv flex">
 	<div class="box">
-		<a href="@Url.Content("~/AddMaterial/BList")"><img class="" src="../images/Business/backarrow.png" style="width:40px; height:45px;"/></a>
-		<form method="post" enctype="application/x-www-form-urlencoded" action="BMaterialTypeSubmit">
+
+		<a href="@Url.Content("~/AddMaterial/BList")"><img class="" src="../images/Business/backarrow.png" style="width:40px; height:45px;" /></a>
+
+		<form method="post" enctype="multipart/form-data" action="BMaterialTypeSubmit">
 			<div class="leftmargin">
 				<div class="flex">
 					<input type="hidden" value="@Model.BFid" name="BFid" />
 					<input type="hidden" value="@Model.Fid" name="Fid" id="fid" />
 					<input class="leftTxt" type="text" placeholder=" 輸入類別名稱....." required name="OptionGroupName" />
-					<input class="butt" type="submit" value="儲存" />
-					<input class="butt" type="button" value="刪除" id="btnDelete"  data-bs-toggle="modal" data-bs-target="#exampleModal"/>
+					<span id="checkName" style="font-size:16px; width:150px; margin-left:10px;"></span>
+					<input class="butt" id="btnSubmit" type="submit" value="儲存" />
+					<input class="butt" type="button" value="刪除" id="btnDelete" data-bs-toggle="modal" data-bs-target="#exampleModal" />
 				</div>
 				<hr style="border:1px solid #000; height:1px">
 			</div>
 			<div class="leftmargin">
-				<span>是否可多選</span>
+				<span>是否可選擇多種配料</span>
 				<div class="form-check form-switch">
-					
+
 					<label class="form-check-label" for="IsMultiple">
-					<input class="form-check-input" type="checkbox" role="switch" name="IsMultiple" id="isMultiple" style="width:50px; height:20px;"></label>
+						<input class="form-check-input" role="switch" type="checkbox" name="IsMultiple" id="isMultiple" style="width:50px; height:20px;">
+					</label>
 				</div>
 				<hr style="border:1px solid #000; height:1px">
 			</div>
@@ -96,6 +106,20 @@
 		const fid = document.querySelector("#fid"); //已存在的類別id;
 		const isMultiple = document.querySelector("#isMultiple"); //類別是否多選
 		const textArea = document.querySelector(".textArea"); //類別備註
+		const checkName = document.querySelector("#checkName"); //驗證有無輸入名稱
+
+		document.querySelector("#demo1").addEventListener("click", function () {
+			checkName.innerHTML = "";
+			txt.value = "份量";
+		})
+		document.querySelector("#demo2").addEventListener("click", function () {
+			checkName.innerHTML = "";
+			txt.value = "單點";
+		})
+		document.querySelector("#demo3").addEventListener("click", function () {
+			checkName.innerHTML = "";
+			txt.value = "冰塊";
+		})
 
 		list();
 		async function list() {
@@ -106,18 +130,18 @@
 			let result = document.createDocumentFragment();
 			result = "";
 			datas.forEach(function (item, index) {
-				if (item.isMultiple == 0)
+				if (item.isMultiple === 0)
 					item.isMultiple = "否";
-				else
+				else if (item.isMultiple === 1)
 					item.isMultiple = "是";
 				result += `
-				<tr name='tr'>
-						<input type="hidden" name="Fid" value="${item.fid}" id="${item.fid}"/>
+								<tr name='tr'>
+										<input type="hidden" name="Fid" value="${item.fid}" id="${item.fid}"/>
 
-						<td>${item.optionGroupName}</td>
-						<td>${item.isMultiple}</td>
-						<td>${item.memo}</td>
-				</tr>`
+										<td>${item.optionGroupName}</td>
+										<td>${item.isMultiple}</td>
+										<td>${item.memo}</td>
+								</tr>`
 			})
 			tbody.innerHTML = result;
 
@@ -126,25 +150,31 @@
 					const id = this.children[0].value; //取得點取的資料列id
 					const name = this.cells[0].innerHTML; //取得點取的資料列名稱
 					const memo = this.cells[2].innerHTML; //取得點取的資料列備註
+					const Multiple = this.cells[1].innerHTML; //取得點取的資料列備註
 					txt.value = name;
 					fid.value = id;
 					textArea.value = memo;
-					console.log(value);
+					console.log(isMultiple)
+
+					if (Multiple == "是") {
+						isMultiple.checked = true;
+					}
 				})
 			})
 		}
 
 		//商品是否多選
-		isMultiple.addEventListener("click", function () {
-			if (isMultiple.checked)
-				isMultiple.value = 1;
-			else
-				isMultiple.value = 0;
-				//console.log(isMultiple);
-		})
+		//isMultiple.addEventListener("click", function () {
+		//	if (isMultiple.checked)
+		//		isMultiple.value = 1;
+		//	else
+		//		isMultiple.value = 2;
+
+		//	console.log(isMultiple);
+		//})
 
 		//刪除
-		btnDelete.addEventListener("click",async function () {
+		btnDelete.addEventListener("click", async function () {
 			console.log(fid.value)
 			if (fid.value == 0) {
 				modalBody.innerHTML = "選取要刪除的類別!";
@@ -158,6 +188,28 @@
 
 				linkDelete.setAttribute("href", `@Url.Content("~/Type/BMaterialTypeDelete/${fid.value}")`);
 			}
+		})
+		document.querySelector("#btnSubmit").addEventListener("click", function () {
+			if (txt.value == "" || txt.value == " ") {
+				event.preventDefault();
+				checkName.innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:20px;" />請輸入名稱`;
+			}
+			else
+				checkName.innerHTML = "";
+
+			if (isMultiple.checked)
+				isMultiple.value = 1;
+			else
+				isMultiple.value = 0;
+
+			console.log(isMultiple.checked)
+		})
+		txt.addEventListener("blur", function () {
+			if (txt.value == "" || txt.value == " ") {
+				checkName.innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:20px;" />請輸入名稱`;
+			}
+			else
+				checkName.innerHTML = "";
 		})
 	</script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

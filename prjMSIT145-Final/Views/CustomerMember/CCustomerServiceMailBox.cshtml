@@ -1,0 +1,292 @@
+﻿@model prjMSIT145_Final.ViewModels.CustomerServiceMailBoxViewModel
+
+@{
+    ViewData["Title"] = "CCustomerServiceMailBox";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@section Styles{
+    <link href="~/css/customer_css/cbsonlyclass.css" rel="stylesheet" />
+    <style>
+        .checkForm.hidden{
+            display:none;
+        }
+        
+        .row{
+            width:50%;
+            margin:30px auto;                      
+        }
+        .col-md-4{
+            width:100%;
+        }
+        .mailForm>.col-md-4 input{
+            width:50%;
+            display:inline;
+        }
+        .col-md-4 label{            
+            display:inline;            
+            font-weight: bold;
+        }
+        .col-md-4>form>div{
+            margin:20px 30px;
+        }
+        .col-md-4>div{
+            margin:20px 30px;
+        }
+        .form-group{
+            display:flex;            
+        }
+        .form-group>div{
+            width:15%;
+        }
+        .form-group>textarea{
+            width:85%;
+        }
+        .btn{
+            margin:10px auto;
+            width:20%;
+            padding:10px 30px;
+        }
+        .section-title {
+            font-size: 28px;
+            padding: 20px 4% 20px;
+            background-color: #f4f4f4;            
+            font-weight: bold;
+        }
+        textarea.control-label:nth-child(2){
+            border:0;
+            background-color:transparent;
+            font-weight: bold;
+        }
+        span.text-danger{
+            margin-left:5px;
+        }
+
+        .row.mailForm .form-group:nth-child(6){
+            position:relative;
+        }
+        .form-group>p.text-danger {
+            position:absolute;
+            right:0;
+        }
+    </style>
+}
+
+<div class="row section-title">
+    聯繫我們
+</div>
+<div class="row mailForm">
+    <div class="col-md-4">
+        <form asp-action="CCustomerServiceMailBox" name="mailForm">            
+            <div class="form-group">
+                <div>
+                    <label class="text-danger">＊</label>
+                        <label asp-for="txtSenderName" class="control-label"></label>
+                </div>
+                    <input asp-for="txtSenderName" class="form-control" />
+                <span name="checkSenderName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                    <div>
+                        <label class="text-danger">＊</label>
+                        <label asp-for="txtEmailAddress" class="control-label"></label>
+                </div>
+                    <input asp-for="txtEmailAddress" class="form-control" />
+                <span name="checkEmailAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div><label class="text-danger">＊</label>
+                        <label asp-for="txtPhone" class="control-label"></label>
+                </div>
+                    <input asp-for="txtPhone" class="form-control" />
+                <span name="checkPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div><label class="text-danger">＊</label>
+                        <label asp-for="txtMailSubject" class="control-label"></label>
+                </div>
+                    <input asp-for="txtMailSubject" class="form-control" />
+                <span name="checkMailSubject" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                    <div>
+                        <label class="text-danger">＊</label>
+                        <label asp-for="txtMailContent" class="control-label"></label>
+                </div>
+                    <textarea asp-for="txtMailContent" class="form-control" rows="5"></textarea>                                       
+            </div>
+                <div class="form-group">
+                <p name="checkMailContent" class="text-danger"></p>
+                </div>
+            <div class="form-group">                
+                    <button id="btnCheck" class="btn btn-dark">確認畫面</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row checkForm hidden">
+    <div class="col-md-4">            
+        <div class="form-group">                        
+            <div>
+                <label class="text-danger">＊</label>
+                <label class="control-label">姓名</label>
+            </div>
+                <label name="lblSenderName" class="control-label"></label>
+        </div>
+        <div class="form-group">            
+            <div>
+                <label class="text-danger">＊</label>
+                <label class="control-label">Email</label>
+            </div>
+            <label name="lblEmailAddress" class="control-label">                    
+            </label>                
+        </div>
+        <div class="form-group">
+                <div>
+                    <label class="text-danger">＊</label>
+                    <label class="control-label">電話</label>
+                </div>            
+            <label name="lblPhone" class="control-label">                
+            </label>                
+        </div>
+        <div class="form-group">
+                <div>
+                    <label class="text-danger">＊</label>
+                    <label class="control-label">詢問主題</label>
+                </div>            
+            <label name="lblmailSubject" class="control-label">                    
+            </label>                
+        </div>
+        <div class="form-group">
+            <div>
+                <label class="text-danger">＊</label>
+                <label class="control-label">詢問內容</label>
+            </div>            
+            <textarea name="lblmailContent" class="control-label" readonly rows="20">                    
+            </textarea>                
+        </div>
+        <div class="form-group">                
+                <input type="button" value="返回輸入畫面" id="btnBack" class="btn btn-light" />
+                <input type="submit" value="提交" id="btnSubmitMail" class="btn btn-dark" />
+        </div>
+           
+    </div>
+</div>
+<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label"></label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseMsg">確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <script>
+        $(function(){            
+
+            function clearCheckForm(){
+                $('[name=lblSenderName]').text('');
+                $('[name=lblEmailAddress]').text('');
+                $('[name=lblPhone]').text('');
+                $('[name=lblmailSubject]').text('');
+                $('[name=lblmailContent]').val('');
+            }
+
+            let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
+                keyboard: false
+            });
+            $('#btnBack').click(function(){
+                clearCheckForm();
+                $('.row.checkForm').addClass('hidden');
+                $('.row.mailForm').show();
+            });
+
+            $('#btnSubmitMail').click(async function(event){
+                event.preventDefault();                
+
+                let formData = new FormData(document.mailForm);
+                let f = await fetch(`@Url.Content("~/CustomerMember/submitCustomerMail")`, {
+                    body: formData,
+                    method: "post",
+                });
+                let msg = await f.text();
+
+                console.log(`msg=${msg}`);
+
+                $('#msgAlert label').text(`提交成功`);
+                msgAlert.show();
+                clearCheckForm();
+                
+                
+            });
+
+            $('#btnCloseMsg').click(function () {  
+                 location.replace('@Url.Content("~/home/CIndex")');
+            });
+
+            $('#btnCheck').click(function(event){
+                event.preventDefault();
+                let SenderName=$('[name=txtSenderName]').val();
+                let email = $('[name=txtEmailAddress]').val();
+                let Phone = $('[name=txtPhone]').val();
+                let mailSubject = $('[name=txtMailSubject]').val();
+                let txtMailContent = $('[name=txtMailContent]').val();
+
+                let errCount=0;
+                $('[name^=txt]').each(function(){
+                    let value = $(this);
+                    if (value.val().trim() == '') {
+                        value.parents('.form-group').find('[name^=check]').text('此為必填欄位');
+                        errCount++;
+                    }
+                    else{
+                        value.parents('.form-group').find('[name^=check]').text('');
+                    }                    
+                });
+
+                
+                if (txtMailContent==''){
+                    $('[name=checkMailContent]').text('此為必填欄位');
+                    errCount++;
+                }else{
+                    $('[name=checkMailContent]').text('');
+                }                
+ 
+                //Regular expression Testing
+                let emailRule = /^\w+((-\w+)|(\.\w+))*\@@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+                
+                //validate ok or not                
+                if(!emailRule.test(email))
+                {
+                    $('[name=txtEmailAddress]').parents('.form-group').find('[name^=check]').text('Email格式不正確');
+                    errCount++;
+                    return false;
+                }                
+                $('[name=txtEmailAddress]').parents('.form-group').find('[name^=check]').text('');
+
+                if (errCount > 0)
+                    return false;
+
+                $('[name=lblSenderName]').text(SenderName);
+                $('[name=lblEmailAddress]').text(email);
+                $('[name=lblPhone]').text(Phone);
+                $('[name=lblmailSubject]').text(mailSubject);
+                $('[name=lblmailContent]').val(txtMailContent);
+
+                $('.row.checkForm.hidden').removeClass('hidden');
+                $('.row.mailForm').hide();
+            });
+        });
+    </script>
+}

@@ -802,7 +802,13 @@ namespace prjMSIT145_Final.Controllers
                 expire = request.Expire.ToString();            
 
             if (expire == "" || DateTime.Now > Convert.ToDateTime(expire))
-                return RedirectToAction("ALogin");
+            {
+                if (tp.ToUpper() == "A") ;
+                    return RedirectToAction("ALogin");
+                if (tp.ToUpper() == "N") ;
+                    return RedirectToAction("Login", "CustomerMember");
+            }
+                
 
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_EXPIRE))                
                 HttpContext.Session.Remove(CDictionary.SK_RESETPWD_EXPIRE);                    
@@ -944,7 +950,7 @@ namespace prjMSIT145_Final.Controllers
             //MySMTP.UseDefaultCredentials = true;
             MySMTP.Credentials = new System.Net.NetworkCredential("b9809004@gapps.ntust.edu.tw", DemoMailServer); //這裡要填正確的帳號跟密碼
             MySMTP.Host = "smtp.gmail.com"; //設定smtp Server
-            MySMTP.Port = /*587*/25;
+            MySMTP.Port = 587;
             MySMTP.EnableSsl = true; //gmail預設開啟驗證
             
 

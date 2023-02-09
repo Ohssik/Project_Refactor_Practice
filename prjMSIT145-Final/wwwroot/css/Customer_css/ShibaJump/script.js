@@ -4,7 +4,7 @@ Array.prototype.random = function() {
 
 Vue.component( "MochiBox", {
   template: `
-  <div class="MochiBox /" :class="[shiba, { pop: pop }]" @click="randomize" tabindex="0">
+  <div class="MochiBox /" :class="[shiba, { pop: pop }]" tabindex="0">
     <MochiShiba 
       :size="size"
       :mood="mood" 

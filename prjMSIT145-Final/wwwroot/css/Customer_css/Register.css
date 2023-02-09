@@ -23,7 +23,7 @@
     font-weight: bold;
 }
 .card3 {
-    background-color: whitesmoke;
+    background-color: white;
     border: solid 2px;
     border-color: transparent;
     width: 636px;
@@ -33,17 +33,16 @@
     padding: 10px;
     margin: 0 auto;
     box-shadow: 6px 6px 6px rgba(20%,20%,40%,0.5),inset 1px 1px 4px 2px rgba(20%,20%,40%,0.5);
-   
 }
 .necessspan {
     color: red;
     font-size: 14px;
 }
 
-.title2{
-    background-color: whitesmoke;
+.title2 {
+    background-color: white;
     margin: 10px;
-    margin-right:50px;
+    margin-right: 50px;
 }
 .dashed {
     border: 0.1px solid rgb(236, 229, 229);
@@ -61,8 +60,8 @@
     font-weight: bold;
 
 }
-.title3{
-    background-color: whitesmoke;
+.title3 {
+    background-color: white;
     margin: 40px;
 }
 .input {
@@ -93,9 +92,9 @@
     text-align: left;
     display: flex;
 }
-.color{
-    background-color: whitesmoke;
-    color:blue;
+.color {
+    background-color: white;
+    color: blue;
     margin-right: 10px;
     font-size: 20px;
 }
@@ -137,15 +136,17 @@
     margin-right: 80px;
 
 }
-.enter{
+.enter {
     width: 157px;
     height: 65px;
-    background-color: #ff5e7d;
-    color: whitesmoke;
+    /* background-color: #ff5e7d;*/
+    background-color: #0292f4;
+    color: white;
     font-weight: bold;
     border-radius: 5px;
     border: transparent;
     font-size: 18px;
+    cursor:pointer;
 }
 .dog{
     background-color: #9f4e27;
