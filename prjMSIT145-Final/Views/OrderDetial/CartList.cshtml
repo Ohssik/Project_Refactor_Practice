@@ -42,6 +42,7 @@
         .Fieldset i {
             position: absolute;
             right: 20px;
+            
         }
 
         .orderRefresh {
@@ -309,7 +310,7 @@
                     </div>
                     <h5>預計取餐時間</h5>
                     <fieldset class="Fieldset" id="pickUpTime">
-                        <legend class="font-size">@Convert.ToString(Model.PickUpDate).Substring(0,9) @Model.PickUpTime</legend>
+                        <input class="Fieldset" id="change" value="" />
                     </fieldset>
                     <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
                     <h5>門市位置</h5>
@@ -610,20 +611,29 @@
                 $("#pickUp").append(` <div class="pickUp_back"></div>
                         <div class="pickUp_mainDiv">
                         <div class="pickUp_fixed pickUp_pickUpDiv cardBorderColor pickUp_divBorder">
-                            <input class="pickUp_date pickUp_margin cardBorderColor pickUp_divBorder" type="date" min="2023-02-08"/>
+                                    <input class="pickUp_date pickUp_margin cardBorderColor pickUp_divBorder" type="date" min="2023-02-08" value="" id=inputchangeDate/>
 
                             <div class="pickUp_timeDiv">
 
-                               <input id="hoursDiv" class="pickUp_time pickUp_divBorder cardBorderColor" type="time" value="時"/>
+                               <input id="hoursDiv" class="pickUp_time pickUp_divBorder cardBorderColor" type="time" id="inputchangeTime" value=""/>
                             
                             </div>
                                     <div class="delete_row">
-                                            <div class="delete_btn"><button id="delete">確認</button></div>
+                                                            <div class="delete_btn"><button id="enter">確認</button></div>
                                             <div class="delete_btn"><button id="cancel">取消</button></div>
                                         </div>
                         </div>
                     </div>`
                 );
+                $("#enter").on("click", function () {
+                    console.log("click")
+                    $(".pickUp_back").addClass("delete_none")
+                    $(".pickUp_pickUpDiv").addClass("delete_none")
+                    $("#change").val("#inputchangeDate")
+                    $("#change").val("#inputchangeTime")
+
+                })
+
                 $("#cancel").on("click", function () {
                     $(".pickUp_back").addClass("delete_none")
                     $(".pickUp_pickUpDiv").addClass("delete_none")
@@ -659,6 +669,8 @@
         $(".btnToFinish").click(function (){
             window.location.href = "OrderDetial/List";
         })
-
+        //選擇日期
+         
+       
     </script>
 }

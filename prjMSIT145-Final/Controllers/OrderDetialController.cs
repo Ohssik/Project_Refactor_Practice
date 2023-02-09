@@ -337,8 +337,6 @@ namespace prjMSIT145_Final.Controllers
 
             COrderDetialViewModel vm = new COrderDetialViewModel();
 
-            //_context.Orders.Add(k);
-            //_context.SaveChanges();
 
             vm.TotalQty = 0;
 
