@@ -48,10 +48,14 @@
         <hr style="border:1px dashed #000; height:1px">
 
         @*選擇配料類別*@
-        <h6 id="h6">選擇配料類別</h6>
+        <div style="display:flex">
+            <h6 id="h6">選擇配料類別</h6>
+            <span id="checkMaterialType" style="margin-left:20px; font-size:17px;"></span>
+        </div>
+        <input type="hidden" id="materialCheck"/>
         <div id="chooseMaterial">
           @*  <label for="" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="" name="chooseMaterial" style="font-size:20px" />&ensp;單點</label>*@
-        </div>
+        </div> 
 
         @*產品價格*@
         <hr style="border:1px dashed #000; height:1px">
@@ -143,13 +147,23 @@
             let materialFrag = document.createDocumentFragment();
             materialFrag = "";
 
-            console.log(material)
+            //console.log(material)
             material.forEach(function (item, index) {
                 materialFrag += ` <label for="${item.fid}" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="${item.fid}" id="${item.fid}" name="productOp" style="font-size:20px" />&ensp;${item.optionGroupName}</label>`
             })
 
             chooseMaterial.innerHTML = materialFrag;
-           
+
+            //確認配料類別有無選取
+             document.getElementsByName("productOp").forEach(function (val) {
+                val.addEventListener("click", function () {
+                    document.querySelector("#materialCheck").value = val.value;
+                    if(!val.checked)
+                        document.querySelector("#materialCheck").value ="";
+
+                    document.querySelector("#checkMaterialType").innerHTML = ``;
+                })
+            })
         })
       
         //上傳照片
@@ -202,13 +216,18 @@
             else
                 checkName.innerHTML = "";
 
-                 document.getElementsByName("productOp").forEach(function (val) {
-                     val
-            val.addEventListener("click",function(){
-                console.log(val);
-            })
+                if(document.querySelector("#materialCheck").value == "")
+               {
+                   event.preventDefault();
+                document.querySelector("#checkMaterialType").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:30px;"/>請選擇配料類別`;
+                console.log(document.querySelector("#materialCheck").value)
+               }
+               else
+                document.querySelector("#checkMaterialType").innerHTML = ``;
+           
         })
-        })
+
+
 
         //驗證類別是否選擇
         selType.addEventListener("change", function () {
