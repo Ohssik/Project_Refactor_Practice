@@ -418,22 +418,9 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult Forgetpassword()
         {
             
-
-
-
-
             return View();
 
         }
-
-
-        //public IActionResult Forgetpassword()
-        //{
-
-        //    return View();
-        //}
-
-
 
         [HttpPost]
         public IActionResult Forgetpassword(CNormalMemberViewModel vm)
@@ -456,22 +443,23 @@ namespace prjMSIT145_Final.Controllers
                     int portNumber = 587;
                     bool enableSSL = true;
                     //填入寄送方email和密碼
+                    string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?Fid={member.Fid}";
                     string emailFrom = "a29816668@gmail.com";
                     string emailpassword = "joksdquaswjdyzpu";
                     //收信方email 可以用逗號區分多個收件人
                     string emailTo = vm.Email;
                     //主旨
-                    string subject = "Hello";
+                    string subject = "重製密碼";
                     //內容
-                    string body = $"https://localhost:7266/CustomerMember/forgetalterpassword/?Fid={vm.Fid}";
+                    string body = $"<h2>重製密碼</h2><h3><br><a href={url}>請點此連結重設密碼</a></h3>";
                     using (MailMessage mail = new MailMessage())
                     {
-                        mail.From = new MailAddress(emailFrom);
+                        mail.From = new MailAddress(emailFrom,"日柴", System.Text.Encoding.UTF8);
                         mail.To.Add(emailTo);
                         mail.Subject = subject;
                         mail.Body = body;
                         // 若你的內容是HTML格式，則為True
-                        mail.IsBodyHtml = false;
+                        mail.IsBodyHtml = true;
                         using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
                         {
                             smtp.Credentials = new NetworkCredential(emailFrom, emailpassword);
@@ -489,15 +477,33 @@ namespace prjMSIT145_Final.Controllers
 
             }
 
-                 return Redirect("~/Home/CIndex");
+                
         }
+        public IActionResult Forgetpasswordapi(CNormalMemberViewModel vm)
+        {
+            if (vm.Email!= null && vm.Phone!=null)
+            {
+                NormalMember member =_context.NormalMembers.FirstOrDefault(c=>c.Email== vm.Email && c.Phone==vm.Phone);
+                if (member != null) {
+                    return Json("已送出重製密碼信件");
+                    }
+                else
+                {
+                    return Json("帳號或Email錯誤");
+                }
+                
+            }
+
+                 return Json("請兩格都不要空白");
+        }
+
 
         public IActionResult forgetalterpassword(int? Fid)
         {
             if (Fid != null)
             {
                 NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Fid == Fid);
-                if(member!= null)
+                if (member != null)
                 {
                     return View(member);
                 }
@@ -515,7 +521,7 @@ namespace prjMSIT145_Final.Controllers
         {
             if(member.Password == null)
             {
-                return View();
+                return View(member);
             }
             else
             {
