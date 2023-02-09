@@ -1,25 +1,27 @@
-﻿const msgDiv = document.querySelector(".msgDiv"); //對話框
-const userImg = document.querySelector("#userImg"); //客戶頭像
-const txt = document.querySelector("#txt"); //輸入框
-const btnSubmit = document.querySelector("#btnSubmit"); //送出
-const tr = document.querySelectorAll("tr");
-const resultDiv = document.querySelector("#resultDiv");
+﻿const msgDiv = document.querySelector(".msgDivProblem"); //對話框
+const userImg = document.querySelector("#userImgProblem"); //客戶頭像
+const txt = document.querySelector("#txtProblem"); //輸入框
+const btnSubmitProblem = document.querySelector("#btnSubmitProblem"); //送出
+const tr = document.getElementsByName("trProblem");
+const resultDiv = document.querySelector("#resultDivProblem");
 let azureLogo = document.querySelector("#azureLogo"); //按鈕
 let logoDiv = document.querySelector("#logoDiv");
 let timer = null; //時間變數
 
-let msg = "";
+let msgProblem = "";
 // 點選常見問題
-tr.forEach(function (td) {
-    td.addEventListener("click", function () {
-        console.log(this.firstElementChild.innerHTML);
-        msg = this.firstElementChild.innerHTML;
-        txt.value = msg;
+tr.forEach(function (msg) {
+    msg.addEventListener("click", function () {
+        //console.log(this.firstElementChild.innerHTML);
+        
+        msgProblem = this.firstElementChild.innerHTML;
+        console.log("msg"+msgProblem)
+        txt.value = msgProblem;
     });
 });
 
 //按下送出鈕
-btnSubmit.addEventListener("click", async function () {
+btnSubmitProblem.addEventListener("click", async function () {
     //使用者頭像ajax
     const response = await fetch("/Problem/PUserImg");
     const img = await response.json();
@@ -48,7 +50,7 @@ btnSubmit.addEventListener("click", async function () {
     if (img.userImg !== "") {
         fragForUser = `<div class="display userDiv">
                                     <div class="userMsg">${txt.value}</div>
-                                        <div class="imgDiv" id='userImg'><img src="../images/Customer/Member/${img.userImg}" alt="SessionImg"/></div>
+                                        <div class="imgDiv" id='userImgProblem'><img src="../images/Customer/Member/${img.userImg}" alt="SessionImg"/></div>
                                     </div > `;
     }
     else {
@@ -63,7 +65,9 @@ btnSubmit.addEventListener("click", async function () {
 
     txt.value = "";
 });
-
+msgDiv.addEventListener("scroll", function () {
+    console.log( msgDiv.scrollTop)
+})
  let hight = document.documentElement.scrollHeight;  //需要顯示得總長
 document.addEventListener("scroll", function () {
     clearTimeout(timer);

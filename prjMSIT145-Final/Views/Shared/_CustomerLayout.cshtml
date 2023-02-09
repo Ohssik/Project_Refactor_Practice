@@ -210,15 +210,15 @@
                             <div class="qDiv">
                                 <p>&nbsp;常見問題:</p>
                                 <table class="table table-hover">
-                                    <tr><td style="border-bottom:1px solid lightgray">變更或取消訂單</td></tr>
-                                    <tr><td style="border-bottom:1px solid lightgray">收到的商品有誤</td></tr>
-                                    <tr><td style="border-bottom:1px solid lightgray">沒收到優惠券</td></tr>
-                                    <tr><td style="border-bottom:1px solid lightgray">信用卡退款</td></tr>
+                                    <tr name="trProblem"><td style="border-bottom:1px solid lightgray">變更或取消訂單</td></tr>
+									<tr name="trProblem"><td style="border-bottom:1px solid lightgray">收到的商品有誤</td></tr>
+									<tr name="trProblem"><td style="border-bottom:1px solid lightgray">沒收到優惠券</td></tr>
+									<tr name="trProblem"><td style="border-bottom:1px solid lightgray">信用卡退款</td></tr>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    <div id="resultDiv">
+                    <div id="resultDivProblem">
                         @*<div class="display userDiv">
                         <div class="userMsg">信用卡退款</div>
                         <div class="imgDiv"><img src="images/user.png" alt="" /></div>
@@ -227,8 +227,8 @@
                 </div>
 
                 <div class="txtDiv display">
-                    <input type="text" id="txt" />
-                    <button id="btnSubmit" type="button"><img src="~/images/Problem/send.png" /></button>
+					<input type="text" id="txtProblem" />
+                    <button id="btnSubmitProblem" type="button"><img src="~/images/Problem/send.png" /></button>
                 </div>
             </div>
         </div>
