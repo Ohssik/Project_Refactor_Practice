@@ -292,7 +292,7 @@
     </style>
 }
 <div class="changePage">
-  @*<form method="post" enctype="multipart/form-data">*@
+  <form method="post" enctype="multipart/form-data">
     <div class="slides1" id="slides">
         <div class="bodyBackgroundColor body_Icon_delete_Guide_fontColor body">
             <div class="mainDiv">
@@ -308,12 +308,12 @@
                 <div class="divMargin cardBackgroundColor" id="pickUp">
                     <h4>取餐方式</h4>
                     <div class="pickUpMD">
-                        <input type="radio" checked="checked" name="PickUpType" value="自取" />
+                        <input type="radio" checked="checked" name="PickUpType" value="自取" id="PickUpType" />
                         <p>自取 </p>
                     </div>
                     <h5>預計取餐時間</h5>
                     <fieldset class="Fieldset" id="pickUpTime">
-                        <input class="font-size dateTime" name="change" id="change" />
+                            <input class="font-size dateTime" name="pickUpDate" id="change" type="datetime-local" />
                     </fieldset>
                     <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
                     <h5>門市位置</h5>
@@ -421,7 +421,7 @@
                     </div>
                     <div class="flexAndItemsCenter orderDivBottomBorder orderFinalPrice">
                         <div id="pay"><h4>應付金額</h4></div>
-                        <input type="text" value="@Model.TotalAmount" id="AddTotal" hidden/>
+                        <input type="text" value="" id="AddTotal" name="TotalAmount" hidden/>
                         <div class="orderAbsolteForRight"><h4 id="TotalAmount">$&nbsp;@Model.TotalAmount</h4></div>
                     </div>
                 </div>
@@ -533,31 +533,31 @@
                     </div>
                     <div class="spanFont div flexAndItemsCenter cardBorderColor">
                         <div class="marginright">取餐方式</div>
-                        <div>@Model.PickUpType</div>
+                        <div>自取</div>
                     </div>
                     <div class="spanFont div flexAndItemsCenter cardBorderColor">
                         <div class="marginright">預計取餐時間</div>
-                        <div ></div>
+                        <div id="change2"></div>
                     </div>
                     <div class="spanFont div flexAndItemsCenter cardBorderColor">
                         <div class="marginright">付款方式</div>
-                        <div>@Model.PayTermCatId</div>
+                        <div id="CPayTernCatId"></div>
                     </div>
                     <div class="spanFont div flexAndItemsCenter">
                         <div class="marginright">應付金額</div>
-                        <div>$@Model.TotalAmount</div>
+                        <div id="TotalAmount2">$@Model.TotalAmount</div>
                     </div>
                 </div>
             </div>
             <div class="topMargin">
                 <div class="flexAndItemsCenter bottomBtn ">
                     <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
-                    <div><button class="btnToFinish">送出訂單</button></div>
+                    <div><button class="btnToFinish" type="submit">送出訂單</button></div>
                 </div>
             </div>
         </div>
     </div>  
-   @*</form>*@
+   </form>
 </div>
 @section Scripts{
     <script src="@Url.Content("~/js/jquery-3.6.2.js")" ></script>
@@ -565,30 +565,56 @@
     <script>
         let DateValue=``;
         @*網頁重新整理*@
-            $("#btnReset").click(function () {
+        $("#btnReset").click(function () {
                 location.reload();
             })
         @*有無加購塑膠袋*@
-            $("#plastic").click(function () {
+        $("#plastic").click(function () {
                 let checked = $("#plastic").prop("checked");
                 if (checked) {
                     console.log(checked)
                     $("#plasticPrice").text("$ 2");
                     $("#AddTotal").val(@Model.TotalAmount+2);
                     $("#TotalAmount").text("$ "+(@Model.TotalAmount+2));
+                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount+2));
                 }
                 else {
                     $("#plasticPrice").text("您未加購塑膠袋");
                     $("#AddTotal").val(@Model.TotalAmount);
                     $("#TotalAmount").text("$ " + (@Model.TotalAmount));
+                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount));
                 }
             })
 
-        @*選擇付款方式*@
-            
 
+        @*選擇付款方式*@
+        $("#cash").click(function () {
+                let checked = $("#cash").prop("checked");
+                if (checked) {
+                    console.log(checked)
+                    $("#CPayTernCatId").text("現金");
+
+                }
+                else {
+                    $("#CPayTernCatId").text("信用卡");
+                }
+            })
+        $("#cardit").click(function () {
+            let checked = $("#cardit").prop("checked");
+            if (checked) {
+                console.log(checked)
+                $("#CPayTernCatId").text("信用卡");
+
+            }
+            else {
+                $("#CPayTernCatId").text("現金");
+            }
+        })
+
+        
         @*刪除單一產品*@
-            $(".deleteBtn").on("click", function () {
+        $(".deleteBtn").on("click", function () {
+                event.preventDefault();
                 $("body").after(
                     `<div class="delete_back"></div>
                         <div class="delete_mainDiv">
@@ -607,54 +633,39 @@
                         </div>
                         `)
                 $("#cancel").on("click", function () {
+                    event.preventDefault();
                     $(".delete_back").addClass("delete_none")
                     $(".delete_msgDiv").addClass("delete_none")
 
                 })
                 $(".delete_back").on("click", function () {
+                    event.preventDefault();
                     $(".delete_back").addClass("delete_none")
                     $(".delete_msgDiv").addClass("delete_none")
                 })
             })
 
-        @*點擊自取時間*@
-            $("#pickUpTime").on("click", () => {
+        @*改變日期*@
+        $("#change").change(function () {
 
-                $("#pickUp").append(` <div class="pickUp_back"></div>
-                        <div class="pickUp_mainDiv">
-                        <div class="pickUp_fixed pickUp_pickUpDiv cardBorderColor pickUp_divBorder">
-                                            <input class="pickUp_date pickUp_margin cardBorderColor pickUp_divBorder" type="datetime-local" min="2023-02-07 value="2023-02-09" id="inputchangeDate"/>
-                                    <div class="delete_row">
-                                                            <div class="delete_btn"><button id="enter">確認</button></div>
-                                            <div class="delete_btn"><button id="cancel">取消</button></div>
-                                        </div>
-                        </div>
-                    </div>`
-                );
-                $("#enter").on("click", function () {
- 
-                    $(".pickUp_back").addClass("delete_none")
-                    $(".pickUp_pickUpDiv").addClass("delete_none")
-   
-                    DateValue = document.getElementById("inputchangeDate").value
-                    $("#change").val(`${DateValue}`)
-                    
 
-                })
+            DateValue = document.getElementById("change").value
+            $("#change").val(`${DateValue}`)
+            console.log(DateValue);
 
-                $("#cancel").on("click", function () {
-                    $(".pickUp_back").addClass("delete_none")
-                    $(".pickUp_pickUpDiv").addClass("delete_none")
+        })
+        $("#change").change(function () {
 
-                })
-                $(".pickUp_back").on("click", function () {
-                    $(".pickUp_back").addClass("delete_none")
-                    $(".pickUp_pickUpDiv").addClass("delete_none")
-                })
-            });
+
+            DateValue = document.getElementById("change").value
+            $("#change2").text(`${DateValue}`)
+            console.log(DateValue);
+
+        })
+       
 
         $(".btnToNext").click(function () {
-            
+            event.preventDefault();
             if (document.getElementById("slides").getAttribute("class") == "slides1"){
                 document.getElementById("slides").setAttribute("class","slides2");
 
@@ -665,7 +676,7 @@
         });
 
         $(".btnToAdd").click(function () {
-            
+            event.preventDefault();
             if (document.getElementById("slides").getAttribute("class") == "slides3") {
                 document.getElementById("slides").setAttribute("class", "slides2");
 
@@ -675,6 +686,7 @@
             };
         })
         $(".btnToFinish").click(function (){
+            event.preventDefault();
             window.location.href = "OrderDetial/List";
         })
 

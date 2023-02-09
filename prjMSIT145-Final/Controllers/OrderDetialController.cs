@@ -238,7 +238,7 @@ namespace prjMSIT145_Final.Controllers
                     on o.BFid equals b.Fid
                     join a in _context.PaymentTermCategories
                     on o.PayTermCatId equals a.Fid
-                    where o.Fid == 1
+                    where o.Fid == 39
                     select new
                     {
                         Fid = o.Fid,
@@ -267,6 +267,7 @@ namespace prjMSIT145_Final.Controllers
                 vm.PayTermCatId = item.PayTernCatId;
                 vm.Memo = item.Memo;
                 vm.OrderState = item.OrderState;
+                vm.TotalAmount = item.TotalAmount;
             }
 
 
@@ -284,7 +285,7 @@ namespace prjMSIT145_Final.Controllers
                     on o.BFid equals b.Fid
                     join a in _context.PaymentTermCategories
                     on o.PayTermCatId equals a.Fid
-                    where o.Fid == 1
+                    where o.Fid == 39
                     select new
                     {
                         Fid = o.Fid,
@@ -308,7 +309,7 @@ namespace prjMSIT145_Final.Controllers
             var Pr = from o in _context.OrderItems
                      join p in _context.Products
                      on o.ProductFid equals p.Fid
-                     where o.OrderFid == 1
+                     where o.OrderFid == 39
                      select new
                      {
                          Fid = o.Fid,
