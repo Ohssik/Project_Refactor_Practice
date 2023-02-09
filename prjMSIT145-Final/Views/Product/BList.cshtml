@@ -221,15 +221,15 @@
                     document.querySelector("#BFid").value =  cell.children[1].value;
 
                     //判斷編輯的產品目前狀態
-                    document.getElementsByName("IsForSale").forEach(function (radio) {
-                        console.log(radio);
-                        if (cell.children[5].innerHTML === "未上架")
+                    //document.getElementsByName("IsForSale").forEach(function (radio) {
+                    //    console.log(radio);
+                        if (cell.children[6].innerHTML === "未上架")
                             document.querySelector("#IsForSale0").checked = true;
-                        else if (cell.children[5].innerHTML === "已上架")
+                        else if (cell.children[6].innerHTML === "已上架")
                             document.querySelector("#IsForSale1").checked = true;
-                        else if (cell.children[5].innerHTML === "停售")
+                        else if (cell.children[6].innerHTML == "停售")
                             document.querySelector("#IsForSale2").checked = true;
-                    })
+                    //})
 
                     if (imgShow.getAttribute("src") == "../images/Business/upload.png")
                         imgShow.setAttribute("style", "width: 90px; height: 70px;");

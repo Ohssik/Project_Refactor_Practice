@@ -12,11 +12,11 @@
     <div style="margin:0 0 20px 50px">
     <button id="demo1" class="btn btn-outline-secondary">Demo_L</button>
     <button id="demo2" class="btn btn-outline-secondary">Demo_M</button>
-    <button id="demo3" class="btn btn-outline-secondary">Demo_S</button>
+    @*<button id="demo3" class="btn btn-outline-secondary">Demo_S</button>*@
      <button id="demo4" class="btn btn-outline-secondary">Demo單點炸雞塊</button>
     <button id="demo5" class="btn btn-outline-secondary">Demo單點薯條</button>
-    <button id="demo6" class="btn btn-outline-secondary">Demo單點荷包蛋</button>
-        <button id="demo7" class="btn btn-outline-secondary">Demo冰塊</button>
+    @*<button id="demo6" class="btn btn-outline-secondary">Demo單點荷包蛋</button>*@
+        @*<button id="demo7" class="btn btn-outline-secondary">Demo冰塊</button>*@
         <button id="demo8" class="btn btn-outline-secondary">Demo冰塊</button>
         <button id="demo9" class="btn btn-outline-secondary">Demo冰塊</button>
     </div>
@@ -85,17 +85,17 @@
 
         const demo1 = document.querySelector("#demo1"); 
         const demo2 = document.querySelector("#demo2"); 
-        const demo3 = document.querySelector("#demo3"); 
+        //const demo3 = document.querySelector("#demo3"); 
         const demo4 = document.querySelector("#demo4");
         const demo5= document.querySelector("#demo5"); 
-        const demo6 = document.querySelector("#demo6"); 
-        const demo7 = document.querySelector("#demo7"); 
+        //const demo6 = document.querySelector("#demo6"); 
+        //const demo7 = document.querySelector("#demo7"); 
         const demo8 = document.querySelector("#demo8"); 
         const demo9 = document.querySelector("#demo9"); 
        
         demo1.addEventListener("click", function () {
             txtOptionName.value = "L";
-           txtPrice.value = "10";
+           txtPrice.value = "20";
             checkName.innerHTML = "";
         })
        
@@ -105,11 +105,11 @@
             checkName.innerHTML = "";
         })
         
-        demo3.addEventListener("click", function () {
-            txtOptionName.value = "S";
-           txtPrice.value = "-10";
-            checkName.innerHTML = "";
-        })
+        //demo3.addEventListener("click", function () {
+        //    txtOptionName.value = "S";
+        //   txtPrice.value = "0";
+        //    checkName.innerHTML = "";
+        //})
 
         demo4.addEventListener("click", function () {
                txtOptionName.value = "炸雞塊";
@@ -123,17 +123,17 @@
             checkName.innerHTML = "";
         })
    
-        demo6.addEventListener("click", function () {
-            txtOptionName.value = "荷包蛋";
-            txtPrice.value = "15";
-            checkName.innerHTML = "";
-        })
+        //demo6.addEventListener("click", function () {
+        //    txtOptionName.value = "荷包蛋";
+        //    txtPrice.value = "15";
+        //    checkName.innerHTML = "";
+        //})
        
-        demo7.addEventListener("click", function () {
-            txtOptionName.value = "正常冰";
-            txtPrice.value = "0";
-            checkName.innerHTML = "";
-        })
+        //demo7.addEventListener("click", function () {
+        //    txtOptionName.value = "正常冰";
+        //    txtPrice.value = "0";
+        //    checkName.innerHTML = "";
+        //})
       
         demo8.addEventListener("click", function () {
             txtOptionName.value = "少冰";
