@@ -21,8 +21,6 @@ namespace prjMSIT145_Final.Models
 
         public async Task SendMessage(int otheruserid, string message)
         {  
-            //找出要發給的那個人的資料
-            var user = users.FirstOrDefault(u => u.ChatroomUserid == otheruserid);
             //抓Session裡的member
             string json = (Context.GetHttpContext().Session.GetString(CDictionary.SK_LOGINED_USER));
             BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
@@ -51,12 +49,15 @@ namespace prjMSIT145_Final.Models
                 chat2Userother.Userid = otheruserid;
                 _context.SaveChanges();
             } 
+
              //對自己發出訊息
-               await Clients.Client(Context.ConnectionId).SendAsync("ReceiveMessage", message);
+               await Clients.Client(Context.ConnectionId).SendAsync("RemoteMessage",message);
+            //找出要發給的那個人的資料
+            var user = users.FirstOrDefault(u => u.ChatroomUserid == otheruserid);
             if(user != null)
             {
                 //對對方發出訊息
-               await Clients.Client(user.ConnectionId).SendAsync("ReceiveMessage", message);
+               await Clients.Client(user.ConnectionId).SendAsync("LocalMessage", message);
             }
              //把訊息存入聊天室
                 ChatMessage chatMessage = new ChatMessage();
@@ -64,6 +65,8 @@ namespace prjMSIT145_Final.Models
                 chatMessage.Senderid =(int)member.ChatroomUserid;
                 chatMessage.Message= message;
                 chatMessage.SendTime = DateTime.Now;
+                _context.ChatMessages.Add(chatMessage);
+            _context.SaveChanges();
         }
         //修改連線時的動作(加上自己想要的)
         public override async Task OnConnectedAsync()
@@ -73,7 +76,7 @@ namespace prjMSIT145_Final.Models
                 ChatroomUser user = new ChatroomUser();
                 if (Context.GetHttpContext().Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
                 {
-                    string json = (Context.GetHttpContext().Session.GetString(CDictionary.SK_LOGINED_USER));
+                    string json = (Context.GetHttpContext().Session.GetString(CDictionary.SK_LOGINED_Business));
                     BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
                     user.ChatroomUserid = (int)member.ChatroomUserid;
                     user.ConnectionId = Context.ConnectionId;
