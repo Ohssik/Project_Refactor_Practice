@@ -13,9 +13,9 @@ let msgProblem = "";
 tr.forEach(function (msg) {
     msg.addEventListener("click", function () {
         //console.log(this.firstElementChild.innerHTML);
-        
+
         msgProblem = this.firstElementChild.innerHTML;
-        console.log("msg"+msgProblem)
+        console.log("msg" + msgProblem)
         txt.value = msgProblem;
     });
 });
@@ -66,12 +66,13 @@ btnSubmitProblem.addEventListener("click", async function () {
     txt.value = "";
 });
 
- let hight = document.documentElement.scrollHeight;  //需要顯示得總長
+
+let hight = document.documentElement.scrollHeight;  //需要顯示得總長
 document.addEventListener("scroll", function () {
     clearTimeout(timer);
 
     let top = document.documentElement.scrollTop; //頁面目前所在高度
-   
+
     const azureClass = azureLogo.classList.contains("walk");  //檢查是否有'walk'的class
 
     //停止捲動事件一秒後移除動畫class
@@ -89,7 +90,7 @@ document.addEventListener("scroll", function () {
         }, 500)
     }
 
-    
+
     //console.log("top:" + top);
     //console.log("hight:" + hight);
     //console.log(document.body.scrollHeight);
