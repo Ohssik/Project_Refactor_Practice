@@ -219,7 +219,8 @@
                         dataType: 'json',
                         success: function (msg) {
                             $('.cartOrdersQty').text(msg);
-                            $('.cartOrdersQty').addClass('red');
+                            if(msg != '')
+                                $('.cartOrdersQty').addClass('red');
                         }
                     });
             }else{
