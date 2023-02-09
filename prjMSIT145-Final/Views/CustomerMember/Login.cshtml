@@ -308,13 +308,10 @@
                 $('#txtAccount').val('');
                 $('[name=txtEmail]').val('');
             });
-            $('#btnSendRequest').click(function () {
-                console.log(`here`);
-                
+            $('#btnSendRequest').click(function () {                                
                 if ($('#txtAccount').val() == '' || $('[name=txtEmail]').val() == '')
                     return false;
-
-                console.log(`here111`);
+                
                 $('#btnSendRequest').attr('disabled', 'disabled');
                 $.ajax({
                     url: `@Url.Content("~/Admin/AForgotAdminPwd")`,
