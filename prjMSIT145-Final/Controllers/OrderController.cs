@@ -21,9 +21,13 @@ namespace prjMSIT145_Final.Controllers
         }
         public IActionResult CCartList(int? NFid)
         {
-            NFid = 1;
-            if (NFid == null)
+            if (HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER) == null)
+            {
                 return Redirect("/CustomerMember/Login");
+            }
+            NormalMember Memberdatas = JsonSerializer.Deserialize<NormalMember>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+            NFid = Memberdatas.Fid;
+
             List<VOrdersViewModel> OrdersList = new List<VOrdersViewModel>();
             var Orderdatas = from O in _context.Orders
                              join B in _context.BusinessMembers on O.BFid equals B.Fid
@@ -183,10 +187,10 @@ namespace prjMSIT145_Final.Controllers
                             select O;
             foreach (var item in SendOrder)
             {
-                item.PickUpDate= DateTime.Now;
-                item.PickUpTime= DateTime.Now.AddMinutes(15)-DateTime.Now;
+                item.PickUpDate = DateTime.Now;
+                item.PickUpTime = DateTime.Now.AddMinutes(15) - DateTime.Now;
                 item.PickUpType = "自取";
-                item.PayTermCatId= 1;
+                item.PayTermCatId = 1;
                 item.OrderState = "1";
             }
             _context.SaveChanges();
