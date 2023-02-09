@@ -52,7 +52,7 @@
 			<div class="modal-content" style=" box-sizing:border-box; padding:20px;">
 				<div class="modal-header" style="padding:0;">
 					<form method="post" enctype="multipart/form-data" action="BEdit" style="width:100%;">
-						<input type="hidden" name="BFid"/>
+                        <input type="hidden" name="BFid" id="BFid" />
 						<input type="hidden" name="Fid" id="Fid"/>
 						<div class="topdiv">
 							<button type="button" data-bs-dismiss="modal" style="background-color:transparent ;border:none; width:30px; height:20px; position:absolute; top:20px; left:20px;"><img src="~/images/Business/exit.png" style="width:100%; height:100%;" /></button>
@@ -122,6 +122,7 @@
 				result += `
 							<tr>
 							<input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
+							<input type="hidden" name="${item.bFid}" value="${item.bFid}" id="${item.bFid}"/>
 
 							<td>${item.optionName}</td>
 							<td>$${item.unitPrice}</td>
@@ -158,9 +159,11 @@
 
 					
 					Fid.value = cell.children[0].value;
-					txtOptionName.value  = cell.children[1].innerHTML;
-					selType.innerHTML = `<option>${cell.children[3].innerHTML}</option>`;
-					txtPrice.value = cell.children[2].innerHTML.substring(1);
+					txtOptionName.value  = cell.children[2].innerHTML;
+					selType.innerHTML = `<option>${cell.children[4].innerHTML}</option>`;
+					txtPrice.value = cell.children[3].innerHTML.substring(1);
+					document.querySelector("#BFid").value = cell.children[1].value;
+
 				})
 			})
 			////套用bootstrap,dataTable功能

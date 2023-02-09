@@ -52,7 +52,7 @@
                 <div class="modal-header" style="padding:0;">
                     <form method="post" enctype="multipart/form-data" action="BEdit" style="width:100%;">
                         <input type="hidden" id="Fid" name="Fid" />
-                        <input type="hidden" id="BFid" name="BFid" value="@Model.BFid"/>
+                        <input type="hidden" id="BFid" name="BFid"/>
                         <div class="topdiv">
                             <button type="button" data-bs-dismiss="modal" style="background-color:transparent ;border:none; width:30px; height:20px; position:absolute; top:20px; left:20px;"><img src="~/images/Business/exit.png" style="width:100%; height:100%;" /></button>
                             <input id="txtProductName" name="ProductName" class="inputtext" type="text" value="" required />   @*產品名稱*@
@@ -170,8 +170,8 @@
 
                 result += `
                                 <tr>
-                                        <input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
-                                         <input type="hidden" name="${item.categoryFid}" value="${item.fid}" id="${item.fid}"/>
+                                       <input type="hidden" name="${item.fid}" value="${item.fid}" id="${item.fid}"/>
+                                   <input type="hidden" name="${item.bFid}" value="${item.bFid}" id="${item.bFid}"/>
 
                                 <td><input style='width:50px; height:50px;' type="image" src="../images/${item.photo}"></td>
                                 <td>${item.productName}</td>
@@ -211,13 +211,14 @@
                     const txtMemo = document.querySelector("#txtMemo"); //備註
                     const cell = this.parentElement.parentElement;  //tr內的值
 
-                    txtProductName.value = cell.children[2].innerHTML;
-                    document.querySelector("#Photo").value = cell.children[1].firstElementChild.getAttribute("src").substring()
-                    imgShow.setAttribute("src", cell.children[1].firstElementChild.getAttribute("src"));
-                    selType.innerHTML = `<option>${cell.children[4].innerHTML}</option>`;
-                    txtPrice.value = cell.children[3].innerHTML;
-                    txtMemo.innerHTML = cell.children[6].innerHTML;
+                    txtProductName.value = cell.children[3].innerHTML;
+                    document.querySelector("#Photo").value = cell.children[2].firstElementChild.getAttribute("src").substring()
+                    imgShow.setAttribute("src", cell.children[2].firstElementChild.getAttribute("src"));
+                    selType.innerHTML = `<option>${cell.children[5].innerHTML}</option>`;
+                    txtPrice.value = cell.children[4].innerHTML;
+                    txtMemo.innerHTML = cell.children[7].innerHTML;
                     fid.value = cell.children[0].value;
+                    document.querySelector("#BFid").value =  cell.children[1].value;
 
                     //判斷編輯的產品目前狀態
                     document.getElementsByName("IsForSale").forEach(function (radio) {
@@ -271,18 +272,18 @@
             imgShow.setAttribute("style", "width: 90px; height: 70px;");
         })
         //送出時確認商品類別及狀態是否選取
-        //btnSubmit.addEventListener("click", function (event) {
-        //    if (selType.value === "請選擇商品類別") {
-        //        event.preventDefault();
-        //        document.querySelector("#checkType").innerHTML =  `<img src="@Url.Content("~/images/Business/warning.png")" style = "width:30px;" />請確認商品類別是否選取!`;
-        //    }
-        //    if (!IsForSale0.checked && !IsForSale1.checked && !IsForSale2.checked) {
-        //        event.preventDefault();
-        //        document.querySelector("#checkSale").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style = "width:30px;" />請選擇產品狀態`;
-        //    }
-        //    else
-        //        document.querySelector("#checkSale").innerHTML = ``;
-        //})
+        btnSubmit.addEventListener("click", function (event) {
+            if (selType.value === "請選擇商品類別") {
+                event.preventDefault();
+                document.querySelector("#checkType").innerHTML =  `<img src="@Url.Content("~/images/Business/warning.png")" style = "width:30px;" />請確認商品類別是否選取!`;
+            }
+            if (!IsForSale0.checked && !IsForSale1.checked && !IsForSale2.checked) {
+                event.preventDefault();
+                document.querySelector("#checkSale").innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style = "width:30px;" />請選擇產品狀態`;
+            }
+            else
+                document.querySelector("#checkSale").innerHTML = ``;
+        })
     </script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
