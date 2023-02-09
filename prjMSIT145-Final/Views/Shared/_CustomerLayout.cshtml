@@ -100,12 +100,12 @@
         <nav>
              
             <ul id="alink" class="Navigationbar_Member">
-                @{
-                    if(Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)){
-                        string  json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
-                        NormalMember x = JsonSerializer.Deserialize<NormalMember>(json);
-                        string membername = x.MemberName.Substring(1, 2);
-                          if(x.MemberPhotoFile!=null){
+                    @{
+                        if(Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)){
+                            string  json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
+                            NormalMember x = JsonSerializer.Deserialize<NormalMember>(json);
+                            string membername = x.MemberName;
+                            if(x.MemberPhotoFile!=null){
 
                                     <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content($"~/images/Customer/Member/{x.MemberPhotoFile}")" style="width:55px;border-radius:30px" /><span class="spaname">@membername</span><p>&emsp;會員中心</p></a></li>
                           
