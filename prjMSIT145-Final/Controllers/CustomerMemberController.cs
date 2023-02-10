@@ -500,7 +500,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 NormalMember member =_context.NormalMembers.FirstOrDefault(c=>c.Email== vm.Email && c.Phone==vm.Phone);
                 if (member != null) {
-                    return Json("已送出重製密碼信件");
+                    return Json("已送出重置密碼信件");
                     }
                 else
                 {
