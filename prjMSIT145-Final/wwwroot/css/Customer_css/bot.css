@@ -88,13 +88,15 @@
     height:100%;
 }
 /* 對話框 */
-.msgDiv {
+.msgDivProblem {
     /* min-height: 500px;
     max-height: 700px;*/
     height: 95%;
     max-width: 380px;
     min-width: 380px;
     border-bottom: 1px solid lightgray;
+    box-sizing: border-box;
+    padding: 10px 0;
 }
 
 #collapseExample {

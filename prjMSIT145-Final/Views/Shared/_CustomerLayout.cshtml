@@ -138,6 +138,8 @@
         <a asp-area="" asp-controller="Home" asp-action="CIndex"><img class="Footer_Logo" src="~/images/Customer/Navigation/shibaLogo_row1.png" /></a>
         <p><a asp-area="" asp-controller="Home" asp-action="CIndex">&copy;&ensp;2023&ensp;ShibaDaily&ensp;臺灣</a></p>
     </footer>
+
+
         @*Azure機器人*@
         <div class="azureLogo"
              id="azureLogo"
@@ -149,7 +151,7 @@
         </div>
         <div class="azure collapse" id="azure">
             <div class="card card-body ">
-                <iframe src='https://webchat.botframework.com/embed/msit14501daily-bot?s=sBZOKBWuvAU.FFRe_6cBbQ1LCnnx85WWa4mkmpEfJqewEceFCfWMPMw' style='min-width: 380px;max-width:380px; min-height: 700px; border:none;'></iframe>
+                <iframe src="https://webchat.botframework.com/embed/shibaDailyBot?s=gySBdYrhTJA.xpabJgu38KhBw_csUQRj3-DYvQzPmXCIGx-g1jiqShk" style='min-width: 380px;max-width:380px; min-height: 700px; border:none;'></iframe>
             </div>
         </div>
 
@@ -168,11 +170,44 @@
         <div class="logo collapse" id="collapseExample">
             <div class="card card-body" style="">
                 <!-- 以下自己刻 -->
-                <div class="msgDiv scroll">
+                <div class="msgDivProblem scroll">
                     <div class="display serviceDiv">
                         <div class="imgDiv"><img src="~/images/Problem/dailyLogo.png" /></div>
                         <div class="serviceMsg">
                             你好，請輸入問題，以便為您解答!
+                            <div class="qDiv">
+                                <p>&nbsp;常見問題:</p>
+                                <table class="table table-hover">
+                                    <tr name="trProblem"><td style="border-bottom:1px solid lightgray">變更或取消訂單</td></tr>
+									<tr name="trProblem"><td style="border-bottom:1px solid lightgray">收到的商品有誤</td></tr>
+									<tr name="trProblem"><td style="border-bottom:1px solid lightgray">沒收到優惠券</td></tr>
+									<tr name="trProblem"><td style="border-bottom:1px solid lightgray">帳號無法使用</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="resultDivProblem">
+                        @*<div class="display userDiv">
+                        <div class="userMsg">信用卡退款</div>
+                        <div class="imgDiv"><img src="images/user.png" alt="" /></div>
+                        </div>*@
+                    </div>
+                </div>
+
+                <div class="txtDiv display">
+                    <input type="text" id="txtProblem" />
+                    <button id="btnSubmitProblem" type="button"><img src="~/images/Problem/send.png" /></button>
+                </div>
+            </div>
+        </div>
+        <div class="logo collapse" id="collapseExample">
+            <div class="card card-body" style="">
+                <!-- 以下自己刻 -->
+                <div class="msgDiv scroll">
+                    <div class="display serviceDiv">
+                        <div class="imgDiv"><img src="~/images/Problem/dailyLogo.png" /></div>
+                        <div class="serviceMsg">
+                           
                             <div class="qDiv">
                                 <p>&nbsp;常見問題:</p>
                                 <table class="table table-hover">
@@ -198,7 +233,105 @@
                 </div>
             </div>
         </div>
-        @*聊天室*@
+        <div class="logo collapse" id="collapseExample">
+            <div class="card card-body" style="">
+                <!-- 以下自己刻 -->
+                <div class="msgDiv scroll">
+                    <div class="display serviceDiv">
+                        <div class="imgDiv"><img src="~/images/Problem/dailyLogo.png" /></div>
+                        <div class="serviceMsg">
+                           
+                            <div class="qDiv">
+                                <p>&nbsp;常見問題:</p>
+                                <table class="table table-hover">
+                                    <tr><td style="border-bottom:1px solid lightgray">變更或取消訂單</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">收到的商品有誤</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">沒收到優惠券</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">信用卡退款</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="resultDiv">
+                        @*<div class="display userDiv">
+                        <div class="userMsg">信用卡退款</div>
+                        <div class="imgDiv"><img src="images/user.png" alt="" /></div>
+                        </div>*@
+                    </div>
+                </div>
+
+                <div class="txtDiv display">
+                    <input type="text" id="txt" />
+                    <button id="btnSubmit" type="button"><img src="~/images/Problem/send.png" /></button>
+                </div>
+            </div>
+        </div>
+        <div class="logo collapse" id="collapseExample">
+            <div class="card card-body" style="">
+                <!-- 以下自己刻 -->
+                <div class="msgDiv scroll">
+                    <div class="display serviceDiv">
+                        <div class="imgDiv"><img src="~/images/Problem/dailyLogo.png" /></div>
+                        <div class="serviceMsg">
+                           
+                            <div class="qDiv">
+                                <p>&nbsp;常見問題:</p>
+                                <table class="table table-hover">
+                                    <tr><td style="border-bottom:1px solid lightgray">變更或取消訂單</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">收到的商品有誤</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">沒收到優惠券</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">信用卡退款</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="resultDiv">
+                        @*<div class="display userDiv">
+                        <div class="userMsg">信用卡退款</div>
+                        <div class="imgDiv"><img src="images/user.png" alt="" /></div>
+                        </div>*@
+                    </div>
+                </div>
+
+                <div class="txtDiv display">
+                    <input type="text" id="txt" />
+                    <button id="btnSubmit" type="button"><img src="~/images/Problem/send.png" /></button>
+                </div>
+            </div>
+        </div>
+        <div class="logo collapse" id="collapseExample">
+            <div class="card card-body" style="">
+                <!-- 以下自己刻 -->
+                <div class="msgDiv scroll">
+                    <div class="display serviceDiv">
+                        <div class="imgDiv"><img src="~/images/Problem/dailyLogo.png" /></div>
+                        <div class="serviceMsg">
+                           
+                            <div class="qDiv">
+                                <p>&nbsp;常見問題:</p>
+                                <table class="table table-hover">
+                                    <tr><td style="border-bottom:1px solid lightgray">變更或取消訂單</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">收到的商品有誤</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">沒收到優惠券</td></tr>
+                                    <tr><td style="border-bottom:1px solid lightgray">信用卡退款</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="resultDiv">
+                        @*<div class="display userDiv">
+                        <div class="userMsg">信用卡退款</div>
+                        <div class="imgDiv"><img src="images/user.png" alt="" /></div>
+                        </div>*@
+                    </div>
+                </div>
+
+                <div class="txtDiv display">
+                    <input type="text" id="txt" />
+                    <button id="btnSubmit" type="button"><img src="~/images/Problem/send.png" /></button>
+                </div>
+            </div>
+        </div>
         <div class="logo collapse" id="collapseExample">
             <div class="card card-body" style="">
                 <!-- 以下自己刻 -->
@@ -236,9 +369,11 @@
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
         <script src="~/js/bot.js"></script>  @*機器人Js檔*@
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    @*<script src="~/js/site.js" asp-append-version="true"></script>*@
+     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+            <!-- <script src="~/js/site.js" asp-append-version="true"></script> -->
+
     @await RenderSectionAsync("UpperScripts", required: false)
     <script>
         $(function(){
