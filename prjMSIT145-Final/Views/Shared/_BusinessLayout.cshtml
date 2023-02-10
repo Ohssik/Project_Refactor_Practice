@@ -72,7 +72,7 @@
                 <a class="sidebar-brand d-flex align-items-center justify-content-center"
                    href="@Url.Content("~/Order/BNewList")" style="margin-top:10px">
                     <div class="sidebar-brand-icon">
-                        <img id="businessImg" src=""
+                        <img id="businessImg" src="~/adminImg/logo2.png"
                              style="width: 70%; margin-top: 20px; margin-bottom: 20px" />
                         @*<p>希望可以隨著登入店家不同，更改頭像</p>*@
 
@@ -374,12 +374,13 @@
         async function load() {
             const request = await fetch("@Url.Content("~/BusinessMember/BImgnName")");
             const datas = await request.json();
+
             console.log(datas);
 
-            if (datas.bPhoto == null)
-                businessImg.setAttribute("src", `~/adminImg/logo2.png`);
-            else
-                businessImg.setAttribute("src", `../images/${datas.bPhoto}`);
+            //if (datas.bPhoto == "")
+            //    businessImg.setAttribute("src", `~/adminImg/logo2.png`);
+            //else
+            //    businessImg.setAttribute("src", `../images/${datas.bPhoto}`);
 
             businessName.innerHTML = datas.bName;
         }
