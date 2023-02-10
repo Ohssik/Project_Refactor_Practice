@@ -219,10 +219,10 @@
 									Profile
 									</a>
 									*@
-									<a class="dropdown-item" href="#">
+								@*	<a class="dropdown-item" href="#">
 										<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
 										Settings
-									</a>
+									</a>*@
 									@*
 									<a class="dropdown-item" href="#">
 									<i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -230,8 +230,8 @@
 									</a>
 									<div class="dropdown-divider"></div>
 									*@
-									<a class="dropdown-item" href="@Url.Action("Blogin","BusinessMember")" data-toggle="modal" data-target="#logoutModal">
-										<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" id="Logoutbtn"></i>
+									<a href="@Url.Content("~/BusinessMember/BLogout")" class="dropdown-item">
+										<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" ></i>
 										Logout
 									</a>
 								</div>
@@ -332,23 +332,8 @@
 			&copy; 2023 - prjMSIT145_Final - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 		</div>
 	</footer>
-	@*聊天室JS*@
-	<script>
-		
-		const ChatNowUserName = document.getElementById("ChatNowUser");
-		const ChatNowUserid = document.getElementById("ChatNowUserid");
-		const ChatNowUserChatid = document.getElementById("ChatNowUserChatid");
-		const chatmessageDiv = document.getElementById("chatmessageDiv");
-		const chatMessageInput = document.getElementById("chatMessageInput");
-		const chatMessagebtn = document.getElementById("chatMessagebtn");
-
-		//登出
-		document.getElementById("Logoutbtn").addEventListener("click",function(){
-			console.log("1234")
-		})
-
-
-    </script>
+	
+	
 	
 	@*<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>*@
 
@@ -375,7 +360,21 @@
 	<script src="@Url.Content("~/js/demo/datatables-demo.js")"></script>
     <script src="@Url.Content("~/js/signalr/dist/browser/signalr.js")"></script>
     <script src="@Url.Content("~/js/ChatRoom.js")"></script>
+	@*聊天室JS*@
+    <script>
 
+        const ChatNowUserName = document.getElementById("ChatNowUser");
+        const ChatNowUserid = document.getElementById("ChatNowUserid");
+        const ChatNowUserChatid = document.getElementById("ChatNowUserChatid");
+        const chatmessageDiv = document.getElementById("chatmessageDiv");
+        const chatMessageInput = document.getElementById("chatMessageInput");
+        const chatMessagebtn = document.getElementById("chatMessagebtn");
+
+
+
+
+
+    </script>
 	@await RenderSectionAsync("Scripts", required: false)
 	
   
