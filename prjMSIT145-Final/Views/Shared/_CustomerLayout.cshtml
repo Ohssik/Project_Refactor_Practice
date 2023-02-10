@@ -174,7 +174,7 @@
 
 
         @*Azure機器人*@
-        <div class="azureLogo"
+        <div class="azureLogo position-fixed"
              id="azureLogo"
              data-bs-toggle="collapse"
              data-bs-target="#azure"
@@ -183,15 +183,15 @@
             
             <img src="@Url.Content("~/images/Problem/DailyBot.png")" alt="DailyLogo" />
         </div>
-        <div class="azure collapse" id="azure">
+        <div class="azure collapse position-fixed" id="azure">
             <div class="card card-body ">
-                <iframe src="https://webchat.botframework.com/embed/shibaDailyBot?s=gySBdYrhTJA.xpabJgu38KhBw_csUQRj3-DYvQzPmXCIGx-g1jiqShk" style='min-width: 380px;max-width:380px; min-height: 700px; border:none;'></iframe>
+                <iframe src="https://webchat.botframework.com/embed/shibaDailyBot?s=gySBdYrhTJA.xpabJgu38KhBw_csUQRj3-DYvQzPmXCIGx-g1jiqShk" style='min-width: 380px;max-width:380px;height: 100%; border:none;'></iframe>
             </div>
         </div>
 
         <!-- 要把collapse 加入id=collapseExample的class裡 -->
         <!-- 手動刻 -->
-        <div class="logoDiv "
+        <div class="logoDiv position-fixed"
              id="logoDiv"
              data-bs-toggle="collapse"
              data-bs-target="#shibaDaily"
@@ -201,7 +201,7 @@
         </div>
 
 
-        <div class="logo collapse" id="shibaDaily">
+        <div class="logo collapse position-fixed" id="shibaDaily">
             <div class="card card-body" style="">
                 <!-- 以下自己刻 -->
                 <div class="msgDivProblem scroll">
@@ -319,7 +319,7 @@
 
         <script src="~/js/bot.js"></script>  @*機器人Js檔*@
 
-     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
             <!-- <script src="~/js/site.js" asp-append-version="true"></script> -->
 
