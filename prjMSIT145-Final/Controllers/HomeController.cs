@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Security.Cryptography;
+using System.Text.Json;
 using static NuGet.Packaging.PackagingConstants;
 
 namespace prjMSIT145_Final.Controllers
@@ -471,7 +472,12 @@ namespace prjMSIT145_Final.Controllers
         [HttpPost]
         public IActionResult CAddtoCart(IFormCollection NewOrder, int? NFid)
         {
-            NFid = 1;
+            if (HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER) == null)
+            {
+                return Redirect("/CustomerMember/Login");
+            }
+            NormalMember Memberdatas = JsonSerializer.Deserialize<NormalMember>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+            NFid = Memberdatas.Fid;
             int SNIDCount = 0;
             if (NFid != 0)  //是否有登入會員
             {
