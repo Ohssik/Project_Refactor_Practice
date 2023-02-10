@@ -206,7 +206,12 @@ namespace prjMSIT145_Final.Controllers
                 BusinessImg img = _context.BusinessImgs.FirstOrDefault(i => i.BFid == member.Fid);
 
                 CBusinessImgnNameViewModel vm = new CBusinessImgnNameViewModel();
-                //vm.BPhoto = img.LogoImgFileName;
+
+                //if (img.LogoImgFileName == null)
+                //    vm.BPhoto = "~/adminImg/logo2.png";
+                //else
+                vm.BPhoto = img.LogoImgFileName;
+
                 vm.BName = member.MemberName;
 
                 return Json(vm);

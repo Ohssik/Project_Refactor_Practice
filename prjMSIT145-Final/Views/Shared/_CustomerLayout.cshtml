@@ -180,7 +180,6 @@
              data-bs-target="#azure"
              aria-expanded="false"
              aria-controls="azure">
-            
             <img src="@Url.Content("~/images/Problem/DailyBot.png")" alt="DailyLogo" />
         </div>
         <div class="azure collapse position-fixed" id="azure">
@@ -317,11 +316,11 @@
 
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-        <script src="~/js/bot.js"></script>  @*機器人Js檔*@
+
 
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-            <!-- <script src="~/js/site.js" asp-append-version="true"></script> -->
+        <!-- <script src="~/js/site.js" asp-append-version="true"></script> -->
 
     @await RenderSectionAsync("UpperScripts", required: false)
     <script>
@@ -373,6 +372,7 @@
     </script>
         <script src="@Url.Content("~/js/signalr/dist/browser/signalr.js")"></script>
         <script src="@Url.Content("~/js/ChatRoom.js")"></script>
+        <script src="@Url.Content("~/js/bot.js")"></script>  @*機器人Js檔*@
         @await RenderSectionAsync("Scripts", required: false)
     </div>
 </body>
