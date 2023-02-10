@@ -191,6 +191,12 @@ namespace prjMSIT145_Final.Controllers
             return View();
         }
 
+        public IActionResult BLogout()
+        {
+            HttpContext.Session.Remove(CDictionary.SK_LOGINED_Business);
+            return RedirectToAction("Blogin");
+        }
+
 
 
 

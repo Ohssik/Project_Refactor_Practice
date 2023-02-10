@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Text.Json;
+using System;
 
 namespace prjMSIT145_Final.Models
 
@@ -19,17 +20,18 @@ namespace prjMSIT145_Final.Models
     
         public static List<ChatroomUser> users = new List<ChatroomUser>();
 
-        public async Task SendMessage(int otheruserid, string message)
-        {  
+        public async Task SendMessageto(string otheruserid, string message)
+        {
+            int _otheruserid = Convert.ToInt32(otheruserid);
             //抓Session裡的member
-            string json = (Context.GetHttpContext().Session.GetString(CDictionary.SK_LOGINED_USER));
+            string json = (Context.GetHttpContext().Session.GetString(CDictionary.SK_LOGINED_Business));
             BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
             //找聊天室室友這兩個人的
             var userinchat = _context.Chat2Users.Where(u => u.Userid == member.ChatroomUserid);
-            var otheruserinchat = _context.Chat2Users.Where(u => u.Userid == otheruserid);
+            var otheruserinchat = _context.Chat2Users.Where(u => u.Userid == _otheruserid);
             var joinchatroom = userinchat.Join(otheruserinchat, u => u.Chatid, o => o.Chatid, (u, o) => u.Chatid).FirstOrDefault();
             //如果沒找到
-            if (joinchatroom == null)
+            if (joinchatroom == 0)
             {
                 //新增一個聊天室
                 Chatroom Chatroom= new Chatroom();
@@ -43,21 +45,23 @@ namespace prjMSIT145_Final.Models
                 Chat2User chat2User =new Chat2User();
                 chat2User.Chatid = joinchatroom;
                 chat2User.Userid = (int)member.ChatroomUserid;
+                _context.Chat2Users.Add(chat2User);
                 _context.SaveChanges();
                 Chat2User chat2Userother = new Chat2User();
                 chat2Userother.Chatid = joinchatroom;
-                chat2Userother.Userid = otheruserid;
+                chat2Userother.Userid = _otheruserid;
+                _context.Chat2Users.Add(chat2Userother);
                 _context.SaveChanges();
             } 
 
              //對自己發出訊息
-               await Clients.Client(Context.ConnectionId).SendAsync("RemoteMessage",message);
+               await Clients.Client(Context.ConnectionId).SendAsync("LocalMessage", message); 
             //找出要發給的那個人的資料
-            var user = users.FirstOrDefault(u => u.ChatroomUserid == otheruserid);
+            var user = users.FirstOrDefault(u => u.ChatroomUserid == _otheruserid);
             if(user != null)
             {
                 //對對方發出訊息
-               await Clients.Client(user.ConnectionId).SendAsync("LocalMessage", message);
+               await Clients.Client(user.ConnectionId).SendAsync("RemoteMessage", message);
             }
              //把訊息存入聊天室
                 ChatMessage chatMessage = new ChatMessage();
@@ -85,7 +89,7 @@ namespace prjMSIT145_Final.Models
 
 
             }
-            await base.OnConnectedAsync();
+             await  base.OnConnectedAsync();
         }
         public override async Task OnDisconnectedAsync(Exception ex)
         {
@@ -94,7 +98,7 @@ namespace prjMSIT145_Final.Models
             {
                 users.Remove(user);
             }
-            base.OnDisconnectedAsync(ex);
+            await base.OnDisconnectedAsync(ex);
         }
     }
 }
