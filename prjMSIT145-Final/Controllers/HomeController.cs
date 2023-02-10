@@ -26,6 +26,7 @@ namespace prjMSIT145_Final.Controllers
 
         public IActionResult CIndex()
         {
+            #region 將商家資訊取至集合
             List<VBusinessMemberContainImgViewModel> BusinessMemberList = new List<VBusinessMemberContainImgViewModel>();
             var BusinessMemberdatas = _context.BusinessMembers.Join(_context.BusinessImgs, BM => BM.Fid, BI => BI.BFid, (BM, BI) => new
             {
@@ -57,7 +58,26 @@ namespace prjMSIT145_Final.Controllers
                 });
             }
             CUtility.BusinessMemberList = BusinessMemberList;
-            return View(CUtility.BusinessMemberList);
+            #endregion
+            #region 將平台圖片取至集合
+            List<AdImg> AdImgList = new List<AdImg>();
+            var ads = from ad in _context.AdImgs
+                      where ad.OrderBy == 0
+                      orderby ad.Fid
+                      select ad;
+            foreach (var ad in ads)
+            {
+                AdImgList.Add(ad);
+            }
+            CUtility.AdImgList= AdImgList;
+            #endregion
+            List<VCUtilityViewModel> CUL = new List<VCUtilityViewModel>();
+            CUL.Add(new VCUtilityViewModel
+            {
+                BusinessMemberList = CUtility.BusinessMemberList,
+                AdImgList = CUtility.AdImgList,
+            });
+            return View(CUL);
         }
 
         public IActionResult CShowProduct(int? BFid, int? OrderFid)
