@@ -137,5 +137,7 @@ namespace prjMSIT145_Final.ViewModels
         }
         public string? txtPassword { get; set; }
         public string? txtConfirmPwd { get; set; }
+        public string? LOGO_ImgFileName { get; set; }
+
     }
 }
