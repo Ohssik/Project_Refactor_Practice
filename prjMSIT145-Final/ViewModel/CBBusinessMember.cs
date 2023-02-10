@@ -2,11 +2,11 @@
 
 namespace prjMSIT145_Final.ViewModel
 {
-    public class CBBusinessMember
+    public class CBBusinessMemberViewModel
     {
         private BusinessMember member;
         private BusinessImg Img;
-        public CBBusinessMember()
+        public CBBusinessMemberViewModel()
         {
             Img = new BusinessImg();
             member = new BusinessMember();
