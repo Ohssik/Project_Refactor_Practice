@@ -100,14 +100,14 @@ document.addEventListener("scroll", function () {
     if ((hight - top) <= 1100) {
          azureLogo.setAttribute("style", "bottom:8%;");
         logoDiv.setAttribute("style", "bottom:8%");
-        document.querySelector(".logo").setAttribute("style", "bottom:18%;")
-        document.querySelector(".azure").setAttribute("style", "bottom:18%;")
+        document.querySelector(".logo").setAttribute("style", "bottom:20%;")
+        document.querySelector(".azure").setAttribute("style", "bottom:20%;")
     }
     else {
         azureLogo.setAttribute("style", "bottom:5%");
         logoDiv.setAttribute("style", "bottom:5%");
-        document.querySelector(".logo").setAttribute("style", "bottom:15%;")
-        document.querySelector(".azure").setAttribute("style", "bottom:-1%;")
+        document.querySelector(".logo").setAttribute("style", "bottom:16%;")
+        document.querySelector(".azure").setAttribute("style", "bottom:16%;")
     }
 })
 
@@ -115,6 +115,6 @@ document.addEventListener("scroll", function () {
 if (hight <= document.documentElement.clientHeight) {
     azureLogo.setAttribute("style", "bottom:8%;");
     logoDiv.setAttribute("style", "bottom:8%;");
-    document.querySelector(".logo").setAttribute("style", "bottom:18%;")
-    document.querySelector(".azure").setAttribute("style", "bottom:18%;")
+    document.querySelector(".logo").setAttribute("style", "bottom:20%;")
+    document.querySelector(".azure").setAttribute("style", "bottom:20%;")
 }

@@ -10,7 +10,7 @@
     width: 70px;
     height: 60px;
     position: fixed;
-    bottom: 30px;
+    bottom: 5%;
     left: 40px;
     transition: 0.2s;
 }
@@ -44,10 +44,9 @@
 .azure {
     position: fixed;
     left: 40px;
-    top: 8%;
+    bottom: 16%;
     margin-top: 50px;
-    max-height: 70%;
-    min-height:68%;
+    height: 70%;
 }
 /* 腳掌印 */
 .logoDiv {
@@ -71,6 +70,7 @@
     bottom: 14%;
     background-color: white;
     height: 72%;
+    min-height:65%;
 }
 /* 平台及使用者頭像 */
 .imgDiv {
