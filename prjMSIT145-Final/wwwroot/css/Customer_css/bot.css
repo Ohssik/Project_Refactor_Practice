@@ -1,4 +1,12 @@
-﻿.azureLogo {
+﻿.logoBottom{
+    bottom:8%;
+}
+.logoBottomPageEnd
+{
+    bottom:13%;
+}
+
+.azureLogo {
     width: 70px;
     height: 60px;
     position: fixed;
@@ -38,6 +46,8 @@
     left: 40px;
     top: 8%;
     margin-top: 50px;
+    max-height: 70%;
+    min-height:68%;
 }
 /* 腳掌印 */
 .logoDiv {
@@ -58,7 +68,7 @@
 .logo {
     position: fixed;
     left: 40px;
-    top: 14%;
+    bottom: 14%;
     background-color: white;
     height: 72%;
 }
