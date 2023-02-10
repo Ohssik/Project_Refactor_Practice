@@ -75,7 +75,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 if (cac.Fid > 0)
                 {
-                    var coup = _context.Coupons.FirstOrDefault(t => t.Fid == cac.Fid);
+                    Coupon coup = _context.Coupons.FirstOrDefault(t => t.Fid == cac.Fid);
                     if (coup != null)
                     {
                         coup.Price = cac.Price;
@@ -116,7 +116,7 @@ namespace prjMSIT145_Final.Controllers
                         c2n.MemberId = cac.NmemberID;
 
                         int fid = 1;
-                        var lastCoup = _context.Coupons.OrderByDescending(c => c.Fid).FirstOrDefault();
+                        Coupon lastCoup = _context.Coupons.OrderByDescending(c => c.Fid).FirstOrDefault();
                         if (lastCoup != null)
                             fid=lastCoup.Fid;
 
@@ -139,12 +139,12 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult ACouponDelete(int id)
         {
             //var coup = await _context.Coupons.FindAsync(id);
-            var coup = _context.Coupons.FirstOrDefault(c => c.Fid==id);
+            Coupon coup = _context.Coupons.FirstOrDefault(c => c.Fid==id);
             if (coup == null)
             {
                 return NotFound();
             }
-            var c2n = _context.Coupon2NormalMembers.FirstOrDefault(c => c.CouponId==id);
+            Coupon2NormalMember c2n = _context.Coupon2NormalMembers.FirstOrDefault(c => c.CouponId==id);
             if (c2n!=null)
                 _context.Coupon2NormalMembers.Remove(c2n);
             _context.Coupons.Remove(coup);
@@ -278,17 +278,15 @@ namespace prjMSIT145_Final.Controllers
                 if (user != null)
                 {
                     var coupons = from c2n in _context.Coupon2NormalMembers
-                                  join coup in _context.Coupons on c2n.CouponId equals coup.Fid
-                                  into cGroup
-                                  from c in cGroup.DefaultIfEmpty()
-                                  where c2n.MemberId == user.Fid /*&& c.IsUsed == 1*/
+                                  join coup in _context.Coupons on c2n.CouponId equals coup.Fid                                  
+                                  where c2n.MemberId == user.Fid 
                                   select new
                                   {
                                       c2n.CouponId,
-                                      c.Title,
-                                      c.Price,
-                                      c.Memo,
-                                      c.IsUsed,
+                                      coup.Title,
+                                      coup.Price,
+                                      coup.Memo,
+                                      coup.IsUsed,
                                       c2n.Fid
 
                                   };

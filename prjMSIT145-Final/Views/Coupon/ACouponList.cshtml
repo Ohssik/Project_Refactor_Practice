@@ -159,6 +159,7 @@
                 </form>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="btnDemo">demo</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
                 <button type="button" class="btn btn-primary" id="buttonSend">送出</button>
             </div>
@@ -208,7 +209,12 @@
             keyboard: false
         });
 
+        $('#btnDemo').click(function () {
         
+            $('#Price').val('20');
+            $('#Title').val('清明節優惠');
+            $('#Memo').val('清明節優惠清明節優惠清明節優惠清明節優惠清明節優惠');
+        });
             
         $('#btnCloseMsg').click(function () {
             $('#msgAlert>label').text('');            
