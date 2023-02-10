@@ -38,7 +38,7 @@ btnSubmitProblem.addEventListener("click", async function () {
     let fragForUser = document.createDocumentFragment();
     let fragForService = document.createDocumentFragment();
 
-    fragForService = `<div class="display serviceDiv">
+    fragForService = `<div class="displayProblem serviceDiv">
                      <div class="imgDiv"><img src="../images/Problem/dailyLogo.png" alt="ServiceImg" /></div>
                     <div class="serviceMsg">
                                ${data.answer}
@@ -48,13 +48,13 @@ btnSubmitProblem.addEventListener("click", async function () {
     //Customer/Member
     //判斷使用者有無頭像
     if (img.userImg !== "") {
-        fragForUser = `<div class="display userDiv">
+        fragForUser = `<div class="displayProblem userDiv">
                                     <div class="userMsg">${txt.value}</div>
                                         <div class="imgDiv" id='userImgProblem'><img src="../images/Customer/Member/${img.userImg}" alt="SessionImg"/></div>
                                     </div > `;
     }
     else {
-        fragForUser = `<div class="display userDiv">
+        fragForUser = `<div class="displayProblem userDiv">
                                     <div class="userMsg">${txt.value}</div>
                                         <div class="imgDiv" id='userImg'><img src="../images/Problem/user.png" alt="UserImg" /></div>
                                     </div > `;
@@ -99,14 +99,14 @@ document.addEventListener("scroll", function () {
     if ((hight - top) <= 1000) {
         azureLogo.setAttribute("style", "bottom:80px;");
         logoDiv.setAttribute("style", "bottom:80px");
-        document.querySelector(".logo").setAttribute("style", "top:4%;")
-        document.querySelector(".azure").setAttribute("style", "top:4%;")
+        document.querySelector(".logo").setAttribute("style", "top:10%;")
+        document.querySelector(".azure").setAttribute("style", "top:10%;")
     }
     else {
         azureLogo.setAttribute("style", "bottom:30px");
         logoDiv.setAttribute("style", "bottom:30px");
-        document.querySelector(".logo").setAttribute("style", "top:8%;")
-        document.querySelector(".azure").setAttribute("style", "top:8%;")
+        document.querySelector(".logo").setAttribute("style", "top:13%;")
+        document.querySelector(".azure").setAttribute("style", "top:13%;")
     }
 })
 
@@ -114,6 +114,6 @@ document.addEventListener("scroll", function () {
 if (hight <= document.documentElement.clientHeight) {
     azureLogo.setAttribute("style", "bottom:80px;");
     logoDiv.setAttribute("style", "bottom:80px");
-    document.querySelector(".logo").setAttribute("style", "top:4%;")
-    document.querySelector(".azure").setAttribute("style", "top:4%;")
+    document.querySelector(".logo").setAttribute("style", "top:10%;")
+    document.querySelector(".azure").setAttribute("style", "top:10%;")
 }
