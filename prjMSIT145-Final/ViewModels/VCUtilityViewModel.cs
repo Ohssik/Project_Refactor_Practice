@@ -1,9 +1,12 @@
-﻿namespace prjMSIT145_Final.ViewModels
+﻿using prjMSIT145_Final.Models;
+
+namespace prjMSIT145_Final.ViewModels
 {
     public class VCUtilityViewModel
     {
 
         public List<VBusinessMemberContainImgViewModel>? BusinessMemberList { get; set; }
+        public List<AdImg>? AdImgList { get; set; }
         //-----------
         public List<VBusinessMemberDetailViewModel>? BusinessMemberDetailList { get; set; }
         public List<VPaymenttermViewModel>? PaymenttermList { get; set; }

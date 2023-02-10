@@ -341,6 +341,7 @@
             const response = await fetch(`@Url.Content("~/Home/CShowProductOption?PFid=${PFid}")`);
             const datas = await response.json();
             ModalBody.innerHTML = `<img id="ProductPhoto" class = "ProductPhoto" src = "/images/${datas[0].productBasicInfoList[0].photo}" />`;
+            ModalBody.innerHTML += `<div id="ProductMemo" class = "MemoArea" />${datas[0].productBasicInfoList[0].memo}<div>`;
             for (let i = 0, maxPCL = datas[0].optionGroupList.length; i < maxPCL; i++) {
                 if (datas[0].optionGroupList[i].isMultiple == 0) {
                     ModalBody.innerHTML += `<p class="OptionGroupTitle"><span class="NeedChoose">✱</span>${datas[0].optionGroupList[i].optionGroupName}</p >`;
