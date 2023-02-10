@@ -79,11 +79,12 @@
 
                 <img src="@Url.Content("~/images/Customer/Member/question.png")" class="img2"></img>
 
-                <p class="text3"><a href="#" class="forgotspan" id="forgotPwd">忘記密碼</a></p>
+                <p class="text3"><a href=@Url.Action("Forgetpassword","CustomerMember") class="forgotspan" id="forgotPwd">忘記密碼</a></p>
             </div>
                 <div class="demobtnlogin">
                     <input type="button" class="democorrect" id="democorrectid" value="democorrect" />
                     <input type="button" class="demoerror" id="demoerrorid" value="demoerror" />
+                    <input type="button" class="overclass" id="overid" value="demoover" />
                 </div>
             <div class="dashed"></div>
             <div>
@@ -103,7 +104,7 @@
 
 @*}*@
 @*忘記密碼發信Modal*@
-<div class="modal fade" id="sendMail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@*<div class="modal fade" id="sendMail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -124,15 +125,15 @@
             </div>
             <div class="modal-footer">
                 <span class="text-danger" id="pwdInvalid"></span>
-                
+                    <button type="button" style="margin-left:300px;background-color:green" class="btn btn-secondary" id="demobutton">demo</button>
                 <button type="button" class="btn btn-primary" id="btnSendRequest">送出</button>
             </div>
         </div>
     </div>
-</div>
+</div>*@
 
 @*代替alert的Modal*@
-<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@*<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -141,11 +142,13 @@
                 </div>
             </div>
             <div class="modal-footer">
+                   
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseMsg">確定</button>
+                   
             </div>
         </div>
     </div>
-</div>
+</div>*@
 
 @section Scripts {
     @{
@@ -257,11 +260,16 @@
                 document.getElementById("spanresponse").innerHTML = data;
                 return;
             }
-            else if (data == "尚未開通會員資格") {
+            else if (data =="尚未開通會員資格") {
+                document.getElementById("spanresponse").innerHTML = data;
+                return;
+            }
+            else if (data == "此帳號被停權") {
                 document.getElementById("spanresponse").innerHTML = data;
                 return;
             }
             else {
+                document.getElementById("spanresponse").innerHTML = "";
                 document.getElementById("Login").submit();
             }
                 };
@@ -275,86 +283,101 @@
 
         document.getElementById("demoerrorid").addEventListener('click', () => {                                 //錯誤
 
-            document.getElementById("phoneid").value = "0958749621";
-            document.getElementById("Password").value = "A1234";
+            document.getElementById("phoneid").value = "0958762198";
+            document.getElementById("Password").value = "aA1234";
             
 
         });
+        document.getElementById("overid").addEventListener('click',()=>{
+
+            document.getElementById("phoneid").value = "0936212576";
+            document.getElementById("Password").value = "aA123456";
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-        $(function () {                                                              //忘記密碼
-
-            let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
-                keyboard: false
-            });
-            let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
-                keyboard: false
-            });
-            $('#btnCancel').click(function () {
-                $('#btnSendRequest').removeAttr('disabled');
-                $('#txtAccount').val('');
-                $('[name=txtEmail]').val('');
-            });
-            $('#btnSendRequest').click(function () {                                
-                if ($('#txtAccount').val() == '' || $('[name=txtEmail]').val() == '')
-                    return false;
-                
-                $('#btnSendRequest').attr('disabled', 'disabled');
-                $.ajax({
-                    url: `@Url.Content("~/Admin/AForgotAdminPwd")`,
-                    type: "post",
-                    data: {
-                        data: JSON.stringify({
-                            txtAccount: $('#txtAccount').val(),
-                            txtEmail: $('[name = txtEmail]').val(),
-                            memberType: 'N'
-                        }),
-                    },
-                    dataType: "json",
-                    success: function (msg) {
-                        console.log(`msg=${msg}`);
-                        if (`${msg}`.indexOf('success success') > -1) {
-                            $('#txtAccount').val('');
-                            $('[name=txtEmail]').val('');
-                            sendMail.hide();
-                            $('#msgAlert label').text('發信成功，請到信箱收取修改密碼通知信');
-                            msgAlert.show();
-                        } else {
-                            $('#pwdInvalid').text(msg);
-
-                        }
-                        $('#btnSendRequest').removeAttr('disabled');
-                    },
-                    error:function(msg){
-                        console.log(`error msg=${msg}`);
-                    }
-                });
-            });
-            $('#forgotPwd').click(function () {
-                $('#txtAccount').val('');
-                $('[name=txtEmail]').val('');
-                sendMail.show();
-                $('#btnSendRequest').removeAttr('disabled');
-                $('#msgAlert label').text('');
-                $('#pwdInvalid').text('');
-                //$('#txtAccount').val('0986543125');
-                //$('[name=txtEmail]').val('rmtorh@hotmail.com');
-
-            });
         });
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        //$(function () {                                                              //忘記密碼
+
+        //    let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
+        //        keyboard: false
+        //    });
+        //    let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
+        //        keyboard: false
+        //    });
+        //    $('#btnCancel').click(function () {
+        //        $('#btnSendRequest').removeAttr('disabled');
+        //        $('#txtAccount').val('');
+        //        $('[name=txtEmail]').val('');
+        //    });
+        //    $('#btnSendRequest').click(function () {                                
+        //        if ($('#txtAccount').val() == '' || $('[name=txtEmail]').val() == '')
+        //            return false;
+                
+        //        $('#btnSendRequest').attr('disabled', 'disabled');
+        //        $.ajax({
+        //            url: `@Url.Content("~/Admin/AForgotAdminPwd")`,
+        //            type: "post",
+        //            data: {
+        //                data: JSON.stringify({
+        //                    txtAccount: $('#txtAccount').val(),
+        //                    txtEmail: $('[name = txtEmail]').val(),
+        //                    memberType: 'N'
+        //                }),
+        //            },
+        //            dataType: "json",
+        //            success: function (msg) {
+        //                console.log(`msg=${msg}`);
+        //                if (`${msg}`.indexOf('success success') > -1) {
+        //                    $('#txtAccount').val('');
+        //                    $('[name=txtEmail]').val('');
+        //                    sendMail.hide();
+        //                    $('#msgAlert label').text('發信成功，請到信箱收取修改密碼通知信');
+        //                    msgAlert.show();
+        //                } else {
+        //                    $('#pwdInvalid').text(msg);
+
+        //                }
+        //                $('#btnSendRequest').removeAttr('disabled');
+        //            },
+        //            error:function(msg){
+        //                console.log(`error msg=${msg}`);
+        //            }
+        //        });
+        //    });
+        //    $('#forgotPwd').click(function () {
+        //        $('#txtAccount').val('');
+        //        $('[name=txtEmail]').val('');
+        //        sendMail.show();
+        //        $('#btnSendRequest').removeAttr('disabled');
+        //        $('#msgAlert label').text('');
+        //        $('#pwdInvalid').text('');
+        //        //$('#txtAccount').val('0986543125');
+        //        //$('[name=txtEmail]').val('rmtorh@hotmail.com');
+
+        //    });
+        //});
+        //document.getElementById("demobutton").addEventListener('click',()=>{
+        //    document.getElementById("txtAccount").value="0936212576";
+        //    document.getElementById("txtEmail").value = "a29803385@hotmail.com";
+
+
+
+        //})
          
            
     </script>   

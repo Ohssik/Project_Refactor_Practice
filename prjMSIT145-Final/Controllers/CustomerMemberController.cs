@@ -63,11 +63,22 @@ namespace prjMSIT145_Final.Controllers
             NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Phone.Equals(vm.txtAccount) && c.Password.Equals(vm.txtPassword));
             if (x != null)
             {
-                if (x.EmailCertified == 1)
+                if (x.IsSuspensed == 1 && x.EmailCertified ==1)
                 {
-                    return Json("");
+                    return Json("此帳號被停權");
                 }
-                return Json("尚未開通會員資格");
+                else {
+                    if (x.EmailCertified == 1 &&x.IsSuspensed==0)
+                    {
+                        return Json("");
+                    }
+                    else
+                    {
+                        return Json("尚未開通會員資格");
+                    }
+                }
+               
+                
             }
 
             return Json("帳號或密碼有錯");
@@ -167,10 +178,10 @@ namespace prjMSIT145_Final.Controllers
             //主旨
             string subject = "註冊驗證信";
             //內容
-            string body =$"<a href={url}>請點此連結</a>,並回表單輸入此驗證碼{vm.EmailCertified}";
+            string body =$"<h2>新會員你好請點此開通連結</h2><h3><br><a href={url}>請點此開通連結</a>並回表單輸入此驗證碼{vm.EmailCertified}</h3>";
             using (MailMessage mail = new MailMessage())
             {
-                mail.From = new MailAddress(emailFrom);
+                mail.From = new MailAddress(emailFrom,"日柴", System.Text.Encoding.UTF8);
                 mail.To.Add(emailTo);
                 mail.Subject = subject;
                 mail.Body = body;
@@ -404,55 +415,142 @@ namespace prjMSIT145_Final.Controllers
           return Json("舊密碼正確");
 
         }
-        
-
-
         public IActionResult Forgetpassword()
         {
-
+            
             return View();
+
+        }
+
+        [HttpPost]
+        public IActionResult Forgetpassword(CNormalMemberViewModel vm)
+        {
+            if (vm.Phone == null || vm.Email == null)
+            {
+                return View();
+            }
+            else
+            {
+                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Phone == vm.Phone && c.Email == vm.Email);
+                if (member == null)
+                {
+                    return View();
+                }
+                else
+                {
+                    string smtpAddress = "smtp.gmail.com";
+                    //設定Port
+                    int portNumber = 587;
+                    bool enableSSL = true;
+                    //填入寄送方email和密碼
+                    string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?Fid={member.Fid}";
+                    string emailFrom = "a29816668@gmail.com";
+                    string emailpassword = "joksdquaswjdyzpu";
+                    //收信方email 可以用逗號區分多個收件人
+                    string emailTo = vm.Email;
+                    //主旨
+                    string subject = "重製密碼";
+                    //內容
+                    string body = $"<h2>重製密碼</h2><h3><br><a href={url}>請點此連結重設密碼</a></h3>";
+                    using (MailMessage mail = new MailMessage())
+                    {
+                        mail.From = new MailAddress(emailFrom,"日柴", System.Text.Encoding.UTF8);
+                        mail.To.Add(emailTo);
+                        mail.Subject = subject;
+                        mail.Body = body;
+                        // 若你的內容是HTML格式，則為True
+                        mail.IsBodyHtml = true;
+                        using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                        {
+                            smtp.Credentials = new NetworkCredential(emailFrom, emailpassword);
+                            smtp.EnableSsl = enableSSL;
+                            smtp.Send(mail);
+                        }
+
+
+                    }
+
+                    //return Redirect("~/Home/CIndex");
+                    return Redirect("~/Home/CIndex");
+
+                }
+
+            }
+
+                
+        }
+        public IActionResult Forgetpasswordapi(CNormalMemberViewModel vm)
+        {
+            if (vm.Email!= null && vm.Phone!=null)
+            {
+                NormalMember member =_context.NormalMembers.FirstOrDefault(c=>c.Email== vm.Email && c.Phone==vm.Phone);
+                if (member != null) {
+                    return Json("已送出重製密碼信件");
+                    }
+                else
+                {
+                    return Json("帳號或Email錯誤");
+                }
+                
+            }
+
+                 return Json("請兩格都不要空白");
         }
 
 
-
-        [HttpPost]
-        public IActionResult Forgetpassword(string Email)
+        public IActionResult forgetalterpassword(int? Fid)
         {
-            string smtpAddress = "smtp.gmail.com";
-            //設定Port
-            int portNumber = 587;
-            bool enableSSL = true;
-            //填入寄送方email和密碼
-            string emailFrom = "a29816668@gmail.com";
-            string emailpassword = "joksdquaswjdyzpu";
-            //收信方email 可以用逗號區分多個收件人
-            string emailTo = Email;
-            //主旨
-            string subject = "Hello";
-            //內容
-            string body = "https://localhost:7266/CustomerMember/Register";
-            using (MailMessage mail = new MailMessage())
+            if (Fid != null)
             {
-                mail.From = new MailAddress(emailFrom);
-                mail.To.Add(emailTo);
-                mail.Subject = subject;
-                mail.Body = body;
-                // 若你的內容是HTML格式，則為True
-                mail.IsBodyHtml = false;
-                using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Fid == Fid);
+                if (member != null)
                 {
-                    smtp.Credentials = new NetworkCredential(emailFrom, emailpassword);
-                    smtp.EnableSsl = enableSSL;
-                    smtp.Send(mail);
+                    return View(member);
                 }
+
+                return Redirect("~/Home/CIndex");
 
 
             }
 
 
-
-            return Content("已寄出");
+            return Redirect("~/Home/CIndex");
         }
+        [HttpPost]
+        public IActionResult forgetalterpassword(NormalMember member)
+        {
+            if(member.Password == null)
+            {
+                return View(member);
+            }
+            else
+            {
+                NormalMember x=_context.NormalMembers.FirstOrDefault(c=>c.Fid==member.Fid);
+                if (x == null)
+                {
+                    return View();
+                }
+                else
+                {
+                    x.Password = member.Password;
+                    _context.SaveChanges();
+                    return Redirect("~/Home/CIndex");
+                }
+               
+            }
+
+
+
+
+
+        }
+
+
+
+
+
+
+
         public IActionResult getCartOrderQty(string data)
         {
             if (!string.IsNullOrEmpty(data))
