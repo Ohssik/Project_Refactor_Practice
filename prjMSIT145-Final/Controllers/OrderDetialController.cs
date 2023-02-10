@@ -32,19 +32,19 @@ namespace prjMSIT145_Final.Controllers
         }
         public IActionResult List()
         {
-            int NFid = 0;
-            if (HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER) == null)
-            {
-                return Redirect("/CustomerMember/Login");
-            }
-            NormalMember Memberdatas = JsonSerializer.Deserialize<NormalMember>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
-            NFid = Memberdatas.Fid;
+            //int NFid = 0;
+            //if (HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER) == null)
+            //{
+            //    return Redirect("/CustomerMember/Login");
+            //}
+            //NormalMember Memberdatas = JsonSerializer.Deserialize<NormalMember>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+            //NFid = Memberdatas.Fid;
 
             List<COrderDetialViewModel> OrderDetiallist = new List<COrderDetialViewModel>();
             var OrderDatas = from O in _context.Orders
                              join B in _context.BusinessMembers
                              on O.BFid equals B.Fid
-                             where O.NFid == NFid
+                             //where O.NFid == NFid
                              select new
                              {
                                  O.Fid,
@@ -233,47 +233,26 @@ namespace prjMSIT145_Final.Controllers
         [HttpPost]
         public IActionResult CartList(COrderDetialViewModel vm)
         {
-            var q = from o in _context.Orders
-                    join b in _context.BusinessMembers
-                    on o.BFid equals b.Fid
-                    join a in _context.PaymentTermCategories
-                    on o.PayTermCatId equals a.Fid
-                    where o.Fid == 39
-                    select new
-                    {
-                        Fid = o.Fid,
-                        NFid = o.NFid,
-                        BFid = o.BFid,
-                        BMemberName = b.MemberName,
-                        BMemberPhone = b.Phone,
-                        BAddress = b.Address,
-                        PickUpDate = o.PickUpDate,
-                        PickUpTime = o.PickUpTime,
-                        PickUpType = o.PickUpType,
-                        PickUpPerson = o.PickUpPerson,
-                        PickUpPersonPhone = o.PickUpPersonPhone,
-                        PayTernCatId = a.PaymentType,
-                        OrderState = o.OrderState,
-                        Memo = o.Memo,
-                        OrderTime = o.OrderTime,
-                        TotalAmount = o.TotalAmount
+            
+            Order prod = _context.Orders.FirstOrDefault(t => t.Fid == vm.Fid);
 
-                    };
-            foreach (var item in q)
+            if(prod != null)
             {
-                vm.PickUpType = item.PickUpType;
-                vm.PickUpTime = item.PickUpTime;
-                vm.PickUpDate = item.PickUpDate;
-                vm.PayTermCatId = item.PayTernCatId;
-                vm.Memo = item.Memo;
-                vm.OrderState = item.OrderState;
-                vm.TotalAmount = item.TotalAmount;
+                
+                prod.PickUpType= vm.PickUpType;
+                prod.PickUpDate = vm.PickUpDate;
+                prod.PickUpTime = vm.PickUpDate - DateTime.Now;
+                prod.OrderState = vm.OrderState;
+                prod.PayTermCatId = Int32.Parse(vm.PayTermCatId);
+                prod.Memo = vm.Memo;
+                prod.TotalAmount= vm.TotalAmount;
             }
 
 
+           
             _context.SaveChanges();
 
-            return View();
+            return RedirectToAction("List");
         }
 
 

@@ -285,7 +285,7 @@
             margin-left: -2400px;
             transition: all .5s;
         }
-        .dateTime{
+        .borderNone{
             border:solid 0px;
             outline: none;
         }
@@ -293,6 +293,7 @@
 }
 <div class="changePage">
   <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="Fid" value="@Model.Fid" />
     <div class="slides1" id="slides">
         <div class="bodyBackgroundColor body_Icon_delete_Guide_fontColor body">
             <div class="mainDiv">
@@ -300,7 +301,8 @@
                 <div class="flexAndItemsCenter divMargin cardBackgroundColor">
                     <div>
                         <h4 id="storeName">店家名稱</h4>
-                        <h6 id="storePhone"><i class="fa-solid fa-phone"></i> @Model.BMemberPhone</h6>
+                           @* <h6 id="storePhone"><i class="fa-solid fa-phone name="BMemberPhone">@Model.BMemberPhone</i> </h6>*@
+                            <h6 id="storePhone"><i class="fa-solid fa-phone"></i><input class="fa-solid borderNone" name="BMemberPhone" value="@Model.BMemberPhone" /> </h6>
                     </div>
                     <button class="storeIntro_btn">揪團</button>
                 </div>
@@ -313,13 +315,13 @@
                     </div>
                     <h5>預計取餐時間</h5>
                     <fieldset class="Fieldset" id="pickUpTime">
-                            <input class="font-size dateTime" name="pickUpDate" id="change" type="datetime-local" />
+                            <input class="font-size borderNone" name="pickUpDate" id="change" type="datetime-local" value="" />
                     </fieldset>
                     <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
                     <h5>門市位置</h5>
                     <a href="">
                         <fieldset class="Fieldset">
-                            <legend class="font-size">@Model.Address</legend>
+                                <input class="font-size borderNone" value="@Model.Address" name="Address" />
                             <i class="fa-solid fa-location-dot"></i>
                         </fieldset>
                     </a>
@@ -342,7 +344,7 @@
                         </div>
                         <h5 id="memberName">會員名稱</h5>
                         <div class="orderAbsolteForRight">
-                            <span id="totalPrice">$ @Model.TotalAmount</span>
+                            <span id="totalPrice" >$ @Model.TotalAmount</span>
                             <span id="totalQty">/ @Model.TotalQty 份</span>
                         </div>
                     </div>
@@ -471,13 +473,14 @@
                     </div>
                 </div>
                 <div class="flexAndItemsCenter radioDiv">
-                    <div class="margin"><input type="radio" id="cash" name="PayTernCatId" value="1"></div>
+                    <div class="margin"><input type="radio" id="cash" ></div>
                     <div class="margin"><label for="cash"><span class="spanFont">現金</span></label></div>
                 </div>
                 <div class="flexAndItemsCenter radioDiv">
-                    <div class="margin"><input type="radio" id="cardit" name="PayTernCatId" value="2"></div>
+                    <div class="margin"><input type="radio" id="cardit" ></div>
                     <div class="margin"><label for="cardit"><span class="spanFont">信用卡</span></label></div>
                 </div>
+                    <input type="hidden" name="PayTernCatID" value="" id="PayTernCatID" />
             </div>
             <!-- 開立發票 -->
             <div class="divMargin cardBackgroundColor">
@@ -553,6 +556,7 @@
                 <div class="flexAndItemsCenter bottomBtn ">
                     <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
                     <div><button class="btnToFinish" type="submit">送出訂單</button></div>
+                        <input type="hidden" name="OrderState" value="1" />
                 </div>
             </div>
         </div>
@@ -564,6 +568,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let DateValue=``;
+        
         @*網頁重新整理*@
         $("#btnReset").click(function () {
                 location.reload();
@@ -589,11 +594,12 @@
 
         @*選擇付款方式*@
         $("#cash").click(function () {
+                
                 let checked = $("#cash").prop("checked");
                 if (checked) {
                     console.log(checked)
                     $("#CPayTernCatId").text("現金");
-
+                    $("#PayTernCatID").val("1");
                 }
                 else {
                     $("#CPayTernCatId").text("信用卡");
@@ -604,7 +610,8 @@
             if (checked) {
                 console.log(checked)
                 $("#CPayTernCatId").text("信用卡");
-
+                $("#PayTernCatID").val("2")
+                
             }
             else {
                 $("#CPayTernCatId").text("現金");
@@ -685,11 +692,21 @@
 
             };
         })
-        $(".btnToFinish").click(function (){
-            event.preventDefault();
-            window.location.href = "OrderDetial/List";
-        })
+        //$(".btnToFinish").click(function (){
+            
+        //    window.location.href = "OrderDetial/List";
+            
+        //})
+        
+        //var el = document.querySelector('.btnToFinish');
 
+        //el.addEventListener('click', function () {
+        //    // 原本，點擊連結會「跳轉到指定網頁」
+        //    // 取消「元素的預設行為」
+        //    event.preventDefault();
+        //    window.location.href = "OrderDetial/List";
+        //    console.log('test');
+        //}, false);
          
        
     </script>
