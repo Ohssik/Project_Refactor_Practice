@@ -64,10 +64,10 @@
 }
 /* 平台及使用者頭像 */
 .imgDiv {
-    min-width: 50px;
-    height: 50px;
+    min-width: 65px;
+    max-width: 65px;
+    height: 65px;
     margin: 0 5px;
-    border-radius: 50%;
 }
 
     .imgDiv img {
@@ -111,6 +111,8 @@
 .serviceMsg {
     word-wrap: break-word;
     font-size: 13px;
+    padding:5px 0;
+    box-sizing:border-box;
 }
 
     .serviceMsg p {
@@ -135,9 +137,9 @@
 
 .userMsg {
     word-wrap: break-word;
-    font-size: 13px;
+    font-size: 15px;
     box-sizing: border-box;
-    padding: 15px 0;
+    padding: 25px 0;
 }
 /* 輸入框 */
 .txtDiv {
