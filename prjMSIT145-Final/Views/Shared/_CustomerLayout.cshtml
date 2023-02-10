@@ -59,8 +59,41 @@
     .Navigationbar_Direct>li:nth-child(2){
         padding-top: 42px;
     }
-             
 
+        .chatroomDialogue {
+            width: 100%;
+            height: 400px;
+        }
+
+        .chatroomUser {
+            display: flex;
+            margin-bottom: 10px
+        }
+
+            .chatroomUser .chatroomMessage {
+                background-color: #aaa;
+                padding: 15px;
+                border-radius: 15px;
+            }
+
+        .remote .chatroomMessage {
+            margin-left: 5px;
+            margin-right: 110px;
+            background-color: #3e92cc;
+            color: #fff;
+        }
+
+
+        .local {
+            justify-content: flex-end
+        }
+
+            .local .chatroomMessage {
+                margin-left: 110px;
+                margin-right: 5px;
+                background-color: #98fb98;
+                order: -1;
+                color: black;
     </style>
     
     @await RenderSectionAsync("Styles", required: false)
@@ -200,6 +233,86 @@
                 </div>
             </div>
         </div>
+        @*聊聊*@
+        <button type="button" class="btn btn-primary position-fixed" style="right:10px;bottom:0px;width:90px" id="showChatRoomBtn" data-bs-toggle="collapse2" data-bs-target="#exampleModal">
+            聊聊 <span class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2" id="newMessageAlarm"><span class="visually-hidden">unread messages</span></span>
+        </button>
+        @*隱藏*@
+        <div class="collapse2 position-fixed " id="exampleModal" aria-hidden="true" style="right:10px; bottom:5px; width:630px; ">
+            <div class="card card-body pt-1 p-0 m-0">
+                <div style="width:630px;height:520px;" class="m-0 p-0">
+                    <div id="head" class="row justify-content-center" style="width:625px;height:40px;">
+                        <div class="col-2 row justify-content-center"><div class="mx-auto "><i>聊聊</i></div></div>
+                        <div class="col-8"></div>
+                        <button type="button" class="btn-close col-2" data-bs-toggle="collapse" data-bs-target="#exampleModal"></button>
+
+                    </div>
+                    <hr class="p-0 m-0" size="1px" align="center" width="98%" color="black">
+
+                    <div id="body" style="width:610px;height:520px;" class="justify-content-center container p-1 m-0">
+                        <div class="row container p-0 m-0 ">
+                            <div class="col-8" style="background-color:#F4F5F7;">
+                                @*現在對話人的名稱*@
+                                <div>
+                                    <div id="ChatNowUser" style="padding-left:12px;">kelly</div>
+                                    <div hidden>
+                                        <input value="" id="ChatNowUserid"></input>
+                                        <input value="" id="ChatNowUserChatid"></input>
+                                    </div>
+                                </div>
+                                <hr class="p-0 m-0" size="1px" align="center" width="98%" color="black">
+                                <div class="" style="overflow-y:auto;overflow-x:hidden">
+
+                                    @*訊息*@
+                                    <div id="chatmessageDiv" class="chatroomDialogue">
+                                        @*對方*@
+                                        @*<div class="chatroomUser remote">
+                                        <div class="chatroomMessage">
+                                        你好~
+                                        </div>
+                                        </div>*@
+                                        @*自己*@
+                                        @*<div class="chatroomUser local">
+                                        <div class="chatroomMessage">
+                                        你好!
+                                        </div>
+                                        </div>*@
+
+                                    </div>
+                                    @*輸入訊息*@
+
+                                    <div class="row">
+                                        <input class="col-9" type="text" id="chatMessageInput" style="margin-left:15px"></input>
+                                        <input class="col-2" type="button" id="chatMessagebtn" value="送出"></input>
+
+                                    </div>
+                                </div>
+                            </div>
+                            @*過話對話的人*@
+                            <div class="col-4  p-0 m-0 overflow-auto " style="background-color:bisque">
+
+                                <div style="height:470px" id="chatOthersUser" class="container p-0 m-0">
+                                    @*用戶*@
+                                    <div class="row  border-3 p-0 m-0 back" style="background-color:azure">
+                                        <div class="col-5 p-1" id="chatOthersUserImg"><img src="~/images/4c8b3a99-bc8e-43f6-b351-44221fbd8219.jpg" width="48px" height="48px" /></div>
+                                        <div class="col-7 ">kelly</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
 
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
@@ -253,8 +366,12 @@
 
         });
 
+   
 
+           
     </script>
+        <script src="@Url.Content("~/js/signalr/dist/browser/signalr.js")"></script>
+        <script src="@Url.Content("~/js/ChatRoom.js")"></script>
         @await RenderSectionAsync("Scripts", required: false)
     </div>
 </body>

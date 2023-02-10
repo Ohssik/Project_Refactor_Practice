@@ -165,6 +165,20 @@ namespace prjMSIT145_Final.Controllers
             vm.EmailCertified = rnd.Next(10000000, 90000000);
             _context.Add(vm.member);
             _context.SaveChanges();
+
+            //聊天室相關
+            ChatroomUser chatroomUser = new ChatroomUser();
+            chatroomUser.UserType = 0;//0是客戶 1是商家 2 是平台 欄位改成INT
+            chatroomUser.Memberfid = vm.member.Fid;
+            _context.ChatroomUsers.Add(chatroomUser);
+            _context.SaveChanges();
+            vm.member.ChatroomUserid = chatroomUser.ChatroomUserid;
+            _context.SaveChanges();
+
+
+
+
+
             string url = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={vm.Fid}";
             string smtpAddress = "smtp.gmail.com";
             //設定Port
@@ -196,6 +210,7 @@ namespace prjMSIT145_Final.Controllers
 
 
             }
+
                 return Redirect("~/Home/CIndex");
           
         }

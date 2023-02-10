@@ -23,12 +23,12 @@
             {
                 count++;
 
-                    <tr id="ListBar" data-bs-toggle="modal" data-bs-target="#detailModal" class="container" name="baritem">
-             <td id="Fid" hidden>@Html.DisplayFor(modelItem => item.Fid)</td>
-             <th class=" col-1 align-middle">#@count</th>
-            <td class="col-4 align-middle">@Html.DisplayFor(modelItem => item.OrderISerialId)</td>
-                    <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.NmbName)</td>
-            <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.TotalAmount)</td>
+            <tr id="ListBar"  class="container" name="baritem">
+            <td id="Fid" hidden>@Html.DisplayFor(modelItem => item.Fid)</td>
+                    <th class=" col-1 align-middle" data-bs-toggle="modal" data-bs-target="#detailModal">#@count</th>
+            <td class="col-4 align-middle" data-bs-toggle="modal" data-bs-target="#detailModal">@Html.DisplayFor(modelItem => item.OrderISerialId)</td>
+                    <td class="col-2 align-middle" data-bs-toggle="modal" data-bs-target="#detailModal">@Html.DisplayFor(modelItem => item.NmbName)</td>
+                    <td class="col-2 align-middle" data-bs-toggle="modal" data-bs-target="#detailModal">@Html.DisplayFor(modelItem => item.TotalAmount)</td>
             <td class="col-3 align-middle">
                             @Html.ActionLink("餐點完成", "BEditStateApi", new {State=item.OrderState,nextState="3",orderid=item.Fid  },new{@class="btn btn-success"})
                             @Html.ActionLink("完成訂單", "BEditStateApi",  new {State=item.OrderState,nextState="4",orderid=item.Fid  },new{@class="btn btn-danger"})
@@ -121,8 +121,8 @@
                                     </div>
                                 </div>`;
                                      selFooter.innerHTML = `
-                                             <a  class="btn btn-primary" href="BEditStateApi/?State=2&&nextState=3&&orderid=${orderid}">接受</a>
-                                              <a  class="btn btn-primary" href="BEditStateApi/?State=2&&nextState=4&&orderid=${orderid}">接受</a>
+                                             <a  class="btn btn-primary" href="BEditStateApi/?State=2&&nextState=3&&orderid=${orderid}">餐點完成</a>
+                                                      <a  class="btn btn-primary" href="BEditStateApi/?State=2&&nextState=4&&orderid=${orderid}">完成訂單</a>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>`;
                    
                     option.forEach(function (optionitem, index) {
