@@ -10,38 +10,38 @@
         .checkForm.hidden{
             display:none;
         }
-        
-        .row{
+
+        .row.CSMail{
             width:50%;
             margin:30px auto;                      
         }
-        .col-md-4{
+        .col-md-4.CSMail{
             width:100%;
         }
         .mailForm>.col-md-4 input{
             width:50%;
             display:inline;
         }
-        .col-md-4 label{            
+        .col-md-4.CSMail label{
             display:inline;            
             font-weight: bold;
         }
-        .col-md-4>form>div{
+        .col-md-4.CSMail>form>div{
             margin:20px 30px;
         }
-        .col-md-4>div{
+        .col-md-4.CSMail>div{
             margin:20px 30px;
         }
-        .form-group{
+        .form-group.CSMail{
             display:flex;            
         }
-        .form-group>div{
+        .form-group.CSMail>div{
             width:15%;
         }
-        .form-group>textarea{
+        .form-group.CSMail>textarea{
             width:85%;
         }
-        .btn{
+        .btn.CSMail{
             margin:10px auto;
             width:20%;
             padding:10px 30px;
@@ -64,20 +64,20 @@
         .row.mailForm .form-group:nth-child(6){
             position:relative;
         }
-        .form-group>p.text-danger {
+        .form-group.CSMail>p.text-danger {
             position:absolute;
             right:0;
         }
     </style>
 }
 
-<div class="row section-title">
+    <div class="row section-title CSMail">
     聯繫我們
 </div>
-<div class="row mailForm">
-    <div class="col-md-4">
+<div class="row mailForm CSMail">
+        <div class="col-md-4 CSMail">
         <form asp-action="CCustomerServiceMailBox" name="mailForm">            
-            <div class="form-group">
+                <div class="form-group CSMail">
                 <div>
                     <label class="text-danger">＊</label>
                         <label asp-for="txtSenderName" class="control-label"></label>
@@ -85,7 +85,7 @@
                     <input asp-for="txtSenderName" class="form-control" />
                 <span name="checkSenderName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+                <div class="form-group CSMail">
                     <div>
                         <label class="text-danger">＊</label>
                         <label asp-for="txtEmailAddress" class="control-label"></label>
@@ -93,48 +93,48 @@
                     <input asp-for="txtEmailAddress" class="form-control" />
                 <span name="checkEmailAddress" class="text-danger"></span>
             </div>
-            <div class="form-group">
+                <div class="form-group CSMail">
                 <div><label class="text-danger">＊</label>
                         <label asp-for="txtPhone" class="control-label"></label>
                 </div>
                     <input asp-for="txtPhone" class="form-control" />
                 <span name="checkPhone" class="text-danger"></span>
             </div>
-            <div class="form-group">
+                <div class="form-group CSMail">
                 <div><label class="text-danger">＊</label>
                         <label asp-for="txtMailSubject" class="control-label"></label>
                 </div>
                     <input asp-for="txtMailSubject" class="form-control" />
                 <span name="checkMailSubject" class="text-danger"></span>
             </div>
-            <div class="form-group">
+                <div class="form-group CSMail">
                     <div>
                         <label class="text-danger">＊</label>
                         <label asp-for="txtMailContent" class="control-label"></label>
                 </div>
                     <textarea asp-for="txtMailContent" class="form-control" rows="5"></textarea>                                       
             </div>
-                <div class="form-group">
+                <div class="form-group CSMail">
                 <p name="checkMailContent" class="text-danger"></p>
                 </div>
-            <div class="form-group">
-                <button type="button" id="btnDemo" class="btn btn-dark">Demo</button>
-                <button id="btnCheck" class="btn btn-dark">確認畫面</button>
+                <div class="form-group CSMail">
+                    <button type="button" id="btnDemo" class="btn btn-dark CSMail">Demo</button>
+                    <button id="btnCheck" class="btn btn-dark CSMail">確認畫面</button>
             </div>
         </form>
     </div>
 </div>
 
 <div class="row checkForm hidden">
-    <div class="col-md-4">            
-        <div class="form-group">                        
+        <div class="col-md-4 CSMail">
+        <div class="form-group CSMail">                        
             <div>
                 <label class="text-danger">＊</label>
                 <label class="control-label">姓名</label>
             </div>
                 <label name="lblSenderName" class="control-label"></label>
         </div>
-        <div class="form-group">            
+            <div class="form-group CSMail">
             <div>
                 <label class="text-danger">＊</label>
                 <label class="control-label">Email</label>
@@ -142,7 +142,7 @@
             <label name="lblEmailAddress" class="control-label">                    
             </label>                
         </div>
-        <div class="form-group">
+            <div class="form-group CSMail">
                 <div>
                     <label class="text-danger">＊</label>
                     <label class="control-label">電話</label>
@@ -150,7 +150,7 @@
             <label name="lblPhone" class="control-label">                
             </label>                
         </div>
-        <div class="form-group">
+            <div class="form-group CSMail">
                 <div>
                     <label class="text-danger">＊</label>
                     <label class="control-label">詢問主題</label>
@@ -158,7 +158,7 @@
             <label name="lblmailSubject" class="control-label">                    
             </label>                
         </div>
-        <div class="form-group">
+            <div class="form-group CSMail">
             <div>
                 <label class="text-danger">＊</label>
                 <label class="control-label">詢問內容</label>
@@ -166,9 +166,9 @@
             <textarea name="lblmailContent" class="control-label" readonly rows="20">                    
             </textarea>                
         </div>
-        <div class="form-group">                
-                <input type="button" value="返回輸入畫面" id="btnBack" class="btn btn-light" />
-                <input type="submit" value="提交" id="btnSubmitMail" class="btn btn-dark" />
+            <div class="form-group CSMail">
+                <input type="button" value="返回輸入畫面" id="btnBack" class="btn btn-light CSMail" />
+                <input type="submit" value="提交" id="btnSubmitMail" class="btn btn-dark CSMail" />
         </div>
            
     </div>
@@ -191,8 +191,8 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    
+    
     <script>
         $(function(){            
 
