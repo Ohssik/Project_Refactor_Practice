@@ -288,6 +288,7 @@ namespace prjMSIT145_Final.Controllers
             IEnumerable<BusinessMember> businessMembers = from member in _context.BusinessMembers
                                                       select member;
             
+            
             if (businessMembers != null)
             {
                 foreach (BusinessMember b in businessMembers)
@@ -298,6 +299,7 @@ namespace prjMSIT145_Final.Controllers
                 }
 
             }
+            
 
             return View(list);
         }
@@ -311,6 +313,7 @@ namespace prjMSIT145_Final.Controllers
             IEnumerable<Order> orderDatas = from order in _context.Orders
                                             where order.BFid == (int)id
                                             select order;
+            BusinessImg businessLogo = _context.BusinessImgs.FirstOrDefault(bl => bl.BFid == (int)id);
 
             if (businessDatas != null)
             {
@@ -319,6 +322,11 @@ namespace prjMSIT145_Final.Controllers
                 if (orderDatas != null)
                 {
                     b.orders = orderDatas;
+                }
+
+                if (businessLogo != null)
+                {                                        
+                    b.LOGO_ImgFileName = businessLogo.LogoImgFileName;                    
                 }
                 return View(b);
             }
