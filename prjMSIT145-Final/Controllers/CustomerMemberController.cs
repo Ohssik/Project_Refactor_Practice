@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Apis.Auth;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
@@ -36,7 +37,7 @@ namespace prjMSIT145_Final.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Login(CLoginViewModel vm)
+        public ActionResult Login(CLoginViewModel vm)                                                                             //登入動作
         {
 
 
@@ -58,7 +59,7 @@ namespace prjMSIT145_Final.Controllers
             return View();
         }
 
-        public ActionResult loginmailverify(CLoginViewModel vm)
+        public ActionResult loginmailverify(CLoginViewModel vm)                                                              //登入顯示會員狀態
         {
             NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Phone.Equals(vm.txtAccount) && c.Password.Equals(vm.txtPassword));
             if (x != null)
@@ -83,21 +84,117 @@ namespace prjMSIT145_Final.Controllers
 
             return Json("帳號或密碼有錯");
         }
+        public IActionResult ValidGoogleLogin()                                                                                                  //google
+        {
+            string? formCredential = Request.Form["credential"]; //回傳憑證
+            string? formToken = Request.Form["g_csrf_token"]; //回傳令牌
+            string? cookiesToken = Request.Cookies["g_csrf_token"]; //Cookie 令牌
 
-        
+            // 驗證 Google Token
+            GoogleJsonWebSignature.Payload? payload = VerifyGoogleToken(formCredential, formToken, cookiesToken).Result;
+            if (payload == null)
+            {
+                // 驗證失敗
+                ViewData["Msg"] = "驗證 Google 授權失敗";
+                return Redirect("~/Home/CIndex");
+            }
+            else
+            {
+                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Email == payload.Email);
+                if (member != null)
+                {
+                    CLoginViewModel vm = new CLoginViewModel();
+                    vm.txtAccount = member.Phone;
+                    vm.txtPassword = member.Password;
+                    Login(vm);
+                }
+                else
+                {
+                    NormalMember x = new NormalMember();
+
+                    x.Email = payload.Email;
+                    x.MemberName = payload.Name;
+
+                    return RedirectToAction("Register", x);
+
+                }
+
+            };
+            return Redirect("~/Home/CIndex");
+        }
+
+        /// <summary>
+        /// 驗證 Google Token
+        /// </summary>
+        /// <param name="formCredential"></param>
+        /// <param name="formToken"></param>
+        /// <param name="cookiesToken"></param>
+        /// <returns></returns>
+        public async Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string? formCredential, string? formToken, string? cookiesToken)   //google
+        {
+            // 檢查空值
+            if (formCredential == null || formToken == null && cookiesToken == null)
+            {
+                return null;
+            }
+
+            GoogleJsonWebSignature.Payload? payload;
+            try
+            {
+                // 驗證 token
+                if (formToken != cookiesToken)
+                {
+                    return null;
+                }
+
+                // 驗證憑證
+                IConfiguration Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
+                string GoogleApiClientId = Config.GetSection("GoogleApiClientId").Value;
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new List<string>() { GoogleApiClientId }
+                };
+                payload = await GoogleJsonWebSignature.ValidateAsync(formCredential, settings);
+                if (!payload.Issuer.Equals("accounts.google.com") && !payload.Issuer.Equals("https://accounts.google.com"))
+                {
+                    return null;
+                }
+                if (payload.ExpirationTimeSeconds == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    DateTime now = DateTime.Now.ToUniversalTime();
+                    DateTime expiration = DateTimeOffset.FromUnixTimeSeconds((long)payload.ExpirationTimeSeconds).DateTime;
+                    if (now > expiration)
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+            return payload;
+        }
 
 
-        public ActionResult Loginout()
+
+
+
+        public ActionResult Loginout()                                                                                          //登出
         {
             HttpContext.Session.Remove(CDictionary.SK_LOGINED_USER);
 
             return Redirect("~/Home/CIndex");
             //return RedirectToAction("Index", "CustomerMember");
         }
-        public IActionResult Register()
+        public IActionResult Register(NormalMember member)
         {
 
-            return View();
+            return View(member);
         }
         [HttpPost]
         public IActionResult Register(CNormalMemberViewModel vm, IFormFile photo)
@@ -553,12 +650,7 @@ namespace prjMSIT145_Final.Controllers
                 }
                
             }
-
-
-
-
-
-        }
+         }
 
 
 
