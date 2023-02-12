@@ -32,12 +32,12 @@
         <div class="regsterleftgroup">
         <span class="text3">
             <p class="color">*</p>
-                        <p class="text4">真實姓名<span class="necessspan">(必填)</span><span class="Formatspan">(三個中文字)</span></p>
+                        <p class="text4">真實姓名<span class="necessspan">(必填)</span></p>
         </span>
                 <div class="divhint">
                     <div class="div1">
-                            <input id="MemberName" type="text" class="input" value="@ViewBag.Name" name="MemberName"  />
-                        
+                           @* <input id="MemberName" type="text" class="input" value="@ViewBag.Name" name="MemberName"  />*@
+                            <input id="MemberName" type="text" class="input" value="@Model.MemberName" name="MemberName"  />
                     </div>
                         <span id="namecorrect" class="spanerrormessage"></span>
                 </div>
@@ -61,7 +61,7 @@
                     </span>
                     <div class="divhint">
                         <div class="div1">
-                            <input type="email" class="input" name="Email" value="@ViewBag.Email" id="Email" />
+                            <input type="email" class="input" name="Email" value="@Model.Email" id="Email" />
                         </div>
                         <span id="emailcorrect" class="spanerrormessage"></span>
                     </div>
