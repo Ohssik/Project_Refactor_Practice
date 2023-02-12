@@ -13,13 +13,45 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 connection.on("RemoteMessage", function (otherName, ChatroomUserid,Fid,message) {
     
     var li = document.createElement("li");
+    const ListChatMessageil = ChatMessageul.lastElementChild;
     li.setAttribute("class", "d-flex mb-2 mt-2");
-    console.log("1234");
-    console.log(document.getElementById("ChatMessageul"));
+    console.log(ListChatMessageil);
     ChatNowUserName.innerHTML = otherName;
     ChatNowUserid.value = `${Fid}`;
     ChatNowUserChatid.value = `${ChatroomUserid}`;
+    if (ListChatMessageil == null) {
+        li.innerHTML = ` <img src="#"
+                                     alt="#"
+                                     class="rounded-circle d-flex align-self-start me-3 shadow-1-strong mt-2"
+                                     width="35"
+                                    />
+                                <div class="card remotemessage">
+                                    <div class="card-body p-2">
+                                        <p class="mb-0 small">
+                                            ${message}
+                                        </p>
+                                    </div>
+                                </div>
+                              `
+       
+    }
+    else
+    {
+if (ListChatMessageil.getAttribute("class") == "d-flex mb-2 mt-2") {
 
+        li.innerHTML = ` <div class="rounded-circle d-flex align-self-start me-3 shadow-1-strong mt-2 "style="padding-right:35px">
+                                </div>
+                                <div class="card remotemessage">
+                                    <div class="card-body p-2">
+                                        <p class="mb-0 small">
+                                             ${message}
+                                        </p>
+                                    </div>
+                                </div>
+                              `
+        
+    }
+    else {
         li.innerHTML = `<img src="#"
                                      alt="#"
                                      class="rounded-circle d-flex align-self-start me-3 shadow-1-strong mt-2"
@@ -33,7 +65,11 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid,Fid,message) 
                                     </div>
                                 </div>
                               `
-        console.log("有頭像");
+        
+    }
+    }
+    
+    
    
     
     

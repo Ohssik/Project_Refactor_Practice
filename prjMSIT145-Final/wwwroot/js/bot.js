@@ -15,8 +15,9 @@ tr.forEach(function (msg) {
         //console.log(this.firstElementChild.innerHTML);
 
         msgProblem = this.firstElementChild.innerHTML;
-        console.log("msg" + msgProblem)
+        //console.log("msg" + msgProblem)
         txt.value = msgProblem;
+        //console.log($("#txtProblem").val())
     });
 });
 

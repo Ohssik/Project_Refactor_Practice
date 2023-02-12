@@ -75,6 +75,24 @@
             </div>
 
             <input id="submitid" type="submit" value="登入" class="login" />
+            <div>
+                <div style="margin-bottom:20px;">
+                    <div id="g_id_onload"
+                         data-client_id="274917650943-tcctf041b357aeff8q2um096rutfsrt9.apps.googleusercontent.com"
+                         data-login_uri="https://localhost:7266/CustomerMember/ValidGoogleLogin"
+                         data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-size="large"
+                         data-theme="filled_blue"
+                         data-text="sign_in_with"
+                         data-shape="rectangular"
+                         data-logo_alignment="center">
+                    </div>
+                </div>
+            </div>
+            <div id="buttonDiv"></div>
             <div class="display">
 
                 <img src="@Url.Content("~/images/Customer/Member/question.png")" class="img2"></img>
@@ -154,7 +172,7 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
        
 
@@ -212,35 +230,7 @@
            
            });
            
-            //document.getElementById("submitid").addEventListener('click',async ()=>{
-            //        event.preventDefault();
-
-            //    let formdata = new FormData(document.Loginname);
-
-            //    const request = await fetch(`@Url.Content("~/CustomerMember/loginmailverify")`,{
-                
-            //        body:formdata,
-            //        method:"Post",
-
-            //        })
-            //    const data=await request.json();
-            //    console.log(data);
-            //        if (data == "此帳號不存在") {
-            //            alert("此帳號不存在")
-            //            return;
-            //        }
-            //    else if(data=="尚未開通會員資格"){
-
-            //        alert("尚未開通會員資格")
-            //        return;
-            //    }
-            //    else{
-            //    document.getElementById("Login").submit();
-            //    }
-                    
-
-
-            //    });
+         
        async function logincheck (){
            
 
