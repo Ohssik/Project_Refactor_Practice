@@ -38,7 +38,7 @@ namespace prjMSIT145_Final.Controllers
                 
                         string json = JsonSerializer.Serialize(b);
                         HttpContext.Session.SetString(CDictionary.SK_LOGINED_Business, json);
-                        HttpContext.Session.SetString("name", "1234");
+                       
                         return RedirectToAction("BList", "Order");
                     }
                 }
