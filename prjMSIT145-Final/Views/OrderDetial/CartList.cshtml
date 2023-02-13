@@ -611,12 +611,14 @@
                     console.log(checked)
                     $("#CPayTermCatId").text("現金");
                     $("#cash").val("1");
-                        $("#btnECPay").css("display","none")
+                            $("#btnECPay").css("display","none")//增加css
+                $("#btnSubmit").css("display", "null")//移除css
 
                 }
                 else {
                     $("#CPayTermCatId").text("信用卡");
-                    $("#btnSubmit").css("display","none")
+                        $("#btnSubmit").css("display","none")//增加css
+                $("#btnECPay").css("display", "null")//移除css
 
                 }
             })
@@ -626,12 +628,14 @@
                 console.log(checked)
                 $("#CPayTermCatId").text("信用卡");
                 $("#cardit").val("2")
-                $("#btnSubmit").css("display","none")
+                    $("#btnSubmit").css("display","none")  //增加css
+                        $("#btnECPay").css("display","null") //移除css
                     console.log(document.querySelector("#btnECPay"))
             }
             else {
                 $("#CPayTermCatId").text("現金");
-                    $("#btnECPay").css("display","none")
+            $("#btnECPay").css("display", "none")
+            $("#btnSubmit").css("display", "null")//移除css
 
             }
         })

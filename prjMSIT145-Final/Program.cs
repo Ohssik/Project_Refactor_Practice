@@ -2,8 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using prjMSIT145_Final.Models;
 
 
-
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -46,6 +47,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
+
+
+
 app.UseSession();
 app.UseAuthorization();
 
