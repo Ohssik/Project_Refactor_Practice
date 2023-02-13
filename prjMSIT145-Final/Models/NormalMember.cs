@@ -19,5 +19,7 @@ namespace prjMSIT145_Final.Models
         public int? IsSuspensed { get; set; }
         public int? EmailCertified { get; set; }
         public int? ChatroomUserid { get; set; }
+        public string? GoogleEmail { get; set; }
+        public string? LineUserid { get; set; }
     }
 }
