@@ -28,17 +28,17 @@ namespace prjMSIT145_Final.Controllers
         public AdminController(ispanMsit145shibaContext context, IWebHostEnvironment host, IConfiguration config)
         {
             _context = context;
-            _host=host;
-            _config=config;
+            _host = host;
+            _config = config;
         }
-        
+
         public IActionResult sendAccountLockedNotice(string data)//寄送帳號停權/復權通知
         {
             var DemoMailServer = _config["DemoMailServer:pwd"];
 
             if (!string.IsNullOrEmpty(data))
-            {                                                
-                CASendEmailViewModel mail=JsonConvert.DeserializeObject<CASendEmailViewModel>(data);
+            {
+                CASendEmailViewModel mail = JsonConvert.DeserializeObject<CASendEmailViewModel>(data);
                 if (mail != null)
                 {
                     if (mail.memberType == "B")
@@ -63,14 +63,15 @@ namespace prjMSIT145_Final.Controllers
 
                     string mailSubject = $"帳號{changeType}通知";
 
-                    string result = sendMail(mail.txtRecipient, mailBody, mailSubject);
+                    //string result = sendMail(mail.txtRecipient, mailBody, mailSubject);
+                    string result = (new CSendMail()).sendMail(mail.txtRecipient, mailBody, mailSubject, _config["DemoMailServer:pwd"].ToString());
                     return Json(result);
                 }
-                                    
+
             }
-            
+
             return NoContent();
-            
+
         }
         public IActionResult checkPwd(string account, string pwd)
         {
@@ -97,13 +98,13 @@ namespace prjMSIT145_Final.Controllers
             AdminMember member = _context.AdminMembers.FirstOrDefault(u => u.Account == admin.Account && u.Password == admin.Password);
             if (member == null)
             {
-                ViewData["checkAccountResult"]="帳號或密碼有誤";
+                ViewData["checkAccountResult"] = "帳號或密碼有誤";
                 return View();
             }
 
             string json = System.Text.Json.JsonSerializer.Serialize(member);
             HttpContext.Session.SetString(CDictionary.SK_LOGINED_ADMIN, json);
-           
+
             return RedirectToAction("ANormalMemberList");
         }
         public IActionResult ALogout()
@@ -117,13 +118,13 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult ANormalMemberList()
         {
             List<CANormalMemberViewModel> list = new List<CANormalMemberViewModel>();
-            
+
             IEnumerable<NormalMember> normalMembers = from member in _context.NormalMembers
-                   select member;
-            
-            if(normalMembers != null)
+                                                      select member;
+
+            if (normalMembers != null)
             {
-                foreach(NormalMember n in normalMembers)
+                foreach (NormalMember n in normalMembers)
                 {
                     CANormalMemberViewModel cvm = new CANormalMemberViewModel();
                     cvm.normalMember = n;
@@ -131,21 +132,21 @@ namespace prjMSIT145_Final.Controllers
                 }
 
             }
-            
+
             return View(list);
-            
+
         }
 
         public IActionResult ANormalMemberDetails(int? id)
         {
             if (id == null)
                 return RedirectToAction("ANormalMemberList");
-            
+
             var personalDatas = _context.NormalMembers.FirstOrDefault(c => c.Fid == (int)id);
             IEnumerable<Order> orderDatas = from order in _context.Orders
                                             where order.NFid == (int)id
                                             select order;
-            
+
             if (personalDatas != null)
             {
                 CANormalMemberViewModel n = new CANormalMemberViewModel();
@@ -166,10 +167,10 @@ namespace prjMSIT145_Final.Controllers
             {
                 var user = _context.NormalMembers.FirstOrDefault(t => t.Fid == n.Fid);
                 if (!string.IsNullOrEmpty(n.txtPassword) && (n.txtPassword.Trim() == n.txtConfirmPwd))
-                {                    
+                {
                     if (user != null)
                     {
-                        user.Password = n.txtPassword;                        
+                        user.Password = n.txtPassword;
                     }
                 }
                 //user.IsSuspensed = (int)n.IsSuspensed;
@@ -213,41 +214,41 @@ namespace prjMSIT145_Final.Controllers
             //                 };
 
             var orderDatas = from order in _context.Orders
-                              join f in _context.ViewShowFullOrders on order.Fid equals f.OrderFid
-                              into group7
-                              from g7 in group7.DefaultIfEmpty()
-                              join bm in _context.BusinessImgs on g7.BFid equals bm.Fid
-                              into group2
-                              from g2 in group2.DefaultIfEmpty()
-                              join b in _context.BusinessMembers on order.BFid equals b.Fid
-                              into group3
-                              from g3 in group3.DefaultIfEmpty()
-                              join pay in _context.PaymentTermCategories on order.PayTermCatId equals pay.Fid
-                              into group4
-                              from g4 in group4.DefaultIfEmpty()
-                              where order.Fid == (int)id
-                              select new
-                              {
-                                  g7.BMemberPhone,
-                                  g7.BMemberName,
-                                  order.OrderISerialId,
-                                  order.PickUpDate,
-                                  order.PickUpPerson,
-                                  order.PickUpPersonPhone,
-                                  order.PickUpTime,
-                                  order.PickUpType,
-                                  order.PayTermCatId,
-                                  order.Memo,
-                                  order.TotalAmount,
-                                  g7.ProductName,
-                                  order.OrderState,
-                                  g7.Options,
-                                  g7.Qty,
-                                  g7.SubTotal,
-                                  g2.LogoImgFileName,
-                                  g3.Address,
-                                  g4.PaymentType
-                              };
+                             join f in _context.ViewShowFullOrders on order.Fid equals f.OrderFid
+                             into group7
+                             from g7 in group7.DefaultIfEmpty()
+                             join bm in _context.BusinessImgs on g7.BFid equals bm.Fid
+                             into group2
+                             from g2 in group2.DefaultIfEmpty()
+                             join b in _context.BusinessMembers on order.BFid equals b.Fid
+                             into group3
+                             from g3 in group3.DefaultIfEmpty()
+                             join pay in _context.PaymentTermCategories on order.PayTermCatId equals pay.Fid
+                             into group4
+                             from g4 in group4.DefaultIfEmpty()
+                             where order.Fid == (int)id
+                             select new
+                             {
+                                 g7.BMemberPhone,
+                                 g7.BMemberName,
+                                 order.OrderISerialId,
+                                 order.PickUpDate,
+                                 order.PickUpPerson,
+                                 order.PickUpPersonPhone,
+                                 order.PickUpTime,
+                                 order.PickUpType,
+                                 order.PayTermCatId,
+                                 order.Memo,
+                                 order.TotalAmount,
+                                 g7.ProductName,
+                                 order.OrderState,
+                                 g7.Options,
+                                 g7.Qty,
+                                 g7.SubTotal,
+                                 g2.LogoImgFileName,
+                                 g3.Address,
+                                 g4.PaymentType
+                             };
 
             if (orderDatas != null)
             {
@@ -256,7 +257,7 @@ namespace prjMSIT145_Final.Controllers
                 foreach (var vsf in orderDatas.Distinct())
                 {
                     CANormalMemberOrderDetailViewModel detail = new CANormalMemberOrderDetailViewModel();
-                    detail.productName=vsf.ProductName;
+                    detail.productName = vsf.ProductName;
                     detail.Options = vsf.Options + "/" + "$" + vsf.SubTotal + "/" + vsf.Qty + "份";
                     items.Add(detail);
                 }
@@ -284,11 +285,11 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult ABusinessMemberList()
         {
             List<CABusinessMemberViewModel> list = new List<CABusinessMemberViewModel>();
-            
+
             IEnumerable<BusinessMember> businessMembers = from member in _context.BusinessMembers
-                                                      select member;
-            
-            
+                                                          select member;
+
+
             if (businessMembers != null)
             {
                 foreach (BusinessMember b in businessMembers)
@@ -299,7 +300,7 @@ namespace prjMSIT145_Final.Controllers
                 }
 
             }
-            
+
 
             return View(list);
         }
@@ -325,14 +326,14 @@ namespace prjMSIT145_Final.Controllers
                 }
 
                 if (businessLogo != null)
-                {                                        
-                    b.LOGO_ImgFileName = businessLogo.LogoImgFileName;                    
+                {
+                    b.LOGO_ImgFileName = businessLogo.LogoImgFileName;
                 }
                 return View(b);
             }
 
             return RedirectToAction("ABusinessMemberList");
-            
+
         }
         [HttpPost]
         public IActionResult ABusinessMemberDetails(CABusinessMemberViewModel b)
@@ -352,7 +353,7 @@ namespace prjMSIT145_Final.Controllers
             }
 
             return RedirectToAction("ABusinessMemberList");
-            
+
         }
         public IActionResult ABusinessMemberOrder(int? id)
         {
@@ -437,7 +438,7 @@ namespace prjMSIT145_Final.Controllers
                 foreach (var vsf in orderDatas.Distinct())
                 {
                     CANormalMemberOrderDetailViewModel detail = new CANormalMemberOrderDetailViewModel();
-                    detail.productName=vsf.ProductName;
+                    detail.productName = vsf.ProductName;
                     detail.Options = vsf.Options + "/" + "$" + vsf.SubTotal + "/" + vsf.Qty + "份";
                     items.Add(detail);
                 }
@@ -456,7 +457,7 @@ namespace prjMSIT145_Final.Controllers
                 n.businessAddress = orderDatas.Distinct().ToList()[0].Address;
                 n.PayTermCatName = orderDatas.ToList()[0].PaymentType;
                 n.OrderState = orderDatas.Distinct().ToList()[0].OrderState;
-                n.normalImgFile= orderDatas.Distinct().ToList()[0].MemberPhotoFile;
+                n.normalImgFile = orderDatas.Distinct().ToList()[0].MemberPhotoFile;
 
                 return View(n);
             }
@@ -469,59 +470,59 @@ namespace prjMSIT145_Final.Controllers
             var datas = from img in _context.AdImgs
                         orderby img.OrderBy
                         select img;
-            List<CAAdImg> list=new List<CAAdImg>();
-            foreach(var data in datas)
+            List<CAAdImg> list = new List<CAAdImg>();
+            foreach (var data in datas)
             {
                 CAAdImg cAAd = new CAAdImg();
                 cAAd.adImg = data;
                 list.Add(cAAd);
             }
-            if (list.Count>0)
+            if (list.Count > 0)
             {
-                var ader = _context.BusinessMembers.FirstOrDefault(a => a.Fid==list[0].BFid);
-                if (ader!=null)
-                    list[0].ImgBelongTo=ader.MemberName;
-                
+                var ader = _context.BusinessMembers.FirstOrDefault(a => a.Fid == list[0].BFid);
+                if (ader != null)
+                    list[0].ImgBelongTo = ader.MemberName;
+
             }
-            
+
             return View(list.AsEnumerable());
         }
-        
+
         public IActionResult loadImgInfo(string fid)//載入廣告圖片資訊
         {
             CAAdImg cAAdImg = new CAAdImg();
-            AdImg img = _context.AdImgs.FirstOrDefault(i => i.Fid==Convert.ToInt32(fid));
-            if (img!=null)
+            AdImg img = _context.AdImgs.FirstOrDefault(i => i.Fid == Convert.ToInt32(fid));
+            if (img != null)
             {
-                var ader=_context.BusinessMembers.FirstOrDefault(i => i.Fid==Convert.ToInt32(img.BFid));
-                if (ader!=null)
-                    cAAdImg.ImgBelongTo=ader.MemberName;
-                cAAdImg.adImg=img;
-            }            
-            
-            return Json(cAAdImg);            
+                var ader = _context.BusinessMembers.FirstOrDefault(i => i.Fid == Convert.ToInt32(img.BFid));
+                if (ader != null)
+                    cAAdImg.ImgBelongTo = ader.MemberName;
+                cAAdImg.adImg = img;
+            }
+
+            return Json(cAAdImg);
         }
-        
+
         public IActionResult changeAdOrderBy(string data)//移動廣告圖片時儲存圖片排序
         {
             string result = "0";
             List<CAAdImg> ads = null;
             if (!string.IsNullOrEmpty(data))
-            {                
-                ads=JsonConvert.DeserializeObject<List<CAAdImg>>(data);
-                
+            {
+                ads = JsonConvert.DeserializeObject<List<CAAdImg>>(data);
+
                 //_context.AdImgs.RemoveRange(ads);
                 foreach (CAAdImg ad in ads)
                 {
-                    AdImg updateItem = _context.AdImgs.FirstOrDefault(a => a.Fid==Convert.ToInt32(ad.sFid));                    
-                    updateItem.OrderBy=ad.OrderBy;
-                    
+                    AdImg updateItem = _context.AdImgs.FirstOrDefault(a => a.Fid == Convert.ToInt32(ad.sFid));
+                    updateItem.OrderBy = ad.OrderBy;
+
                 }
-                
+
                 _context.SaveChanges();
-                result="1";
+                result = "1";
             }
-            
+
             return Content(result);
         }
         public IActionResult saveAdInfo(string data)//儲存小圖片的資訊
@@ -530,15 +531,15 @@ namespace prjMSIT145_Final.Controllers
             CAAdImg ad = null;
             if (!string.IsNullOrEmpty(data))
             {
-                ad=JsonConvert.DeserializeObject<CAAdImg>(data);
+                ad = JsonConvert.DeserializeObject<CAAdImg>(data);
 
-                AdImg updateItem = _context.AdImgs.FirstOrDefault(a => a.Fid==Convert.ToInt32(ad.sFid));
-                updateItem.StartTime=ad.StartTime;
-                updateItem.EndTime=ad.EndTime;                
-                updateItem.Hyperlink=ad.Hyperlink;                
-                
+                AdImg updateItem = _context.AdImgs.FirstOrDefault(a => a.Fid == Convert.ToInt32(ad.sFid));
+                updateItem.StartTime = ad.StartTime;
+                updateItem.EndTime = ad.EndTime;
+                updateItem.Hyperlink = ad.Hyperlink;
+
                 _context.SaveChanges();
-                result="1";
+                result = "1";
             }
 
             return Content(result);
@@ -549,49 +550,49 @@ namespace prjMSIT145_Final.Controllers
             //CAAdImg ad = null;
             if (!string.IsNullOrEmpty(data))
             {
-                AdImg deleteItem = _context.AdImgs.FirstOrDefault(a => a.Fid==Convert.ToInt32(data));
+                AdImg deleteItem = _context.AdImgs.FirstOrDefault(a => a.Fid == Convert.ToInt32(data));
                 _context.AdImgs.Remove(deleteItem);
 
                 _context.SaveChanges();
-                result="1";
+                result = "1";
             }
 
             return Content(result);
         }
         public IActionResult AaddAdImg(string data)//上傳並儲存新廣告圖片
-        {            
+        {
             CAAdImg ad = null;
             AdImg returnAd = null;
             if (!string.IsNullOrEmpty(data))
             {
-                ad=JsonConvert.DeserializeObject<CAAdImg>(data);
+                ad = JsonConvert.DeserializeObject<CAAdImg>(data);
                 byte[] imageBytes = ad.icon;
                 string[] fileTypeArr = ad.fileType.Split('/');
-                string fileType = "."+fileTypeArr[1];
+                string fileType = "." + fileTypeArr[1];
 
-                string fName = Guid.NewGuid().ToString()+fileType;
+                string fName = Guid.NewGuid().ToString() + fileType;
                 MemoryStream buf = new MemoryStream(imageBytes);
-                string filePath = Path.Combine(_host.WebRootPath, "adminImg/adDisplay", fName);                                
+                string filePath = Path.Combine(_host.WebRootPath, "adminImg/adDisplay", fName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    buf.WriteTo(fileStream);                   
+                    buf.WriteTo(fileStream);
                 }
-                
+
                 buf.Close();
                 buf.Dispose();
 
-                ad.ImgName=fName;
+                ad.ImgName = fName;
                 ad.EndTime = DateTime.Now.AddYears(3);
                 var lastAd = _context.AdImgs.OrderBy(a => a.OrderBy).LastOrDefault();
                 int orderBy = 1;
-                if (lastAd!=null)
-                    orderBy = (int)lastAd.OrderBy+1;
-                ad.OrderBy=orderBy;
+                if (lastAd != null)
+                    orderBy = (int)lastAd.OrderBy + 1;
+                ad.OrderBy = orderBy;
                 _context.AdImgs.Add(ad.adImg);
 
                 _context.SaveChanges();
-                
-                returnAd = _context.AdImgs.FirstOrDefault(a => a.OrderBy==orderBy);
+
+                returnAd = _context.AdImgs.FirstOrDefault(a => a.OrderBy == orderBy);
             }
 
             return Json(returnAd);
@@ -602,14 +603,14 @@ namespace prjMSIT145_Final.Controllers
             AdImg returnAd = null;
             if (!string.IsNullOrEmpty(data))
             {
-                ad=JsonConvert.DeserializeObject<CAAdImg>(data);
+                ad = JsonConvert.DeserializeObject<CAAdImg>(data);
                 if (!string.IsNullOrEmpty(ad.fileType))
                 {
                     byte[] imageBytes = ad.icon;
                     string[] fileTypeArr = ad.fileType.Split('/');
-                    string fileType = "."+fileTypeArr[1];
+                    string fileType = "." + fileTypeArr[1];
 
-                    string fName = Guid.NewGuid().ToString()+fileType;
+                    string fName = Guid.NewGuid().ToString() + fileType;
                     MemoryStream buf = new MemoryStream(imageBytes);
                     string filePath = Path.Combine(_host.WebRootPath, "adminImg/adDisplay", fName);
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -619,24 +620,24 @@ namespace prjMSIT145_Final.Controllers
                     buf.Close();
                     buf.Dispose();
 
-                    ad.ImgName=fName;
+                    ad.ImgName = fName;
                 }
-                
-                var lastAd = _context.AdImgs.FirstOrDefault(a=>a.Fid==ad.Fid);
-                
-                if (lastAd!=null)
+
+                var lastAd = _context.AdImgs.FirstOrDefault(a => a.Fid == ad.Fid);
+
+                if (lastAd != null)
                 {
-                    lastAd.Hyperlink=ad.Hyperlink;
+                    lastAd.Hyperlink = ad.Hyperlink;
                     if (!string.IsNullOrEmpty(ad.fileType))
-                        lastAd.ImgName=ad.ImgName;                    
+                        lastAd.ImgName = ad.ImgName;
                     _context.SaveChanges();
                 }
-              
+
                 returnAd = lastAd;
             }
 
             return Json(returnAd);
-            
+
         }
         public IActionResult ASetting()//管理者帳密頁面
         {
@@ -648,20 +649,20 @@ namespace prjMSIT145_Final.Controllers
                 if (member != null)
                     admin.admin = member;
             }
-            
+
             return View(admin);
         }
-        
+
         public IActionResult saveAdminPwd(string data)//修改管理者帳密
         {
             string result = "0";
-            
+
             if (!string.IsNullOrEmpty(data))
             {
                 CASettingViewModel cas = JsonConvert.DeserializeObject<CASettingViewModel>(data);
 
                 AdminMember updateItem = _context.AdminMembers.FirstOrDefault(a => a.Fid == cas.Fid);
-                updateItem.Password = cas.txtPassword;           
+                updateItem.Password = cas.txtPassword;
 
                 _context.SaveChanges();
                 result = "1";
@@ -675,59 +676,59 @@ namespace prjMSIT145_Final.Controllers
             if (!string.IsNullOrEmpty(data))
             {
                 CForgetPwdViewModel fm = JsonConvert.DeserializeObject<CForgetPwdViewModel>(data);
-                
+
                 //一般會員
                 if (fm.memberType == "N")
                 {
-                    var user = _context.NormalMembers.FirstOrDefault(u => u.Phone == fm.txtAccount && u.Email==fm.txtEmail);
+                    var user = _context.NormalMembers.FirstOrDefault(u => u.Phone == fm.txtAccount && u.Email == fm.txtEmail);
                     if (user == null)
                         return Json("登入帳號或信箱不符");
-                    
-                    result=setForgetPwdMail(fm);                        
-                    
+
+                    result = setForgetPwdMail(fm);
+
                 }
                 //網站管理者
                 else if (fm.memberType == "A")
                 {
-                    var user = _context.AdminMembers.FirstOrDefault(u => u.Account == fm.txtAccount && u.Email==fm.txtEmail);
+                    var user = _context.AdminMembers.FirstOrDefault(u => u.Account == fm.txtAccount && u.Email == fm.txtEmail);
                     if (user == null)
                         return Json("登入帳號或信箱不符");
 
-                    result=setForgetPwdMail(fm);
-                        #region ADO.NET測試
-                        //using (SqlConnection conn = new SqlConnection(connStr))
-                        //{
-                        //    conn.Open();
-                        //    using (SqlCommand cmd = new SqlCommand())
-                        //    {
-                        //        cmd.Connection = conn;
-                        //        cmd.CommandText = "insert into ChangeRequestPassword(Token,Account,Email) values(@Token,@Account,@Email)";
-                        //        cmd.Parameters.AddWithValue("Token", token);
-                        //        cmd.Parameters.AddWithValue("Account", fm.txtAccount);
-                        //        cmd.Parameters.AddWithValue("Email", fm.txtEmail);
-                        //        try
-                        //        {
-                        //            cmd.ExecuteNonQuery();
-                        //            result = "success";
-                        //        }
-                        //        catch (Exception err)
-                        //        {
-                        //            result = $"error:{err.Message}";
-                        //        }
-                        //    }
-                        //}
-                        #endregion
-                        
+                    result = setForgetPwdMail(fm);
+                    #region ADO.NET測試
+                    //using (SqlConnection conn = new SqlConnection(connStr))
+                    //{
+                    //    conn.Open();
+                    //    using (SqlCommand cmd = new SqlCommand())
+                    //    {
+                    //        cmd.Connection = conn;
+                    //        cmd.CommandText = "insert into ChangeRequestPassword(Token,Account,Email) values(@Token,@Account,@Email)";
+                    //        cmd.Parameters.AddWithValue("Token", token);
+                    //        cmd.Parameters.AddWithValue("Account", fm.txtAccount);
+                    //        cmd.Parameters.AddWithValue("Email", fm.txtEmail);
+                    //        try
+                    //        {
+                    //            cmd.ExecuteNonQuery();
+                    //            result = "success";
+                    //        }
+                    //        catch (Exception err)
+                    //        {
+                    //            result = $"error:{err.Message}";
+                    //        }
+                    //    }
+                    //}
+                    #endregion
+
                 }
-                
+
             }
-            
+
             return Json(result);
         }
 
         private string setForgetPwdMail(CForgetPwdViewModel fm)//DB建立忘記密碼請求並發信
         {
-            string result;            
+            string result;
             string token = Guid.NewGuid().ToString();
             string url = $"https://localhost:7266/Admin/ResetPwd?token={token}&acc={fm.txtAccount}&tp={fm.memberType}";
 
@@ -756,10 +757,10 @@ namespace prjMSIT145_Final.Controllers
             //}
             #endregion
             ChangeRequestPassword request = new ChangeRequestPassword();
-            request.Token=token;
-            request.Account=fm.txtAccount;
-            request.Email=fm.txtEmail;
-            request.Expire=DateTime.Now.AddMinutes(10);
+            request.Token = token;
+            request.Account = fm.txtAccount;
+            request.Email = fm.txtEmail;
+            request.Expire = DateTime.Now.AddMinutes(10);
             _context.ChangeRequestPasswords.Add(request);
             try
             {
@@ -778,11 +779,12 @@ namespace prjMSIT145_Final.Controllers
                                 "<hr>" +
                                 "<br><br>此為系統通知，請勿直接回信，謝謝";
             string mailSubject = $"修改密碼通知";
-            result +=" "+sendMail(fm.txtEmail, mailBody, mailSubject);
+            //result +=" "+sendMail(fm.txtEmail, mailBody, mailSubject);
+            result += " " + (new CSendMail()).sendMail(fm.txtEmail, mailBody, mailSubject, _config["DemoMailServer:pwd"].ToString());
             return result;
         }
 
-        public IActionResult ResetPwd(string token,string acc,string tp)//忘記密碼的重設密碼頁
+        public IActionResult ResetPwd(string token, string acc, string tp)//忘記密碼的重設密碼頁
         {
             string expire = "";
             #region ADO.NET測試
@@ -805,34 +807,34 @@ namespace prjMSIT145_Final.Controllers
             //}
             #endregion
 
-            ChangeRequestPassword request = _context.ChangeRequestPasswords.FirstOrDefault(r => r.Token==token);
-            if(request!=null)            
-                expire = request.Expire.ToString();            
+            ChangeRequestPassword request = _context.ChangeRequestPasswords.FirstOrDefault(r => r.Token == token);
+            if (request != null)
+                expire = request.Expire.ToString();
 
             if (expire == "" || DateTime.Now > Convert.ToDateTime(expire))
             {
                 if (tp.ToUpper() == "A") ;
-                    return RedirectToAction("ALogin");
+                return RedirectToAction("ALogin");
                 if (tp.ToUpper() == "N") ;
-                    return RedirectToAction("Login", "CustomerMember");
+                return RedirectToAction("Login", "CustomerMember");
             }
-                
 
-            if (HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_EXPIRE))                
-                HttpContext.Session.Remove(CDictionary.SK_RESETPWD_EXPIRE);                    
-                
+
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_EXPIRE))
+                HttpContext.Session.Remove(CDictionary.SK_RESETPWD_EXPIRE);
+
             HttpContext.Session.SetString(CDictionary.SK_RESETPWD_EXPIRE, expire);
 
             return View();
-            
+
         }
         public IActionResult submitResetPwd(CResetPwdViewModel reset)//忘記密碼的送出重設密碼
         {
             string result = "";
             if (reset.txtPassword == reset.txtConfirmPwd)
-            {                
-                string expire= "";
-                if (HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_EXPIRE))                
+            {
+                string expire = "";
+                if (HttpContext.Session.Keys.Contains(CDictionary.SK_RESETPWD_EXPIRE))
                     expire = HttpContext.Session.GetString(CDictionary.SK_RESETPWD_EXPIRE);
 
                 if (expire != "")
@@ -840,7 +842,7 @@ namespace prjMSIT145_Final.Controllers
                     DateTime expireTime = Convert.ToDateTime(expire);
                     if (DateTime.Now < expireTime)
                     {
-                        if (reset.tp.ToUpper()=="N")
+                        if (reset.tp.ToUpper() == "N")
                         {
                             NormalMember user = _context.NormalMembers.FirstOrDefault(u => u.Phone == reset.txtAccount);
                             if (user != null)
@@ -880,13 +882,13 @@ namespace prjMSIT145_Final.Controllers
                                 //}
                                 #endregion
 
-                                result+= " "+deleteChangePwdRequest(expireTime, reset.token, reset.txtAccount);
+                                result += " " + deleteChangePwdRequest(expireTime, reset.token, reset.txtAccount);
 
                             }
                             else
-                                result="error:Wrong Account";
+                                result = "error:Wrong Account";
                         }
-                        else if (reset.tp.ToUpper()=="A")
+                        else if (reset.tp.ToUpper() == "A")
                         {
                             AdminMember user = _context.AdminMembers.FirstOrDefault(u => u.Account == reset.txtAccount);
                             if (user != null)
@@ -902,31 +904,31 @@ namespace prjMSIT145_Final.Controllers
                                     result += $"error:{err.Message}";
                                 }
 
-                                result+= " "+deleteChangePwdRequest(expireTime, reset.token, reset.txtAccount);
+                                result += " " + deleteChangePwdRequest(expireTime, reset.token, reset.txtAccount);
 
                             }
                             else
-                                result="error:Wrong Account";
+                                result = "error:Wrong Account";
                         }
 
                     }
                     HttpContext.Session.Remove(CDictionary.SK_RESETPWD_EXPIRE);
                 }
                 else
-                    result="error:Link Expired";
+                    result = "error:Link Expired";
 
             }
-            
+
             return Json(result);
         }
 
-        private string deleteChangePwdRequest(DateTime expireTime,string token,string acc)//重設密碼後刪除DB的忘記密碼請求
+        private string deleteChangePwdRequest(DateTime expireTime, string token, string acc)//重設密碼後刪除DB的忘記密碼請求
         {
             string result = "";
-            ChangeRequestPassword request = _context.ChangeRequestPasswords.FirstOrDefault(r =>r.Token==token);
-            if (request!=null)
+            ChangeRequestPassword request = _context.ChangeRequestPasswords.FirstOrDefault(r => r.Token == token);
+            if (request != null)
             {
-                var deleteItem = _context.ChangeRequestPasswords.Where(r => r.Account==acc);
+                var deleteItem = _context.ChangeRequestPasswords.Where(r => r.Account == acc);
                 _context.ChangeRequestPasswords.RemoveRange(deleteItem.ToList());
                 try
                 {
@@ -943,14 +945,14 @@ namespace prjMSIT145_Final.Controllers
             return result;
         }
 
-        private string sendMail(string email,string mailBody,string mailSubject)//發信
-        {            
+        private string sendMail(string email, string mailBody, string mailSubject)//發信
+        {
             var DemoMailServer = _config["DemoMailServer:pwd"];
             MailMessage MyMail = new MailMessage();
             MyMail.From = new MailAddress("ShibaAdmin@msit145shiba.com.tw", "日柴", System.Text.Encoding.UTF8);
             MyMail.To.Add(email);
-            
-            MyMail.Subject = mailSubject;            
+
+            MyMail.Subject = mailSubject;
             MyMail.Body = mailBody; //設定信件內容
             MyMail.IsBodyHtml = true; //是否使用html格式
 
@@ -960,23 +962,199 @@ namespace prjMSIT145_Final.Controllers
             MySMTP.Host = "smtp.gmail.com"; //設定smtp Server
             MySMTP.Port = 587;
             MySMTP.EnableSsl = true; //gmail預設開啟驗證
-            
+
 
             try
             {
-                MySMTP.Send(MyMail);                
+                MySMTP.Send(MyMail);
                 return "success";
             }
             catch (Exception ex)
             {
-                return $"Mail error:{ex.ToString()}";                
+                return $"Mail error:{ex.ToString()}";
             }
             finally
             {
                 MyMail.Dispose(); //釋放資源
             }
+
+        }
+        public IActionResult AServiceMailList()
+        {
+            List<CgetServiceMailViewModel> mailList = new List<CgetServiceMailViewModel>();
+            try
+            {
+                #region ADO.NET測試
+                var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
+                using (SqlConnection conn = new SqlConnection(connStr))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.Connection = conn;
+                        cmd.CommandText = "select Fid,SenderName,Email,Phone,Subject,Context,ReceivedTime,Reply from ServiceMailBox order by fid desc";
+                        //cmd.Parameters.AddWithValue("Expire", Convert.ToDateTime(expire));
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+
+                        while (reader.Read())
+                        {
+                            CgetServiceMailViewModel mail = new CgetServiceMailViewModel();
+                            mail.Fid = Convert.ToInt32(reader["Fid"]);
+                            mail.SenderName = Convert.ToString(reader["SenderName"]);
+                            mail.Email = Convert.ToString(reader["Email"]);
+                            mail.Phone = Convert.ToString(reader["Phone"]);
+                            mail.Subject = Convert.ToString(reader["Subject"]);
+                            mail.Context = Convert.ToString(reader["Context"]);
+                            mail.ReceivedTime = Convert.ToDateTime(reader["ReceivedTime"]);
+                            mail.Reply = Convert.ToString(reader["Reply"]);
+                            mailList.Add(mail);
+                        }
+
+                        reader.Close();
+                    }
+                }
+                #endregion
+            }
+            catch (Exception err)
+            {
+                
+            }
+            return View(mailList.AsEnumerable());
+        }
+        public IActionResult getServiceMail()
+        {
+
+            List<CgetServiceMailViewModel> mailList = new List<CgetServiceMailViewModel>();
+            
+            try
+            {
+                #region ADO.NET測試
+                var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
+                using (SqlConnection conn = new SqlConnection(connStr))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.Connection = conn;
+                        cmd.CommandText = "select Fid,SenderName,Email,Phone,Subject,Context,ReceivedTime from ServiceMailBox where Reply is null or Reply='' order by ReceivedTime desc";
+                        //cmd.Parameters.AddWithValue("Expire", Convert.ToDateTime(expire));
+                        SqlDataReader reader = cmd.ExecuteReader();
+
+                        
+                        while (reader.Read())
+                        {
+                            CgetServiceMailViewModel mail = new CgetServiceMailViewModel();
+                            mail.Fid = Convert.ToInt32(reader["Fid"]);
+                            mail.SenderName = Convert.ToString(reader["SenderName"]);
+                            mail.Email = Convert.ToString(reader["Email"]);
+                            mail.Phone = Convert.ToString(reader["Phone"]);
+                            mail.Subject = Convert.ToString(reader["Subject"]);
+                            mail.Context = Convert.ToString(reader["Context"]);
+                            mail.ReceivedTime = Convert.ToDateTime(reader["ReceivedTime"]);
+                            mailList.Add(mail);
+                        }
+
+                        reader.Close();
+                    }
+                }
+                #endregion
+            }
+            catch (Exception err)
+            {
+                return Json($"error:{err.Message}");
+            }            
+            
+            return Json(mailList);
+        }
+        public IActionResult gotoMailDetail(int? id)
+        {
+            if (id == null)
+                RedirectToAction("AServiceMailList");
+
+            return View();
+        }
+        public IActionResult getServiceMailContext(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                return NoContent();
+
+            int id = Convert.ToInt32(data);
+            try
+            {
+                CgetServiceMailViewModel model = new CgetServiceMailViewModel();
+
+                #region ADO.NET測試
+                var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
+                using (SqlConnection conn = new SqlConnection(connStr))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.Connection = conn;
+                        cmd.CommandText = "select * from ServiceMailBox where fid=@fid";
+                        cmd.Parameters.AddWithValue("fid", id);
+                        SqlDataReader reader = cmd.ExecuteReader();
+                       
+
+                        while (reader.Read())
+                        {
+                            model.Context = Convert.ToString(reader["Context"]);
+                            model.Reply = Convert.ToString(reader["Reply"]);
+                            model.SenderName = Convert.ToString(reader["SenderName"]);
+                            model.Email = Convert.ToString(reader["Email"]);
+                            model.Phone = Convert.ToString(reader["Phone"]);
+                            model.Subject = Convert.ToString(reader["Subject"]);
+                        }
+
+                        reader.Close();
+                    }
+                }
+                #endregion
+                return Json(model);
+            }
+            catch (Exception err)
+            {
+                return Json($"error:{err.Message}");
+            }
             
         }
+        public IActionResult submitServiceMailReply(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                return NoContent();
 
+            CgetServiceMailViewModel mail = JsonConvert.DeserializeObject<CgetServiceMailViewModel>(data);
+            if (mail != null)
+            {
+                #region ADO.NET測試
+                var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
+                using (SqlConnection conn = new SqlConnection(connStr))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.Connection = conn;
+                        cmd.CommandText = "update ServiceMailBox set Reply=@Reply,ReadTime=@ReadTime where fid=@fid";
+                        cmd.Parameters.AddWithValue("fid", mail.Fid);
+                        cmd.Parameters.AddWithValue("Reply", mail.Reply);
+                        cmd.Parameters.AddWithValue("ReadTime", Convert.ToDateTime(mail.ReadTime));
+                        try
+                        {
+                            cmd.ExecuteNonQuery();
+                            return Json("success");
+                        }
+                        catch(Exception err)
+                        {
+                            return Json($"error:{err.Message}");
+                        }
+                        
+                    }
+                }
+                #endregion
+            }
+
+            return NoContent();
+        }
     }
 }

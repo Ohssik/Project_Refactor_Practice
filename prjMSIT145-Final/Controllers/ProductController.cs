@@ -21,6 +21,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
                     return View();
+                else
                 return RedirectToAction("Blogin", "BusinessMember");
 
             }

@@ -41,6 +41,7 @@ namespace prjMSIT145_Final.Models
         public virtual DbSet<ProductCategory> ProductCategories { get; set; } = null!;
         public virtual DbSet<ProductOption> ProductOptions { get; set; } = null!;
         public virtual DbSet<ProductOptionGroup> ProductOptionGroups { get; set; } = null!;
+        public virtual DbSet<ServiceMailBox> ServiceMailBoxes { get; set; } = null!;
         public virtual DbSet<ViewOptionsToGroup> ViewOptionsToGroups { get; set; } = null!;
         public virtual DbSet<ViewOrderDetail> ViewOrderDetails { get; set; } = null!;
         public virtual DbSet<ViewOrderDetailList> ViewOrderDetailLists { get; set; } = null!;
@@ -48,6 +49,14 @@ namespace prjMSIT145_Final.Models
         public virtual DbSet<ViewShowFullOrder> ViewShowFullOrders { get; set; } = null!;
         public virtual DbSet<ViewShowProductList> ViewShowProductLists { get; set; } = null!;
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Data Source=ispan-msit145-shiba2.database.windows.net;Initial Catalog=ispanMsit145shiba;Persist Security Info=True;User ID=msit145Shiba;Password=sh1baMsite45;MultipleActiveResultSets=true");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -316,6 +325,8 @@ namespace prjMSIT145_Final.Models
 
                 entity.Property(e => e.Gender).HasMaxLength(10);
 
+                entity.Property(e => e.GoogleEmail).HasMaxLength(50);
+
                 entity.Property(e => e.IsSuspensed)
                     .HasColumnName("isSuspensed")
                     .HasDefaultValueSql("((1))");
@@ -537,6 +548,29 @@ namespace prjMSIT145_Final.Models
                 entity.Property(e => e.Memo).HasMaxLength(50);
 
                 entity.Property(e => e.OptionGroupName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ServiceMailBox>(entity =>
+            {
+                entity.HasKey(e => e.Fid);
+
+                entity.ToTable("ServiceMailBox");
+
+                entity.Property(e => e.Context).HasMaxLength(200);
+
+                entity.Property(e => e.Email).HasMaxLength(50);
+
+                entity.Property(e => e.Phone).HasMaxLength(50);
+
+                entity.Property(e => e.ReadTime).HasColumnType("datetime");
+
+                entity.Property(e => e.ReceivedTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Reply).HasMaxLength(200);
+
+                entity.Property(e => e.SenderName).HasMaxLength(50);
+
+                entity.Property(e => e.Subject).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ViewOptionsToGroup>(entity =>

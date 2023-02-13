@@ -86,6 +86,18 @@ namespace prjMSIT145_Final.ViewModels
             set { _member.EmailCertified = value; }
         }
 
+        public string? GoogleEmail
+        {
+            get { return _member.GoogleEmail; }
+            set { _member.GoogleEmail = value; }
+        }
+        public string? LineUserid
+        {
+            get { return _member.LineUserid; }
+            set { _member.LineUserid = value; }
+        }
+
+
         public string? OldPassword { get; set; }
 
         public string? Passwordcheck { get; set; }

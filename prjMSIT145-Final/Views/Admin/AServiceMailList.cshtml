@@ -1,0 +1,288 @@
+﻿@model IEnumerable<prjMSIT145_Final.ViewModels.CgetServiceMailViewModel>
+
+@{
+    ViewData["Title"] = "管理者控制台/客服訊息管理";
+    Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
+}
+
+@section Scripts{
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(function(){
+            $('.nav-item').eq(4).addClass('active').siblings().removeClass('active');
+            let replyModal = new bootstrap.Modal(document.getElementById('replyModal'), {
+                keyboard: false
+            });
+            let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
+                keyboard: false
+            });
+
+            let fid = getUrlParameter('fid');
+            if(fid != ''){
+                $.ajax({
+                    url: `@Url.Content("~/Admin/getServiceMailContext")`,
+                    type: 'post',
+                    data: { data: fid },
+                    dataType: 'json',
+                    success: function (msg) {
+                        //console.log(msg);
+                        if (`${msg}`.indexOf('error:') == -1) {
+                            $('#Context').val(`${msg.context}`);
+                            $('#Reply').val(`${msg.reply}`);
+                            $('#SenderName').val(`${msg.senderName}`);
+                            $('#Phone').val(`${msg.phone}`);
+                            $('#Email').val(`${msg.email}`);
+                            $('#Subject').val(`${msg.subject}`);
+                            if (`${msg.reply}` != '')
+                                $('#buttonSend').hide();
+                        }
+                        replyModal.show();
+                    }
+                });
+            }
+
+            $('#btnCloseMsg').click(function () {
+                $('#msgAlert>label').text('');
+                location.reload(true);
+            });
+            $('#dataTable>tbody').on('click', 'button:nth-child(1)', function () {
+                // 編輯
+                $('#buttonSend').show();
+                const Fid = $(this).parents('tr').find('td:nth-child(1)').text().trim();
+                const SenderName = $(this).parents('tr').find('td:nth-child(2)').text().trim();
+                const Email = $(this).parents('tr').find('td:nth-child(3)').text().trim();
+                const Phone = $(this).parents('tr').find('td:nth-child(4)').text().trim();
+                const Subject = $(this).parents('tr').find('td:nth-child(5)').text().trim();
+                let ReceivedTime = $(this).parents('tr').find('td:nth-child(6)').text().trim();
+                
+
+                $('#Fid').val(Fid);
+                $('#SenderName').val(SenderName);
+                $('#Email').val(Email);
+                $('#Phone').val(Phone);
+                $('#Subject').val(Subject);
+                $('#ReceivedTime').val(ReceivedTime);
+
+                $.ajax({
+                    url: `@Url.Content("~/Admin/getServiceMailContext")`,
+                    type: 'post',
+                    data: { data: Fid },
+                    dataType: 'json',
+                    success: function (msg) {
+                        //console.log(msg);
+                        if (`${msg}`.indexOf('error:') == -1) {
+                            $('#Context').val(`${msg.context}`);
+                            $('#Reply').val(`${msg.reply}`);
+                            if (`${msg.reply}` != '')
+                                $('#buttonSend').hide();
+                        }
+                        replyModal.show();
+                    }
+                });
+            });
+
+            $('#buttonSend').click(function () {                
+                const id = $('#Fid').val()
+                if (id) {
+                    //資料修改
+                    $.ajax({
+                        url: `@Url.Content("~/Admin/submitServiceMailReply")`,
+                        type: 'POST',
+                        data: {
+                            data: JSON.stringify({
+                                Fid: id,
+                                Email: $('#Email').val(),
+                                Reply: $('#Reply').val(),
+                                ReadTime: (new Date())
+                            })
+                        },
+                        dataType: "json",
+                        success: function (msg) {
+                            //console.log(`msg=${msg}`);
+                            if (`${msg}`.indexOf('success')!=-1) {                                
+                                replyModal.hide();
+                                $('#msgAlert label').text('回報成功');
+                                msgAlert.show();                                
+                            }
+
+                        }
+                    }).done(function (data) {
+                        clearData();
+                    })
+
+                }
+            });
+            function clearData() {
+                $('input').val("");
+                $('textarea').val("");
+            }
+            //抓 url get 參數
+            function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                    sURLVariables = sPageURL.split('&'),
+                    sParameterName,
+                    i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                    }
+                }
+                return false;
+            }
+        });
+    </script>
+}
+<div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800">客服訊息管理</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">訊息一覽表</h6>
+        </div>
+        <div class="card-body">
+            
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Fid)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SenderName)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.Email)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.Phone)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Subject)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ReceivedTime)
+                            </th>
+                            <th>
+                                是否已處理
+                            </th>
+                            
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Fid)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SenderName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Phone)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Subject)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReceivedTime)
+                                </td>
+                                <td>                                    
+                                    @{
+                                        if(!string.IsNullOrEmpty(item.Reply)){
+                                                                        @:V
+                                        }
+                                    }
+                                </td>
+                                
+                                <td>                                    
+                                    <button name="btnUpdate" class="btn btn-info btn-circle" data-bs-target="#replyModal">
+                                        <i class="fas fa-info-circle"></i>
+                                    </button>
+                                                                
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">回覆訊息<span></span></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="replyForm">
+                    <input type="hidden" name="Fid" id="Fid">
+                    <div class="form-group">
+                        <label for="SenderName">發信人</label>
+                        <input type="text" class="form-control" name="SenderName" id="SenderName" value=""
+                               placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="Phone">電話</label>
+                        <input type="text" class="form-control" name="Phone" id="Phone" value=""
+                               placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="Email">Email</label>
+                        <input type="text" class="form-control" name="Email" id="Email" value=""
+                               placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="Subject">詢問主題</label>
+                        <input type="text" class="form-control" name="Subject" id="Subject" value=""
+                               placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="Context">詢問內容</label>
+                        <textarea type="text" class="form-control" name="Context" id="Context" placeholder=""></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="Reply">回覆</label>
+                        <textarea type="text" class="form-control" name="Reply" id="Reply" placeholder=""></textarea>
+                    </div>
+                                        
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="btnDemo">Demo</button>                
+                <button type="button" class="btn btn-primary" id="buttonSend">送出</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="msgAlert" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label"></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCloseMsg">確定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
