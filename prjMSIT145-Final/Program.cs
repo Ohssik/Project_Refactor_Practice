@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
+builder.Services.AddMemoryCache();
+//builder.Services.AddMvc();
 
 builder.Services.AddDbContext<ispanMsit145shibaContext>(
  options => options.UseSqlServer(
