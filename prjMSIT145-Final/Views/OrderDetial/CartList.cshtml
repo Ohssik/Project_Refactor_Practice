@@ -302,7 +302,7 @@
                     <div>
                         <h4 id="storeName">店家名稱</h4>
                            @* <h6 id="storePhone"><i class="fa-solid fa-phone name="BMemberPhone">@Model.BMemberPhone</i> </h6>*@
-                            <h6 id="storePhone"><i class="fa-solid fa-phone"></i><input class="fa-solid borderNone" name="BMemberPhone" value="@Model.BMemberPhone" /> </h6>
+                                <h6 id="storePhone"><i class="fa-solid fa-phone"></i><input class="fa-solid borderNone"  value="&nbsp;@Model.BMemberPhone" style="color:#9F4E27" /> </h6>
                     </div>
                     <button class="storeIntro_btn">揪團</button>
                 </div>
@@ -315,16 +315,11 @@
                     </div>
                     <h5>預計取餐時間</h5>
                     <fieldset class="Fieldset" id="pickUpTime">
-                            <input class="font-size borderNone" name="pickUpDate" id="change" type="datetime-local" value="" />
+                            <input class="font-size borderNone" name="pickUpDate" id="changeDate" type="datetime-local" value="" min="" />
                     </fieldset>
                     <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
                     <h5>門市位置</h5>
-                    <a href="">
-                        <fieldset class="Fieldset">
-                                <input class="font-size borderNone" value="@Model.Address" name="Address" />
-                            <i class="fa-solid fa-location-dot"></i>
-                        </fieldset>
-                    </a>
+                       <div class="font-size borderNone">@Model.Address</div>    
                 </div>
                 <!-- 會員訂購資訊 -->
                 <div class="divMargin cardBackgroundColor">
@@ -376,6 +371,7 @@
                                     <div class="deleteBtn">
                                         <button>
                                             <i class="fa-regular fa-trash-can"></i>
+                                            @Html.ActionLink("刪除", "Delete", new {  id=Model.ItemFid  },new {onclick = "return confirm('確定要刪除嗎')"})
                                         </button>
                                     </div>
                                 </div>
@@ -443,17 +439,17 @@
                 <div>
                     <h4>取餐人資料</h4>
                     <fieldset class="Fieldset">
-                        <legend class="font-size">@Model.PickUpPerson</legend>
+                            <input class="font-size borderNone" value="@Model.PickUpPerson" name="PickUpPerson" id="changePickUpPerson" />
 
                     </fieldset>
                     <fieldset class="Fieldset">
-                        <legend class="font-size">@Model.PickUpPersonPhone</legend>
+                            <input class="font-size borderNone" value="@Model.PickUpPersonPhone" name="PickUpPersonPhone" id="changePickUpPersonPhone" />
 
                     </fieldset>
                     <h4>留言給店家</h4>
                     <fieldset id="msg" class="flex Fieldset">
                         <div class="msgDiv">
-                            <input class="input spanFont" type="text" placeholder="可留下備用號碼,供店家聯繫">
+                            <input class="input spanFont" type="text" name="Memo" value="" placeholder="可留下備用號碼,供店家聯繫">
                         </div>
                         <!-- <div>
                             <i class="fa-solid fa-chevron-right"></i>
@@ -473,14 +469,14 @@
                     </div>
                 </div>
                 <div class="flexAndItemsCenter radioDiv">
-                    <div class="margin"><input type="radio" id="cash" ></div>
+                    <div class="margin"><input type="radio" id="cash" name="PayTermCatId" value=""></div>
                     <div class="margin"><label for="cash"><span class="spanFont">現金</span></label></div>
                 </div>
                 <div class="flexAndItemsCenter radioDiv">
-                    <div class="margin"><input type="radio" id="cardit" ></div>
+                        <div class="margin"><input type="radio" id="cardit" name="PayTermCatId" value=""></div>
                     <div class="margin"><label for="cardit"><span class="spanFont">信用卡</span></label></div>
                 </div>
-                    <input type="hidden" name="PayTernCatID" value="" id="PayTernCatID" />
+                    <input type="hidden" name="PayTermCatId" value="" id="PayTermCatId" />
             </div>
             <!-- 開立發票 -->
             <div class="divMargin cardBackgroundColor">
@@ -488,17 +484,10 @@
                 <div class="flexAndItemsCenter radioDiv">
                     <div class="margin"><input type="radio" id="paperInvoice" name="invoice" checked></div>
                     <div class="margin"><label for="paperInvoice"><span class="spanFont">紙本發票</span></label></div>
+                    <div class="margin"><input type="radio" id="paperInvoice" name="invoice" ></div>
+                    <div class="margin"><label for="paperInvoice"><span class="spanFont">電子發票</span></label></div>
                 </div>
                 <div>
-                    <!-- <div class="flexAndItemsCenter radioDiv">
-                        <div class="margin"><input type="radio" id="phoneInvoice" name="invoice" value="phoneInvoice"></div>
-                        <div class="margin"><label for="phoneInvoice"><span class="spanFont">手機載具</span></label></div>
-
-                    </div>
-                    <-- 點選手機載具後跳出 -->
-                    <!-- <div class="phoneBarcode">
-                        <input class="input spanFont" type="text" placeholder="第一位字元為' / ' ,  英文皆為大寫">
-                    </div> -->
                 </div>
             </div>
             <!-- 上下頁按鈕 -->
@@ -528,11 +517,11 @@
                     </div>
                     <div class="spanFont div flexAndItemsCenter cardBorderColor">
                         <div class="marginright">取餐人</div>
-                        <div>@Model.PickUpPerson</div>
+                        <div id="changePickUpPerson2">@Model.PickUpPerson</div>
                     </div>
                     <div class="spanFont div flexAndItemsCenter cardBorderColor">
                         <div class="marginright">連絡電話</div>
-                        <div>@Model.PickUpPersonPhone</div>
+                        <div id="changePickUpPersonPhone2">@Model.PickUpPersonPhone</div>
                     </div>
                     <div class="spanFont div flexAndItemsCenter cardBorderColor">
                         <div class="marginright">取餐方式</div>
@@ -540,11 +529,11 @@
                     </div>
                     <div class="spanFont div flexAndItemsCenter cardBorderColor">
                         <div class="marginright">預計取餐時間</div>
-                        <div id="change2"></div>
+                        <div id="changeDate2"></div>
                     </div>
                     <div class="spanFont div flexAndItemsCenter cardBorderColor">
                         <div class="marginright">付款方式</div>
-                        <div id="CPayTernCatId"></div>
+                        <div id="CPayTermCatId"></div>
                     </div>
                     <div class="spanFont div flexAndItemsCenter">
                         <div class="marginright">應付金額</div>
@@ -568,7 +557,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         let DateValue=``;
-        
+        let PickupPersonValue=``;
+        let PickUpPersonPhoneValue=``;
         @*網頁重新整理*@
         $("#btnReset").click(function () {
                 location.reload();
@@ -591,86 +581,104 @@
                 }
             })
 
-
         @*選擇付款方式*@
         $("#cash").click(function () {
                 
                 let checked = $("#cash").prop("checked");
                 if (checked) {
                     console.log(checked)
-                    $("#CPayTernCatId").text("現金");
-                    $("#PayTernCatID").val("1");
+                    $("#CPayTermCatId").text("現金");
+                    $("#cash").val("1");
+                    
                 }
                 else {
-                    $("#CPayTernCatId").text("信用卡");
+                    $("#CPayTermCatId").text("信用卡");
+                   
                 }
             })
         $("#cardit").click(function () {
             let checked = $("#cardit").prop("checked");
             if (checked) {
                 console.log(checked)
-                $("#CPayTernCatId").text("信用卡");
-                $("#PayTernCatID").val("2")
+                $("#CPayTermCatId").text("信用卡");
+                $("#cardit").val("2")
                 
             }
             else {
-                $("#CPayTernCatId").text("現金");
+                $("#CPayTermCatId").text("現金");
+                
             }
         })
 
-        
         @*刪除單一產品*@
-        $(".deleteBtn").on("click", function () {
-                event.preventDefault();
-                $("body").after(
-                    `<div class="delete_back"></div>
-                        <div class="delete_mainDiv">
-                            <div class="delete_msgDiv cardBorderColor">
-                                <div>
-                                    <h3>提醒</h3>
-                                </div>
-                                <div class="delete_text">
-                                    <p>確定刪除此商品嗎</p>
-                                </div>
-                                <div class="delete_row">
-                                    <div class="delete_btn"><button id="cancel">取消</button></div>
-                                    <div class="delete_btn"><button id="delete">刪除</button></div>
-                                </div>
-                            </div>
-                        </div>
-                        `)
-                $("#cancel").on("click", function () {
-                    event.preventDefault();
-                    $(".delete_back").addClass("delete_none")
-                    $(".delete_msgDiv").addClass("delete_none")
+        //$(".deleteBtn").on("click", function () {
+        //        event.preventDefault();
+        //        $("body").after(
+        //            `<div class="delete_back"></div>
+        //                <div class="delete_mainDiv">
+        //                    <div class="delete_msgDiv cardBorderColor">
+        //                        <div>
+        //                            <h3>提醒</h3>
+        //                        </div>
+        //                        <div class="delete_text">
+        //                            <p>確定刪除此商品嗎</p>
+        //                        </div>
+        //                        <div class="delete_row">
+        //                            <div class="delete_btn"><button id="cancel">取消</button></div>
+        //                                    <div class="delete_btn"><button id="btnDelete">刪除</button></div>
+        //                        </div>
+        //                    </div>
+        //                </div>
+        //                `)
+        //        $("#cancel").on("click", function () {
+        //            event.preventDefault();
+        //            $(".delete_back").addClass("delete_none")
+        //            $(".delete_msgDiv").addClass("delete_none")
 
-                })
-                $(".delete_back").on("click", function () {
-                    event.preventDefault();
-                    $(".delete_back").addClass("delete_none")
-                    $(".delete_msgDiv").addClass("delete_none")
-                })
-            })
+        //        })
+        //        $(".delete_back").on("click", function () {
+        //            event.preventDefault();
+        //            $(".delete_back").addClass("delete_none")
+        //            $(".delete_msgDiv").addClass("delete_none")
+        //        })
+        //        btnDelete.forEach(function (click) {
+        //            click.addEventListener("click", function () {
+        //                const id = this.parentElement.parentElement.firstElementChild;
+
+        //                btnDeleteCheck.addEventListener("click", function () {
+        //                    btnDeleteCheck.setAttribute("href", `@Url.Content("~/OrderDetial/Delete/${id.value}")`);
+        //                })
+        //            })
+        //        })
+        //    })
 
         @*改變日期*@
-        $("#change").change(function () {
+        $("#changeDate").change(function () {
 
+            DateValue = document.getElementById("changeDate").value
+            $("#changeDate").val(`${DateValue}`)
+        })
+        $("#changeDate").change(function () {
 
-            DateValue = document.getElementById("change").value
-            $("#change").val(`${DateValue}`)
-            console.log(DateValue);
+            DateValue = document.getElementById("changeDate").value
+            $("#changeDate2").text(`${DateValue}`)
 
         })
-        $("#change").change(function () {
 
-
-            DateValue = document.getElementById("change").value
-            $("#change2").text(`${DateValue}`)
-            console.log(DateValue);
-
+        @*改變取餐人*@
+        $("#changePickUpPerson").change(function(){
+           PickupPersonValue = document.getElementById("changePickUpPerson").value
+           $("#changePickUpPerson2").text(`${PickupPersonValue}`)
         })
-       
 
+        @*改變取餐人電話*@
+        $("#changePickUpPersonPhone").change(function () {
+                PickUpPersonPhoneValue = document.getElementById("changePickUpPersonPhone").value
+                $("#changePickUpPersonPhone2").text(`${PickUpPersonPhoneValue}`)
+            })
+
+
+        @*下一頁*@
         $(".btnToNext").click(function () {
             event.preventDefault();
             if (document.getElementById("slides").getAttribute("class") == "slides1"){
@@ -681,7 +689,7 @@
 
             };           
         });
-
+        @*上一頁*@
         $(".btnToAdd").click(function () {
             event.preventDefault();
             if (document.getElementById("slides").getAttribute("class") == "slides3") {
@@ -692,21 +700,6 @@
 
             };
         })
-        //$(".btnToFinish").click(function (){
-            
-        //    window.location.href = "OrderDetial/List";
-            
-        //})
-        
-        //var el = document.querySelector('.btnToFinish');
-
-        //el.addEventListener('click', function () {
-        //    // 原本，點擊連結會「跳轉到指定網頁」
-        //    // 取消「元素的預設行為」
-        //    event.preventDefault();
-        //    window.location.href = "OrderDetial/List";
-        //    console.log('test');
-        //}, false);
          
        
     </script>

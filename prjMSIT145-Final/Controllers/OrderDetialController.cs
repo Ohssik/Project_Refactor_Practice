@@ -229,6 +229,23 @@ namespace prjMSIT145_Final.Controllers
             return View(vm);
         }
 
+        public ActionResult Delete(int? id)
+        {
+            if (id != null)
+            {
+                OrderItem prod = _context.OrderItems.FirstOrDefault(p => p.Fid == id);
+                
+
+                if (prod != null)
+                {
+                    _context.OrderItems.Remove(prod);
+                    _context.SaveChanges();
+                }
+
+                
+            }
+            return RedirectToAction("CartList");
+        }
 
         [HttpPost]
         public IActionResult CartList(COrderDetialViewModel vm)
@@ -246,6 +263,8 @@ namespace prjMSIT145_Final.Controllers
                 prod.PayTermCatId = Int32.Parse(vm.PayTermCatId);
                 prod.Memo = vm.Memo;
                 prod.TotalAmount= vm.TotalAmount;
+                prod.PickUpPerson = vm.PickUpPerson;
+                prod.PickUpPersonPhone = vm.PickUpPersonPhone;
             }
 
 
