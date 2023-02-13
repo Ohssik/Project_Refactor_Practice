@@ -7,6 +7,7 @@ using NuGet.Protocol;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
 using System.Collections.Generic;
+using System.Composition;
 using System.Diagnostics.Metrics;
 using System.Net;
 using System.Net.Mail;
@@ -663,7 +664,7 @@ namespace prjMSIT145_Final.Controllers
             if (!string.IsNullOrEmpty(data))
             {
                 int nfid = Convert.ToInt32(data);
-                int ordersQty = _context.Orders.Where(o => o.NFid == nfid && o.OrderState=="0").Count();
+                int ordersQty = _context.ViewShowFullOrders.Where(o => o.NFid == nfid && o.OrderState=="0").Count();
                 string showQty = ordersQty > 0 ? ordersQty.ToString() : "";
                 return Json(showQty);
             }
@@ -685,6 +686,39 @@ namespace prjMSIT145_Final.Controllers
                 $"來信人Email：{mail.txtEmailAddress}";
             string mailSubject = "網站客服信箱來信";
             string result = cs.sendMail("b9809004@gapps.ntust.edu.tw", mailBody, mailSubject, DemoMailServer.ToString());
+
+            result += " ";
+            #region ADO.NET測試
+            var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "insert into ServiceMailBox(SenderName,Email,Phone,Subject,Context,ReceivedTime)" +
+                        "values(@SenderName,@Email,@Phone,@Subject,@Context,@ReceivedTime)";
+                    cmd.Parameters.AddWithValue("SenderName", mail.txtSenderName);
+                    cmd.Parameters.AddWithValue("Email", mail.txtEmailAddress);
+                    cmd.Parameters.AddWithValue("Phone", mail.txtPhone);
+                    cmd.Parameters.AddWithValue("Subject", mail.txtMailSubject);
+                    cmd.Parameters.AddWithValue("Context", mail.txtMailContent);
+                    cmd.Parameters.AddWithValue("ReceivedTime", DateTime.Now);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        result += "success";
+                    }
+                    catch (Exception err)
+                    {
+                        result += $"error:{err.Message}";
+                    }
+
+                }
+            }
+            #endregion
+
+
             return Json(result);
         }
     }
