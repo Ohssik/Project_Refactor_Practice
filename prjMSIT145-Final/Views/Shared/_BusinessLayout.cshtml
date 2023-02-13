@@ -22,41 +22,37 @@
     <!-- Custom styles for this page -->
     <link href="@Url.Content("~/vendor/datatables/dataTables.bootstrap4.min.css")" rel="stylesheet">
     <style>
-        .chatroomDialogue {
-            width: 100%;
-            height: 400px;
+        ::-webkit-scrollbar {
+            width: 5px;
         }
 
-        .chatroomUser {
-            display: flex;
-            margin-bottom: 10px
+        ::-webkit-scrollbar-track {
+            border-radius: 0%;
         }
 
-            .chatroomUser .chatroomMessage {
-                background-color: #aaa;
-                padding: 15px;
-                border-radius: 15px;
-            }
+        ::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+            background: #485461;
+        }
 
-        .remote .chatroomMessage {
+        .remotemessage {
+            background-color: #d8d6d2;
+            color: #050505;
+            max-width: 180px;
             margin-left: 5px;
-            margin-right: 110px;
-            background-color: #3e92cc;
-            color: #fff;
+            margin-right: 180px;
         }
 
 
-        .local {
-            justify-content: flex-end
+        .localmessage {
+            background-color: #9f4e27;
+            color: #ffffff;
+            max-width: 180px;
+            margin-right: 5px;
+            margin-left: 180px;
         }
 
-            .local .chatroomMessage {
-                margin-left: 110px;
-                margin-right: 5px;
-                background-color: #98fb98;
-                order: -1;
-                color: black;
-            }
+           
 
     </style>
     @await RenderSectionAsync("Styles", required: false)
@@ -247,79 +243,252 @@
         </div>
     </div>
     @*聊聊*@
-    <button type="button" class="btn btn-primary position-fixed" style="right:10px;bottom:0px;width:90px" id="showChatRoomBtn" data-bs-toggle="collapse" data-bs-target="#exampleModal">
+    <button type="button" class="btn btn-primary position-fixed" style="right:10px;bottom:0px;width:90px" id="showChatRoomBtn" data-bs-toggle="collapse" data-bs-target="#exampleModal" >
         聊聊 <span class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2" id="newMessageAlarm"><span class="visually-hidden">unread messages</span></span>
     </button>
+ 
     @*隱藏*@
-    <div class="collapse position-fixed " id="exampleModal" aria-hidden="true" style="right:10px; bottom:5px; width:630px; ">
-        <div class="card card-body pt-1 p-0 m-0">
-            <div style="width:630px;height:520px;" class="m-0 p-0">
-                <div id="head" class="row justify-content-center" style="width:625px;height:40px;">
-                    <div class="col-2 row justify-content-center"><div class="mx-auto "><i>聊聊</i></div></div>
-                    <div class="col-8"></div>
-                    <button type="button" class="btn-close col-2" data-bs-toggle="collapse" data-bs-target="#exampleModal"></button>
-
+    <section class="collapse position-fixed p-1 m-0" style="background-color: #eee;width:688px;right:10px;bottom:5px;" id="exampleModal" aria-hidden="true">
+        <div class="container p-0 m-0">
+            <div class="row">
+                <div class="" style="width: 415px; height: 515px">
+                    <!-- 店名 -->
+                    <div class="card-header d-flex justify-content-between p-3 mb-2"
+                         style="width: 400px">
+                        <p class="fw-bold mb-0" id="ChatNowUser">在睡五分鐘大安店</p>
+                        <input hidden id="ChatNowUserid" value=""/>
+                        <input hidden id="ChatNowUserChatid" value=""/>
+                        <p class="text-muted small mb-0"><i class="far fa-clock"></i></p>
+                    </div>
+                    <!-- 聊天內容 -->
+                    <div class="overflow-auto" style="width: 400px; height: 420px ;">
+                        <ul class="list-unstyled" id="ChatMessageul">
+                           
+                        </ul>
+                    </div>
+                    <!-- 送出按鈕 -->
+                    <div class="input-group mb-3" style="width: 390px">
+                        <input class="form-control" id="chatMessageInput" type="text" />
+                        <button id="chatMessagebtn"
+                                type="button"
+                                class="btn btn-outline-secondary"
+                                style="width: 30px">
+                            
+                        </button>
+                    </div>
                 </div>
-                <hr class="p-0 m-0" size="1px" align="center" width="98%" color="black">
-
-                <div id="body" style="width:610px;height:520px;" class="justify-content-center container p-1 m-0">
-                    <div class="row container p-0 m-0 ">
-                        <div class="col-8" style="background-color:#F4F5F7;">
-                            @*現在對話人的名稱*@
-                            <div>
-                                <div id="ChatNowUser" style="padding-left:12px;">kelly</div>
-                                <div hidden>
-                                    <input value="" id="ChatNowUserid"></input>
-                                    <input value="" id="ChatNowUserChatid"></input>
-                                </div>
-                            </div>
-                            <hr class="p-0 m-0" size="1px" align="center" width="98%" color="black">
-                            <div class="" style="overflow-y:auto;overflow-x:hidden">
-
-                                @*訊息*@
-                                <div id="chatmessageDiv" class="chatroomDialogue">
-                                    @*對方*@
-                                    @*<div class="chatroomUser remote">
-                                    <div class="chatroomMessage">
-                                    你好~
-                                    </div>
-                                    </div>*@
-                                    @*自己*@
-                                    @*<div class="chatroomUser local">
-                                    <div class="chatroomMessage">
-                                    你好!
-                                    </div>
-                                    </div>*@
-
-                                </div>
-                                @*輸入訊息*@
-
-                                <div class="row">
-                                    <input class="col-9" type="text" id="chatMessageInput" style="margin-left:15px"></input>
-                                    <input class="col-2" type="button" id="chatMessagebtn" value="送出"></input>
-
-                                </div>
-                            </div>
-                        </div>
-                        @*過話對話的人*@
-                        <div class="col-4  p-0 m-0 overflow-auto " style="background-color:bisque">
-
-                            <div style="height:470px" id="chatOthersUser" class="container p-0 m-0">
-                                @*用戶*@
-                                <div class="row  border-3 p-0 m-0 back" style="background-color:azure">
-                                    <div class="col-5 p-1" id="chatOthersUserImg"><img src="~/images/4c8b3a99-bc8e-43f6-b351-44221fbd8219.jpg" width="48px" height="48px" /></div>
-                                    <div class="col-7 ">kelly</div>
-                                </div>
-                            </div>
-
+                <!-- 用戶 -->
+               
+                <div class="mb-4 mb-md-0 p-0" style="width: 275px">
+                    <div class="card">
+                        <div class="card-body overflow-auto p-1 m-1">
+                            <ul class="list-unstyled mb-0"
+                                style="height: 500px; width: 250px">
+                                <li class="p-2 border-bottom" style="background-color: #eee">
+                                    <a href="#!" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp"
+                                                 alt="avatar"
+                                                 class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                                                 width="30" />
+                                            <div class="pt-1" style="max-width: 150px">
+                                                <p class="fw-bold mb-0 small">在睡五分鐘大安店</p>
+                                                <p class="small m-0 text-truncate">
+                                                    Hello, Are you there? Hello, Are you there? Hello,
+                                                    Are you there? Hello, Are you there? Hello, Are you
+                                                    there?
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-1">
+                                            <span class="badge bg-danger float-end">1</span>
+                                            <p class="small text-muted mb-1">現在</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="p-2 border-bottom">
+                                    <a href="#!" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-1.webp"
+                                                 alt="avatar"
+                                                 class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                                                 width="30" />
+                                            <div class="pt-1" style="max-width: 150px">
+                                                <p class="fw-bold mb-0 small">在睡五分鐘大安店</p>
+                                                <p class="small m-0 text-truncate">
+                                                    Hello, Are you there? Hello, Are you there? Hello,
+                                                    Are you there? Hello, Are you there? Hello, Are you
+                                                    there?
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-1">
+                                            <span class="badge bg-danger float-end">1</span>
+                                            <p class="small text-muted mb-1">現在</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="p-2 border-bottom">
+                                    <a href="#!" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-2.webp"
+                                                 alt="avatar"
+                                                 class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                                                 width="30" />
+                                            <div class="pt-1" style="max-width: 150px">
+                                                <p class="fw-bold mb-0 small">在睡五分鐘大安店</p>
+                                                <p class="small m-0 text-truncate">
+                                                    Hello, Are you there? Hello, Are you there? Hello,
+                                                    Are you there? Hello, Are you there? Hello, Are you
+                                                    there?
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-1">
+                                            <span class="badge bg-danger float-end">1</span>
+                                            <p class="small text-muted mb-1">現在</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="p-2 border-bottom">
+                                    <a href="#!" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-3.webp"
+                                                 alt="avatar"
+                                                 class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                                                 width="30" />
+                                            <div class="pt-1" style="max-width: 150px">
+                                                <p class="fw-bold mb-0 small">在睡五分鐘大安店</p>
+                                                <p class="small m-0 text-truncate">
+                                                    Hello, Are you there? Hello, Are you there? Hello,
+                                                    Are you there? Hello, Are you there? Hello, Are you
+                                                    there?
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-1">
+                                            <span class="badge bg-danger float-end">1</span>
+                                            <p class="small text-muted mb-1">現在</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="p-2 border-bottom">
+                                    <a href="#!" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-4.webp"
+                                                 alt="avatar"
+                                                 class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                                                 width="30" />
+                                            <div class="pt-1" style="max-width: 150px">
+                                                <p class="fw-bold mb-0 small">在睡五分鐘大安店</p>
+                                                <p class="small m-0 text-truncate">
+                                                    Hello, Are you there? Hello, Are you there? Hello,
+                                                    Are you there? Hello, Are you there? Hello, Are you
+                                                    there?
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-1">
+                                            <span class="badge bg-danger float-end">1</span>
+                                            <p class="small text-muted mb-1">現在</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="p-2 border-bottom">
+                                    <a href="#!" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp"
+                                                 alt="avatar"
+                                                 class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                                                 width="30" />
+                                            <div class="pt-1" style="max-width: 150px">
+                                                <p class="fw-bold mb-0 small">在睡五分鐘大安店</p>
+                                                <p class="small m-0 text-truncate">
+                                                    Hello, Are you there? Hello, Are you there? Hello,
+                                                    Are you there? Hello, Are you there? Hello, Are you
+                                                    there?
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-1">
+                                            <span class="badge bg-danger float-end">1</span>
+                                            <p class="small text-muted mb-1">現在</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="p-2 border-bottom">
+                                    <a href="#!" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp"
+                                                 alt="avatar"
+                                                 class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                                                 width="30" />
+                                            <div class="pt-1" style="max-width: 150px">
+                                                <p class="fw-bold mb-0 small">在睡五分鐘大安店</p>
+                                                <p class="small m-0 text-truncate">
+                                                    Hello, Are you there? Hello, Are you there? Hello,
+                                                    Are you there? Hello, Are you there? Hello, Are you
+                                                    there?
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-1">
+                                            <span class="badge bg-danger float-end">1</span>
+                                            <p class="small text-muted mb-1">現在</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="p-2 border-bottom">
+                                    <a href="#!" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp"
+                                                 alt="avatar"
+                                                 class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                                                 width="30" />
+                                            <div class="pt-1" style="max-width: 150px">
+                                                <p class="fw-bold mb-0 small">在睡五分鐘大安店</p>
+                                                <p class="small m-0 text-truncate">
+                                                    Hello, Are you there? Hello, Are you there? Hello,
+                                                    Are you there? Hello, Are you there? Hello, Are you
+                                                    there?
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-1">
+                                            <span class="badge bg-danger float-end">1</span>
+                                            <p class="small text-muted mb-1">現在</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                 <li class="p-2 border-bottom">
+                                    <a href="#!" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp"
+                                                 alt="avatar"
+                                                 class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                                                 width="30" />
+                                            <div class="pt-1" style="max-width: 150px">
+                                                <p class="fw-bold mb-0 small">在睡五分鐘大安店</p>
+                                                <p class="small m-0 text-truncate">
+                                                    Hello, Are you there? Hello, Are you there? Hello,
+                                                    Are you there? Hello, Are you there? Hello, Are you
+                                                    there?
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-1">
+                                            <span class="badge bg-danger float-end">1</span>
+                                            <p class="small text-muted mb-1">現在</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
-    </div>
+    </section>
 
     <footer class="border-top footer text-muted">
         <div class="container">
@@ -357,12 +526,7 @@
     @*聊天室JS*@
     <script>
 
-        //const ChatNowUserName = document.getElementById("ChatNowUser");
-        //const ChatNowUserid = document.getElementById("ChatNowUserid");
-        //const ChatNowUserChatid = document.getElementById("ChatNowUserChatid");
-        //const chatmessageDiv = document.getElementById("chatmessageDiv");
-        //const chatMessageInput = document.getElementById("chatMessageInput");
-        //const chatMessagebtn = document.getElementById("chatMessagebtn");
+       
 
         const businessImg = document.querySelector("#businessImg");
         const businessName = document.querySelector("#businessName");
@@ -388,7 +552,7 @@
 
     </script>
     @await RenderSectionAsync("Scripts", required: false)
-
+  
 
 </body>
 </html>
