@@ -243,9 +243,10 @@
         </div>
     </div>
     @*聊聊*@
-    <button type="button" class="btn btn-primary position-fixed" style="right:10px;bottom:0px;width:90px" id="showChatRoomBtn" data-bs-toggle="collapse" data-bs-target="#exampleModal">
+    <button type="button" class="btn btn-primary position-fixed" style="right:10px;bottom:0px;width:90px" id="showChatRoomBtn" data-bs-toggle="collapse" data-bs-target="#exampleModal" >
         聊聊 <span class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2" id="newMessageAlarm"><span class="visually-hidden">unread messages</span></span>
     </button>
+ 
     @*隱藏*@
     <section class="collapse position-fixed p-1 m-0" style="background-color: #eee;width:688px;right:10px;bottom:5px;" id="exampleModal" aria-hidden="true">
         <div class="container p-0 m-0">
@@ -551,7 +552,7 @@
 
     </script>
     @await RenderSectionAsync("Scripts", required: false)
-
+  
 
 </body>
 </html>

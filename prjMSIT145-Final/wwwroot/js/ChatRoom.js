@@ -5,10 +5,23 @@ const ChatNowUserChatid = document.getElementById("ChatNowUserChatid");
 const ChatMessageul = document.getElementById("ChatMessageul");
 const chatMessageInput = document.getElementById("chatMessageInput");
 const chatMessagebtn = document.getElementById("chatMessagebtn");
+
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
 
-/*document.getElementById("chatMessageInput").disabled = true;*/
+
+document.getElementById("showChatRoomBtn").setAttribute("style", "display:none");
+document.getElementById("showChatRoomBtn").addEventListener("click", function () {
+    if (document.getElementById("showChatRoomBtn").getAttribute("style")=="right:10px;bottom:0px;width:90px")
+    {
+        document.getElementById("showChatRoomBtn").setAttribute("style", "right:10px;bottom:530px;width:90px");
+    }
+    else
+    {
+        document.getElementById("showChatRoomBtn").setAttribute("style", "right:10px;bottom:0px;width:90px");
+    }
+
+});
 /*對方說的*/
 connection.on("RemoteMessage", function (otherName, ChatroomUserid,Fid,message) {
     
@@ -105,7 +118,11 @@ connection.on("LocalMessage", function (message) {
 
 connection.start().then(function () {
     console.log("Hub 連線完成");
-    document.getElementById("chatMessagebtn").disabled = false;
+   
+    document.getElementById("showChatRoomBtn").setAttribute("style", "right:10px;bottom:0px;width:90px")
+    
+        
+    
 }).catch(function (err) {
 
     return console.error(err.toString());
