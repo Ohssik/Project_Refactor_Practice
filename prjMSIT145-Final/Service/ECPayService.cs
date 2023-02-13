@@ -67,10 +67,10 @@ namespace prjMSIT145_Final.Service
                 //{ "CustomField4",  ""},
 
                 //完成後發通知
-                { "ReturnURL",  $"{Config.GetSection("HostURL").Value}/ECPay/CallbackNotify?option=ECPay"},
+                { "ReturnURL",  $"{Config.GetSection("HostURL").Value}/CreditPay/CallbackNotify?option=ECPay"},
 
                 //付款完成後導頁$"{Config.GetSection("HostURL").Value}/Home/CallbackReturn?option=ECPay"}
-                { "OrderResultURL",$"{Config.GetSection("HostURL").Value}/ECPay/CallbackReturn?option=ECPay"},
+                { "OrderResultURL","https://localhost:7266/OrderDetial/List"},
 
 
                 //付款方式為 ATM 時，當使用者於綠界操作結束時，綠界回傳 虛擬帳號資訊至 此URL
