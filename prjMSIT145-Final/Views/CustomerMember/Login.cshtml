@@ -75,7 +75,8 @@
             </div>
 
             <input id="submitid" type="submit" value="登入" class="login" />
-            <div>
+            <div class="googleline">
+            <div class="googleclass">
                 <div style="margin-bottom:20px;">
                     <div id="g_id_onload"
                          data-client_id="274917650943-tcctf041b357aeff8q2um096rutfsrt9.apps.googleusercontent.com"
@@ -83,7 +84,7 @@
                          data-auto_prompt="false">
                     </div>
                     <div class="g_id_signin"
-                         data-type="standard"
+                         data-type="icon"
                          data-size="large"
                          data-theme="filled_blue"
                          data-text="sign_in_with"
@@ -92,7 +93,13 @@
                     </div>
                 </div>
             </div>
-            <div id="buttonDiv"></div>
+            @*<div id="buttonDiv"></div>*@
+            <div class="lineclass">
+                <a href="@Url.Action("LineLoginDirect")">
+                    <img class="imgline" src="@Url.Content("~/images/Customer/Member/btn_base.png")" alt="Line Login" />
+                </a>
+             </div>
+                </div>
             <div class="display">
 
                 <img src="@Url.Content("~/images/Customer/Member/question.png")" class="img2"></img>

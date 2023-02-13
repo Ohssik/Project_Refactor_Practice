@@ -201,4 +201,16 @@
 .g_id_signin {
     margin-left: 100px;
 }
-
+.googleline{
+    display:flex;
+    justify-items:center;
+    text-align:center;
+    margin-left:40px;
+    
+}
+.googleclass{
+   margin-right:35px;
+}
+.imgline{
+    width:41px;
+}
