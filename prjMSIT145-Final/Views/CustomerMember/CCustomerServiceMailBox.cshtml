@@ -117,8 +117,9 @@
                 <div class="form-group">
                 <p name="checkMailContent" class="text-danger"></p>
                 </div>
-            <div class="form-group">                
-                    <button id="btnCheck" class="btn btn-dark">確認畫面</button>
+            <div class="form-group">
+                <button type="button" id="btnDemo" class="btn btn-dark">Demo</button>
+                <button id="btnCheck" class="btn btn-dark">確認畫面</button>
             </div>
         </form>
     </div>
@@ -287,6 +288,14 @@
                 $('.row.checkForm.hidden').removeClass('hidden');
                 $('.row.mailForm').hide();
             });
+
+            $("#btnDemo").on("click",function(){
+                let SenderName = $('[name=txtSenderName]').val("喬姵瑋");
+                let email = $('[name=txtEmailAddress]').val("chiaoqaz@gmail.com");
+                let Phone = $('[name=txtPhone]').val("0988286982");
+                let mailSubject = $('[name=txtMailSubject]').val("帳號無法使用");
+                let txtMailContent = $('[name=txtMailContent]').val("帳號無法登入，註冊使用的資料與上述相同。");
+            })
         });
     </script>
 }

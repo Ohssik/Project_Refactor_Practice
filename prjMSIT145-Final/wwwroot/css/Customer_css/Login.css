@@ -172,20 +172,33 @@
     color: white;
     background-color: blue;
     border-radius: 20px;
-    width: 60px;
+    width: 40px;
 }
 
 .demoerror {
     position:absolute;
     bottom: 20px;
-    right: 20px;
+    right: 50px;
     color: white;
     background-color: red;
     border-radius: 20px;
-    width: 60px;
+    width: 40px;
 }
-.spanresponseclass{
+.overclass{
+    position: absolute;
+    bottom: 20px;
+    right: 0px;
+    color: white;
+    background-color:yellow;
+    border-radius: 20px;
+    width: 40px;
+}
+.spanresponseclass {
     color: red;
     font-weight: bold;
     font-size: 20px;
 }
+.g_id_signin {
+    margin-left: 100px;
+}
+

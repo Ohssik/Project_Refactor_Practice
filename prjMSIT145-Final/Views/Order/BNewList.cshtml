@@ -23,15 +23,16 @@
                 {
                     count++;
 
-                    <tr id="ListBar" data-bs-toggle="modal" data-bs-target="#detailModal" class="container" name="baritem">
-                        <td id="Fid" hidden>@Html.DisplayFor(modelItem => item.Fid)</td>
-                        <th class=" col-1 align-middle">#@count</th>
-                        <td class="col-4 align-middle">@Html.DisplayFor(modelItem => item.OrderISerialId)</td>
-                        <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.NmbName)</td>
-                        <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.TotalAmount)</td>
-                        <td class="col-3 align-middle">
-                            @Html.ActionLink("接受", "BEditStateApi", new {State=item.OrderState,nextState="2",orderid=item.Fid  },new{@class="btn btn-success"})
-                            @Html.ActionLink("取消", "BEditStateApi",  new {State=item.OrderState,nextState="5",orderid=item.Fid  },new{@class="btn btn-danger"})
+                    <tr id="ListBar"  class="container" name="baritem">
+                    <td data-bs-toggle="modal" data-bs-target="#detailModal" id="Fid" hidden>@Html.DisplayFor(modelItem => item.Fid)</td>
+                    <th data-bs-toggle="modal" data-bs-target="#detailModal" class="col-1 align-middle">#@count</th>
+                    <td data-bs-toggle="modal" data-bs-target="#detailModal" class="col-4 align-middle">@Html.DisplayFor(modelItem => item.OrderISerialId)</td>
+                    <td data-bs-toggle="modal" data-bs-target="#detailModal" class="col-2 align-middle">@Html.DisplayFor(modelItem => item.NmbName)</td>
+                    <td data-bs-toggle="modal" data-bs-target="#detailModal" class="col-2 align-middle">@Html.DisplayFor(modelItem => item.TotalAmount)</td>
+                    <td  class="col-3 align-middle">
+                            @Html.ActionLink("接受", "BEditStateApi", new {State=item.OrderState,nextState="2",orderid=item.Fid  },new{@class="btn btn-success",})
+                        @Html.ActionLink("取消", "BEditStateApi",  new {State=item.OrderState,nextState="5",orderid=item.Fid  },new{@class="btn btn-danger",})
+                        <button name="changeChatUser" data-bs-toggle="collapse" data-bs-target="#exampleModal" class="btn btn-success" value="@item.NFid">聯絡客戶</button>
                         </td>
                     </tr>
                 }
@@ -156,5 +157,35 @@
                 });
             }
             });
+            //停止氣泡事件
+        function _stopPropagation(){
+            event.stopPropagation()
+        }
+
+
+
+
+
+
+            const changeChatUserbtns = document.getElementsByName("changeChatUser");
+            changeChatUserbtns.forEach(function (changeChatUserbtn) {
+            changeChatUserbtn.addEventListener("click", async function (changeChatUserbtn) {
+                const response = await fetch(`@Url.Content("~/ChatRoom/ChatUserChangeApi/?fid=${this.value}")`)
+                const data = await response.json();
+                ChatNowUserName.innerHTML = data.memberName;
+
+                ChatNowUserid.value = data.fid;
+                ChatNowUserChatid.value =data.chatroomUserid;
+                
+                
+
+
+
+
+            })
+        })
+
+
+
         </script>
     }

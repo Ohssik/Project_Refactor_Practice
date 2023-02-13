@@ -1,8 +1,16 @@
-﻿.azureLogo {
+﻿.logoBottom{
+    bottom:8%;
+}
+.logoBottomPageEnd
+{
+    bottom:13%;
+}
+
+.azureLogo {
     width: 70px;
     height: 60px;
     position: fixed;
-    bottom: 30px;
+    bottom: 5%;
     left: 40px;
     transition: 0.2s;
 }
@@ -21,14 +29,14 @@
         from {
             height:20px;
             /*transform: rotateX(70deg);*/
-            opacity: 90%;
+             opacity: 10%;
             bottom: 90px;
             filter: drop-shadow(5px 10px 5px rgba(0,0,0,0.5));
         }
         to {
             height: 40px;
             /*transform: rotateX(70deg);*/
-            opacity: 30%;
+           opacity: 90%;
             bottom: 30px;
             filter: drop-shadow(5px 10px 5px rgba(0,0,0,2));
         }
@@ -36,8 +44,9 @@
 .azure {
     position: fixed;
     left: 40px;
-    top: 8%;
+    bottom: 16%;
     margin-top: 50px;
+    height: 70%;
 }
 /* 腳掌印 */
 .logoDiv {
@@ -47,7 +56,7 @@
     left: 150px;
     bottom: 30px ;
     transition: 0.2s;
-    filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.3))
+    /*filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.3))*/
 }
 
     .logoDiv img {
@@ -58,16 +67,17 @@
 .logo {
     position: fixed;
     left: 40px;
-    top: 8%;
+    bottom: 14%;
     background-color: white;
     height: 72%;
+    min-height:65%;
 }
 /* 平台及使用者頭像 */
 .imgDiv {
-    min-width: 50px;
-    height: 50px;
+    min-width: 65px;
+    max-width: 65px;
+    height: 65px;
     margin: 0 5px;
-    border-radius: 50%;
 }
 
     .imgDiv img {
@@ -81,20 +91,22 @@
     overflow-x: hidden;
 }
 
-.display {
+.displayProblem {
     display: flex;
 }
 .card{
     height:100%;
 }
 /* 對話框 */
-.msgDiv {
+.msgDivProblem {
     /* min-height: 500px;
     max-height: 700px;*/
     height: 95%;
     max-width: 380px;
     min-width: 380px;
     border-bottom: 1px solid lightgray;
+    box-sizing: border-box;
+    padding: 10px 0;
 }
 
 #collapseExample {
@@ -109,6 +121,8 @@
 .serviceMsg {
     word-wrap: break-word;
     font-size: 13px;
+    padding:5px 0;
+    box-sizing:border-box;
 }
 
     .serviceMsg p {
@@ -133,9 +147,9 @@
 
 .userMsg {
     word-wrap: break-word;
-    font-size: 13px;
+    font-size: 15px;
     box-sizing: border-box;
-    padding: 15px 0;
+    padding: 25px 0;
 }
 /* 輸入框 */
 .txtDiv {

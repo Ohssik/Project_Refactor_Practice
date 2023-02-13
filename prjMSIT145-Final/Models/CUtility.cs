@@ -5,6 +5,7 @@ namespace prjMSIT145_Final.Models
     public class CUtility
     {
         public static List<VBusinessMemberContainImgViewModel>? BusinessMemberList = null;
+        public static List<AdImg>? AdImgList = null;
         //-----------
         public static List<VBusinessMemberDetailViewModel>? BusinessMemberDetailList = null;
         public static List<VPaymenttermViewModel>? PaymenttermList = null;

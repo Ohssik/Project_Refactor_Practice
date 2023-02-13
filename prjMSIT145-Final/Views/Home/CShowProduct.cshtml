@@ -217,11 +217,11 @@
 
 <!-- FormArea -->
 <form asp-controller="Home" asp-action="CAddtoCart" method="post" enctype="multipart/form-data">
-    <input type="text" name="OFid" id="OFid" value="@Model[0].OrderID" hidden/>
+    <input type="text" name="OFid" id="OFid" value="@Model[0].OrderID" hidden />
     <input type="text" name="BFid" id="BFid" value="@Model[0].BusinessMemberDetailList[0].Fid" hidden />
     <input type="text" name="PFid" id="PFid" value="無變化" hidden />
     <input type="text" name="TotalAmount" id="TotalAmount" value="無變化" hidden />
-    <input type="text" name="Qty" id="Qty" value="無變化" hidden/>
+    <input type="text" name="Qty" id="Qty" value="無變化" hidden />
     <!-- Modal -->
     <div class="modal fade" id="OptionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -243,7 +243,16 @@
                             <div class="Plusbtn CursorPointer" id="Plus">+</div>
                         </div>
                     </div>
-                    <button type="button" class="Submitbtn CursorPointer" id="submit">加入購物車</button>
+                    <button type="button" class="Submitbtn CursorPointer" id="submit">
+                        @if (!Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+                        {
+                            @:請登入會員
+                        }
+                        else
+                        {
+                            @:加入購物車
+                        }
+                    </button>
                 </div>
 
             </div>
@@ -253,13 +262,13 @@
 
 @section UpperScripts{
     <script>
-        
+
     </script>
 }
 @section Scripts{
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-
+        let Membercheck = `@Context.Session.GetString(CDictionary.SK_LOGINED_USER)`;
         let BasePriceRecord = 0;
         let BasePrice = 0;
         let TotalPrice = 0;
@@ -268,6 +277,13 @@
         let OptionsAreaList = document.getElementsByClassName('OptionsArea');
         let check = 0;
         let innercheck = 0;
+
+        document.getElementById("submit").addEventListener("click", function () {
+            if (Membercheck == "")
+            {
+                location.href = "/CustomerMember/Login";
+            }
+        });
 
         @{
             foreach (var ProductClass in Model[0].ProductClassList)
@@ -325,6 +341,7 @@
             const response = await fetch(`@Url.Content("~/Home/CShowProductOption?PFid=${PFid}")`);
             const datas = await response.json();
             ModalBody.innerHTML = `<img id="ProductPhoto" class = "ProductPhoto" src = "/images/${datas[0].productBasicInfoList[0].photo}" />`;
+            ModalBody.innerHTML += `<div id="ProductMemo" class = "MemoArea" />${datas[0].productBasicInfoList[0].memo}<div>`;
             for (let i = 0, maxPCL = datas[0].optionGroupList.length; i < maxPCL; i++) {
                 if (datas[0].optionGroupList[i].isMultiple == 0) {
                     ModalBody.innerHTML += `<p class="OptionGroupTitle"><span class="NeedChoose">✱</span>${datas[0].optionGroupList[i].optionGroupName}</p >`;
@@ -409,13 +426,19 @@
                             } else {
                                 check -= 1;
                             }
-                            if (check == 0) {
-                                document.getElementById("submit").setAttribute("type", "submit");
-                            }
-                            else {
+                            if (Membercheck == "") {
                                 document.getElementById("submit").setAttribute("type", "button");
-                            }
-
+                                document.getElementById("submit").innerHTML = "請登入會員";
+                            }else{
+                                if (check == 0)
+                                {
+                                    document.getElementById("submit").setAttribute("type", "submit");
+                                    document.getElementById("submit").innerHTML = "加入購物車";
+                                }else{
+                                    document.getElementById("submit").setAttribute("type", "button");
+                                    document.getElementById("submit").innerHTML = "必選項未選";
+                                }
+                            }    
                         });
                     }
                 } else {

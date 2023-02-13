@@ -1,4 +1,4 @@
-﻿@model List<prjMSIT145_Final.ViewModels.VBusinessMemberContainImgViewModel>
+﻿@model List<prjMSIT145_Final.ViewModels.VCUtilityViewModel>
 @{
     Layout = "_CustomerLayout";
     ViewData["Title"] = "Home Page";
@@ -7,7 +7,7 @@
     <link href="~/css/Customer_css/CMainpagestyle.css" rel="stylesheet" />
     <link href="~/css/Customer_css/CShopcardstyle.css" rel="stylesheet" />
     <style>
-       
+
     </style>
 }
 <section class="Displayarea">
@@ -17,7 +17,7 @@
         <div class="wrapper">
             <ul class="slides">
                 @*<li><img class="hidden" src="@Url.Content("~/adminImg/adDisplay/001.jpg")" /></li>*@
-            </ul>                
+            </ul>
         </div>
     </div>
     <div class="Bone Boneposition1">
@@ -45,6 +45,29 @@
         <p>我的券夾</p>
     </div>
 </section>
+<section class="ImgDisplay">
+    @{
+        int Count = 0;
+        string png = "";
+        foreach (var item in Model[0].AdImgList)
+        {
+            Count++;
+            png = @$"https://localhost:7266/adminImg/adDisplay/{item.ImgName}";
+            if (Count == 1)
+            {
+                <div class="LeftAD" style="background-image:url('@png')"></div>
+            }
+            else if(Count == 2)
+            {
+                <div class="MidAD" style="background-image:url('@png');"></div>
+            }
+            else if(Count == 3)
+            {
+                <div class="RightAD" style="background-image:url('@png');"></div>
+            }
+        }
+    }
+</section>
 <section class="Showshoptilte">
     <p>專屬推薦店家</p>
     <div>
@@ -54,7 +77,7 @@
 </section>
 <section class="Showshopdisplay">
     @{
-        foreach (var item in Model)
+        foreach (var item in Model[0].BusinessMemberList)
         {
             if (item.IsSuspensed == 0)
             {
@@ -100,8 +123,8 @@
 </section>
 @section Scripts{
     <script>
-        
-        @foreach (var item in Model)
+
+        @foreach (var item in Model[0].BusinessMemberList)
         {
             if (item.IsSuspensed == 0)
             {
@@ -113,68 +136,67 @@
                 }
             }
         }
-        $(function () { 
-            let slideNum = 0;
-            let slideCount = $(".slides li").length;
-            let lastIndex = slideCount - 1;                        
-            
-            let adArr=new Array();
-            adArr.push('001.jpg');    
-            //$('ul.slides').append('<li><img src /></li>');
-            $.ajax({
+            $(function () {
+                let slideNum = 0;
+                let slideCount = $(".slides li").length;
+                let lastIndex = slideCount - 1;
+
+                let adArr = new Array();
+                adArr.push('001.jpg');
+                //$('ul.slides').append('<li><img src /></li>');
+                $.ajax({
                     url: `@Url.Content("~/home/CgetAdImgList")`,
-                    type:'post',
-                    data:{},
-                    dataType:'json',
-                    success:function(data){
-                        
-                        let docFrag=document.createDocumentFragment();
-                        $(data).each(function(i,value){
+                    type: 'post',
+                    data: {},
+                    dataType: 'json',
+                    success: function (data) {
+
+                        let docFrag = document.createDocumentFragment();
+                        $(data).each(function (i, value) {
                             //adArr.push(value.imgName);
                             $(docFrag).append(`<li><img src='@Url.Content("~/adminImg/adDisplay/")${value.imgName}' /></li>`);
                         });
                         $('ul.slides').append(docFrag);
                         //console.log(adArr);
-                    }                    
-            });
+                    }
+                });
 
-                
-                slideNum=0;
-            let si = setInterval(() => {
-                    let i = $('ul.slides>li').length+1;
+
+                slideNum = 0;
+                let si = setInterval(() => {
+                    let i = $('ul.slides>li').length + 1;
                     //console.log(i);
-                //let i = adArr.length;
-                if (i > 0)
-                {
-                    i = i - 1;
-                //    //slideNum = ((new Date()).getSeconds()) % i;
-                        if (slideNum>i){
+                    //let i = adArr.length;
+                    if (i > 0) {
+                        i = i - 1;
+                        //    //slideNum = ((new Date()).getSeconds()) % i;
+                        if (slideNum > i) {
                             slideNum = 0;
                         }
-                //        console.log(`slideNum=${slideNum}, adArr[slideNum]=${adArr[slideNum]}`);
-                //        $('ul.slides>li>img').fadeOut(200, function () {
-                //            $(this).attr('src', `@Url.Content("~/adminImg/adDisplay/")${adArr[slideNum]}`);
-                //        }).fadeIn(200);
+                        //        console.log(`slideNum=${slideNum}, adArr[slideNum]=${adArr[slideNum]}`);
+                        //        $('ul.slides>li>img').fadeOut(200, function () {
+                        //            $(this).attr('src', `@Url.Content("~/adminImg/adDisplay/")${adArr[slideNum]}`);
+                        //        }).fadeIn(200);
 
-                //        //$('ul.slides>li>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${adArr[slideNum]}`);
-                //        $('ul.slides>li>img').removeClass('hidden');
-                //        if (adArr[slideNum]=='001.jpg'){
-                //            $('ul.slides>li>img').addClass('hidden');
-                //        }
+                        //        //$('ul.slides>li>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${adArr[slideNum]}`);
+                        //        $('ul.slides>li>img').removeClass('hidden');
+                        //        if (adArr[slideNum]=='001.jpg'){
+                        //            $('ul.slides>li>img').addClass('hidden');
+                        //        }
 
                         let slidemove = -540 * slideNum;
                         if (slideNum == 0) {
                             $('ul.slides').addClass('hidden');
                         }
-                        else{
+                        else {
                             $('ul.slides').removeClass('hidden');
                         }
                         $('ul.slides').css('left', slidemove);
                         slideNum++;
-                }
-                    
-            }, 2000);
-            
-        });
+                    }
+
+                }, 2000);
+
+            });
     </script>
 }

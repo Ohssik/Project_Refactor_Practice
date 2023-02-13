@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Security.Cryptography;
+using System.Text.Json;
 using static NuGet.Packaging.PackagingConstants;
 
 namespace prjMSIT145_Final.Controllers
@@ -26,6 +27,7 @@ namespace prjMSIT145_Final.Controllers
 
         public IActionResult CIndex()
         {
+            #region 將商家資訊取至集合
             List<VBusinessMemberContainImgViewModel> BusinessMemberList = new List<VBusinessMemberContainImgViewModel>();
             var BusinessMemberdatas = _context.BusinessMembers.Join(_context.BusinessImgs, BM => BM.Fid, BI => BI.BFid, (BM, BI) => new
             {
@@ -57,7 +59,26 @@ namespace prjMSIT145_Final.Controllers
                 });
             }
             CUtility.BusinessMemberList = BusinessMemberList;
-            return View(CUtility.BusinessMemberList);
+            #endregion
+            #region 將平台圖片取至集合
+            List<AdImg> AdImgList = new List<AdImg>();
+            var ads = from ad in _context.AdImgs
+                      where ad.OrderBy == 0
+                      orderby ad.Fid
+                      select ad;
+            foreach (var ad in ads)
+            {
+                AdImgList.Add(ad);
+            }
+            CUtility.AdImgList= AdImgList;
+            #endregion
+            List<VCUtilityViewModel> CUL = new List<VCUtilityViewModel>();
+            CUL.Add(new VCUtilityViewModel
+            {
+                BusinessMemberList = CUtility.BusinessMemberList,
+                AdImgList = CUtility.AdImgList,
+            });
+            return View(CUL);
         }
 
         public IActionResult CShowProduct(int? BFid, int? OrderFid)
@@ -451,7 +472,12 @@ namespace prjMSIT145_Final.Controllers
         [HttpPost]
         public IActionResult CAddtoCart(IFormCollection NewOrder, int? NFid)
         {
-            NFid = 1;
+            if (HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER) == null)
+            {
+                return Redirect("/CustomerMember/Login");
+            }
+            NormalMember Memberdatas = JsonSerializer.Deserialize<NormalMember>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+            NFid = Memberdatas.Fid;
             int SNIDCount = 0;
             if (NFid != 0)  //是否有登入會員
             {

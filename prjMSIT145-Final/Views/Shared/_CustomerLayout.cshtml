@@ -59,8 +59,41 @@
     .Navigationbar_Direct>li:nth-child(2){
         padding-top: 42px;
     }
-             
 
+        .chatroomDialogue {
+            width: 100%;
+            height: 400px;
+        }
+
+        .chatroomUser {
+            display: flex;
+            margin-bottom: 10px
+        }
+
+            .chatroomUser .chatroomMessage {
+                background-color: #aaa;
+                padding: 15px;
+                border-radius: 15px;
+            }
+
+        .remote .chatroomMessage {
+            margin-left: 5px;
+            margin-right: 110px;
+            background-color: #3e92cc;
+            color: #fff;
+        }
+
+
+        .local {
+            justify-content: flex-end
+        }
+
+            .local .chatroomMessage {
+                margin-left: 110px;
+                margin-right: 5px;
+                background-color: #98fb98;
+                order: -1;
+                color: black;
     </style>
     
     @await RenderSectionAsync("Styles", required: false)
@@ -100,12 +133,12 @@
         <nav>
              
             <ul id="alink" class="Navigationbar_Member">
-                @{
-                    if(Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)){
-                        string  json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
-                        NormalMember x = JsonSerializer.Deserialize<NormalMember>(json);
-                        string membername = x.MemberName.Substring(1, 2);
-                          if(x.MemberPhotoFile!=null){
+                    @{
+                        if(Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)){
+                            string  json = Context.Session.GetString(CDictionary.SK_LOGINED_USER);
+                            NormalMember x = JsonSerializer.Deserialize<NormalMember>(json);
+                            string membername = x.MemberName;
+                            if(x.MemberPhotoFile!=null){
 
                                     <li><a href=@Url.Action("Edit","CustomerMember")><img src="@Url.Content($"~/images/Customer/Member/{x.MemberPhotoFile}")" style="width:55px;border-radius:30px" /><span class="spaname">@membername</span><p>&emsp;會員中心</p></a></li>
                           
@@ -138,53 +171,56 @@
         <a asp-area="" asp-controller="Home" asp-action="CIndex"><img class="Footer_Logo" src="~/images/Customer/Navigation/shibaLogo_row1.png" /></a>
         <p><a asp-area="" asp-controller="Home" asp-action="CIndex">&copy;&ensp;2023&ensp;ShibaDaily&ensp;臺灣</a></p>
     </footer>
+
+
         @*Azure機器人*@
-        <div class="azureLogo"
+        <div class="azureLogo position-fixed"
              id="azureLogo"
              data-bs-toggle="collapse"
              data-bs-target="#azure"
              aria-expanded="false"
-             aria-controls="collapseExample">
+             aria-controls="azure">
             <img src="@Url.Content("~/images/Problem/DailyBot.png")" alt="DailyLogo" />
         </div>
-        <div class="azure collapse" id="azure">
+        <div class="azure collapse position-fixed" id="azure">
             <div class="card card-body ">
-                <iframe src='https://webchat.botframework.com/embed/msit14501daily-bot?s=sBZOKBWuvAU.FFRe_6cBbQ1LCnnx85WWa4mkmpEfJqewEceFCfWMPMw' style='min-width: 380px;max-width:380px; min-height: 700px; border:none;'></iframe>
+                <iframe src="https://webchat.botframework.com/embed/shibaDailyBot?s=gySBdYrhTJA.xpabJgu38KhBw_csUQRj3-DYvQzPmXCIGx-g1jiqShk" style='min-width: 380px;max-width:380px;height: 100%; border:none;'></iframe>
             </div>
+            
         </div>
 
         <!-- 要把collapse 加入id=collapseExample的class裡 -->
         <!-- 手動刻 -->
-        <div class="logoDiv "
+        <div class="logoDiv position-fixed"
              id="logoDiv"
              data-bs-toggle="collapse"
-             data-bs-target="#collapseExample"
+             data-bs-target="#shibaDaily"
              aria-expanded="false"
-             aria-controls="collapseExample">
+             aria-controls="shibaDaily">
             <img src="@Url.Content("~/images/Problem/DailyBot.png")" alt="DailyLogo" />
         </div>
 
 
-        <div class="logo collapse" id="collapseExample">
+        <div class="logo collapse position-fixed" id="shibaDaily">
             <div class="card card-body" style="">
                 <!-- 以下自己刻 -->
-                <div class="msgDiv scroll">
-                    <div class="display serviceDiv">
+                <div class="msgDivProblem scroll">
+                    <div class="displayProblem serviceDiv">
                         <div class="imgDiv"><img src="~/images/Problem/dailyLogo.png" /></div>
                         <div class="serviceMsg">
                             你好，請輸入問題，以便為您解答!
                             <div class="qDiv">
                                 <p>&nbsp;常見問題:</p>
                                 <table class="table table-hover">
-                                    <tr><td style="border-bottom:1px solid lightgray">變更或取消訂單</td></tr>
-                                    <tr><td style="border-bottom:1px solid lightgray">收到的商品有誤</td></tr>
-                                    <tr><td style="border-bottom:1px solid lightgray">沒收到優惠券</td></tr>
-                                    <tr><td style="border-bottom:1px solid lightgray">信用卡退款</td></tr>
+                                    <tr name="trProblem"><td style="border-bottom:1px solid lightgray">變更或取消訂單</td></tr>
+									<tr name="trProblem"><td style="border-bottom:1px solid lightgray">收到的商品有誤</td></tr>
+									<tr name="trProblem"><td style="border-bottom:1px solid lightgray">沒收到優惠券</td></tr>
+									<tr name="trProblem"><td style="border-bottom:1px solid lightgray">帳號無法使用</td></tr>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    <div id="resultDiv">
+                    <div id="resultDivProblem">
                         @*<div class="display userDiv">
                         <div class="userMsg">信用卡退款</div>
                         <div class="imgDiv"><img src="images/user.png" alt="" /></div>
@@ -192,53 +228,101 @@
                     </div>
                 </div>
 
-                <div class="txtDiv display">
-                    <input type="text" id="txt" />
-                    <button id="btnSubmit" type="button"><img src="~/images/Problem/send.png" /></button>
+                <div class="txtDiv displayProblem">
+                    <input type="text" id="txtProblem" />
+                    <button id="btnSubmitProblem" type="button"><img src="~/images/Problem/send.png" /></button>
                 </div>
             </div>
         </div>
-        @*聊天室*@
-        <div class="logo collapse" id="collapseExample">
-            <div class="card card-body" style="">
-                <!-- 以下自己刻 -->
-                <div class="msgDiv scroll">
-                    <div class="display serviceDiv">
-                        <div class="imgDiv"><img src="~/images/Problem/dailyLogo.png" /></div>
-                        <div class="serviceMsg">
-                           
-                            <div class="qDiv">
-                                <p>&nbsp;常見問題:</p>
-                                <table class="table table-hover">
-                                    <tr><td style="border-bottom:1px solid lightgray">變更或取消訂單</td></tr>
-                                    <tr><td style="border-bottom:1px solid lightgray">收到的商品有誤</td></tr>
-                                    <tr><td style="border-bottom:1px solid lightgray">沒收到優惠券</td></tr>
-                                    <tr><td style="border-bottom:1px solid lightgray">信用卡退款</td></tr>
-                                </table>
+        @*聊聊*@
+        <button type="button" class="btn btn-primary position-fixed" style="right:10px;bottom:0px;width:90px" id="showChatRoomBtn" data-bs-toggle="collapse" data-bs-target="#exampleModal">
+            聊聊 <span class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2" id="newMessageAlarm"><span class="visually-hidden">unread messages</span></span>
+        </button>
+        @*隱藏*@
+        <div class="collapse position-fixed " id="exampleModal" aria-hidden="true" style="right:10px; bottom:5px; width:630px; ">
+            <div class="card card-body pt-1 p-0 m-0">
+                <div style="width:630px;height:520px;" class="m-0 p-0">
+                    <div id="head" class="row justify-content-center" style="width:625px;height:40px;">
+                        <div class="col-2 row justify-content-center"><div class="mx-auto "><i>聊聊</i></div></div>
+                        <div class="col-8"></div>
+                        <button type="button" class="btn-close col-2" data-bs-toggle="collapse" data-bs-target="#exampleModal"></button>
+
+                    </div>
+                    <hr class="p-0 m-0" size="1px" align="center" width="98%" color="black">
+
+                    <div id="body" style="width:610px;height:520px;" class="justify-content-center container p-1 m-0">
+                        <div class="row container p-0 m-0 ">
+                            <div class="col-8" style="background-color:#F4F5F7;">
+                                @*現在對話人的名稱*@
+                                <div>
+                                    <div id="ChatNowUser" style="padding-left:12px;">kelly</div>
+                                    <div hidden>
+                                        <input value="" id="ChatNowUserid"></input>
+                                        <input value="" id="ChatNowUserChatid"></input>
+                                    </div>
+                                </div>
+                                <hr class="p-0 m-0" size="1px" align="center" width="98%" color="black">
+                                <div class="" style="overflow-y:auto;overflow-x:hidden">
+
+                                    @*訊息*@
+                                    <div id="chatmessageDiv" class="chatroomDialogue">
+                                        @*對方*@
+                                        @*<div class="chatroomUser remote">
+                                        <div class="chatroomMessage">
+                                        你好~
+                                        </div>
+                                        </div>*@
+                                        @*自己*@
+                                        @*<div class="chatroomUser local">
+                                        <div class="chatroomMessage">
+                                        你好!
+                                        </div>
+                                        </div>*@
+
+                                    </div>
+                                    @*輸入訊息*@
+
+                                    <div class="row">
+                                        <input class="col-9" type="text" id="chatMessageInput" style="margin-left:15px"></input>
+                                        <input class="col-2" type="button" id="chatMessagebtn" value="送出"></input>
+
+                                    </div>
+                                </div>
+                            </div>
+                            @*過話對話的人*@
+                            <div class="col-4  p-0 m-0 overflow-auto " style="background-color:bisque">
+
+                                <div style="height:470px" id="chatOthersUser" class="container p-0 m-0">
+                                    @*用戶*@
+                                    <div class="row  border-3 p-0 m-0 back" style="background-color:azure">
+                                        <div class="col-5 p-1" id="chatOthersUserImg"><img src="~/images/4c8b3a99-bc8e-43f6-b351-44221fbd8219.jpg" width="48px" height="48px" /></div>
+                                        <div class="col-7 ">kelly</div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                    </div>
-                    <div id="resultDiv">
-                        @*<div class="display userDiv">
-                        <div class="userMsg">信用卡退款</div>
-                        <div class="imgDiv"><img src="images/user.png" alt="" /></div>
-                        </div>*@
-                    </div>
-                </div>
 
-                <div class="txtDiv display">
-                    <input type="text" id="txt" />
-                    <button id="btnSubmit" type="button"><img src="~/images/Problem/send.png" /></button>
+                    </div>
+
                 </div>
             </div>
         </div>
+
+
+
+
+
+
 
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-        <script src="~/js/bot.js"></script>  @*機器人Js檔*@
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    @*<script src="~/js/site.js" asp-append-version="true"></script>*@
+
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- <script src="~/js/site.js" asp-append-version="true"></script> -->
+
     @await RenderSectionAsync("UpperScripts", required: false)
     <script>
         $(function(){
@@ -283,8 +367,13 @@
 
         });
 
+   
 
+           
     </script>
+        <script src="@Url.Content("~/js/signalr/dist/browser/signalr.js")"></script>
+        <script src="@Url.Content("~/js/ChatRoom.js")"></script>
+        <script src="@Url.Content("~/js/bot.js")"></script>  @*機器人Js檔*@
         @await RenderSectionAsync("Scripts", required: false)
     </div>
 </body>

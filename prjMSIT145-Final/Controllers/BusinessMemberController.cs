@@ -113,7 +113,7 @@ namespace prjMSIT145_Final.Controllers
                 _context.SaveChanges();
                 Img = NewImg;
             }
-            CBBusinessMember vm = new CBBusinessMember();
+            CBBusinessMemberViewModel vm = new CBBusinessMemberViewModel();
             vm._businessMember = member;
             vm.Fid = member.Fid;
             vm.MemberName = member.MemberName;
@@ -135,7 +135,7 @@ namespace prjMSIT145_Final.Controllers
             return View(vm);
         }
         [HttpPost]
-        public IActionResult BRevise(CBBusinessMember vm)
+        public IActionResult BRevise(CBBusinessMemberViewModel vm)
         {
             BusinessMember member = _context.BusinessMembers.FirstOrDefault(m => m.Fid == vm.Fid);
             BusinessImg img = _context.BusinessImgs.FirstOrDefault(i => i.BFid == vm.Fid);
@@ -191,9 +191,34 @@ namespace prjMSIT145_Final.Controllers
             return View();
         }
 
+        public IActionResult BLogout()
+        {
+            HttpContext.Session.Remove(CDictionary.SK_LOGINED_Business);
+            return RedirectToAction("Blogin");
+        }
+        public ActionResult BImgnName()
+        {
+            if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
+            {
+                string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
 
+                BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
+                BusinessImg img = _context.BusinessImgs.FirstOrDefault(i => i.BFid == member.Fid);
 
+                CBusinessImgnNameViewModel vm = new CBusinessImgnNameViewModel();
 
+                //if (img.LogoImgFileName == null)
+                //    vm.BPhoto = "~/adminImg/logo2.png";
+                //else
+                vm.BPhoto = img.LogoImgFileName;
+
+                vm.BName = member.MemberName;
+
+                return Json(vm);
+            }
+            else
+            return RedirectToAction("Blogin");
+        }
 
     }
 }

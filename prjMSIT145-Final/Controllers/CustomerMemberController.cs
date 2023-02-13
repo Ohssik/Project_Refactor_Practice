@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Apis.Auth;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
@@ -36,7 +37,7 @@ namespace prjMSIT145_Final.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Login(CLoginViewModel vm)
+        public ActionResult Login(CLoginViewModel vm)                                                                             //登入動作
         {
 
 
@@ -58,35 +59,142 @@ namespace prjMSIT145_Final.Controllers
             return View();
         }
 
-        public ActionResult loginmailverify(CLoginViewModel vm)
+        public ActionResult loginmailverify(CLoginViewModel vm)                                                              //登入顯示會員狀態
         {
             NormalMember x = _context.NormalMembers.FirstOrDefault(c => c.Phone.Equals(vm.txtAccount) && c.Password.Equals(vm.txtPassword));
             if (x != null)
             {
-                if (x.EmailCertified == 1)
+                if (x.IsSuspensed == 1 && x.EmailCertified ==1)
                 {
-                    return Json("");
+                    return Json("此帳號被停權");
                 }
-                return Json("尚未開通會員資格");
+                else {
+                    if (x.EmailCertified == 1 &&x.IsSuspensed==0)
+                    {
+                        return Json("");
+                    }
+                    else
+                    {
+                        return Json("尚未開通會員資格");
+                    }
+                }
+               
+                
             }
 
             return Json("帳號或密碼有錯");
         }
+        public IActionResult ValidGoogleLogin()                                                                                                  //google
+        {
+            string? formCredential = Request.Form["credential"]; //回傳憑證
+            string? formToken = Request.Form["g_csrf_token"]; //回傳令牌
+            string? cookiesToken = Request.Cookies["g_csrf_token"]; //Cookie 令牌
 
-        
+            // 驗證 Google Token
+            GoogleJsonWebSignature.Payload? payload = VerifyGoogleToken(formCredential, formToken, cookiesToken).Result;
+            if (payload == null)
+            {
+                // 驗證失敗
+                ViewData["Msg"] = "驗證 Google 授權失敗";
+                return Redirect("~/Home/CIndex");
+            }
+            else
+            {
+                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Email == payload.Email);
+                if (member != null)
+                {
+                    CLoginViewModel vm = new CLoginViewModel();
+                    vm.txtAccount = member.Phone;
+                    vm.txtPassword = member.Password;
+                    Login(vm);
+                }
+                else
+                {
+                    NormalMember x = new NormalMember();
+
+                    x.Email = payload.Email;
+                    x.MemberName = payload.Name;
+
+                    return RedirectToAction("Register", x);
+
+                }
+
+            };
+            return Redirect("~/Home/CIndex");
+        }
+
+        /// <summary>
+        /// 驗證 Google Token
+        /// </summary>
+        /// <param name="formCredential"></param>
+        /// <param name="formToken"></param>
+        /// <param name="cookiesToken"></param>
+        /// <returns></returns>
+        public async Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string? formCredential, string? formToken, string? cookiesToken)   //google
+        {
+            // 檢查空值
+            if (formCredential == null || formToken == null && cookiesToken == null)
+            {
+                return null;
+            }
+
+            GoogleJsonWebSignature.Payload? payload;
+            try
+            {
+                // 驗證 token
+                if (formToken != cookiesToken)
+                {
+                    return null;
+                }
+
+                // 驗證憑證
+                IConfiguration Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
+                string GoogleApiClientId = Config.GetSection("GoogleApiClientId").Value;
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new List<string>() { GoogleApiClientId }
+                };
+                payload = await GoogleJsonWebSignature.ValidateAsync(formCredential, settings);
+                if (!payload.Issuer.Equals("accounts.google.com") && !payload.Issuer.Equals("https://accounts.google.com"))
+                {
+                    return null;
+                }
+                if (payload.ExpirationTimeSeconds == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    DateTime now = DateTime.Now.ToUniversalTime();
+                    DateTime expiration = DateTimeOffset.FromUnixTimeSeconds((long)payload.ExpirationTimeSeconds).DateTime;
+                    if (now > expiration)
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+            return payload;
+        }
 
 
-        public ActionResult Loginout()
+
+
+
+        public ActionResult Loginout()                                                                                          //登出
         {
             HttpContext.Session.Remove(CDictionary.SK_LOGINED_USER);
 
             return Redirect("~/Home/CIndex");
             //return RedirectToAction("Index", "CustomerMember");
         }
-        public IActionResult Register()
+        public IActionResult Register(NormalMember member)
         {
 
-            return View();
+            return View(member);
         }
         [HttpPost]
         public IActionResult Register(CNormalMemberViewModel vm, IFormFile photo)
@@ -154,6 +262,20 @@ namespace prjMSIT145_Final.Controllers
             vm.EmailCertified = rnd.Next(10000000, 90000000);
             _context.Add(vm.member);
             _context.SaveChanges();
+
+            //聊天室相關
+            ChatroomUser chatroomUser = new ChatroomUser();
+            chatroomUser.UserType = 0;//0是客戶 1是商家 2 是平台 欄位改成INT
+            chatroomUser.Memberfid = vm.member.Fid;
+            _context.ChatroomUsers.Add(chatroomUser);
+            _context.SaveChanges();
+            vm.member.ChatroomUserid = chatroomUser.ChatroomUserid;
+            _context.SaveChanges();
+
+
+
+
+
             string url = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={vm.Fid}";
             string smtpAddress = "smtp.gmail.com";
             //設定Port
@@ -167,10 +289,10 @@ namespace prjMSIT145_Final.Controllers
             //主旨
             string subject = "註冊驗證信";
             //內容
-            string body =$"<a href={url}>請點此連結</a>,並回表單輸入此驗證碼{vm.EmailCertified}";
+            string body =$"<h2>新會員你好請點此開通連結</h2><h3><br><a href={url}>請點此開通連結</a>並回表單輸入此驗證碼{vm.EmailCertified}</h3>";
             using (MailMessage mail = new MailMessage())
             {
-                mail.From = new MailAddress(emailFrom);
+                mail.From = new MailAddress(emailFrom,"日柴", System.Text.Encoding.UTF8);
                 mail.To.Add(emailTo);
                 mail.Subject = subject;
                 mail.Body = body;
@@ -185,6 +307,7 @@ namespace prjMSIT145_Final.Controllers
 
 
             }
+
                 return Redirect("~/Home/CIndex");
           
         }
@@ -404,55 +527,137 @@ namespace prjMSIT145_Final.Controllers
           return Json("舊密碼正確");
 
         }
-        
-
-
         public IActionResult Forgetpassword()
         {
-
+            
             return View();
+
+        }
+
+        [HttpPost]
+        public IActionResult Forgetpassword(CNormalMemberViewModel vm)
+        {
+            if (vm.Phone == null || vm.Email == null)
+            {
+                return View();
+            }
+            else
+            {
+                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Phone == vm.Phone && c.Email == vm.Email);
+                if (member == null)
+                {
+                    return View();
+                }
+                else
+                {
+                    string smtpAddress = "smtp.gmail.com";
+                    //設定Port
+                    int portNumber = 587;
+                    bool enableSSL = true;
+                    //填入寄送方email和密碼
+                    string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?Fid={member.Fid}";
+                    string emailFrom = "a29816668@gmail.com";
+                    string emailpassword = "joksdquaswjdyzpu";
+                    //收信方email 可以用逗號區分多個收件人
+                    string emailTo = vm.Email;
+                    //主旨
+                    string subject = "重製密碼";
+                    //內容
+                    string body = $"<h2>重製密碼</h2><h3><br><a href={url}>請點此連結重設密碼</a></h3>";
+                    using (MailMessage mail = new MailMessage())
+                    {
+                        mail.From = new MailAddress(emailFrom,"日柴", System.Text.Encoding.UTF8);
+                        mail.To.Add(emailTo);
+                        mail.Subject = subject;
+                        mail.Body = body;
+                        // 若你的內容是HTML格式，則為True
+                        mail.IsBodyHtml = true;
+                        using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                        {
+                            smtp.Credentials = new NetworkCredential(emailFrom, emailpassword);
+                            smtp.EnableSsl = enableSSL;
+                            smtp.Send(mail);
+                        }
+
+
+                    }
+
+                    //return Redirect("~/Home/CIndex");
+                    return Redirect("~/Home/CIndex");
+
+                }
+
+            }
+
+                
+        }
+        public IActionResult Forgetpasswordapi(CNormalMemberViewModel vm)
+        {
+            if (vm.Email!= null && vm.Phone!=null)
+            {
+                NormalMember member =_context.NormalMembers.FirstOrDefault(c=>c.Email== vm.Email && c.Phone==vm.Phone);
+                if (member != null) {
+                    return Json("已送出重製密碼信件");
+                    }
+                else
+                {
+                    return Json("帳號或Email錯誤");
+                }
+                
+            }
+
+                 return Json("請兩格都不要空白");
         }
 
 
-
-        [HttpPost]
-        public IActionResult Forgetpassword(string Email)
+        public IActionResult forgetalterpassword(int? Fid)
         {
-            string smtpAddress = "smtp.gmail.com";
-            //設定Port
-            int portNumber = 587;
-            bool enableSSL = true;
-            //填入寄送方email和密碼
-            string emailFrom = "a29816668@gmail.com";
-            string emailpassword = "joksdquaswjdyzpu";
-            //收信方email 可以用逗號區分多個收件人
-            string emailTo = Email;
-            //主旨
-            string subject = "Hello";
-            //內容
-            string body = "https://localhost:7266/CustomerMember/Register";
-            using (MailMessage mail = new MailMessage())
+            if (Fid != null)
             {
-                mail.From = new MailAddress(emailFrom);
-                mail.To.Add(emailTo);
-                mail.Subject = subject;
-                mail.Body = body;
-                // 若你的內容是HTML格式，則為True
-                mail.IsBodyHtml = false;
-                using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Fid == Fid);
+                if (member != null)
                 {
-                    smtp.Credentials = new NetworkCredential(emailFrom, emailpassword);
-                    smtp.EnableSsl = enableSSL;
-                    smtp.Send(mail);
+                    return View(member);
                 }
+
+                return Redirect("~/Home/CIndex");
 
 
             }
 
 
-
-            return Content("已寄出");
+            return Redirect("~/Home/CIndex");
         }
+        [HttpPost]
+        public IActionResult forgetalterpassword(NormalMember member)
+        {
+            if(member.Password == null)
+            {
+                return View(member);
+            }
+            else
+            {
+                NormalMember x=_context.NormalMembers.FirstOrDefault(c=>c.Fid==member.Fid);
+                if (x == null)
+                {
+                    return View();
+                }
+                else
+                {
+                    x.Password = member.Password;
+                    _context.SaveChanges();
+                    return Redirect("~/Home/CIndex");
+                }
+               
+            }
+         }
+
+
+
+
+
+
+
         public IActionResult getCartOrderQty(string data)
         {
             if (!string.IsNullOrEmpty(data))
