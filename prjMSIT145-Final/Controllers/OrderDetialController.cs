@@ -281,8 +281,8 @@ namespace prjMSIT145_Final.Controllers
             var q = from o in _context.Orders
                     join b in _context.BusinessMembers
                     on o.BFid equals b.Fid
-                    join a in _context.PaymentTermCategories
-                    on o.PayTermCatId equals a.Fid
+                    //join a in _context.PaymentTermCategories
+                    //on o.PayTermCatId equals a.Fid
                     where o.Fid == Fid
                     select new
                     {
@@ -292,12 +292,12 @@ namespace prjMSIT145_Final.Controllers
                         BMemberName = b.MemberName,
                         BMemberPhone = b.Phone,
                         BAddress = b.Address,
-                        PickUpDate = o.PickUpDate,
-                        PickUpTime = o.PickUpTime,
-                        PickUpType = o.PickUpType,
+                        //PickUpDate = o.PickUpDate,
+                        //PickUpTime = o.PickUpTime,
+                        //PickUpType = o.PickUpType,
                         PickUpPerson = o.PickUpPerson,
                         PickUpPersonPhone = o.PickUpPersonPhone,
-                        PayTernCatId = a.PaymentType,
+                        //PayTernCatId = a.PaymentType,
                         OrderState = o.OrderState,
                         Memo = o.Memo,
                         OrderTime = o.OrderTime,
@@ -349,11 +349,11 @@ namespace prjMSIT145_Final.Controllers
                     vm.Fid = c.Fid;
                     vm.BFid = c.BFid;
                     vm.NFid = c.NFid;
-                    vm.PickUpTime = c.PickUpTime;
-                    vm.PickUpDate = c.PickUpDate;
-                    vm.PickUpType = c.PickUpType;
+                    //vm.PickUpTime = c.PickUpTime;
+                    //vm.PickUpDate = c.PickUpDate;
+                    //vm.PickUpType = c.PickUpType;
                     vm.PickUpPersonPhone = c.PickUpPersonPhone;
-                    vm.PayTermCatId = c.PayTernCatId;
+                    //vm.PayTermCatId = c.PayTernCatId;
                     vm.Memo = c.Memo;
 
                     vm.items = new List<COrderItemViewModel>();
