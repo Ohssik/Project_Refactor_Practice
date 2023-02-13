@@ -90,8 +90,8 @@ namespace prjMSIT145_Final.Controllers
 			ViewData["ReceiveObj"] = result.ReceiveObj;
 			ViewData["TradeInfo"] = result.TradeInfo;
 
-			//return RedirectToAction("")  返回歷史訂單明細
-			return View();
+			//return RedirectToAction("")  返回歷史訂單明細OrderDetial/List
+			return RedirectToAction("List", "OrderDetial");
 		}
 
 		//沒用到
