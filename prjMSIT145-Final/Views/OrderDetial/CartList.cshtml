@@ -78,7 +78,7 @@
         .orderTrashAndPen {
             display: flex;
             /* position: absolute;
-                                                            right:20px; */
+                                                                                            right:20px; */
         }
 
             .orderTrashAndPen button {
@@ -283,30 +283,31 @@
             margin-left: -2400px;
             transition: all .5s;
         }
-        .borderNone{
-            border:solid 0px;
+
+        .borderNone {
+            border: solid 0px;
             outline: none;
         }
     </style>
 }
 @*刪除*@
 <@*div class="modal fade" id="btnDeleteModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header" style="width:100%">
-                <h5 class="modal-title" id="exampleModalLabel">提醒</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                確定要刪除嗎?
-            </div>
-            <div class="modal-footer" style="width:100%">
-                <button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
-                <a id="linkDelete"><button style="width:70px;" class="btnDeleteCheck" data-bs-dismiss="modal">刪除</button></a>
-            </div>
-        </div>
-    </div>
-</div>*@
+       <div class="modal-dialog modal-dialog-centered">
+       <div class="modal-content">
+       <div class="modal-header" style="width:100%">
+       <h5 class="modal-title" id="exampleModalLabel">提醒</h5>
+       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+       </div>
+       <div class="modal-body">
+       確定要刪除嗎?
+       </div>
+       <div class="modal-footer" style="width:100%">
+       <button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
+       <a id="linkDelete"><button style="width:70px;" class="btnDeleteCheck" data-bs-dismiss="modal">刪除</button></a>
+       </div>
+       </div>
+       </div>
+       </div>*@
 <div class="changePage">
   <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="Fid" value="@Model.Fid" />
@@ -317,7 +318,7 @@
                 <div class="flexAndItemsCenter divMargin cardBackgroundColor">
                     <div>
                         <h4 id="storeName">店家名稱</h4>
-                           @* <h6 id="storePhone"><i class="fa-solid fa-phone name="BMemberPhone">@Model.BMemberPhone</i> </h6>*@
+                            @* <h6 id="storePhone"><i class="fa-solid fa-phone name="BMemberPhone">@Model.BMemberPhone</i> </h6>*@
                                 <h6 id="storePhone"><i class="fa-solid fa-phone"></i><input class="fa-solid borderNone"  value="&nbsp;@Model.BMemberPhone" style="color:#9F4E27" /> </h6>
                     </div>
                     <button class="storeIntro_btn">揪團</button>
@@ -335,7 +336,7 @@
                     </fieldset>
                     <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
                     <h5>門市位置</h5>
-                       <div class="font-size borderNone">@Model.Address</div>    
+                       <div class="font-size borderNone">@Model.Address</div>
                 </div>
                 <!-- 會員訂購資訊 -->
                 <div class="divMargin cardBackgroundColor">
@@ -360,37 +361,37 @@
                         </div>
                     </div>
                     <!-- *****動態產生*****至198行 -->
-                    @foreach (var item in Model.items)
-                    {
-                        <div class="itemCard_padding_margin button_Icon_Guide_BackGroundColor">
+                        @foreach (var item in Model.items)
+                        {
+                                        <div class="itemCard_padding_margin button_Icon_Guide_BackGroundColor">
 
-                            <!-- *餐點資訊,依實際點選內容增加span -->
-                            <h6>@item.ProductName</h6>
-                            <div class="flexAndItemsCenter displayBetween ">
-                                <div>
-                                    <span id="itemDetailFont" class="spanFont">
-                                        @foreach (var item2 in item.OptionName)
-                                        {
-                                            <span><span>@item2</span> /</span>
-                                        }
-                                        <span><span>$@item.OptionAmount</span> /</span>
-                                        <span><span>@item.Qty 份</span> </span>
-                                    </span>
-                                </div>
-                                <div class="orderTrashAndPen">
-                                    <!-- 設定觸發事件時更改背景顏色 -->
-                                    <div class="editBtn">
-                                        <button class="penBackGroundColor">
-                                            <i class="fa-solid fa-pen"></i>
-                                        </button>
-                                    </div>
-                                    <td>
-                                        <button class="buteditgar" name="btnDelete" data-bs-toggle="modal" data-bs-target="btnDeleteModel"><img src="../images/Business/garbage.png"></button>
-                                    </td>
-                                </div>
-                            </div>
-                        </div>
-                    }
+                                            <!-- *餐點資訊,依實際點選內容增加span -->
+                                            <h6>@item.ProductName</h6>
+                                            <div class="flexAndItemsCenter displayBetween ">
+                                                <div>
+                                                    <span id="itemDetailFont" class="spanFont">
+                                            @foreach (var item2 in item.OptionName)
+                                            {
+                                                                            <span><span>@item2</span> /</span>
+                                            }
+                                                        <span><span>$@item.OptionAmount</span> /</span>
+                                                        <span><span>@item.Qty 份</span> </span>
+                                                    </span>
+                                                </div>
+                                                <div class="orderTrashAndPen">
+                                                    <!-- 設定觸發事件時更改背景顏色 -->
+                                                    <div class="editBtn">
+                                                        <button class="penBackGroundColor">
+                                                            <i class="fa-solid fa-pen"></i>
+                                                        </button>
+                                                    </div>
+                                                    <td>
+                                                        <button class="buteditgar" name="btnDelete" data-bs-toggle="modal" data-bs-target="btnDeleteModel"><img src="../images/Business/garbage.png"></button>
+                                                    </td>
+                                                </div>
+                                            </div>
+                                        </div>
+                        }
                 </div>
                 <!-- 優惠券(可略) -->
                 <div class="divMargin cardBackgroundColor" id="offerDiv">
@@ -420,7 +421,7 @@
                     <div class="flexAndItemsCenter orderDivBottomBorder">
                         <div>
                             <h4 id="storeName">店家名稱</h4>
-                            @*<h6 id="storePhone"><i class="fa-solid fa-phone"></i> @Model.BMemberPhone</h6>*@
+                                @*<h6 id="storePhone"><i class="fa-solid fa-phone"></i> @Model.BMemberPhone</h6>*@
                         </div>
                         <button class="storeIntro_btn">揪團</button>
                     </div>
@@ -467,39 +468,39 @@
                             </div>
                         </div>
                         <!-- *****動態產生*****至198行 -->
-                        @foreach (var item in Model.items)
-                        {
-                            <div class="itemCard_padding_margin button_Icon_Guide_BackGroundColor">
+                            @foreach (var item in Model.items)
+                            {
+                                            <div class="itemCard_padding_margin button_Icon_Guide_BackGroundColor">
 
-                                <!-- *餐點資訊,依實際點選內容增加span -->
-                                <h6>@item.ProductName</h6>
-                                <div class="flexAndItemsCenter displayBetween ">
-                                    <div>
-                                        <span id="itemDetailFont" class="spanFont">
-                                            @foreach (var item2 in item.OptionName)
-                                            {
-                                                <span><span>@item2</span> /</span>
-                                            }
-                                            <span><span>$@item.OptionAmount</span> /</span>
-                                            <span><span>@item.Qty 份</span> </span>
-                                        </span>
-                                    </div>
-                                    <div class="orderTrashAndPen">
-                                        <!-- 設定觸發事件時更改背景顏色 -->
-                                        <div class="editBtn">
-                                            <button class="penBackGroundColor">
-                                                <i class="fa-solid fa-pen"></i>
-                                            </button>
-                                        </div>
-                                        <div class="deleteBtn">
-                                            <button>
-                                                <i class="fa-regular fa-trash-can"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
+                                                <!-- *餐點資訊,依實際點選內容增加span -->
+                                                <h6>@item.ProductName</h6>
+                                                <div class="flexAndItemsCenter displayBetween ">
+                                                    <div>
+                                                        <span id="itemDetailFont" class="spanFont">
+                                                @foreach (var item2 in item.OptionName)
+                                                {
+                                                                                <span><span>@item2</span> /</span>
+                                                }
+                                                            <span><span>$@item.OptionAmount</span> /</span>
+                                                            <span><span>@item.Qty 份</span> </span>
+                                                        </span>
+                                                    </div>
+                                                    <div class="orderTrashAndPen">
+                                                        <!-- 設定觸發事件時更改背景顏色 -->
+                                                        <div class="editBtn">
+                                                            <button class="penBackGroundColor">
+                                                                <i class="fa-solid fa-pen"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="deleteBtn">
+                                                            <button>
+                                                                <i class="fa-regular fa-trash-can"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                            }
                     </div>
                     <!-- 優惠券(可略) -->
                     <div class="divMargin cardBackgroundColor" id="offerDiv">
@@ -661,220 +662,220 @@
                 </div>
             </div>
         </div>
-    </div>  
+    </div>
    </form>
 </div>
 @section Scripts{
-    <script src="@Url.Content("~/js/jquery-3.6.2.js")"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        let DateValue=``;
-        let PickupPersonValue=``;
-        let PickUpPersonPhoneValue=``;
-        const btnDelete = document.getElementsByName("btnDelete");
-        const btnDeleteCheck = document.querySelector("#linkDelete")
+                    <script src="@Url.Content("~/js/jquery-3.6.2.js")"></script>
+                    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+                    <script>
+                let DateValue = ``;
+                let PickupPersonValue = ``;
+                let PickUpPersonPhoneValue = ``;
+                const btnDelete = document.getElementsByName("btnDelete");
+                const btnDeleteCheck = document.querySelector("#linkDelete")
         @*網頁重新整理*@
-            $("#btnReset").click(function () {
-                location.reload();
-            })
+                    $("#btnReset").click(function () {
+                        location.reload();
+                    })
         @*有無加購塑膠袋*@
-            $("#plastic").click(function () {
-                let checked = $("#plastic").prop("checked");
-                if (checked) {
-                    console.log(checked)
-                    $("#plasticPrice").text("$ 2");
-                    $("#AddTotal").val(@Model.TotalAmount+2);
-                    $("#TotalAmount").text("$ " + (@Model.TotalAmount+2));
-                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount+2));
-                }
-                else {
-                    $("#plasticPrice").text("您未加購塑膠袋");
-                    $("#AddTotal").val(@Model.TotalAmount);
-                    $("#TotalAmount").text("$ " + (@Model.TotalAmount));
-                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount));
-                }
-            })
+                    $("#plastic").click(function () {
+                        let checked = $("#plastic").prop("checked");
+                        if (checked) {
+                            console.log(checked)
+                            $("#plasticPrice").text("$ 2");
+                            $("#AddTotal").val(@Model.TotalAmount+2);
+                            $("#TotalAmount").text("$ " + (@Model.TotalAmount+2));
+                            $("#TotalAmount2").text("$ " + (@Model.TotalAmount+2));
+                        }
+                        else {
+                            $("#plasticPrice").text("您未加購塑膠袋");
+                            $("#AddTotal").val(@Model.TotalAmount);
+                            $("#TotalAmount").text("$ " + (@Model.TotalAmount));
+                            $("#TotalAmount2").text("$ " + (@Model.TotalAmount));
+                        }
+                    })
 
         @*選擇付款方式*@
-        $("#cash").click(function () {
-                
-                let checked = $("#cash").prop("checked");
-                if (checked) {
-                    console.log(checked)
-                    $("#CPayTermCatId").text("現金");
-                    $("#cash").val("1");
-                    
-                }
-                else {
-                    $("#CPayTermCatId").text("信用卡");
-                   
-                }
+                    $("#cash").click(function () {
 
-                console.log($("#CPayTernCatId").text())
-            })
-        $("#cardit").click(function () {
-            let checked = $("#cardit").prop("checked");
-            if (checked) {
-                console.log(checked)
-                $("#CPayTermCatId").text("信用卡");
-                $("#cardit").val("2")
-                
-            }
-            else {
-                $("#CPayTermCatId").text("現金");
-                
-            }
-        })
+                        let checked = $("#cash").prop("checked");
+                        if (checked) {
+                            console.log(checked)
+                            $("#CPayTermCatId").text("現金");
+                            $("#cash").val("1");
 
-        //btnDelete.forEach(function (click) {
-        //    click.addEventListener("click", function () {
-        //        const id = this.parentElement.parentElement.firstElementChild;
+                        }
+                        else {
+                            $("#CPayTermCatId").text("信用卡");
 
-        //        btnDeleteCheck.addEventListener("click", function () {
-        //            btnDeleteCheck.setAttribute("href", `@Url.Content("~/OrderDetial/Delete/${id}")`);
-        //        })
-        //    })
-        //})
+                        }
+
+                        console.log($("#CPayTernCatId").text())
+                    })
+                $("#cardit").click(function () {
+                    let checked = $("#cardit").prop("checked");
+                    if (checked) {
+                        console.log(checked)
+                        $("#CPayTermCatId").text("信用卡");
+                        $("#cardit").val("2")
+
+                    }
+                    else {
+                        $("#CPayTermCatId").text("現金");
+
+                    }
+                })
+
+                //btnDelete.forEach(function (click) {
+                //    click.addEventListener("click", function () {
+                //        const id = this.parentElement.parentElement.firstElementChild;
+
+                //        btnDeleteCheck.addEventListener("click", function () {
+                //            btnDeleteCheck.setAttribute("href", `@Url.Content("~/OrderDetial/Delete/${id}")`);
+                //        })
+                //    })
+                //})
 
         @*改變日期*@
-        $("#changeDate").change(function () {
+                    $("#changeDate").change(function () {
 
-            DateValue = document.getElementById("changeDate").value
-            $("#changeDate").val(`${DateValue}`)
-        })
-        $("#changeDate").change(function () {
+                        DateValue = document.getElementById("changeDate").value
+                        $("#changeDate").val(`${DateValue}`)
+                    })
+                $("#changeDate").change(function () {
 
-            DateValue = document.getElementById("changeDate").value
-            $("#changeDate2").text(`${DateValue}`)
+                    DateValue = document.getElementById("changeDate").value
+                    $("#changeDate2").text(`${DateValue}`)
 
-        })
+                })
 
         @*改變取餐人*@
-        $("#changePickUpPerson").change(function(){
-           PickupPersonValue = document.getElementById("changePickUpPerson").value
-           $("#changePickUpPerson2").text(`${PickupPersonValue}`)
-        })
+                    $("#changePickUpPerson").change(function () {
+                        PickupPersonValue = document.getElementById("changePickUpPerson").value
+                        $("#changePickUpPerson2").text(`${PickupPersonValue}`)
+                    })
 
         @*改變取餐人電話*@
-        $("#changePickUpPersonPhone").change(function () {
-                PickUpPersonPhoneValue = document.getElementById("changePickUpPersonPhone").value
-                $("#changePickUpPersonPhone2").text(`${PickUpPersonPhoneValue}`)
-            })
+                    $("#changePickUpPersonPhone").change(function () {
+                        PickUpPersonPhoneValue = document.getElementById("changePickUpPersonPhone").value
+                        $("#changePickUpPersonPhone2").text(`${PickUpPersonPhoneValue}`)
+                    })
 
 
         @*下一頁*@
-        $(".btnToNext").click(function () {
-            event.preventDefault();
-            if (document.getElementById("slides").getAttribute("class") == "slides1") {
-                document.getElementById("slides").setAttribute("class", "slides2");
+                    $(".btnToNext").click(function () {
+                        event.preventDefault();
+                        if (document.getElementById("slides").getAttribute("class") == "slides1") {
+                            document.getElementById("slides").setAttribute("class", "slides2");
 
-            } else if (document.getElementById("slides").getAttribute("class") == "slides2") {
-                document.getElementById("slides").setAttribute("class", "slides3");
+                        } else if (document.getElementById("slides").getAttribute("class") == "slides2") {
+                            document.getElementById("slides").setAttribute("class", "slides3");
 
-            };
+                        };
 
 
 
-        });
+                    });
         @*上一頁*@
-        $(".btnToAdd").click(function () {
-            event.preventDefault();
-            if (document.getElementById("slides").getAttribute("class") == "slides3") {
-                document.getElementById("slides").setAttribute("class", "slides2");
+                    $(".btnToAdd").click(function () {
+                        event.preventDefault();
+                        if (document.getElementById("slides").getAttribute("class") == "slides3") {
+                            document.getElementById("slides").setAttribute("class", "slides2");
 
-            } else if (document.getElementById("slides").getAttribute("class") == "slides2") {
-                document.getElementById("slides").setAttribute("class", "slides1");
+                        } else if (document.getElementById("slides").getAttribute("class") == "slides2") {
+                            document.getElementById("slides").setAttribute("class", "slides1");
 
-            };
-        })
-
-
-
-        $("#btnSubmit").on("click", function () {
-            event.preventDefault();
-            window.location.href = "OrderDetial/List";
-
-        })
-
-        //綠界
-        $("#btnECPay").click(function () {
-
-            const totalPrice = Math.round($("#TotalAmount2").text().substring(1));
-
-            let pay = $("#CPayTernCatId").text();
+                        };
+                    })
 
 
-            const app = Vue.createApp({
-                data() {
-                    return {
-                        // 表單資料
-                        addForm: {
-                            MerchantOrderNo: '@ViewData["MerchantOrderNo"]'
-                            , ItemDesc: '日柴測試商品'
-                            , Amt: `${totalPrice}`
-                            , ExpireDate: '@ViewData["ExpireDate"]'
-                            , PayOption: 'ECPay'
-                            , Email: 'azsxdc91008816@gmail.com'
-                        }
-                    }
-                }
-                , methods: {
-                    // 呼叫SendToNewebPay Controller 並取得回傳Form
-                    SendToNewebPay(ChannelID) {
-                        console.log(ChannelID)
-                        var self = this;
 
-                        // 組合表單資料
-                        var postData = {};
-                        postData['ChannelID'] = ChannelID;
-                        postData['MerchantOrderNo'] = self.addForm.MerchantOrderNo;
-                        postData['ItemDesc'] = self.addForm.ItemDesc;
-                        postData['Amt'] = self.addForm.Amt;
-                        postData['ExpireDate'] = self.addForm.ExpireDate;
-                        postData['PayOption'] = self.addForm.PayOption;
-                        postData['Email'] = self.addForm.Email;
+                $("#btnSubmit").on("click", function () {
+                    event.preventDefault();
+                    window.location.href = "OrderDetial/List";
 
-
-                        // 使用 jQuery Ajax 傳送至後端
-                        $.ajax({
-                            url: '@Url.Content("~/CreditPay/SendToNewebPay")',
-                            method: 'POST',
-                            dataType: 'json',
-                            data: { inModel: postData, __RequestVerificationToken: $('@Html.AntiForgeryToken()').val() },
-                            success: function (returnObj) {
-                                $("#divContent").html(returnObj);
-                                $("#payForm").submit();
-                            },
-                            error: function (err) {
-                                alert(err.status + " " + err.statusText + '\n' + err.responseText);
-                            }
-                        });
-                    },
-                    GetReturn() {
-
-                        var postData = {};
-                        var self = this;
-                        postData['MerchantOrderNo'] = self.addForm.MerchantOrderNo;
-                        postData['Amt'] = self.addForm.Amt;
-
-                        $.ajax({
-                            url: '@Url.Content("~/CreditPay/GetReturn")',
-                            method: 'POST',
-                            dataType: 'json',
-                            data: { inModel: postData },
-                            success: function (returnObj) {
-                                console.log(returnObj)
-                            },
-                            error: function (err) {
-                                alert(err.status + " " + err.statusText + '\n' + err.responseText);
-                            }
-                        });
-                    }
-                }
-            });
-            const vm = app.mount('#app');
-
-        }
                 })
-    </script>
+
+                //綠界
+                $("#btnECPay").click(function () {
+
+                   const app = Vue.createApp({
+            data() {
+                return {
+                    // 表單資料 //, ItemDesc1: '測試商品1'
+                    //, ItemDesc2: '測試商品2'//, Amt1: '813'
+                    //, Amt2: '814' , , ChannelID:'@ViewData["ChannelID"]'
+                    addForm: {
+                        MerchantOrderNo: '@ViewData["MerchantOrderNo"]'
+                        , ItemDesc: '測試商品'
+                        , Amt: '812'
+                        , ExpireDate: '@ViewData["ExpireDate"]'
+                        , PayOption: 'ECPay'
+                        , Email: 'sean24163@hotmail.com'
+                    }
+                }
+            }
+            , methods: {
+                // 呼叫SendToNewebPay Controller 並取得回傳Form
+
+                SendToNewebPay(ChannelID) {
+                    console.log(ChannelID)
+                    var self = this;
+
+                    // 組合表單資料ChannelID;
+                    var postData = {};
+                    postData['ChannelID'] = ChannelID;
+                    postData['MerchantOrderNo'] = self.addForm.MerchantOrderNo;
+                    postData['ItemDesc'] = self.addForm.ItemDesc;
+                    //postData['ItemDesc[1]'] = self.addForm.ItemDesc;
+                    //postData['ItemDesc[2]'] = self.addForm.ItemDesc;
+                    postData['Amt'] = self.addForm.Amt;
+                    //postData['Amt[1]'] = self.addForm.Amt1;
+                    //postData['Amt[2]'] = self.addForm.Amt2;
+                    postData['ExpireDate'] = self.addForm.ExpireDate;
+                    postData['PayOption'] = self.addForm.PayOption;
+                    postData['Email'] = self.addForm.Email;
+
+
+                    // 使用 jQuery Ajax 傳送至後端
+                    $.ajax({
+                        url: '@Url.Content("~/ECPay/SendToNewebPay")',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: { inModel: postData, __RequestVerificationToken: $('@Html.AntiForgeryToken()').val() },
+                        success: function (returnObj) {
+                            $("#divContent").html(returnObj);
+                            $("#payForm").submit();
+                        },
+                        error: function (err) {
+                            alert(err.status + " " + err.statusText + '\n' + err.responseText);
+                        }
+                    });
+                },
+                GetReturn() {
+
+                    var postData = {};
+                    var self = this;
+                    postData['MerchantOrderNo'] = self.addForm.MerchantOrderNo;
+                    postData['Amt'] = self.addForm.Amt;
+
+                    $.ajax({
+                        url: '@Url.Content("~/ECPay/GetReturn")',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: { inModel: postData },
+                        success: function (returnObj) {
+                            console.log(returnObj)
+                        },
+                        error: function (err) {
+                            alert(err.status + " " + err.statusText + '\n' + err.responseText);
+                        }
+                    });
+                }
+            }
+        });
+            const vm = app.mount('#app');
+                                })
+                </script>
 }
