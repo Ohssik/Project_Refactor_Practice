@@ -17,23 +17,11 @@ namespace prjMSIT145_Final.Controllers
         {
             _context = context;
         }
-        [HttpPost]
-        public IActionResult List(int? id)
-        {
-
-            if (id == null)
-            {
-                return View();
-            }
-            return RedirectToAction("ListInfo");
-
-
-
-        }
+      
         public IActionResult List()
         {
             int NFid = 0;
-            if (HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER) == null)
+            if (!(HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)))
             {
                 return Redirect("/CustomerMember/Login");
             }

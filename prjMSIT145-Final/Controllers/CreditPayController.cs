@@ -82,13 +82,13 @@ namespace prjMSIT145_Final.Controllers
 		/// <summary>
 		/// 支付完成返回網址
 		/// </summary>
-		/// <returns></returns>
-		public IActionResult CallbackReturn(string option)
+		/// <returns></returns>string option
+		public IActionResult CallbackReturn()
 		{
-			var service = GetPayType(option);
-			var result = service.GetCallbackResult(Request.Form);
-			ViewData["ReceiveObj"] = result.ReceiveObj;
-			ViewData["TradeInfo"] = result.TradeInfo;
+			//var service = GetPayType(option);
+			//var result = service.GetCallbackResult(Request.Form);
+			//ViewData["ReceiveObj"] = result.ReceiveObj;
+			//ViewData["TradeInfo"] = result.TradeInfo;
 
 			//return RedirectToAction("")  返回歷史訂單明細OrderDetial/List
 			return RedirectToAction("List", "OrderDetial");
