@@ -17,19 +17,7 @@ namespace prjMSIT145_Final.Controllers
         {
             _context = context;
         }
-        [HttpPost]
-        public IActionResult List(int? id)
-        {
-
-            if (id == null)
-            {
-                return View();
-            }
-            return RedirectToAction("ListInfo");
-
-
-
-        }
+        
         public IActionResult List()
         {
             int NFid = 0;
@@ -234,13 +222,18 @@ namespace prjMSIT145_Final.Controllers
             if (id != null)
             {
                 OrderItem prod = _context.OrderItems.FirstOrDefault(p => p.Fid == id);
-                
+                //var opToPro = _context.ViewShowFullOrders.Where(p => p.ItemFid == id);
 
                 if (prod != null)
-                {
+                
                     _context.OrderItems.Remove(prod);
-                    _context.SaveChanges();
-                }
+                
+                //if (opToPro != null)
+                
+                //    _context.ViewShowFullOrders.RemoveRange(opToPro);
+                
+
+                _context.SaveChanges();
 
                 
             }
@@ -360,6 +353,7 @@ namespace prjMSIT145_Final.Controllers
                         item2.OptionName = new List<string>();
                         item2.OptionPrice = 0;
                         vm.TotalQty += item.ProductQty;
+                        item2.Fid = item.Fid;
 
                         var itemOption = from o in ItemName
                                          where o.ItemFid == item.Fid

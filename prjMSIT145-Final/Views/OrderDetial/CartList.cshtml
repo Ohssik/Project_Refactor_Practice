@@ -292,23 +292,7 @@
     </style>
 }
 @*刪除*@
-<@*div class="modal fade" id="btnDeleteModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header" style="width:100%">
-                <h5 class="modal-title" id="exampleModalLabel">提醒</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                確定要刪除嗎?
-            </div>
-            <div class="modal-footer" style="width:100%">
-                <button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
-                <a id="linkDelete"><button style="width:70px;" class="btnDeleteCheck" data-bs-dismiss="modal">刪除</button></a>
-            </div>
-        </div>
-    </div>
-</div>*@
+
 <div class="changePage">
   <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="Fid" value="@Model.Fid" />
@@ -333,7 +317,7 @@
                     </div>
                     <h5>預計取餐時間</h5>
                     <fieldset class="Fieldset" id="pickUpTime">
-                            <input class="font-size borderNone" name="pickUpDate" id="changeDate" type="datetime-local" value="" min="" />
+                            <input class="font-size borderNone" name="pickUpDate" id="changeDate" type="datetime-local" value="" min="2023-02-13T00:00" max="2023-02-24T12:00" />
                     </fieldset>
                     <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
                     <h5>門市位置</h5>
@@ -387,7 +371,8 @@
                                         </button>
                                     </div>
                                     <td>
-                                        <button class="buteditgar" name="btnDelete" data-bs-toggle="modal" data-bs-target="btnDeleteModel"><img src="../images/Business/garbage.png"></button>
+                                        @*<button class="buteditgar" name="btnDelete" data-bs-toggle="modal" data-bs-target="btnDeleteModel"><img src="../images/Business/garbage.png"></button>*@
+                                            @Html.ActionLink("刪除", "Delete", new {  id=item.Fid  },new {onclick = "return confirm('確定要刪除嗎')"})
                                     </td>
                                 </div>
                             </div>
@@ -569,13 +554,15 @@
 </div>
 @section Scripts{
     <script src="@Url.Content("~/js/jquery-3.6.2.js")" ></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         let DateValue=``;
         let PickupPersonValue=``;
         let PickUpPersonPhoneValue=``;
         const btnDelete = document.getElementsByName("btnDelete");
         const btnDeleteCheck = document.querySelector("#linkDelete")
+        @DateTime.MinValue dt = @DateTime.Now
+        
         @*網頁重新整理*@
         $("#btnReset").click(function () {
                 location.reload();
