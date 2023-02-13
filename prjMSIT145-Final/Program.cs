@@ -51,7 +51,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
 
-pattern: "{controller=OrderDetial}/{action=CartList}/{id?}");
+pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
 app.Run();

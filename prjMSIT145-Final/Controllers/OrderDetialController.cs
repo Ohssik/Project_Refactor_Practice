@@ -32,19 +32,19 @@ namespace prjMSIT145_Final.Controllers
         }
         public IActionResult List()
         {
-            //int NFid = 0;
-            //if (HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER) == null)
-            //{
-            //    return Redirect("/CustomerMember/Login");
-            //}
-            //NormalMember Memberdatas = JsonSerializer.Deserialize<NormalMember>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
-            //NFid = Memberdatas.Fid;
+            int NFid = 0;
+            if (HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER) == null)
+            {
+                return Redirect("/CustomerMember/Login");
+            }
+            NormalMember Memberdatas = JsonSerializer.Deserialize<NormalMember>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+            NFid = Memberdatas.Fid;
 
             List<COrderDetialViewModel> OrderDetiallist = new List<COrderDetialViewModel>();
             var OrderDatas = from O in _context.Orders
                              join B in _context.BusinessMembers
                              on O.BFid equals B.Fid
-                             //where O.NFid == NFid
+                             where O.NFid == NFid
                              select new
                              {
                                  O.Fid,
@@ -283,7 +283,7 @@ namespace prjMSIT145_Final.Controllers
                     on o.BFid equals b.Fid
                     join a in _context.PaymentTermCategories
                     on o.PayTermCatId equals a.Fid
-                    where o.Fid == 39
+                    where o.Fid == Fid
                     select new
                     {
                         Fid = o.Fid,
@@ -307,7 +307,7 @@ namespace prjMSIT145_Final.Controllers
             var Pr = from o in _context.OrderItems
                      join p in _context.Products
                      on o.ProductFid equals p.Fid
-                     where o.OrderFid == 39
+                     where o.OrderFid == Fid
                      select new
                      {
                          Fid = o.Fid,
