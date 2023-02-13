@@ -90,30 +90,31 @@ document.addEventListener("scroll", function () {
         }, 500)
     }
 
-
     //console.log("top:" + top);
-    //console.log("hight:" + hight);
+    console.log("hight:" + hight);
+    //console.log(hight-top)
     //console.log(document.body.scrollHeight);
     //console.log("clientHeight: "+document.documentElement.clientHeight);
     //接近頁面最底時修改定位
-    if ((hight - top) <= 1000) {
-        azureLogo.setAttribute("style", "bottom:80px;");
-        logoDiv.setAttribute("style", "bottom:80px");
-        document.querySelector(".logo").setAttribute("style", "top:10%;")
-        document.querySelector(".azure").setAttribute("style", "top:10%;")
+
+    if ((hight - top) <= 1100) {
+         azureLogo.setAttribute("style", "bottom:8%;");
+        logoDiv.setAttribute("style", "bottom:8%");
+        document.querySelector(".logo").setAttribute("style", "bottom:20%;")
+        document.querySelector(".azure").setAttribute("style", "bottom:20%;")
     }
     else {
-        azureLogo.setAttribute("style", "bottom:30px");
-        logoDiv.setAttribute("style", "bottom:30px");
-        document.querySelector(".logo").setAttribute("style", "top:13%;")
-        document.querySelector(".azure").setAttribute("style", "top:13%;")
+        azureLogo.setAttribute("style", "bottom:5%");
+        logoDiv.setAttribute("style", "bottom:5%");
+        document.querySelector(".logo").setAttribute("style", "bottom:16%;")
+        document.querySelector(".azure").setAttribute("style", "bottom:16%;")
     }
 })
 
-//document.documentElement.clientHeight  目前瀏覽器顯示得高度
+/*document.documentElement.clientHeight  目前瀏覽器顯示得高度*/
 if (hight <= document.documentElement.clientHeight) {
-    azureLogo.setAttribute("style", "bottom:80px;");
-    logoDiv.setAttribute("style", "bottom:80px");
-    document.querySelector(".logo").setAttribute("style", "top:10%;")
-    document.querySelector(".azure").setAttribute("style", "top:10%;")
+    azureLogo.setAttribute("style", "bottom:8%;");
+    logoDiv.setAttribute("style", "bottom:8%;");
+    document.querySelector(".logo").setAttribute("style", "bottom:20%;")
+    document.querySelector(".azure").setAttribute("style", "bottom:20%;")
 }

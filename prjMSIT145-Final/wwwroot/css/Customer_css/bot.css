@@ -1,8 +1,16 @@
-﻿.azureLogo {
+﻿.logoBottom{
+    bottom:8%;
+}
+.logoBottomPageEnd
+{
+    bottom:13%;
+}
+
+.azureLogo {
     width: 70px;
     height: 60px;
     position: fixed;
-    bottom: 30px;
+    bottom: 5%;
     left: 40px;
     transition: 0.2s;
 }
@@ -36,8 +44,9 @@
 .azure {
     position: fixed;
     left: 40px;
-    top: 8%;
+    bottom: 16%;
     margin-top: 50px;
+    height: 70%;
 }
 /* 腳掌印 */
 .logoDiv {
@@ -58,9 +67,10 @@
 .logo {
     position: fixed;
     left: 40px;
-    top: 14%;
+    bottom: 14%;
     background-color: white;
     height: 72%;
+    min-height:65%;
 }
 /* 平台及使用者頭像 */
 .imgDiv {
