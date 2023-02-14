@@ -510,7 +510,7 @@
                     </div>
                 </div>
 
-                <div class="mainDiv ">
+        <div class="mainDiv ">
                     <div class="infoDiv cardBackgroundColor">
                         <div class="flexAndItemsCenter exclamationDiv">
                             <div class="exclamation">
@@ -553,7 +553,7 @@
                         </div>
                     </div>
                     <form method="post" enctype="multipart/form-data" >
-                     <div class="topMargin">
+                <div class="topMargin" id="app">
                         <div class="flexAndItemsCenter bottomBtn ">
                             <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
                                 <input name="OrderState" value="1" hidden />
@@ -565,7 +565,8 @@
                                 <input name="TotalAmount" value="@Model.TotalAmount" id="AddTotal" hidden />
                                 <input name="Memo" value="" id="Memo2" type="text" hidden>
                                 <div>
-                                   <button class="btnToFinish" type="submit">送出訂單</button>
+                            <button class="btnToFinish" type="submit" id="btnSubmit">送出訂單</button>
+                            <button class="btnToFinish" type="submit" id="btnECPay" v-on:click="SendToNewebPay('CREDIT')">送出訂單</button>
                                 </div>
                         </div>
                      </div>
@@ -617,11 +618,14 @@
                         $("#CPayTermCatId").text("現金");
                         $("#cash").val("1");
                         $("#PayTermCatId").val("1");
+                    $("#btnECPay").css("display", "none")//增加css
+                    $("#btnSubmit").css("display", "")//移除css
                     }
                     else {
                         $("#CPayTermCatId").text("信用卡");
-                        
-
+                    $("#btnSubmit").css("display", "none")//增加css
+                    $("#btnECPay").css("display", "")//移除css
+                    console.log(document.querySelector("#btnECPay"))
                     }
                 })
             $("#cardit").click(function () {
@@ -631,10 +635,17 @@
                     $("#CPayTermCatId").text("信用卡");
                     $("#cardit").val("2")
                     $("#PayTermCatId").val("2");
+                $("#btnSubmit").css("display", "none")  //增加css
+                $("#btnECPay").css("display", "") //移除css
+                console.log(document.querySelector("#btnECPay"))
+                console.log(document.querySelector("#btnSubmit"))
+                console.log($("#AddTotal").val())
                 }
                 else {
                     $("#CPayTermCatId").text("現金");
-
+                $("#CPayTermCatId").text("現金");
+                $("#btnECPay").css("display", "none")
+                $("#btnSubmit").css("display", "")//移除css
                 }
             })
 
@@ -720,7 +731,93 @@
 
                     };
                 })
+        //$("#btnSubmit").on("click", function () {
+        //    event.preventDefault();
+        //    window.location.href = "OrderDetial/List";
 
+        //})
 
         </script>
+    <script>
+        //綠界
+        //const price = Math.round($("#TotalAmount2").text().substring(1));
+        const price = $("#AddTotal").val();
+        console.log(price)
+        const app = Vue.createApp({
+            data() {
+                return {
+                    // 表單資料 //, ItemDesc1: '測試商品1'
+                    //, ItemDesc2: '測試商品2'//, Amt1: '813'
+                    //, Amt2: '814' , , ChannelID:'@ViewData["ChannelID"]'
+                    addForm: {
+                        MerchantOrderNo: '@ViewData["MerchantOrderNo"]'
+                        , ItemDesc: '測試商品'
+                        , Amt: `${price}`
+                        , ExpireDate: '@ViewData["ExpireDate"]'
+                        , PayOption: 'ECPay'
+                        , Email: 'sean24163@hotmail.com'
+                    }
+                }
+            }
+            , methods: {
+                // 呼叫SendToNewebPay Controller 並取得回傳Form
+
+                SendToNewebPay(ChannelID) {
+                    console.log(ChannelID)
+                    var self = this;
+
+                    // 組合表單資料ChannelID;
+                    var postData = {};
+                    postData['ChannelID'] = ChannelID;
+                    postData['MerchantOrderNo'] = self.addForm.MerchantOrderNo;
+                    postData['ItemDesc'] = self.addForm.ItemDesc;
+                    //postData['ItemDesc[1]'] = self.addForm.ItemDesc;
+                    //postData['ItemDesc[2]'] = self.addForm.ItemDesc;
+                    postData['Amt'] = self.addForm.Amt;
+                    //postData['Amt[1]'] = self.addForm.Amt1;
+                    //postData['Amt[2]'] = self.addForm.Amt2;
+                    postData['ExpireDate'] = self.addForm.ExpireDate;
+                    postData['PayOption'] = self.addForm.PayOption;
+                    postData['Email'] = self.addForm.Email;
+
+
+                    // 使用 jQuery Ajax 傳送至後端
+                    $.ajax({
+                        url: '@Url.Content("~/CreditPay/SendToNewebPay")',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: { inModel: postData, __RequestVerificationToken: $('@Html.AntiForgeryToken()').val() },
+                        success: function (returnObj) {
+                            $("#divContent").html(returnObj);
+                            $("#payForm").submit();
+                        },
+                        error: function (err) {
+                            alert(err.status + " " + err.statusText + '\n' + err.responseText);
+                        }
+                    });
+                },
+                GetReturn() {
+
+                    var postData = {};
+                    var self = this;
+                    postData['MerchantOrderNo'] = self.addForm.MerchantOrderNo;
+                    postData['Amt'] = self.addForm.Amt;
+
+                    $.ajax({
+                        url: '@Url.Content("~/CreditPay/GetReturn")',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: { inModel: postData },
+                        success: function (returnObj) {
+                            console.log(returnObj)
+                        },
+                        error: function (err) {
+                            alert(err.status + " " + err.statusText + '\n' + err.responseText);
+                        }
+                    });
+                }
+            }
+        });
+        const vm = app.mount('#app');
+    </script>
     }
