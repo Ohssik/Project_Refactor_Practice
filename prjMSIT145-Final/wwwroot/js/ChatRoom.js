@@ -41,6 +41,13 @@ document.getElementById("showChatRoomBtn").addEventListener("click", async funct
     }
 
 });
+//聊天室改變時
+function ChangeChatroom(otheruserid) {
+    console.log(otheruserid+"改變")
+    connection.invoke("ChangeChatroom", otheruserid).catch(function (err) {
+        return console.error(err.toString());
+    });
+}
 //回傳聊天室的Item
 connection.on("ReNewChatRoom", function (data) {
            
@@ -188,3 +195,5 @@ connection.on("LocalMessage", function (message) {
     document.getElementById("ChatMessageul").appendChild(li);
 
 });
+////////
+
