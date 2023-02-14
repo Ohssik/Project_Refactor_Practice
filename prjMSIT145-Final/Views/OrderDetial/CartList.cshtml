@@ -575,6 +575,7 @@
             </div>
         
     </div>
+<div id="divContent"></div>
     @section Scripts{
         <script src="@Url.Content("~/js/jquery-3.6.2.js")"></script>
 
@@ -784,6 +785,8 @@
                         dataType: 'json',
                         data: { inModel: postData, __RequestVerificationToken: $('@Html.AntiForgeryToken()').val() },
                         success: function (returnObj) {
+                            alert(returnObj);
+                            console.log(returnObj);
                             $("#divContent").html(returnObj);
                             $("#payForm").submit();
                         },
