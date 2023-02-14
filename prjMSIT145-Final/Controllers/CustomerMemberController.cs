@@ -271,7 +271,7 @@ namespace prjMSIT145_Final.Controllers
             return Redirect("~/Home/CIndex");
         }
 
-             public class LineLoginToken
+             public class LineLoginToken                                                                              //line
              {
             public string access_token { get; set; }
             public int expires_in { get; set; }
@@ -688,11 +688,11 @@ namespace prjMSIT145_Final.Controllers
                     string token = Guid.NewGuid().ToString();
                     ChangeRequestPassword request = new ChangeRequestPassword();
                     request.Token = token;
-                    request.Account = vm.Phone;
-                    request.Email = vm.Email;
+                    request.Account = member.Phone;
+                    request.Email = member.Email;
                     request.Expire = DateTime.Now.AddMinutes(10);
                     _context.ChangeRequestPasswords.Add(request);
-
+                    _context.SaveChanges();
 
 
 
@@ -701,7 +701,8 @@ namespace prjMSIT145_Final.Controllers
                     int portNumber = 587;
                     bool enableSSL = true;
                     //填入寄送方email和密碼
-                    string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?token={token}&Fid={member.Fid}";
+                    //string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?token={token}&Fid={member.Fid}";
+                    string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?token={request.Token}&Account={request.Account}&Email={request.Email}";
                     string emailFrom = "a29816668@gmail.com";
                     string emailpassword = "joksdquaswjdyzpu";
                     //收信方email 可以用逗號區分多個收件人
@@ -709,7 +710,7 @@ namespace prjMSIT145_Final.Controllers
                     //主旨
                     string subject = "重製密碼";
                     //內容
-                    string body = $"<h2>重製密碼</h2><h3><br><a href={url}>請點此連結重設密碼</a></h3>";
+                    string body = $"<h2>重製密碼</h2><h3><br><a href={url}>請在<span style='color:red;'>10分鐘內</span>點此連結重設密碼</a></h3>";
                     using (MailMessage mail = new MailMessage())
                     {
                         mail.From = new MailAddress(emailFrom,"日柴", System.Text.Encoding.UTF8);
@@ -743,7 +744,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 NormalMember member =_context.NormalMembers.FirstOrDefault(c=>c.Email== vm.Email && c.Phone==vm.Phone);
                 if (member != null) {
-                    return Json("已送出重置密碼信件");
+                    return Json("已送出重置密碼信件,請於10鐘內重製密碼");
                     }
                 else
                 {
@@ -756,7 +757,7 @@ namespace prjMSIT145_Final.Controllers
         }
 
 
-        public IActionResult forgetalterpassword(int? Fid, string token)
+        public IActionResult forgetalterpassword(string Account,string token ,string Email)
         {
 
             ChangeRequestPassword request = _context.ChangeRequestPasswords.FirstOrDefault(c => c.Token == token);
@@ -765,17 +766,22 @@ namespace prjMSIT145_Final.Controllers
                 string expire = request.Expire.ToString();
                 if (DateTime.Now > Convert.ToDateTime(expire))
                 {
+                    
                     return Redirect("~/Home/CIndex");
 
                 }
                 else
                 {
-                    if (Fid != null)
+                    if ( Account!= null && Email!=null)
                     {
-                        NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Fid == Fid);
-                        if (member != null)
+                        //NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Fid == Fid);
+                        if (request != null)
                         {
-                            return View(member);
+                            CResetPwdViewModel creset=new CResetPwdViewModel();
+                            creset.txtAccount = request.Account;
+                            creset.token = request.Token;
+                            return View(creset);
+                            //return View(member);
                         }
                         return Redirect("~/Home/CIndex");
 
@@ -789,22 +795,25 @@ namespace prjMSIT145_Final.Controllers
            
         }
         [HttpPost]
-        public IActionResult forgetalterpassword(NormalMember member)
+        public IActionResult forgetalterpassword(CResetPwdViewModel vm)
         {
-            if(member.Password == null)
+            if( vm.txtPassword !=vm.txtConfirmPwd)
             {
-                return View(member);
+                return View(vm);
             }
             else
             {
-                NormalMember x=_context.NormalMembers.FirstOrDefault(c=>c.Fid==member.Fid);
+                NormalMember x=_context.NormalMembers.FirstOrDefault(c=>c.Phone==vm.txtAccount);
+                
                 if (x == null)
                 {
                     return View();
                 }
                 else
                 {
-                    x.Password = member.Password;
+                    ChangeRequestPassword request = _context.ChangeRequestPasswords.First(c => c.Token == vm.token && c.Account == vm.txtAccount);
+                    x.Password = vm.txtPassword;
+                    _context.ChangeRequestPasswords.Remove(request);
                     _context.SaveChanges();
                     return Redirect("~/Home/CIndex");
                 }
