@@ -117,10 +117,35 @@ namespace prjMSIT145_Final.Models
             await Clients.Client(Context.ConnectionId).SendAsync("ReNewChatRoom", Json);
 
         }
+        //更新左邊聊天室
+        public async Task ChangeChatroom(int otheruserid)
+        {
+            
+            //List<ChatMessage> chatMessages = new List<ChatMessage>();
+            //找到自己
+            ChatroomUser MyData = users.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
+            if (MyData == null)
+                return;
+            //有自已的聊天室
+            var ChatRoom = _context.Chat2Users.Join(_context.Chat2Users, c1 => c1.Chatid, c2 => c2.Chatid, (c1, c2) => new
+            {
+                fid = c1.Fid,
+                chatroomid = c1.Chatid,
+                user = c1.Userid,
+                Otheruser = c2.Userid
+            }
+            ).FirstOrDefault(c => c.user == MyData.ChatroomUserid && c.Otheruser == otheruserid);
+            if (ChatRoom == null)
+                return;
+           var message = _context.ChatMessages.Where(c => c.Chatid == ChatRoom.chatroomid);
+            if (message == null)
+                return;
+            string Json = JsonSerializer.Serialize(message);
+            await Clients.Client(Context.ConnectionId).SendAsync("ReNewChatRoomMain", Json);
+        }
 
 
 
-       
         //傳訊息
         public async Task SendMessage(string otheruserid, string message)
         {
