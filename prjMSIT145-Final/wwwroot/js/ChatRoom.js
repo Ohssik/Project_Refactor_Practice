@@ -195,5 +195,5 @@ connection.on("LocalMessage", function (message) {
     document.getElementById("ChatMessageul").appendChild(li);
 
 });
-////////
+
 
