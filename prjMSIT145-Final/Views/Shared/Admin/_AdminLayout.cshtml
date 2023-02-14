@@ -91,6 +91,12 @@
                         <span>優惠券</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='@Url.Content("~/Admin/AServiceMailList")'>
+                        <i class="fas fa-fw fa-chart-area"></i>
+                        <span>客服信箱</span>
+                    </a>
+                </li>
 
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
@@ -219,80 +225,25 @@
                             </li>
                             *@
                             <!-- Nav Item - Messages -->
-                            @*
+                            
                             <li class="nav-item dropdown no-arrow mx-1">
                                 <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-envelope fa-fw"></i>
                                     <!-- Counter - Messages -->
-                                    <span class="badge badge-danger badge-counter">7</span>
+                                    <span class="badge badge-danger badge-counter msgs"></span>
                                 </a>
                                 <!-- Dropdown - Messages -->
                                 <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                      aria-labelledby="messagesDropdown">
-                                    <h6 class="dropdown-header">
-                                        Message Center
+                                    <h6 class="dropdown-header msgs">
+                                        客服訊息中心
                                     </h6>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="dropdown-list-image mr-3">
-                                            <img class="rounded-circle" src="@Url.Content("~/adminImg/undraw_profile_1.svg")"
-                                                 alt="...">
-                                            <div class="status-indicator bg-success"></div>
-                                        </div>
-                                        <div class="font-weight-bold">
-                                            <div class="text-truncate">
-                                                Hi there! I am wondering if you can help me with a
-                                                problem I've been having.
-                                            </div>
-                                            <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="dropdown-list-image mr-3">
-                                            <img class="rounded-circle" src="@Url.Content("~/adminImg/undraw_profile_2.svg")"
-                                                 alt="...">
-                                            <div class="status-indicator"></div>
-                                        </div>
-                                        <div>
-                                            <div class="text-truncate">
-                                                I have the photos that you ordered last month, how
-                                                would you like them sent to you?
-                                            </div>
-                                            <div class="small text-gray-500">Jae Chun · 1d</div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="dropdown-list-image mr-3">
-                                            <img class="rounded-circle" src="@Url.Content("~/adminImg/undraw_profile_3.svg")"
-                                                 alt="...">
-                                            <div class="status-indicator bg-warning"></div>
-                                        </div>
-                                        <div>
-                                            <div class="text-truncate">
-                                                Last month's report looks great, I am very happy with
-                                                the progress so far, keep up the good work!
-                                            </div>
-                                            <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="dropdown-list-image mr-3">
-                                            <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                                 alt="...">
-                                            <div class="status-indicator bg-success"></div>
-                                        </div>
-                                        <div>
-                                            <div class="text-truncate">
-                                                Am I a good boy? The reason I ask is because someone
-                                                told me that people say this to all dogs, even if they aren't good...
-                                            </div>
-                                            <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                                   
+                                    <a class="dropdown-item text-center small text-gray-500" href="@Url.Content("~/Admin/AServiceMailList")">Read More Messages</a>
                                 </div>
                             </li>
-                            *@
+                            
                             <div class="topbar-divider d-none d-sm-block"></div>
 
                             <!-- Nav Item - User Information -->
@@ -396,47 +347,88 @@
     <!-- Page level custom scripts -->
     <script src="~/js/demo/datatables-demo.js"></script>
     <script>
-        let y = new Date().getFullYear();
-        let M = new Date().getMonth() + 1;
-        let d = new Date().getDate();
-        let weekDay = ['日', '一', '二', '三', '四', '五', '六'];
-        let w = weekDay[new Date().getDay()];
-        let h = new Date().getHours();
-        let showDateInfo = document.getElementById('showDateInfo');//跑馬燈訊息
+        $(function(){
+            let y = new Date().getFullYear();
+            let M = new Date().getMonth() + 1;
+            let d = new Date().getDate();
+            let weekDay = ['日', '一', '二', '三', '四', '五', '六'];
+            let w = weekDay[new Date().getDay()];
+            let h = new Date().getHours();
+            let showDateInfo = document.getElementById('showDateInfo');//跑馬燈訊息
 
-        if (h < 11)
-            showDateInfo.innerHTML = "早安，";
-        else if (h >= 11 && h < 14)
-            showDateInfo.innerHTML = "午安，";
-        else if (h >= 14 && h < 18)
-            showDateInfo.innerHTML = "下午好，";
-        else if (h >= 18)
-            showDateInfo.innerHTML = "晚上好，";
+            if (h < 11)
+                showDateInfo.innerHTML = "早安，";
+            else if (h >= 11 && h < 14)
+                showDateInfo.innerHTML = "午安，";
+            else if (h >= 14 && h < 18)
+                showDateInfo.innerHTML = "下午好，";
+            else if (h >= 18)
+                showDateInfo.innerHTML = "晚上好，";
 
-        showDateInfo.innerHTML += `今天是 ${y}年${M}月${d}日 星期${w}`;
+            showDateInfo.innerHTML += `今天是 ${y}年${M}月${d}日 星期${w}`;
 
-        //取得台北天氣
-        (function () {
-            let url = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=rdec-key-123-45678-011121314";
-            let xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            xhr.send();
-            xhr.onreadystatechange = function () {
-                if (this.readyState === 4 && this.status === 200) {
-                    let response = JSON.parse(this.response);
-                    //console.log(response);
+            //取得台北天氣
+            (function () {
+                let url = "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=rdec-key-123-45678-011121314";
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                xhr.send();
+                xhr.onreadystatechange = function () {
+                    if (this.readyState === 4 && this.status === 200) {
+                        let response = JSON.parse(this.response);
+                        //console.log(response);
 
-                    for (let i = 0; i < response.records.location[5].weatherElement[0].time.length; i++) {
-                        let now = new Date();
-                        let sTime = new Date(response.records.location[5].weatherElement[0].time[i].startTime);
-                        let eTime = new Date(response.records.location[5].weatherElement[0].time[i].endTime)
-                        if (now >= sTime && now < eTime) {
-                            showDateInfo.innerHTML += `，今天台北天氣大約是 ${response.records.location[5].weatherElement[0].time[i].parameter.parameterName}`;
+                        for (let i = 0; i < response.records.location[5].weatherElement[0].time.length; i++) {
+                            let now = new Date();
+                            let sTime = new Date(response.records.location[5].weatherElement[0].time[i].startTime);
+                            let eTime = new Date(response.records.location[5].weatherElement[0].time[i].endTime)
+                            if (now >= sTime && now < eTime) {
+                                showDateInfo.innerHTML += `，今天台北天氣大約是 ${response.records.location[5].weatherElement[0].time[i].parameter.parameterName}`;
+                            }
                         }
                     }
-                }
-            };
-        })();
+                };
+            })();
+
+            //取得客服信箱訊息
+            $.ajax({
+                url:`@Url.Content("~/Admin/getServiceMail")`,
+                type:'post',
+                data:{},
+                dataType:'json',
+                success:function(msg){
+                    //console.log(msg);
+                    if(`${msg}`.indexOf('error')==-1){
+                        let docFrag=document.createDocumentFragment();
+                        let count=0;
+                        $(msg).each(function(i,value){
+                            $(docFrag).append(`
+                                                    <a class="dropdown-item d-flex align-items-center" href="@Url.Content("~/Admin/AServiceMailList")?fid=${value.fid}">
+                                                <div class="dropdown-list-image mr-3">
+                                                    <img class="rounded-circle" src="@Url.Content("~/adminImg/undraw_profile_1.svg")"
+                                                            alt="...">
+                                                    <div class="status-indicator bg-success"></div>
+                                                </div>
+                                                <div class="font-weight-bold">
+                                                    <div class="text-truncate">
+                                                        ${value.subject}
+                                                    </div>
+                                                    <div class="small text-gray-500">${value.senderName} - ${value.receivedTime}</div>
+                                                </div>
+                                            </a>
+                                `);
+                                count++;
+                        });
+                        //console.log(docFrag);
+                        $('h6.dropdown-header.msgs').after(docFrag);
+                        if(count>0){
+                            $('span.msgs').text(count);
+                        }
+                    }
+                    
+                }            
+            });
+        });
     </script>
     @RenderSection("Scripts",required:false)
 </body>

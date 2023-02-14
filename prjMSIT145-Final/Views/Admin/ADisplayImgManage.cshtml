@@ -25,9 +25,9 @@
                     foreach(var item in Model){
                         if (item.OrderBy > 0)
                         {
-                            <div class="divAds" id="@item.Fid" data-id="@item.Fid" data-name="@item.ImgName" data-st="@item.st" data-et="@item.et" data-link="@item.Hyperlink" data-blt="@item.ImgBelongTo">
-                                <img class="adthumbs" src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
-                            </div>
+                                                                <div class="divAds" id="@item.Fid" data-id="@item.Fid" data-name="@item.ImgName" data-st="@item.st" data-et="@item.et" data-link="@item.Hyperlink" data-blt="@item.ImgBelongTo">
+                                                                    <img class="adthumbs" src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
+                                                                </div>
                         }
                     }
                 }
@@ -126,9 +126,9 @@
                 foreach (var item in Model)
                 {
                     if (item.OrderBy == 0){
-                        <div class="homeSmallAd" data-id="@item.Fid" data-name="@item.ImgName" >
-                            <img src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
-                        </div>
+                                                            <div class="homeSmallAd" data-id="@item.Fid" data-name="@item.ImgName" >
+                                                                <img src=@Url.Content("~/adminImg/adDisplay/"+item.ImgName) alt="">
+                                                            </div>
                     }
                 }
             }
@@ -140,32 +140,32 @@
                 foreach (var item in Model)
                 {
                     if (item.OrderBy == 0){
-                        <div class="table-responsive smallAdTable">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <tbody>
+                                                            <div class="table-responsive smallAdTable">
+                                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                                <tbody>
 
-                                <tr>
-                                    <td>@Html.DisplayNameFor(model=>model.Hyperlink)</td>
-                                        <td><input class="smallAdLink" name="smallAdLink" data-id="@item.Fid" type="text" value="@item.Hyperlink"> </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                            <div name="imgInfo" data-id="@item.Fid">
-                                                <input id="file" data-file="smallFile" data-id="@item.Fid" name="file" class="form-control" type="file" />
+                                                                    <tr>
+                                                                        <td>@Html.DisplayNameFor(model=>model.Hyperlink)</td>
+                                                                            <td><input class="smallAdLink" name="smallAdLink" data-id="@item.Fid" type="text" value="@item.Hyperlink"> </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="2">
+                                                                                <div name="imgInfo" data-id="@item.Fid">
+                                                                                    <input id="file" data-file="smallFile" data-id="@item.Fid" name="file" class="form-control" type="file" />
 
-                                            <button name="btnSaveImg" class="btn btn-success btn-icon-split">
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-check"></i>
-                                                </span>
-                                                <span class="text">儲存</span>
-                                            </button>
-                                        </div>
-                                    </td>
+                                                                                <button name="btnSaveImg" class="btn btn-success btn-icon-split">
+                                                                                    <span class="icon text-white-50">
+                                                                                        <i class="fas fa-check"></i>
+                                                                                    </span>
+                                                                                    <span class="text">儲存</span>
+                                                                                </button>
+                                                                            </div>
+                                                                        </td>
 
-                                </tr>
-                            </tbody>
-                        </table>
-                        </div>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            </div>
                     }
                 }
             }
@@ -236,8 +236,8 @@
                             let ad = {
                                 sFid: value,
                                 ImgName:$(`[data-id=${value}]`).data('name'),
-                                StartTime: $(`[data-id=${value}]`).data('st')/*"2019-07-26T00:00:00"*/,
-                                EndTime: $(`[data-id=${value}]`).data('et')/*"2019-07-31T00:00:00"*/,
+                                StartTime: $(`[data-id=${value}]`).data('st'),
+                                EndTime: $(`[data-id=${value}]`).data('et'),
                                 Hyperlink: $(`[data-id=${value}]`).data('link'),
                                 OrderBy: i + 1,
                             };
@@ -310,8 +310,8 @@
                 let ad = {
                     sFid: `${clickedTarget}`,
                     ImgName: $(`[data-id=${clickedTarget}]`).data('name'),
-                    StartTime: $(`#tdStartTime>input`).val().replace('/','-')/*"2019-07-26T00:00:00"*/,
-                    EndTime: $(`#tdEndTime>input`).val().replace('/', '-')/*"2019-07-31T00:00:00"*/,
+                    StartTime: $(`#tdStartTime>input`).val().replace('/','-'),
+                    EndTime: $(`#tdEndTime>input`).val().replace('/', '-'),
                     Hyperlink: $(`#tdHyperlink>input`).val(),
                     OrderBy: 1,
                 };
@@ -326,7 +326,7 @@
                         console.log(msg);
 
                         if(msg==1){
-                            //alert('儲存成功');
+                            
                             $('#msgAlert label').text('儲存成功');
                             msgAlert.show();
                         }
@@ -352,7 +352,7 @@
                             console.log(msg);
 
                             if (msg == 1) {
-                                //alert('刪除成功');
+                                
                                 confirmMsg.hide();
                                 $('#msgAlert label').text('刪除成功');
                                 msgAlert.show();
@@ -378,8 +378,7 @@
                 try {
                     let count=$('#sortable').children('.divAds').length;
                     if(count>=8)
-                    {
-                        //alert('輪播圖數量已達上限，請刪除圖片後再新增');
+                    {                        
                         $('#msgAlert label').text('輪播圖數量已達上限，請刪除圖片後再新增');
                         msgAlert.show();
                         return false;
@@ -508,8 +507,8 @@
             }
 
             
-
-            let fileData;
+            //let fileData;
+            let files=new Array();
             $('[data-file="smallFile"]').change(async function (e) {               
                 try {                    
                     
@@ -524,10 +523,18 @@
 
                     const arrayBuffer = await getArrayBuffer(file);
                     //const response = await uploadFileAJAX(arrayBuffer, file.type);
-                    fileData = {
-                        fileType: file.type,
-                        icon: Array.from(new Uint8Array(arrayBuffer))
-                    };                    
+                    let fileInfo= {
+                        fid: i,
+                        fileData : {
+                            fileType: file.type,
+                            icon: Array.from(new Uint8Array(arrayBuffer))
+                        }
+                    };
+                    files.push(fileInfo);
+                    //fileData = {
+                    //    fileType: file.type,
+                    //    icon: Array.from(new Uint8Array(arrayBuffer))
+                    //};                    
 
                     showPreviewImage(file);
                     
@@ -539,16 +546,28 @@
                 } finally {
                     e.target.value = '';  // reset input file
                     //setUploading(false);
+                    //console.log(files);
                 }
             });
 
             $('[name=btnSaveImg]').click(async function () {
                 let i = $(this).siblings('#file').data('id');
+                let removeIndex = -1;
                 //console.log(`i=${i}`);
                 let fileType='',fileIcon='';
-                if(fileData != null){
-                    fileType = fileData.fileType;
-                    fileIcon = fileData.icon;
+                //if(fileData != null){
+                if (files.length>0) {
+                    $(files).each(function(index,value){
+                        if(i == value.fid){
+                            fileType = value.fileData.fileType;
+                            fileIcon = value.fileData.icon;
+                            removeIndex = index;
+                        }
+                    });
+
+
+                    //fileType = fileData.fileType;
+                    //fileIcon = fileData.icon;
                 }
                 $.ajax({
                     url: `@Url.Content("~/Admin/saveSmallImgData")`,
@@ -564,18 +583,22 @@
                     
                     dataType: "json",
                     success: function (msg) {
-                        console.log(msg);
+                        //console.log(msg);
 
-                        if (msg != null) {
-                            
+                        if (msg != null) {                            
                             $('[name=smallAdLink]').eq(i).val(msg.hyperlink);
-                            //alert('儲存成功');
+                            
                             let alertDiv = `<div class="alert alert-success alert-dismissible fade show" role="alert">
                             <strong>儲存成功</strong>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>`;
+
                             $(`[name=imgInfo][data-id=${i}]`).append(alertDiv);
-                            
+
+                            if(removeIndex > -1)
+                                files.splice(removeIndex,1);
+
+                            //console.log(files);
                         }
 
                     }

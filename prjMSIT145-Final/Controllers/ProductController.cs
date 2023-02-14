@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Packaging;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModel;
 using System.Text;
@@ -21,15 +22,15 @@ namespace prjMSIT145_Final.Controllers
             {
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
                     return View();
+                else
                 return RedirectToAction("Blogin", "BusinessMember");
-
             }
             catch
             {
                 return RedirectToAction("Blogin", "BusinessMember");
             }
         }
-        public ActionResult BItemList(string keyword)
+        public ActionResult BItemList()
         {
             try
             {
@@ -55,7 +56,7 @@ namespace prjMSIT145_Final.Controllers
                                      pro.CategoryFid,
                                      proC.CategoryName
                                  }).Where(p => p.BFid == member.Fid).OrderBy(b => b.CategoryFid);
-
+                 
                     List<CProductsViewModel> list = new List<CProductsViewModel>();
                     foreach (var p in datas)
                     {
@@ -71,6 +72,7 @@ namespace prjMSIT145_Final.Controllers
                         vm.CategoryName = p.CategoryName;
                         list.Add(vm);
                     }
+
                     return Json(list);
                 }
                 return RedirectToAction("Blogin", "BusinessMember");
@@ -129,46 +131,9 @@ namespace prjMSIT145_Final.Controllers
             catch
             {
                 return RedirectToAction("Blogin", "BusinessMember");
-
             }
         }
-        //public ActionResult BEdit(int? id)
-        //{
-        //    var datas = (from pro in _context.Products
-        //                 join proC in _context.ProductCategories
-        //                 on pro.CategoryFid equals proC.Fid
-        //                 select new
-        //                 {
-        //                     pro.Fid,
-        //                     pro.BFid,
-        //                     pro.UnitPrice,
-        //                     pro.IsForSale,
-        //                     pro.CategoryFid,
-        //                     pro.Memo,
-        //                     pro.Photo,
-        //                     pro.ProductName,
-        //                     proC.CategoryName
-        //                 }).Where(p => p.Fid == id);
-        //    CProductsViewModel vm = new CProductsViewModel();
-        //    foreach (var d in datas)
-        //    {
-        //        vm.Fid = d.Fid;
-        //        vm.BFid = d.BFid;
-        //        vm.ProductName = d.ProductName;
-        //        vm.UnitPrice = d.UnitPrice;
-        //        vm.IsForSale = d.IsForSale;
-        //        vm.Memo = d.Memo;
-        //        vm.Photo = d.Photo;
 
-        //        vm.CategoryName = d.CategoryName;
-        //        vm.CategoryFid = d.CategoryFid;
-        //    }
-        //    if (vm.Photo == null)
-        //        vm.Photo = "photo.png";
-        //    return View(vm);
-        //}
-
-        //[HttpPost]
         public ActionResult BEdit(CProductsViewModel vm, IFormFile file)
         {
             if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
@@ -194,16 +159,7 @@ namespace prjMSIT145_Final.Controllers
                     }
                     else if (vm.Photo == null)
                         pro.Photo = null;
-                    //else
-                    //{
-                    //	string oldPath = _host.WebRootPath + $"\\images\\{pro.Photo}";
-                    //	if (System.IO.File.Exists(oldPath))
-                    //	{
-                    //		pro.Photo = oldPath;
-                    //	}
-                    //	else
-                    //	pro.Photo = null;
-                    //}
+
                     pro.IsForSale = vm.IsForSale;
                     pro.CategoryFid = proC.Fid;
                     pro.ProductName = vm.ProductName;
@@ -212,9 +168,6 @@ namespace prjMSIT145_Final.Controllers
                     var opToProList = _context.OptionsToProducts.Where(p => p.ProductFid == vm.Fid).OrderBy(p=>p.OptionGroupFid);
                     _context.OptionsToProducts.RemoveRange(opToProList);
                     _context.SaveChanges();
-                    //OptionsToProduct opToPro = new OptionsToProduct();
-                    //foreach (var list in opToProList)
-                    //{
                         foreach (var d in vm.productOp)
                         {
                         OptionsToProduct opToPro = new OptionsToProduct();
@@ -222,8 +175,6 @@ namespace prjMSIT145_Final.Controllers
                         opToPro.OptionGroupFid = d; 
                                 _context.OptionsToProducts.Add(opToPro);
                         }
-                    //}
-
                     _context.SaveChanges();
                 }
                 return RedirectToAction("BList");

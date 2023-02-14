@@ -31,6 +31,7 @@ namespace prjMSIT145_Final.Controllers
             List<VOrdersViewModel> OrdersList = new List<VOrdersViewModel>();
             var Orderdatas = from O in _context.Orders
                              join B in _context.BusinessMembers on O.BFid equals B.Fid
+                             join BI in _context.BusinessImgs on O.BFid equals BI.BFid
                              where O.NFid == NFid
                              select new
                              {
@@ -38,6 +39,7 @@ namespace prjMSIT145_Final.Controllers
                                  NFid = O.NFid,
                                  BFid = O.BFid,
                                  MemberName = B.MemberName,
+                                 LogoImgFileName = BI.LogoImgFileName,
                                  PickUpDate = O.PickUpDate,
                                  PickUpTime = O.PickUpTime,
                                  PickUpType = O.PickUpType,
@@ -59,6 +61,7 @@ namespace prjMSIT145_Final.Controllers
                     NFid = item.NFid,
                     BFid = item.BFid,
                     MemberName = item.MemberName,
+                    LogoImgFileName = item.LogoImgFileName,
                     PickUpDate = item.PickUpDate,
                     PickUpTime = item.PickUpTime,
                     PickUpType = item.PickUpType,

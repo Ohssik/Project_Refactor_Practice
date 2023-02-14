@@ -3,23 +3,150 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Text.Json;
 using System;
+using System.Reflection.Metadata;
+using System.Diagnostics.Metrics;
+using prjMSIT145_Final.ViewModel;
 
 namespace prjMSIT145_Final.Models
 
 {
     public class ChatHub : Hub 
     {
-       
+        private IWebHostEnvironment _eviroment;
         private readonly ispanMsit145shibaContext _context;
       
-        public ChatHub(ispanMsit145shibaContext context)
+        public ChatHub(ispanMsit145shibaContext context, IWebHostEnvironment p)
         {
             _context = context;
-           
-        }
-    
+            _eviroment = p;
+        } 
         public static List<ChatroomUser> users = new List<ChatroomUser>();
 
+
+        //更新右邊聊天室
+        public async Task ReNewChatRoom()
+        {
+            
+            ChatroomUser MyData = users.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);  
+            if (MyData == null)
+                return;
+            //有自已的聊天室
+            var ChatRoom = _context.Chat2Users.Join(_context.Chat2Users, c1 => c1.Chatid, c2 => c2.Chatid, (c1, c2) => new
+            {
+                fid = c1.Fid,
+                chatroomid = c1.Chatid,
+                user = c1.Userid,
+                Otheruser = c2.Userid
+            }
+            ).Where(c => c.user == MyData.ChatroomUserid && c.Otheruser != MyData.ChatroomUserid);
+
+            if (ChatRoom == null)
+                return;
+
+            var ChatRoomuser = ChatRoom.Join(_context.ChatroomUsers, other => other.Otheruser, u => u.ChatroomUserid, (other, u) => new
+            {
+                ChatroomUserid = u.ChatroomUserid,
+                UserType = u.UserType,
+                ChatroomId = other.chatroomid,
+                MemberId = u.Memberfid,
+                LastOnlineTime = u.LastOnlineTime
+            }); ;
+            //商家與照片合併
+            var Businessimg = _context.BusinessMembers.Join(_context.BusinessImgs, b => b.Fid, i => i.BFid, (b, i) => new
+            {
+                Bfid=b.Fid,
+                BusinessName=b.MemberName,
+                LogoImg=i.LogoImgFileName,
+            });
+            //合併User商家
+            var BChatRoomUser = ChatRoomuser.Where(u => u.UserType == 1)
+               .Join(Businessimg, c => c.MemberId, b => b.Bfid, (c, b) => new
+               {
+                   chatroomid=c.ChatroomId,
+                   chatroomuserid = c.ChatroomUserid,
+                   Memberfid = b.Bfid,
+                   MemberName = b.BusinessName,
+                   Membertype = c.UserType,
+                   MemberImg = b.LogoImg,
+                   LastOnlineTime = c.LastOnlineTime
+               }); 
+            //合併User與一般會員
+            var NChatRoomUser = ChatRoomuser.Where(u => u.UserType == 0)
+               .Join(_context.NormalMembers, c => c.MemberId, n => n.Fid, (c, n) => new
+               {
+                   chatroomid = c.ChatroomId,
+                   chatroomuserid = c.ChatroomUserid,
+                   Memberfid = n.Fid,
+                   MemberName = n.MemberName,
+                   Membertype = c.UserType,
+                   MemberImg = n.MemberPhotoFile,
+                   LastOnlineTime = c.LastOnlineTime,
+               });
+
+               //統一user格式
+               List<CChatroomitemViewModel> ChatRoomList = new List<CChatroomitemViewModel>();
+            //把BChatRoomUser丟進CChatroomitemViewModel
+            foreach (var User in BChatRoomUser)
+              {
+                CChatroomitemViewModel vm = new CChatroomitemViewModel();
+                vm.chatroomid = User.chatroomid;
+                vm.chatroomUserid = User.chatroomuserid;
+                vm.Memberfid = User.Memberfid;
+                vm.MemberName = User.MemberName;
+                vm.UserType = User.Membertype;
+                vm.MemberImg = "../images/"+User.MemberImg;
+                vm.LastOnlineTime = User.LastOnlineTime;
+                ChatRoomList.Add(vm);
+              }
+          
+            //把NChatRoomUser丟進CChatroomitemViewModel
+            foreach (var User in NChatRoomUser)
+            {
+                CChatroomitemViewModel vm = new CChatroomitemViewModel();
+                vm.chatroomid = User.chatroomid;
+                vm.chatroomUserid = User.chatroomuserid;
+                vm.Memberfid = User.Memberfid;
+                vm.MemberName = User.MemberName;
+                vm.UserType = User.Membertype;
+                vm.MemberImg ="../images/Customer/Member/"+ User.MemberImg;
+                vm.LastOnlineTime = User.LastOnlineTime;
+                ChatRoomList.Add(vm);
+            }
+            string Json = JsonSerializer.Serialize(ChatRoomList);
+
+            await Clients.Client(Context.ConnectionId).SendAsync("ReNewChatRoom", Json);
+
+        }
+        //更新左邊聊天室
+        public async Task ChangeChatroom(int otheruserid)
+        {
+            
+            //List<ChatMessage> chatMessages = new List<ChatMessage>();
+            //找到自己
+            ChatroomUser MyData = users.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
+            if (MyData == null)
+                return;
+            //有自已的聊天室
+            var ChatRoom = _context.Chat2Users.Join(_context.Chat2Users, c1 => c1.Chatid, c2 => c2.Chatid, (c1, c2) => new
+            {
+                fid = c1.Fid,
+                chatroomid = c1.Chatid,
+                user = c1.Userid,
+                Otheruser = c2.Userid
+            }
+            ).FirstOrDefault(c => c.user == MyData.ChatroomUserid && c.Otheruser == otheruserid);
+            if (ChatRoom == null)
+                return;
+            List<ChatMessage> message = (List<ChatMessage>) _context.ChatMessages.Where(c => c.Chatid == ChatRoom.chatroomid);
+            if (message == null)
+                return;
+            string Json = JsonSerializer.Serialize(message);
+            await Clients.Client(Context.ConnectionId).SendAsync("ReNewChatRoomMain", Json);
+        }
+
+
+
+        //傳訊息
         public async Task SendMessage(string otheruserid, string message)
         {
             int _otheruserid = Convert.ToInt32(otheruserid);
@@ -161,6 +288,7 @@ namespace prjMSIT145_Final.Models
             }
              await  base.OnConnectedAsync();
         }
+        //離線
         public override async Task OnDisconnectedAsync(Exception ex)
         {
             var user = users.Where(u => u.ConnectionId == Context.ConnectionId).FirstOrDefault();

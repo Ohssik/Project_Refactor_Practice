@@ -16,17 +16,26 @@
       <div class="card3">
             <div class="card30">
                 <h2 class="title2"> <img src="@Url.Content("~/images/Customer/Member/registerperson.png")" />註冊會員</h2>
-        
+                    <input type="hidden" name="LineUserid" value="@Model.LineUserid" />
             <div class="dashed">
 
              </div>
        <div class="divheadpic">
                     <div class="aui-info ">
-                       
-                          <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />                  
-                           <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
+                        @{
+                            if(Model.MemberPhotoFile!=null){
+                                <img src="@Model.MemberPhotoFile" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />
+                            }
+                            else{
+                                <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />
+                            }
+
+                        }
+                            
+                          
+                            <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
                          <span class="sapnphoto">點擊頭像預覽及修改</span>
-            
+                            <input type="hidden"value="@Model.MemberPhotoFile" name="MemberPhotoFile"/>
                     </div>
                 </div>
         <div class="regsterleftgroup">
@@ -65,7 +74,7 @@
                         </div>
                         <span id="emailcorrect" class="spanerrormessage"></span>
                     </div>
-
+                        <input type="hidden" name="GoogleEmail" value="@Model.GoogleEmail" />
                 <span class="text3">
                     <p class="color">*</p>
                         <p class="text4">密碼<span class="necessspan">(必填)</span><span class="Formatspan">(大小寫英文加4個數字)</span></p>

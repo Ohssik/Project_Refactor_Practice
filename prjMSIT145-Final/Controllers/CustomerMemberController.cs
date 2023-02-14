@@ -3,16 +3,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Newtonsoft.Json;
 using NuGet.Protocol;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Composition;
 using System.Diagnostics.Metrics;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Principal;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Web;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace prjMSIT145_Final.Controllers
 {
@@ -47,13 +53,14 @@ namespace prjMSIT145_Final.Controllers
                 if (x.Password.Equals(vm.txtPassword) && x.Phone.Equals(vm.txtAccount))
                 {
                     if (x.IsSuspensed == 0) {
-                        string json = JsonSerializer.Serialize(x);
+                        string json = System.Text.Json.JsonSerializer.Serialize(x);
                         HttpContext.Session.SetString(CDictionary.SK_LOGINED_USER, json);
 
                         return Redirect("~/Home/CIndex");
                     }
-                   
+
                     return View();
+                    
                 }
             }
             return View();
@@ -95,24 +102,25 @@ namespace prjMSIT145_Final.Controllers
             if (payload == null)
             {
                 // 驗證失敗
-                ViewData["Msg"] = "驗證 Google 授權失敗";
+               
                 return Redirect("~/Home/CIndex");
             }
             else
             {
-                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Email == payload.Email);
+                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.GoogleEmail == payload.Email);
                 if (member != null)
                 {
                     CLoginViewModel vm = new CLoginViewModel();
                     vm.txtAccount = member.Phone;
                     vm.txtPassword = member.Password;
+                  
                     Login(vm);
                 }
                 else
                 {
                     NormalMember x = new NormalMember();
 
-                    x.Email = payload.Email;
+                    x.GoogleEmail = payload.Email;
                     x.MemberName = payload.Name;
 
                     return RedirectToAction("Register", x);
@@ -180,6 +188,106 @@ namespace prjMSIT145_Final.Controllers
             return payload;
         }
 
+        public ActionResult LineLoginDirect()                                                                                    //line
+        {
+            string response_type = "code";
+            string client_id = "1657900734";
+            string redirect_uri = HttpUtility.UrlEncode("https://localhost:7266/CustomerMember/CALLBACKLOGIN");
+            string state = "aaa";
+            string LineLoginUrl = string.Format("https://access.line.me/oauth2/v2.1/authorize?response_type={0}&client_id={1}&redirect_uri={2}&state={3}&scope=openid%20profile&nonce=09876xyz",
+                response_type,
+                client_id,
+                redirect_uri,
+                state
+                );
+            return Redirect(LineLoginUrl);
+        }
+
+        public ActionResult CALLBACKLOGIN(string code, string state)                                                               //line callback
+        {
+            if (state == "aaa")
+            {
+                #region Api變數宣告
+                WebClient wc = new WebClient();
+                wc.Encoding = Encoding.UTF8;
+                wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                string result = string.Empty;
+                NameValueCollection nvc = new NameValueCollection();
+                #endregion
+                try
+                {
+                    //取回Token
+                    string ApiUrl_Token = "https://api.line.me/oauth2/v2.1/token";
+                    nvc.Add("grant_type", "authorization_code");
+                    nvc.Add("code", code);
+                    nvc.Add("redirect_uri", "https://localhost:7266/CustomerMember/CALLBACKLOGIN");
+                    nvc.Add("client_id", "1657900734");
+                    nvc.Add("client_secret", "8a686ccc1f01658c94ff67511e5d46b3");
+                    string JsonStr = Encoding.UTF8.GetString(wc.UploadValues(ApiUrl_Token, "POST", nvc));
+                    LineLoginToken ToKenObj = JsonConvert.DeserializeObject<LineLoginToken>(JsonStr);
+                    wc.Headers.Clear();
+
+                    //取回User Profile
+                    string ApiUrl_Profile = "https://api.line.me/v2/profile";
+                    wc.Headers.Add("Authorization", "Bearer " + ToKenObj.access_token);
+                    string UserProfile = wc.DownloadString(ApiUrl_Profile);
+                    LineProfile ProfileObj = JsonConvert.DeserializeObject<LineProfile>(UserProfile);
+                    NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.LineUserid == ProfileObj.userId);
+                    if (member != null)
+                    {
+                        
+
+                        CLoginViewModel loginmember =new CLoginViewModel();
+                        loginmember.txtAccount = member.Phone;
+                        loginmember.txtPassword = member.Password;
+                        if (member.IsSuspensed != 0)
+                        {
+                            return RedirectToAction("Login", new { isSus = "f" });
+                        }
+                        else {
+
+                            Login(loginmember);
+                        }
+                           
+
+                    }
+                    else
+                    {      
+                        NormalMember newmember = new NormalMember();
+                        newmember.LineUserid=ProfileObj.userId;
+                        newmember.MemberName = ProfileObj.displayName;
+                        newmember.MemberPhotoFile = ProfileObj.pictureUrl;
+                        return View("Register", newmember);                     
+                    }
+                   
+                }
+                catch (Exception ex)
+                {
+                    string msg = ex.Message;
+                    throw;
+                }
+            }
+            return Redirect("~/Home/CIndex");
+        }
+
+             public class LineLoginToken
+             {
+            public string access_token { get; set; }
+            public int expires_in { get; set; }
+            public string id_token { get; set; }
+            public string refresh_token { get; set; }
+            public string scope { get; set; }
+            public string token_type { get; set; }
+            }
+
+            public class LineProfile
+            {
+            public string userId { get; set; }
+            public string displayName { get; set; }
+            public string pictureUrl { get; set; }
+            public string statusMessage { get; set; }
+         }
+
 
 
 
@@ -197,7 +305,7 @@ namespace prjMSIT145_Final.Controllers
             return View(member);
         }
         [HttpPost]
-        public IActionResult Register(CNormalMemberViewModel vm, IFormFile photo)
+        public async Task<IActionResult> Register(CNormalMemberViewModel vm, IFormFile photo)                                               //註冊動作
         {
             var data = _context.NormalMembers.Select(c => c.Phone);
             foreach (var i in data)
@@ -213,44 +321,69 @@ namespace prjMSIT145_Final.Controllers
                     ViewBag.birthday = vm.Birthday;
                     ViewBag.MemberPhotoFile = vm.MemberPhotoFile;
                     ViewBag.password = vm.Password;
-                    return View();
-                   
+                    //return View();
+                    return await Task.Run(() => View());
+
                 }
             }
             if (vm.MemberName == null && vm.Password == null)
             {
-                return View();
+                //return View();
+                return await Task.Run(() => View());
             }
             if (vm.Phone == null)
             {
-                return View();
+                //return View();
+                return await Task.Run(() => View());
             }
             else
             {
                 bool correct = Regex.IsMatch(vm.Phone, @"^09[0-9]{8}$");
                 if (!(correct))
                 {
-                    return View();
+                    //return View();
+                    return await Task.Run(() => View());
                 }
                 
             }
             if (vm.Email == null)
             {
-                return View();
+                //return View();
+                return await Task.Run(() => View());
             }
             else
             {
                 bool correct = Regex.IsMatch(vm.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
                 if (!(correct))
                 {
-                    return View();
+                    //return View();
+                    return await Task.Run(() => View());
                 }
             }
-            
+            string fileName = Guid.NewGuid().ToString() + ".jpg";
+            if (vm.MemberPhotoFile != null)
+            {
+                string imgaeURL = vm.MemberPhotoFile;
 
+                string filePath2 = Path.Combine(_eviroment.WebRootPath, "images/Customer/Member", fileName);
+                using (HttpClient client = new HttpClient())
+                {
+                    using (var response = await client.GetAsync(imgaeURL))
+                    {
+                        using (var stream = await response.Content.ReadAsStreamAsync())
+                        {
+                            using (var fileStream = System.IO.File.Create(filePath2))
+                            {
+                                await stream.CopyToAsync(fileStream);
+                            }
+                        }
+                    }
+                }
+                vm.MemberPhotoFile = fileName;
+            }
             if (photo != null)
             {
-                string fileName = Guid.NewGuid().ToString() + ".jpg";
+                //string fileName = Guid.NewGuid().ToString() + ".jpg";
                 string filePath = Path.Combine(_eviroment.WebRootPath, "images/Customer/Member", fileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
@@ -258,6 +391,7 @@ namespace prjMSIT145_Final.Controllers
                 }
                 vm.MemberPhotoFile = fileName;
             }
+            
             Random rnd = new Random();
             vm.EmailCertified = rnd.Next(10000000, 90000000);
             _context.Add(vm.member);
@@ -307,9 +441,9 @@ namespace prjMSIT145_Final.Controllers
 
 
             }
+            return await Task.Run(() => Redirect("~/Home/CIndex"));
+            //return Redirect("~/Home/CIndex");
 
-                return Redirect("~/Home/CIndex");
-          
         }
         public IActionResult Verifyaccount(NormalMember vm)
         {
@@ -597,7 +731,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 NormalMember member =_context.NormalMembers.FirstOrDefault(c=>c.Email== vm.Email && c.Phone==vm.Phone);
                 if (member != null) {
-                    return Json("已送出重製密碼信件");
+                    return Json("已送出重置密碼信件");
                     }
                 else
                 {
@@ -653,11 +787,6 @@ namespace prjMSIT145_Final.Controllers
          }
 
 
-
-
-
-
-
         public IActionResult getCartOrderQty(string data)
         {
             if (!string.IsNullOrEmpty(data))
@@ -685,6 +814,39 @@ namespace prjMSIT145_Final.Controllers
                 $"來信人Email：{mail.txtEmailAddress}";
             string mailSubject = "網站客服信箱來信";
             string result = cs.sendMail("b9809004@gapps.ntust.edu.tw", mailBody, mailSubject, DemoMailServer.ToString());
+
+            result += " ";
+            #region ADO.NET測試
+            var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.Connection = conn;
+                    cmd.CommandText = "insert into ServiceMailBox(SenderName,Email,Phone,Subject,Context,ReceivedTime)" +
+                        "values(@SenderName,@Email,@Phone,@Subject,@Context,@ReceivedTime)";
+                    cmd.Parameters.AddWithValue("SenderName", mail.txtSenderName);
+                    cmd.Parameters.AddWithValue("Email", mail.txtEmailAddress);
+                    cmd.Parameters.AddWithValue("Phone", mail.txtPhone);
+                    cmd.Parameters.AddWithValue("Subject", mail.txtMailSubject);
+                    cmd.Parameters.AddWithValue("Context", mail.txtMailContent);
+                    cmd.Parameters.AddWithValue("ReceivedTime", DateTime.Now);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        result += "success";
+                    }
+                    catch (Exception err)
+                    {
+                        result += $"error:{err.Message}";
+                    }
+
+                }
+            }
+            #endregion
+
+
             return Json(result);
         }
     }

@@ -21,7 +21,7 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult List()
         {
             int NFid = 0;
-            if (HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER) == null)
+            if (!(HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)))
             {
                 return Redirect("/CustomerMember/Login");
             }
@@ -435,7 +435,10 @@ namespace prjMSIT145_Final.Controllers
                     }
                 }
             }
-            return View(vm);
+			ViewData["MerchantOrderNo"] = DateTime.Now.ToString("yyyyMMddHHmmss");  //訂單編號
+			ViewData["ExpireDate"] = DateTime.Now.AddDays(3).ToString("yyyyMMdd"); //繳費有效期限       
+
+			return View(vm);
         }
     }
 }

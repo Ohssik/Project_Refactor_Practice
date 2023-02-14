@@ -7,7 +7,9 @@
     <link href="~/css/Customer_css/CMainpagestyle.css" rel="stylesheet" />
     <link href="~/css/Customer_css/CShopcardstyle.css" rel="stylesheet" />
     <style>
-
+        .Bone.Boneposition4{
+            cursor:pointer;
+        }
     </style>
 }
 <section class="Displayarea">
@@ -55,15 +57,15 @@
             png = @$"https://localhost:7266/adminImg/adDisplay/{item.ImgName}";
             if (Count == 1)
             {
-                <div class="LeftAD" style="background-image:url('@png')"></div>
+                                <div class="LeftAD" style="background-image:url('@png')"></div>
             }
-            else if(Count == 2)
+            else if (Count == 2)
             {
-                <div class="MidAD" style="background-image:url('@png');"></div>
+                                <div class="MidAD" style="background-image:url('@png');"></div>
             }
-            else if(Count == 3)
+            else if (Count == 3)
             {
-                <div class="RightAD" style="background-image:url('@png');"></div>
+                                <div class="RightAD" style="background-image:url('@png');"></div>
             }
         }
     }
@@ -83,38 +85,36 @@
             {
                 if (item.IsOpened > 0)
                 {
-                    @if (item.IsOpened == 1)
+                                    @if (item.IsOpened == 1)
                     {
-                        <div class="Shopcard CursorPointer" id="Shop @item.Fid">
-                            <img class="Shopcardcover" src="~/images/Customer/Shopcard/Test/shopcover.png" />
-                            <img class="Shopcardloggo" src="~/images/Customer/Shopcard/Test/circlelogo.png" />
-                            <div class="Shopcardbottem">
-                                <h3>&ensp;@item.MemberName</h3>
-                                <ul>
-                                    <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
-                                    <li>&ensp;0.3 km&ensp;</li>
-                                    <li>&ensp;★ 4.6&ensp;</li>
-                                </ul>
-                                <h4>&ensp;@item.Address</h4>
-                            </div>
-                        </div>
+                                        <div class="Shopcard CursorPointer" id="Shop @item.Fid">
+                                            <img class="Shopcardcover" src="~/images/@item.SighImgFileName" />
+                                            <img class="Shopcardloggo" src="~/images/@item.LogoImgFileName" />
+                                            <div class="Shopcardbottem">
+                                                <h3>&ensp;@item.MemberName</h3>
+                                                <ul>
+                                                    <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
+                                                    <li id="Dis  @item.Fid" class="DisText">&ensp;0.3 km&ensp;</li>
+                                                </ul>
+                                                <h4>&ensp;@item.Address</h4>
+                                            </div>
+                                        </div>
                     }
-                    @if (item.IsOpened == 2)
+                                    @if (item.IsOpened == 2)
                     {
-                        <div class="Shopcard CursorDefault" id="Shop @item.Fid">
-                            <img class="Shopcardcover" src="~/images/Customer/Shopcard/Test/shopcover.png" />
-                            <img class="Shopcardloggo" src="~/images/Customer/Shopcard/Test/circlelogo.png" />
-                            <div class="ShopisClose">暫停接單</div>
-                            <div class="Shopcardbottem">
-                                <h3>&ensp;@item.MemberName</h3>
-                                <ul>
-                                    <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
-                                    <li>&ensp;0.3 km&ensp;</li>
-                                    <li>&ensp;★ 4.6&ensp;</li>
-                                </ul>
-                                <h4>&ensp;@item.Address</h4>
-                            </div>
-                        </div>
+                                        <div class="Shopcard CursorDefault" id="Shop @item.Fid">
+                                            <img class="Shopcardcover" src="~/images/@item.SighImgFileName" />
+                                            <img class="Shopcardloggo" src="~/images/@item.LogoImgFileName" />
+                                            <div class="ShopisClose">暫停接單</div>
+                                            <div class="Shopcardbottem">
+                                                <h3>&ensp;@item.MemberName</h3>
+                                                <ul>
+                                                    <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
+                                                    <li id="Dis  @item.Fid" class="DisText">&ensp;0.3 km&ensp;</li>
+                                                </ul>
+                                                <h4>&ensp;@item.Address</h4>
+                                            </div>
+                                        </div>
                     }
                 }
             }
@@ -123,6 +123,28 @@
 </section>
 @section Scripts{
     <script>
+        @*let lat = '';
+        let long = '';
+        let DisDiv = document.getElementsByClassName("DisText");
+        navigator.geolocation.getCurrentPosition(successCallback);
+        function successCallback(position) {
+            lat = position.coords.latitude;
+            long = position.coords.longitude;
+            SendCurrentLocation(lat, long);
+        }
+        async function SendCurrentLocation(latitude, longitude) {
+            const response = await fetch(`@Url.Content("~/Home/CDistanceCount")?latitude=${latitude}&longitude=${longitude}`);
+            const datas = await response.json();
+            console.log(datas);
+            let index=0;
+            for (let i = 0, maxBML = datas[0].businessMemberList.length; i < maxBML; i++) {
+                if (datas[0].businessMemberList[i].isSuspensed == 0) {
+                    DisDiv[index].innerHTML = `&ensp;${datas[0].businessMemberList[i].distance} km&ensp;`;
+                    index++;
+                }
+            }
+        }*@
+
 
         @foreach (var item in Model[0].BusinessMemberList)
         {
@@ -136,24 +158,22 @@
                 }
             }
         }
-            $(function () {
+
+        $(function () {
                 let slideNum = 0;
                 let slideCount = $(".slides li").length;
                 let lastIndex = slideCount - 1;
 
                 let adArr = new Array();
-                adArr.push('001.jpg');
-                //$('ul.slides').append('<li><img src /></li>');
+                adArr.push('001.jpg');                
                 $.ajax({
                     url: `@Url.Content("~/home/CgetAdImgList")`,
                     type: 'post',
                     data: {},
                     dataType: 'json',
                     success: function (data) {
-
                         let docFrag = document.createDocumentFragment();
-                        $(data).each(function (i, value) {
-                            //adArr.push(value.imgName);
+                        $(data).each(function (i, value) {                            
                             $(docFrag).append(`<li><img src='@Url.Content("~/adminImg/adDisplay/")${value.imgName}' /></li>`);
                         });
                         $('ul.slides').append(docFrag);
@@ -161,42 +181,30 @@
                     }
                 });
 
-
                 slideNum = 0;
                 let si = setInterval(() => {
                     let i = $('ul.slides>li').length + 1;
                     //console.log(i);
-                    //let i = adArr.length;
+                    
                     if (i > 0) {
-                        i = i - 1;
-                        //    //slideNum = ((new Date()).getSeconds()) % i;
-                        if (slideNum > i) {
+                        i = i - 1;                       
+                        if (slideNum > i) 
                             slideNum = 0;
-                        }
-                        //        console.log(`slideNum=${slideNum}, adArr[slideNum]=${adArr[slideNum]}`);
-                        //        $('ul.slides>li>img').fadeOut(200, function () {
-                        //            $(this).attr('src', `@Url.Content("~/adminImg/adDisplay/")${adArr[slideNum]}`);
-                        //        }).fadeIn(200);
-
-                        //        //$('ul.slides>li>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${adArr[slideNum]}`);
-                        //        $('ul.slides>li>img').removeClass('hidden');
-                        //        if (adArr[slideNum]=='001.jpg'){
-                        //            $('ul.slides>li>img').addClass('hidden');
-                        //        }
-
+                                                
                         let slidemove = -540 * slideNum;
-                        if (slideNum == 0) {
-                            $('ul.slides').addClass('hidden');
-                        }
-                        else {
+                        if (slideNum == 0) 
+                            $('ul.slides').addClass('hidden');                        
+                        else 
                             $('ul.slides').removeClass('hidden');
-                        }
+                        
                         $('ul.slides').css('left', slidemove);
                         slideNum++;
                     }
+                }, 1000);
 
-                }, 2000);
-
-            });
+                $('.Bone.Boneposition4').click(function(){
+                    location.assign('@Url.Action("CCoupons2Member","Coupon")');
+                });
+        });
     </script>
 }
