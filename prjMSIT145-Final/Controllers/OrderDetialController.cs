@@ -346,7 +346,7 @@ namespace prjMSIT145_Final.Controllers
                 prod.PickUpPerson = vm.PickUpPerson;
                 prod.PickUpPersonPhone = vm.PickUpPersonPhone;
             }
-            //_context.SaveChanges();
+            _context.SaveChanges();
             return RedirectToAction("List");
             
         }
