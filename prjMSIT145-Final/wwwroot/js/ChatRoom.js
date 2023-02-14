@@ -25,7 +25,6 @@ connection.start().then(function () {
 
     return console.error(err.toString());
 });
-
 //按下聊天室後
 document.getElementById("showChatRoomBtn").addEventListener("click", async function () {
     if (document.getElementById("showChatRoomBtn").getAttribute("style")=="right:10px;bottom:0px;width:90px")
@@ -89,6 +88,18 @@ connection.on("ReNewChatRoom", function (data) {
 
 
 
+})
+//聊天室改變時
+function ChangeChatroom(otheruserid) {
+    console.log(otheruserid+"改變")
+    connection.invoke("ChangeChatroom", otheruserid).catch(function (err) {
+        return console.error(err.toString());
+    });
+}
+//聊天室載入聊天紀錄
+connection.on("ReNewChatRoomMain", function (data) {
+    var messageData = JSON.parse(data);
+    messageData.forEach
 })
 //按下訊息送出後
 document.getElementById("chatMessagebtn").addEventListener("click", function (event) {
@@ -188,3 +199,5 @@ connection.on("LocalMessage", function (message) {
     document.getElementById("ChatMessageul").appendChild(li);
 
 });
+
+

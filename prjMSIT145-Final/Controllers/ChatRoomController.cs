@@ -31,8 +31,6 @@ namespace prjMSIT145_Final.Controllers
         {
             NormalMember n = _context.NormalMembers.FirstOrDefault(n => n.Fid == fid);
             return Json(n);
-            
-           
         }
 
     }

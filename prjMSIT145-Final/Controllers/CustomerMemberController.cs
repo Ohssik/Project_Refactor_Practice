@@ -58,8 +58,9 @@ namespace prjMSIT145_Final.Controllers
 
                         return Redirect("~/Home/CIndex");
                     }
-                   
+
                     return View();
+                    
                 }
             }
             return View();
@@ -112,6 +113,7 @@ namespace prjMSIT145_Final.Controllers
                     CLoginViewModel vm = new CLoginViewModel();
                     vm.txtAccount = member.Phone;
                     vm.txtPassword = member.Password;
+                  
                     Login(vm);
                 }
                 else
@@ -233,22 +235,29 @@ namespace prjMSIT145_Final.Controllers
                     NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.LineUserid == ProfileObj.userId);
                     if (member != null)
                     {
+                        
+
                         CLoginViewModel loginmember =new CLoginViewModel();
                         loginmember.txtAccount = member.Phone;
                         loginmember.txtPassword = member.Password;
-                        Login(loginmember);
+                        if (member.IsSuspensed != 0)
+                        {
+                            return RedirectToAction("Login", new { isSus = "f" });
+                        }
+                        else {
+
+                            Login(loginmember);
+                        }
+                           
 
                     }
                     else
-                    {
-                        CNormalMemberViewModel x = new CNormalMemberViewModel();
+                    {      
                         NormalMember newmember = new NormalMember();
                         newmember.LineUserid=ProfileObj.userId;
                         newmember.MemberName = ProfileObj.displayName;
                         newmember.MemberPhotoFile = ProfileObj.pictureUrl;
-
-                        return View("Register", newmember);
-
+                        return View("Register", newmember);                     
                     }
                    
                 }
@@ -296,7 +305,7 @@ namespace prjMSIT145_Final.Controllers
             return View(member);
         }
         [HttpPost]
-        public IActionResult Register(CNormalMemberViewModel vm, IFormFile photo)                                               //註冊動作
+        public async Task<IActionResult> Register(CNormalMemberViewModel vm, IFormFile photo)                                               //註冊動作
         {
             var data = _context.NormalMembers.Select(c => c.Phone);
             foreach (var i in data)
@@ -312,44 +321,69 @@ namespace prjMSIT145_Final.Controllers
                     ViewBag.birthday = vm.Birthday;
                     ViewBag.MemberPhotoFile = vm.MemberPhotoFile;
                     ViewBag.password = vm.Password;
-                    return View();
-                   
+                    //return View();
+                    return await Task.Run(() => View());
+
                 }
             }
             if (vm.MemberName == null && vm.Password == null)
             {
-                return View();
+                //return View();
+                return await Task.Run(() => View());
             }
             if (vm.Phone == null)
             {
-                return View();
+                //return View();
+                return await Task.Run(() => View());
             }
             else
             {
                 bool correct = Regex.IsMatch(vm.Phone, @"^09[0-9]{8}$");
                 if (!(correct))
                 {
-                    return View();
+                    //return View();
+                    return await Task.Run(() => View());
                 }
                 
             }
             if (vm.Email == null)
             {
-                return View();
+                //return View();
+                return await Task.Run(() => View());
             }
             else
             {
                 bool correct = Regex.IsMatch(vm.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
                 if (!(correct))
                 {
-                    return View();
+                    //return View();
+                    return await Task.Run(() => View());
                 }
             }
-            
+            string fileName = Guid.NewGuid().ToString() + ".jpg";
+            if (vm.MemberPhotoFile != null)
+            {
+                string imgaeURL = vm.MemberPhotoFile;
 
+                string filePath2 = Path.Combine(_eviroment.WebRootPath, "images/Customer/Member", fileName);
+                using (HttpClient client = new HttpClient())
+                {
+                    using (var response = await client.GetAsync(imgaeURL))
+                    {
+                        using (var stream = await response.Content.ReadAsStreamAsync())
+                        {
+                            using (var fileStream = System.IO.File.Create(filePath2))
+                            {
+                                await stream.CopyToAsync(fileStream);
+                            }
+                        }
+                    }
+                }
+                vm.MemberPhotoFile = fileName;
+            }
             if (photo != null)
             {
-                string fileName = Guid.NewGuid().ToString() + ".jpg";
+                //string fileName = Guid.NewGuid().ToString() + ".jpg";
                 string filePath = Path.Combine(_eviroment.WebRootPath, "images/Customer/Member", fileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
@@ -357,6 +391,7 @@ namespace prjMSIT145_Final.Controllers
                 }
                 vm.MemberPhotoFile = fileName;
             }
+            
             Random rnd = new Random();
             vm.EmailCertified = rnd.Next(10000000, 90000000);
             _context.Add(vm.member);
@@ -406,9 +441,9 @@ namespace prjMSIT145_Final.Controllers
 
 
             }
+            return await Task.Run(() => Redirect("~/Home/CIndex"));
+            //return Redirect("~/Home/CIndex");
 
-                return Redirect("~/Home/CIndex");
-          
         }
         public IActionResult Verifyaccount(NormalMember vm)
         {
@@ -752,17 +787,12 @@ namespace prjMSIT145_Final.Controllers
          }
 
 
-
-
-
-
-
         public IActionResult getCartOrderQty(string data)
         {
             if (!string.IsNullOrEmpty(data))
             {
                 int nfid = Convert.ToInt32(data);
-                int ordersQty = _context.ViewShowFullOrders.Where(o => o.NFid == nfid && o.OrderState=="0").Count();
+                int ordersQty = _context.Orders.Where(o => o.NFid == nfid && o.OrderState=="0").Count();
                 string showQty = ordersQty > 0 ? ordersQty.ToString() : "";
                 return Json(showQty);
             }
