@@ -1,4 +1,4 @@
-﻿@model IEnumerable<prjMSIT145_Final.ViewModels.COrderDetialViewModel>
+﻿@model List<prjMSIT145_Final.ViewModels.COrderDetialViewModel>
 @{
     Layout = "_CustomerLayout";
     ViewData["Title"] = "List";
@@ -6,6 +6,7 @@
 
 @section Styles{
     <style>
+
         .pic_Div {
             width: 100%;
             height: 80px;
@@ -44,9 +45,9 @@
             padding: 10px 0;
             color: #FFFFFF;
             font-weight: 600;
-               
         }
-        .backgroundcolor1{
+
+        .backgroundcolor1 {
             background-color: #ffb700;
         }
 
@@ -61,6 +62,7 @@
         .backgroundcolor5 {
             background-color: red
         }
+
         .column {
             display: flex;
             flex-direction: column;
@@ -72,7 +74,6 @@
         }
 
         p {
-            
             margin: 8px;
         }
 
@@ -83,7 +84,6 @@
         .padding {
             box-sizing: border-box;
             padding: 10px;
-           
         }
 
         .main {
@@ -125,7 +125,6 @@
             margin: 10px;
             text-align: center;
             font-size: 20px;
-            
         }
 
         .btnDiv {
@@ -158,10 +157,9 @@
 
         a:link {
             text-decoration: none;
-            
         }
 
-        
+
 
         a:hover {
             color: gray;
@@ -188,13 +186,13 @@
             background-color: white
         }
 
-        
+
 
         .card_Guide_FontColor {
             color: black;
         }
 
-        
+
 
         .mainDiv {
             position: relative;
@@ -269,61 +267,61 @@
                 </div>
             </form>
             <div class="divCenter ">
-            @{
-                int count = 0;
-                foreach (var item in Model)
-                {
-                    count++;
-                                        @if(item.OrderState != ""){
-                                             @if (item.OrderState == "未接單")
+                @{
+                    int count = 0;
+                    foreach (var item in Model)
+                    {
+                        count++;
+                        @if (item.OrderState != "")
                         {
-                                            <!-- *****動態產生****至140行為止 -->
-                                            <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_1" style="margin-right:40px">
-                                                <div class="state_timeDiv">
-                                                    <!-- 背景色依狀態更改: -->
-                                                    <div class="state backgroundcolor1" name="tab_1">@Html.DisplayFor(modelItem => item.OrderState)</div>
-                                                    <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
-                                                </div>
-                                                <div class="column">
-                                                    <div class="pic_Div">
-                                                        <div class="pic">
-                                                            <img src="images/cat.jpg" class="card-img-top" alt="..." />
-                                                        </div>
-                                                    </div>
-                                                    <div class="">
-                                                        <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
-                                                        <div class="topBorder">
-
-                                                            <p class="card-text card_Guide_FontColor">共 @Html.DisplayFor(modelItem => item.TotalAmount)元</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                            @if (item.OrderState == "未接單")
+                            {
+                                <!-- *****動態產生****至140行為止 -->
+                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_1" style="margin-right:40px">
+                                    <div class="state_timeDiv">
+                                        <!-- 背景色依狀態更改: -->
+                                        <div class="state backgroundcolor1" name="tab_1">@Html.DisplayFor(modelItem => item.OrderState)</div>
+                                        <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="pic_Div">
+                                            <div class="pic">
+                                                <img src="images/cat.jpg" class="card-img-top" alt="..." />
                                             </div>
-                        }
+                                        </div>
+                                        <div class="">
+                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
+                                            <div class="topBorder">
+                                                <p class="card-text card_Guide_FontColor ">共 @Convert.ToInt32(item.TotalAmount) 元</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                             else if (item.OrderState == "已接單")
                             {
-                                                    <!-- *****動態產生****至140行為止 -->
-                                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_2" style="margin-right:40px">
-                                                        <div class="state_timeDiv">
-                                                            <!-- 背景色依狀態更改: -->
-                                                            <div class="state backgroundcolor2">@Html.DisplayFor(modelItem => item.OrderState)</div>
-                                                            <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
-                                                        </div>
-                                                        <div class="column">
-                                                            <div class="pic_Div">
-                                                                <div class="pic">
-                                                                    <img src="images/cat.jpg" class="card-img-top" alt="..." />
-                                                                </div>
-                                                            </div>
-                                                            <div class="">
-                                                                <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
-                                                                <div class="topBorder">
-                                                                
-                                                                    <p class="card-text card_Guide_FontColor">共 @Html.DisplayFor(modelItem => item.TotalAmount)元</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                <!-- *****動態產生****至140行為止 -->
+                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_2" style="margin-right:40px">
+                                    <div class="state_timeDiv">
+                                        <!-- 背景色依狀態更改: -->
+                                        <div class="state backgroundcolor2">@Html.DisplayFor(modelItem => item.OrderState)</div>
+                                        <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="pic_Div">
+                                            <div class="pic">
+                                                <img src="images/cat.jpg" class="card-img-top" alt="..." />
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
+                                            <div class="topBorder">
+
+                                                <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             }
                             else if (item.OrderState == "商家準備中")
                             {
@@ -343,8 +341,7 @@
                                         <div class="">
                                             <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
                                             <div class="topBorder">
-
-                                                <p class="card-text card_Guide_FontColor">共 @Html.DisplayFor(modelItem => item.TotalAmount)元</p>
+                                                <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
                                             </div>
                                         </div>
                                     </div>
@@ -352,97 +349,95 @@
                             }
                             else if (item.OrderState == "已完成")
                             {
-                                                    <!-- *****動態產生****至140行為止 -->
-                                                    <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_4" style="margin-right:40px">
-                                                        <div class="state_timeDiv">
-                                                            <!-- 背景色依狀態更改: -->
-                                                            <div class="state backgroundcolor4">@Html.DisplayFor(modelItem => item.OrderState)</div>
-                                                            <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
-                                                        </div>
-                                                        <div class="column">
-                                                            <div class="pic_Div">
-                                                                <div class="pic">
-                                                                    <img src="images/cat.jpg" class="card-img-top" alt="..." />
-                                                                </div>
-                                                            </div>
-                                                            <div class="">
-                                                                <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
-                                                                <div class="topBorder">
-
-                                                                    <p class="card-text card_Guide_FontColor">共 @Html.DisplayFor(modelItem => item.TotalAmount)元</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                <!-- *****動態產生****至140行為止 -->
+                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_4" style="margin-right:40px">
+                                    <div class="state_timeDiv">
+                                        <!-- 背景色依狀態更改: -->
+                                        <div class="state backgroundcolor4">@Html.DisplayFor(modelItem => item.OrderState)</div>
+                                        <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="pic_Div">
+                                            <div class="pic">
+                                                <img src="images/cat.jpg" class="card-img-top" alt="..." />
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
+                                            <div class="topBorder">
+                                                <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             }
                             else if (item.OrderState == "商家退單")
                             {
-                                                    <!-- *****動態產生****至140行為止 -->
-                                                    <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_5" style="margin-right:40px">
-                                                        <div class="state_timeDiv">
-                                                            <!-- 背景色依狀態更改: -->
-                                                            <div class="state backgroundcolor5">@Html.DisplayFor(modelItem => item.OrderState)</div>
-                                                            <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
-                                                        </div>
-                                                        <div class="column">
-                                                            <div class="pic_Div">
-                                                                <div class="pic">
-                                                                    <img src="images/cat.jpg" class="card-img-top" alt="..." />
-                                                                </div>
-                                                            </div>
-                                                            <div class="">
-                                                                <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
-                                                                <div class="topBorder">
-
-                                                                    <p class="card-text card_Guide_FontColor">共 @Html.DisplayFor(modelItem => item.TotalAmount)元</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                <!-- *****動態產生****至140行為止 -->
+                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_5" style="margin-right:40px">
+                                    <div class="state_timeDiv">
+                                        <!-- 背景色依狀態更改: -->
+                                        <div class="state backgroundcolor5">@Html.DisplayFor(modelItem => item.OrderState)</div>
+                                        <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="pic_Div">
+                                            <div class="pic">
+                                                <img src="images/cat.jpg" class="card-img-top" alt="..." />
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
+                                            <div class="topBorder">
+                                                <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             }
-                            else{
+                            else
+                            {
                                 <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_6" style="margin-right:40px">
-                                                        <div class="state_timeDiv">
-                                                            <!-- 背景色依狀態更改: -->
-                                                            <div class="state backgroundcolor5">@Html.DisplayFor(modelItem => item.OrderState)</div>
-                                                            <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
-                                                        </div>
-                                                        <div class="column">
-                                                            <div class="pic_Div">
-                                                                <div class="pic">
-                                                                    <img src="images/cat.jpg" class="card-img-top" alt="..." />
-                                                                </div>
-                                                            </div>
-                                                            <div class="">
-                                                                <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
-                                                                <div class="topBorder">
-
-                                                                    <p class="card-text card_Guide_FontColor">共 @Html.DisplayFor(modelItem => item.TotalAmount)元</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                    <div class="state_timeDiv">
+                                        <!-- 背景色依狀態更改: -->
+                                        <div class="state backgroundcolor5">@Html.DisplayFor(modelItem => item.OrderState)</div>
+                                        <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
+                                    </div>
+                                    <div class="column">
+                                        <div class="pic_Div">
+                                            <div class="pic">
+                                                <img src="images/cat.jpg" class="card-img-top" alt="..." />
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
+                                            <div class="topBorder">
+                                                <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             }
                         }
 
+                    }
                 }
-            }
             </div>
         </div>
     </div>
     <!-- JavaScript Bundle with Popper -->
-    
+
     <script src="@Url.Content("~/js/jquery-3.6.2.js")"></script>
     <script>
 
-        @foreach(var item in Model)
+        @foreach (var item in Model)
         {
             @:document.getElementById("Click @(item.Fid)").addEventListener('click', function () {
 
             @:window.location.href="ListInfo/?Fid=@(item.Fid)";
 
             @:});
-            
+
         };
 
 
@@ -460,9 +455,9 @@
             });
 
         });
-        
-            
-        
+
+
+
 
     </script>
 

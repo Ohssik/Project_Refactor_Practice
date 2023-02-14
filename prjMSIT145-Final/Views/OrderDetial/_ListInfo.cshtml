@@ -10,12 +10,12 @@
         <h6>@item.ProductName</h6>
         <div class="flexAndItemsCenter displayBetween ">
             <div>
-                <span id="itemDetailFont" class="spanFont">
+                <span id="itemDetailFont" class="spanFont" style="color:#9F4E27">
                     @foreach (var item2 in item.OptionName)
                     {
                         <span><span>@item2</span> /</span>
                     }
-                    <span><span>$@item.OptionAmount</span> /</span>
+                    <span><span>$@Convert.ToInt32(item.OptionAmount)</span> /</span>
                     <span><span>@item.Qty 份</span> </span>
                 </span>
             </div>
