@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json;
+using NuGet.Common;
 using NuGet.Protocol;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
@@ -684,12 +685,23 @@ namespace prjMSIT145_Final.Controllers
                 }
                 else
                 {
+                    string token = Guid.NewGuid().ToString();
+                    ChangeRequestPassword request = new ChangeRequestPassword();
+                    request.Token = token;
+                    request.Account = vm.Phone;
+                    request.Email = vm.Email;
+                    request.Expire = DateTime.Now.AddMinutes(10);
+                    _context.ChangeRequestPasswords.Add(request);
+
+
+
+
                     string smtpAddress = "smtp.gmail.com";
                     //設定Port
                     int portNumber = 587;
                     bool enableSSL = true;
                     //填入寄送方email和密碼
-                    string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?Fid={member.Fid}";
+                    string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?token={token}&Fid={member.Fid}";
                     string emailFrom = "a29816668@gmail.com";
                     string emailpassword = "joksdquaswjdyzpu";
                     //收信方email 可以用逗號區分多個收件人
@@ -744,23 +756,37 @@ namespace prjMSIT145_Final.Controllers
         }
 
 
-        public IActionResult forgetalterpassword(int? Fid)
+        public IActionResult forgetalterpassword(int? Fid, string token)
         {
-            if (Fid != null)
+
+            ChangeRequestPassword request = _context.ChangeRequestPasswords.FirstOrDefault(c => c.Token == token);
+            if (request != null)
             {
-                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Fid == Fid);
-                if (member != null)
+                string expire = request.Expire.ToString();
+                if (DateTime.Now > Convert.ToDateTime(expire))
                 {
-                    return View(member);
+                    return Redirect("~/Home/CIndex");
+
+                }
+                else
+                {
+                    if (Fid != null)
+                    {
+                        NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Fid == Fid);
+                        if (member != null)
+                        {
+                            return View(member);
+                        }
+                        return Redirect("~/Home/CIndex");
+
+                    }
+
                 }
 
-                return Redirect("~/Home/CIndex");
-
-
             }
-
-
             return Redirect("~/Home/CIndex");
+            
+           
         }
         [HttpPost]
         public IActionResult forgetalterpassword(NormalMember member)
