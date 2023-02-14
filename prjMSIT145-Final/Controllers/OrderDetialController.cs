@@ -242,8 +242,7 @@ namespace prjMSIT145_Final.Controllers
             Order prod = _context.Orders.FirstOrDefault(t => t.Fid == vm.Fid);
 
             if(prod != null)
-            {
-                
+            {                
                 prod.PickUpType= vm.PickUpType;
                 prod.PickUpDate = vm.PickUpDate;
                 prod.PickUpTime = vm.PickUpDate - DateTime.Now;

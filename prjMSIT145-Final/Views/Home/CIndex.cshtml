@@ -7,7 +7,9 @@
     <link href="~/css/Customer_css/CMainpagestyle.css" rel="stylesheet" />
     <link href="~/css/Customer_css/CShopcardstyle.css" rel="stylesheet" />
     <style>
-
+        .Bone.Boneposition4{
+            cursor:pointer;
+        }
     </style>
 }
 <section class="Displayarea">
@@ -55,15 +57,15 @@
             png = @$"https://localhost:7266/adminImg/adDisplay/{item.ImgName}";
             if (Count == 1)
             {
-                <div class="LeftAD" style="background-image:url('@png')"></div>
+                                <div class="LeftAD" style="background-image:url('@png')"></div>
             }
             else if (Count == 2)
             {
-                <div class="MidAD" style="background-image:url('@png');"></div>
+                                <div class="MidAD" style="background-image:url('@png');"></div>
             }
             else if (Count == 3)
             {
-                <div class="RightAD" style="background-image:url('@png');"></div>
+                                <div class="RightAD" style="background-image:url('@png');"></div>
             }
         }
     }
@@ -83,36 +85,36 @@
             {
                 if (item.IsOpened > 0)
                 {
-                    @if (item.IsOpened == 1)
+                                    @if (item.IsOpened == 1)
                     {
-                        <div class="Shopcard CursorPointer" id="Shop @item.Fid">
-                            <img class="Shopcardcover" src="~/images/@item.SighImgFileName" />
-                            <img class="Shopcardloggo" src="~/images/@item.LogoImgFileName" />
-                            <div class="Shopcardbottem">
-                                <h3>&ensp;@item.MemberName</h3>
-                                <ul>
-                                    <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
-                                    <li id="Dis  @item.Fid" class="DisText">&ensp;0.3 km&ensp;</li>
-                                </ul>
-                                <h4>&ensp;@item.Address</h4>
-                            </div>
-                        </div>
+                                        <div class="Shopcard CursorPointer" id="Shop @item.Fid">
+                                            <img class="Shopcardcover" src="~/images/@item.SighImgFileName" />
+                                            <img class="Shopcardloggo" src="~/images/@item.LogoImgFileName" />
+                                            <div class="Shopcardbottem">
+                                                <h3>&ensp;@item.MemberName</h3>
+                                                <ul>
+                                                    <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
+                                                    <li id="Dis  @item.Fid" class="DisText">&ensp;0.3 km&ensp;</li>
+                                                </ul>
+                                                <h4>&ensp;@item.Address</h4>
+                                            </div>
+                                        </div>
                     }
-                    @if (item.IsOpened == 2)
+                                    @if (item.IsOpened == 2)
                     {
-                        <div class="Shopcard CursorDefault" id="Shop @item.Fid">
-                            <img class="Shopcardcover" src="~/images/@item.SighImgFileName" />
-                            <img class="Shopcardloggo" src="~/images/@item.LogoImgFileName" />
-                            <div class="ShopisClose">暫停接單</div>
-                            <div class="Shopcardbottem">
-                                <h3>&ensp;@item.MemberName</h3>
-                                <ul>
-                                    <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
-                                    <li id="Dis  @item.Fid" class="DisText">&ensp;0.3 km&ensp;</li>
-                                </ul>
-                                <h4>&ensp;@item.Address</h4>
-                            </div>
-                        </div>
+                                        <div class="Shopcard CursorDefault" id="Shop @item.Fid">
+                                            <img class="Shopcardcover" src="~/images/@item.SighImgFileName" />
+                                            <img class="Shopcardloggo" src="~/images/@item.LogoImgFileName" />
+                                            <div class="ShopisClose">暫停接單</div>
+                                            <div class="Shopcardbottem">
+                                                <h3>&ensp;@item.MemberName</h3>
+                                                <ul>
+                                                    <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
+                                                    <li id="Dis  @item.Fid" class="DisText">&ensp;0.3 km&ensp;</li>
+                                                </ul>
+                                                <h4>&ensp;@item.Address</h4>
+                                            </div>
+                                        </div>
                     }
                 }
             }
@@ -157,7 +159,7 @@
             }
         }
 
-            $(function () {
+        $(function () {
                 let slideNum = 0;
                 let slideCount = $(".slides li").length;
                 let lastIndex = slideCount - 1;
@@ -214,7 +216,11 @@
                         $('ul.slides').css('left', slidemove);
                         slideNum++;
                     }
-                }, 2000);
-            });
+                }, 1000);
+
+                $('.Bone.Boneposition4').click(function(){
+                    location.assign('@Url.Action("CCoupons2Member","Coupon")');
+                });
+        });
     </script>
 }
