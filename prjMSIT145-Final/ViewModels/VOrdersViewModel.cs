@@ -6,6 +6,7 @@
         public int? NFid { get; set; }
         public int? BFid { get; set; }
         public string? MemberName { get; set; }
+        public string? LogoImgFileName { get; set; }
         public DateTime? PickUpDate { get; set; }
         public TimeSpan? PickUpTime { get; set; }
         public string? PickUpType { get; set; }

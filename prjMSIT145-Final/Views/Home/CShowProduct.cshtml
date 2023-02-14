@@ -10,19 +10,11 @@
 <section class="shopinfocard">
     <div class="shopinfoarea">
         <div class="shopinfo">
-            <img class="Shoplogo" src="~/images/Customer/Shopcard/Test/circlelogo.png" />
+            <img class="Shoplogo" src="~/images/@Model[0].BusinessMemberDetailList[0].LogoImgFileName" />
             <div>
                 <div class="shoptitle">@Model[0].BusinessMemberDetailList[0].MemberName</div>
                 <div class="infoblock">
                     <div class="InfoArea">店家資訊</div>
-                    <div class="InfoArea">
-                        <img src="~/images/Customer/ShowProduct/Ystar 16x16.png" />
-                        <img src="~/images/Customer/ShowProduct/Ystar 16x16.png" />
-                        <img src="~/images/Customer/ShowProduct/Ystar 16x16.png" />
-                        <img src="~/images/Customer/ShowProduct/Ystar 16x16.png" />
-                        <img src="~/images/Customer/ShowProduct/Nstar 16x16.png" />
-                        <p>4.2 (6)</p>
-                    </div>
                     <div class="InfoArea"><img src="~/images/Customer/ShowProduct/opentime 20x20.png" /><p>@Model[0].BusinessMemberDetailList[0].OpenTime ~ @Model[0].BusinessMemberDetailList[0].CloseTime</p></div>
                     <div class="InfoArea"><img src="~/images/Customer/ShowProduct/phone 20x20.png" /><p>@Model[0].BusinessMemberDetailList[0].Phone</p></div>
                     <div class="InfoArea"><img src="~/images/Customer/ShowProduct/address 20x20.png" /><p>@Model[0].BusinessMemberDetailList[0].Address</p></div>
@@ -35,13 +27,7 @@
                 <div class="icon">
                     <img src="~/images/Customer/ShowProduct/discount 24x24.png" />
                 </div>
-                <div class="btntext">優惠</div>
-            </div>
-            <div class="iconwrap">
-                <div class="icon">
-                    <img src="~/images/Customer/ShowProduct/take 24x24.png" />
-                </div>
-                <div class="btntext">怎取餐</div>
+                <div class="btntext">問店家</div>
             </div>
             <div class="iconwrap">
                 <div class="icon">
@@ -49,16 +35,10 @@
                 </div>
                 <div class="btntext">找商品</div>
             </div>
-            <div class="iconwrap">
-                <div class="icon">
-                    <img src="~/images/Customer/ShowProduct/add 24x24.png" />
-                </div>
-                <div class="btntext">揪團</div>
-            </div>
         </div>
     </div>
     <section class="ADarea">
-        <img class="Shopcardcover" src="~/images/Customer/Shopcard/Test/shopcover.png" />
+        <img class="Shopcardcover" src="~/images/@Model[0].BusinessMemberDetailList[0].BannerImgFileName1" />
     </section>
 </section>
 
