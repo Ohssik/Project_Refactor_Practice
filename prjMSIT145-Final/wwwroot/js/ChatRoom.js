@@ -101,8 +101,13 @@ connection.on("ReNewChatRoomMain", function (data) {
     var messageData = JSON.parse(data);
     console.log(messageData)
     messageData.forEach(function (item) {
-        const ListChatMessageil = ChatMessageul.lastElementChild;
-        li.setAttribute("class", "d-flex mb-2 mt-2");
+        if (item.Senderid == ChatNowUserChatid.value) {
+            remotemessageShow(item.Message, "#");
+        }
+        else
+        {
+            localmessageShow(item.Message)
+        }
         
       
     })
@@ -149,7 +154,6 @@ function remotemessageShow(message,otherUserimg) {
                                     </div>
                                 </div>
                               `
-
     }
     else {
         if (ListChatMessageil.getAttribute("class") == "d-flex mb-2 mt-2") {
@@ -164,7 +168,6 @@ function remotemessageShow(message,otherUserimg) {
                                     </div>
                                 </div>
                               `
-
         }
         else {
             li.innerHTML = `<img src="#"
@@ -180,7 +183,6 @@ function remotemessageShow(message,otherUserimg) {
                                     </div>
                                 </div>
                               `
-
         }
     }
     document.getElementById("ChatMessageul").appendChild(li);
@@ -197,7 +199,5 @@ function localmessageShow(message)
                                         </p>
                                     </div>
                                 </div>`
-
-
     document.getElementById("ChatMessageul").appendChild(li);
 }

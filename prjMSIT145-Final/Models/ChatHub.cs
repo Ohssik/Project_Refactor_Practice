@@ -143,9 +143,6 @@ namespace prjMSIT145_Final.Models
             string Json = JsonSerializer.Serialize(message);
             await Clients.Client(Context.ConnectionId).SendAsync("ReNewChatRoomMain", Json);
         }
-
-
-
         //傳訊息
         public async Task SendMessage(string otheruserid, string message)
         {
