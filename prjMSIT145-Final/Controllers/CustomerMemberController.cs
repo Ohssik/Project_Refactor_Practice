@@ -787,17 +787,12 @@ namespace prjMSIT145_Final.Controllers
          }
 
 
-
-
-
-
-
         public IActionResult getCartOrderQty(string data)
         {
             if (!string.IsNullOrEmpty(data))
             {
                 int nfid = Convert.ToInt32(data);
-                int ordersQty = _context.ViewShowFullOrders.Where(o => o.NFid == nfid && o.OrderState=="0").Count();
+                int ordersQty = _context.Orders.Where(o => o.NFid == nfid && o.OrderState=="0").Count();
                 string showQty = ordersQty > 0 ? ordersQty.ToString() : "";
                 return Json(showQty);
             }
