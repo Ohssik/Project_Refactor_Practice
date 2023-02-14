@@ -165,18 +165,15 @@
                 let lastIndex = slideCount - 1;
 
                 let adArr = new Array();
-                adArr.push('001.jpg');
-                //$('ul.slides').append('<li><img src /></li>');
+                adArr.push('001.jpg');                
                 $.ajax({
                     url: `@Url.Content("~/home/CgetAdImgList")`,
                     type: 'post',
                     data: {},
                     dataType: 'json',
                     success: function (data) {
-
                         let docFrag = document.createDocumentFragment();
-                        $(data).each(function (i, value) {
-                            //adArr.push(value.imgName);
+                        $(data).each(function (i, value) {                            
                             $(docFrag).append(`<li><img src='@Url.Content("~/adminImg/adDisplay/")${value.imgName}' /></li>`);
                         });
                         $('ul.slides').append(docFrag);
@@ -188,31 +185,18 @@
                 let si = setInterval(() => {
                     let i = $('ul.slides>li').length + 1;
                     //console.log(i);
-                    //let i = adArr.length;
+                    
                     if (i > 0) {
-                        i = i - 1;
-                        //    //slideNum = ((new Date()).getSeconds()) % i;
-                        if (slideNum > i) {
+                        i = i - 1;                       
+                        if (slideNum > i) 
                             slideNum = 0;
-                        }
-                        //        console.log(`slideNum=${slideNum}, adArr[slideNum]=${adArr[slideNum]}`);
-                        //        $('ul.slides>li>img').fadeOut(200, function () {
-                        //            $(this).attr('src', `@Url.Content("~/adminImg/adDisplay/")${adArr[slideNum]}`);
-                        //        }).fadeIn(200);
-
-                        //        //$('ul.slides>li>img').attr('src', `@Url.Content("~/adminImg/adDisplay/")${adArr[slideNum]}`);
-                        //        $('ul.slides>li>img').removeClass('hidden');
-                        //        if (adArr[slideNum]=='001.jpg'){
-                        //            $('ul.slides>li>img').addClass('hidden');
-                        //        }
-
+                                                
                         let slidemove = -540 * slideNum;
-                        if (slideNum == 0) {
-                            $('ul.slides').addClass('hidden');
-                        }
-                        else {
+                        if (slideNum == 0) 
+                            $('ul.slides').addClass('hidden');                        
+                        else 
                             $('ul.slides').removeClass('hidden');
-                        }
+                        
                         $('ul.slides').css('left', slidemove);
                         slideNum++;
                     }

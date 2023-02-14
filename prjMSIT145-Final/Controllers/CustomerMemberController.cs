@@ -236,7 +236,11 @@ namespace prjMSIT145_Final.Controllers
                         CLoginViewModel loginmember =new CLoginViewModel();
                         loginmember.txtAccount = member.Phone;
                         loginmember.txtPassword = member.Password;
-                        Login(loginmember);
+                        if(member.IsSuspensed != 0)
+                        {
+                            return RedirectToAction("Login", new {isSus="f"});
+                        }
+                        //Login(loginmember);
 
                     }
                     else
