@@ -15,14 +15,11 @@ namespace prjMSIT145_Final.ViewModels
             get { return _order; }
             set { _order = value; }
         }
-
         public string? Address
         {
             get;
             set;
         }
-
-
         public int OrderFid
         {
             get { return _order.OrderFid; }

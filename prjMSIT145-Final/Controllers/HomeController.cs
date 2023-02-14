@@ -145,6 +145,7 @@ namespace prjMSIT145_Final.Controllers
                 Gps = BM.Gps,
                 IsOpened = BM.IsOpened,
                 LogoImgFileName = BI.LogoImgFileName,
+                SighImgFileName = BI.SighImgFileName,
                 BannerImgFileName1 = BI.BannerImgFileName1,
                 ChatroomUserid = BM.ChatroomUserid,
             }).Where(BM => BM.FID == BFid).OrderBy(BM => BM.FID);
@@ -163,6 +164,7 @@ namespace prjMSIT145_Final.Controllers
                     Gps = item.Gps,
                     IsOpened = item.IsOpened,
                     LogoImgFileName = item.LogoImgFileName,
+                    SighImgFileName = item.SighImgFileName,
                     BannerImgFileName1 = item.BannerImgFileName1,
                     ChatroomUserid = item.ChatroomUserid,
                 });
