@@ -7,6 +7,7 @@
         public decimal? Productprice { get; set; }
         public int? Qty { get; set; }
         public int? Fid { get; set; }
+        public int? OrderFid { get; set; }
         //detail
         //public int? OptionFid { get; set; }
         public List<string>? OptionName { get; set; }
