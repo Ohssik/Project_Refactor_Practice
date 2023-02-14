@@ -17,23 +17,11 @@ namespace prjMSIT145_Final.Controllers
         {
             _context = context;
         }
-        [HttpPost]
-        public IActionResult List(int? id)
-        {
-
-            if (id == null)
-            {
-                return View();
-            }
-            return RedirectToAction("ListInfo");
-
-
-
-        }
+      
         public IActionResult List()
         {
             int NFid = 0;
-            if (HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER) == null)
+            if (!(HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_USER)))
             {
                 return Redirect("/CustomerMember/Login");
             }
@@ -229,51 +217,49 @@ namespace prjMSIT145_Final.Controllers
             return View(vm);
         }
 
+        public ActionResult Delete(int? id)
+        {
+            if (id != null)
+            {
+                OrderItem prod = _context.OrderItems.FirstOrDefault(p => p.Fid == id);
+                
+
+                if (prod != null)
+                {
+                    _context.OrderItems.Remove(prod);
+                    _context.SaveChanges();
+                }
+
+                
+            }
+            return RedirectToAction("CartList");
+        }
 
         [HttpPost]
         public IActionResult CartList(COrderDetialViewModel vm)
         {
-            var q = from o in _context.Orders
-                    join b in _context.BusinessMembers
-                    on o.BFid equals b.Fid
-                    join a in _context.PaymentTermCategories
-                    on o.PayTermCatId equals a.Fid
-                    where o.Fid == 39
-                    select new
-                    {
-                        Fid = o.Fid,
-                        NFid = o.NFid,
-                        BFid = o.BFid,
-                        BMemberName = b.MemberName,
-                        BMemberPhone = b.Phone,
-                        BAddress = b.Address,
-                        PickUpDate = o.PickUpDate,
-                        PickUpTime = o.PickUpTime,
-                        PickUpType = o.PickUpType,
-                        PickUpPerson = o.PickUpPerson,
-                        PickUpPersonPhone = o.PickUpPersonPhone,
-                        PayTernCatId = a.PaymentType,
-                        OrderState = o.OrderState,
-                        Memo = o.Memo,
-                        OrderTime = o.OrderTime,
-                        TotalAmount = o.TotalAmount
+            
+            Order prod = _context.Orders.FirstOrDefault(t => t.Fid == vm.Fid);
 
-                    };
-            foreach (var item in q)
+            if(prod != null)
             {
-                vm.PickUpType = item.PickUpType;
-                vm.PickUpTime = item.PickUpTime;
-                vm.PickUpDate = item.PickUpDate;
-                vm.PayTermCatId = item.PayTernCatId;
-                vm.Memo = item.Memo;
-                vm.OrderState = item.OrderState;
-                vm.TotalAmount = item.TotalAmount;
+                
+                prod.PickUpType= vm.PickUpType;
+                prod.PickUpDate = vm.PickUpDate;
+                prod.PickUpTime = vm.PickUpDate - DateTime.Now;
+                prod.OrderState = vm.OrderState;
+                prod.PayTermCatId = Int32.Parse(vm.PayTermCatId);
+                prod.Memo = vm.Memo;
+                prod.TotalAmount= vm.TotalAmount;
+                prod.PickUpPerson = vm.PickUpPerson;
+                prod.PickUpPersonPhone = vm.PickUpPersonPhone;
             }
 
 
+           
             _context.SaveChanges();
 
-            return View();
+            return RedirectToAction("List");
         }
 
 
@@ -283,9 +269,7 @@ namespace prjMSIT145_Final.Controllers
             var q = from o in _context.Orders
                     join b in _context.BusinessMembers
                     on o.BFid equals b.Fid
-                    join a in _context.PaymentTermCategories
-                    on o.PayTermCatId equals a.Fid
-                    where o.Fid == 39
+                    where o.Fid == Fid
                     select new
                     {
                         Fid = o.Fid,
@@ -294,12 +278,8 @@ namespace prjMSIT145_Final.Controllers
                         BMemberName = b.MemberName,
                         BMemberPhone = b.Phone,
                         BAddress = b.Address,
-                        PickUpDate = o.PickUpDate,
-                        PickUpTime = o.PickUpTime,
-                        PickUpType = o.PickUpType,
                         PickUpPerson = o.PickUpPerson,
                         PickUpPersonPhone = o.PickUpPersonPhone,
-                        PayTernCatId = a.PaymentType,
                         OrderState = o.OrderState,
                         Memo = o.Memo,
                         OrderTime = o.OrderTime,
@@ -309,7 +289,7 @@ namespace prjMSIT145_Final.Controllers
             var Pr = from o in _context.OrderItems
                      join p in _context.Products
                      on o.ProductFid equals p.Fid
-                     where o.OrderFid == 39
+                     where o.OrderFid == Fid
                      select new
                      {
                          Fid = o.Fid,
@@ -351,11 +331,7 @@ namespace prjMSIT145_Final.Controllers
                     vm.Fid = c.Fid;
                     vm.BFid = c.BFid;
                     vm.NFid = c.NFid;
-                    vm.PickUpTime = c.PickUpTime;
-                    vm.PickUpDate = c.PickUpDate;
-                    vm.PickUpType = c.PickUpType;
                     vm.PickUpPersonPhone = c.PickUpPersonPhone;
-                    vm.PayTermCatId = c.PayTernCatId;
                     vm.Memo = c.Memo;
 
                     vm.items = new List<COrderItemViewModel>();
@@ -389,9 +365,10 @@ namespace prjMSIT145_Final.Controllers
                 }
 
             }
+			ViewData["MerchantOrderNo"] = DateTime.Now.ToString("yyyyMMddHHmmss");  //訂單編號
+			ViewData["ExpireDate"] = DateTime.Now.AddDays(3).ToString("yyyyMMdd"); //繳費有效期限       
 
-
-            return View(vm);
+			return View(vm);
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModel;
 using System.Diagnostics.Metrics;
@@ -37,7 +38,7 @@ namespace prjMSIT145_Final.Controllers
                 
                         string json = JsonSerializer.Serialize(b);
                         HttpContext.Session.SetString(CDictionary.SK_LOGINED_Business, json);
-
+                       
                         return RedirectToAction("BList", "Order");
                     }
                 }
