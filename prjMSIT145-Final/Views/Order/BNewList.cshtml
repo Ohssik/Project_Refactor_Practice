@@ -173,16 +173,16 @@
                 const response = await fetch(`@Url.Content("~/ChatRoom/ChatUserChangeApi/?fid=${this.value}")`)
                 const data = await response.json();
                 ChatNowUserName.innerHTML = data.memberName;
-
                 ChatNowUserid.value = data.fid;
                 ChatNowUserChatid.value =data.chatroomUserid;
-                
-                
+
+                //有問題
+                //ChangeChatroom(chatroomUserid);
 
 
 
 
-            })
+            } )
         })
 
 

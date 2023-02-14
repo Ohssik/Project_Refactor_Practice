@@ -12,5 +12,6 @@
         public int? IsOpened { get; set; }
         public string? LogoImgFileName { get; set; }
         public string? SighImgFileName { get; set; }
+        public string? Distance { get;set; }
     }
 }

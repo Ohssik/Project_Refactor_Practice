@@ -57,11 +57,11 @@
             {
                 <div class="LeftAD" style="background-image:url('@png')"></div>
             }
-            else if(Count == 2)
+            else if (Count == 2)
             {
                 <div class="MidAD" style="background-image:url('@png');"></div>
             }
-            else if(Count == 3)
+            else if (Count == 3)
             {
                 <div class="RightAD" style="background-image:url('@png');"></div>
             }
@@ -86,14 +86,13 @@
                     @if (item.IsOpened == 1)
                     {
                         <div class="Shopcard CursorPointer" id="Shop @item.Fid">
-                            <img class="Shopcardcover" src="~/images/Customer/Shopcard/Test/shopcover.png" />
-                            <img class="Shopcardloggo" src="~/images/Customer/Shopcard/Test/circlelogo.png" />
+                            <img class="Shopcardcover" src="~/images/@item.SighImgFileName" />
+                            <img class="Shopcardloggo" src="~/images/@item.LogoImgFileName" />
                             <div class="Shopcardbottem">
                                 <h3>&ensp;@item.MemberName</h3>
                                 <ul>
                                     <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
-                                    <li>&ensp;0.3 km&ensp;</li>
-                                    <li>&ensp;★ 4.6&ensp;</li>
+                                    <li id="Dis  @item.Fid" class="DisText">&ensp;0.3 km&ensp;</li>
                                 </ul>
                                 <h4>&ensp;@item.Address</h4>
                             </div>
@@ -102,15 +101,14 @@
                     @if (item.IsOpened == 2)
                     {
                         <div class="Shopcard CursorDefault" id="Shop @item.Fid">
-                            <img class="Shopcardcover" src="~/images/Customer/Shopcard/Test/shopcover.png" />
-                            <img class="Shopcardloggo" src="~/images/Customer/Shopcard/Test/circlelogo.png" />
+                            <img class="Shopcardcover" src="~/images/@item.SighImgFileName" />
+                            <img class="Shopcardloggo" src="~/images/@item.LogoImgFileName" />
                             <div class="ShopisClose">暫停接單</div>
                             <div class="Shopcardbottem">
                                 <h3>&ensp;@item.MemberName</h3>
                                 <ul>
                                     <li>&ensp;@item.OpenTime&ensp;～&ensp;@item.CloseTime&ensp;</li>
-                                    <li>&ensp;0.3 km&ensp;</li>
-                                    <li>&ensp;★ 4.6&ensp;</li>
+                                    <li id="Dis  @item.Fid" class="DisText">&ensp;0.3 km&ensp;</li>
                                 </ul>
                                 <h4>&ensp;@item.Address</h4>
                             </div>
@@ -123,6 +121,28 @@
 </section>
 @section Scripts{
     <script>
+        @*let lat = '';
+        let long = '';
+        let DisDiv = document.getElementsByClassName("DisText");
+        navigator.geolocation.getCurrentPosition(successCallback);
+        function successCallback(position) {
+            lat = position.coords.latitude;
+            long = position.coords.longitude;
+            SendCurrentLocation(lat, long);
+        }
+        async function SendCurrentLocation(latitude, longitude) {
+            const response = await fetch(`@Url.Content("~/Home/CDistanceCount")?latitude=${latitude}&longitude=${longitude}`);
+            const datas = await response.json();
+            console.log(datas);
+            let index=0;
+            for (let i = 0, maxBML = datas[0].businessMemberList.length; i < maxBML; i++) {
+                if (datas[0].businessMemberList[i].isSuspensed == 0) {
+                    DisDiv[index].innerHTML = `&ensp;${datas[0].businessMemberList[i].distance} km&ensp;`;
+                    index++;
+                }
+            }
+        }*@
+
 
         @foreach (var item in Model[0].BusinessMemberList)
         {
@@ -136,6 +156,7 @@
                 }
             }
         }
+
             $(function () {
                 let slideNum = 0;
                 let slideCount = $(".slides li").length;
@@ -160,7 +181,6 @@
                         //console.log(adArr);
                     }
                 });
-
 
                 slideNum = 0;
                 let si = setInterval(() => {
@@ -194,9 +214,7 @@
                         $('ul.slides').css('left', slidemove);
                         slideNum++;
                     }
-
                 }, 2000);
-
             });
     </script>
 }
