@@ -32,6 +32,8 @@ namespace prjMSIT145_Final.Controllers
             var OrderDatas = from O in _context.Orders
                              join B in _context.BusinessMembers
                              on O.BFid equals B.Fid
+                             join BI in _context.BusinessImgs 
+                             on O.BFid equals BI.BFid
                              where O.NFid == NFid
                              select new
                              {
@@ -40,6 +42,7 @@ namespace prjMSIT145_Final.Controllers
                                  O.OrderState,
                                  O.OrderTime,
                                  O.TotalAmount,
+                                 BI.LogoImgFileName
                              };
 
             foreach (var c in OrderDatas)
@@ -70,6 +73,7 @@ namespace prjMSIT145_Final.Controllers
                 }
                 vm.OrderTime = c.OrderTime;
                 vm.TotalAmount = Convert.ToInt32(c.TotalAmount);
+                vm.LogoImgFileName = c.LogoImgFileName;
 
                 OrderDetiallist.Add(vm);
             }
@@ -84,6 +88,8 @@ namespace prjMSIT145_Final.Controllers
                     on o.BFid equals b.Fid
                     join a in _context.PaymentTermCategories
                     on o.PayTermCatId equals a.Fid
+                    join bi in _context.BusinessImgs
+                    on o.BFid equals bi.BFid
                     where o.Fid == Fid
                     select new
                     {
@@ -102,7 +108,8 @@ namespace prjMSIT145_Final.Controllers
                         OrderState = o.OrderState,
                         Memo = o.Memo,
                         OrderTime = o.OrderTime,
-                        TotalAmount = o.TotalAmount
+                        TotalAmount = o.TotalAmount,
+                        LogoImgFileName = bi.LogoImgFileName
 
                     };
             var Pr = from o in _context.OrderItems
@@ -177,6 +184,7 @@ namespace prjMSIT145_Final.Controllers
                     vm.PayTermCatId = c.PayTernCatId;
                     vm.Memo = c.Memo;
                     vm.items = new List<COrderItemViewModel>();
+                    vm.LogoImgFileName = c.LogoImgFileName;
 
                     var orderitem = from i in Pr
                                     where i.OrderFid == c.Fid
@@ -340,14 +348,17 @@ namespace prjMSIT145_Final.Controllers
             }
             //_context.SaveChanges();
             return RedirectToAction("List");
+            
         }
-
+        
         public IActionResult CartList(int Fid)
         {
             #region   
             var q = from o in _context.Orders
                     join b in _context.BusinessMembers
                     on o.BFid equals b.Fid
+                    join nm in _context.NormalMembers
+                    on o.NFid equals nm.Fid
                     where o.Fid == Fid
                     select new
                     {
@@ -362,7 +373,8 @@ namespace prjMSIT145_Final.Controllers
                         OrderState = o.OrderState,
                         Memo = o.Memo,
                         OrderTime = o.OrderTime,
-                        TotalAmount = o.TotalAmount
+                        TotalAmount = o.TotalAmount,
+                        MemberPhotoFile = nm.MemberPhotoFile
 
                     };
             var Pr = from o in _context.OrderItems
@@ -406,6 +418,7 @@ namespace prjMSIT145_Final.Controllers
                     vm.NFid = c.NFid;
                     vm.PickUpPersonPhone = c.PickUpPersonPhone;
                     vm.Memo = c.Memo;
+                    vm.MemberPhotoFile = c.MemberPhotoFile;
 
                     vm.items = new List<COrderItemViewModel>();
                     var orderitem = from i in Pr

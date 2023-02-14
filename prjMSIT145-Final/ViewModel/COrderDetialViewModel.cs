@@ -145,6 +145,8 @@ namespace prjMSIT145_Final.ViewModels
         public List<COrderItemViewModel> items { get; set; }
 
         public int? TotalQty { get; set; }
+        public string? LogoImgFileName { get; set; }
+        public string? MemberPhotoFile { get; set; }
 
     }
 }

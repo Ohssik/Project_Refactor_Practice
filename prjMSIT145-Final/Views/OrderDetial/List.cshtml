@@ -153,6 +153,7 @@
 
         .topBorder {
             border-top: 1px solid;
+            border-color: #9F4E27;
         }
 
         a:link {
@@ -189,7 +190,9 @@
 
 
         .card_Guide_FontColor {
-            color: black;
+            color: #9F4E27;
+            font-weight: 600;
+            font-size: 26px;
         }
 
 
@@ -210,6 +213,7 @@
         h4, h5, h6 {
             margin: 5px 0;
             color: #9F4E27;
+            font-size: 22px;
         }
 
         .Fieldset {
@@ -243,31 +247,37 @@
             border-radius: 10px;
             padding: 0 5px;
         }
+
+        .orderTime {
+            font-size: 16px;
+            color: #9F4E27;
+            font-weight: 600;
+        }
     </style>
 }
 
-<div class="bodyBackgroundColor">
+    <div class="bodyBackgroundColor">
 
-    <div class="backgroundDiv">
-        <div class="main">
-            <form action="">
-                <div class="margin select card_Guide_FontColor">
-                    <span>訂單狀態</span>
-                    <div>
-                        <select name="orderState" id="slt1">
-                            <option value="tab_">全部</option>
-                            <option value="tab_1">未接單</option>
-                            <option value="tab_2">已接單</option>
-                            <option value="tab_3">商家準備中</option>
-                            <option value="tab_4">已完成</option>
-                            <option value="tab_5">取消</option>
-                            <option value="tab_6">揪團失敗</option>
-                        </select>
+        <div class="backgroundDiv">
+            <div class="main">
+                <form action="">
+                    <div class="margin select card_Guide_FontColor">
+                        <span>訂單狀態</span>
+                        <div>
+                            <select name="orderState" id="slt1">
+                                <option value="tab_">全部</option>
+                                <option value="tab_1">未接單</option>
+                                <option value="tab_2">已接單</option>
+                                <option value="tab_3">商家準備中</option>
+                                <option value="tab_4">已完成</option>
+                                <option value="tab_5">取消</option>
+                                <option value="tab_6">揪團失敗</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </form>
-            <div class="divCenter ">
-                @{
+                </form>
+                <div class="divCenter ">
+                    @{
                     int count = 0;
                     foreach (var item in Model)
                     {
@@ -280,17 +290,17 @@
                                 <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_1" style="margin-right:40px">
                                     <div class="state_timeDiv">
                                         <!-- 背景色依狀態更改: -->
-                                        <div class="state backgroundcolor1" name="tab_1">@Html.DisplayFor(modelItem => item.OrderState)</div>
-                                        <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
+                                        <div class="state backgroundcolor1" name="tab_1">@item.OrderState</div>
+                                        <div id="orderTime" class="orderTime">@item.OrderTime</div>
                                     </div>
                                     <div class="column">
                                         <div class="pic_Div">
                                             <div class="pic">
-                                                <img src="images/cat.jpg" class="card-img-top" alt="..." />
+                                                <img src="~/images/@item.LogoImgFileName" />
                                             </div>
                                         </div>
                                         <div class="">
-                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
+                                            <h4 class="card-title">@item.BMemberName</h4>
                                             <div class="topBorder">
                                                 <p class="card-text card_Guide_FontColor ">共 @Convert.ToInt32(item.TotalAmount) 元</p>
                                             </div>
@@ -304,19 +314,18 @@
                                 <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_2" style="margin-right:40px">
                                     <div class="state_timeDiv">
                                         <!-- 背景色依狀態更改: -->
-                                        <div class="state backgroundcolor2">@Html.DisplayFor(modelItem => item.OrderState)</div>
-                                        <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
+                                        <div class="state backgroundcolor2">@item.OrderState</div>
+                                        <div id="orderTime" class="orderTime">@item.OrderTime</div>
                                     </div>
                                     <div class="column">
                                         <div class="pic_Div">
                                             <div class="pic">
-                                                <img src="images/cat.jpg" class="card-img-top" alt="..." />
+                                                <img src="~/images/@item.LogoImgFileName" />
                                             </div>
                                         </div>
                                         <div class="">
-                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
+                                            <h4 class="card-title">@item.BMemberName</h4>
                                             <div class="topBorder">
-
                                                 <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
                                             </div>
                                         </div>
@@ -329,17 +338,17 @@
                                 <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_3" style="margin-right:40px">
                                     <div class="state_timeDiv">
                                         <!-- 背景色依狀態更改: -->
-                                        <div class="state ">@Html.DisplayFor(modelItem => item.OrderState)</div>
-                                        <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
+                                        <div class="state ">@item.OrderState</div>
+                                        <div id="orderTime" class="orderTime">@item.OrderTime</div>
                                     </div>
                                     <div class="column">
                                         <div class="pic_Div">
                                             <div class="pic">
-                                                <img src="images/cat.jpg" class="card-img-top" alt="..." />
+                                                <img src="~/images/@item.LogoImgFileName" />
                                             </div>
                                         </div>
                                         <div class="">
-                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
+                                            <h4 class="card-title">@item.BMemberName</h4>
                                             <div class="topBorder">
                                                 <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
                                             </div>
@@ -353,17 +362,17 @@
                                 <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_4" style="margin-right:40px">
                                     <div class="state_timeDiv">
                                         <!-- 背景色依狀態更改: -->
-                                        <div class="state backgroundcolor4">@Html.DisplayFor(modelItem => item.OrderState)</div>
-                                        <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
+                                        <div class="state backgroundcolor4">@item.OrderState</div>
+                                        <div id="orderTime" class="orderTime">@item.OrderTime</div>
                                     </div>
                                     <div class="column">
                                         <div class="pic_Div">
                                             <div class="pic">
-                                                <img src="images/cat.jpg" class="card-img-top" alt="..." />
+                                                <img src="~/images/@item.LogoImgFileName" />
                                             </div>
                                         </div>
                                         <div class="">
-                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
+                                            <h4 class="card-title">@item.BMemberName</h4>
                                             <div class="topBorder">
                                                 <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
                                             </div>
@@ -377,17 +386,17 @@
                                 <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_5" style="margin-right:40px">
                                     <div class="state_timeDiv">
                                         <!-- 背景色依狀態更改: -->
-                                        <div class="state backgroundcolor5">@Html.DisplayFor(modelItem => item.OrderState)</div>
-                                        <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
+                                        <div class="state backgroundcolor5">@item.OrderState</div>
+                                        <div id="orderTime" class="orderTime">@item.OrderTime</div>
                                     </div>
                                     <div class="column">
                                         <div class="pic_Div">
                                             <div class="pic">
-                                                <img src="images/cat.jpg" class="card-img-top" alt="..." />
+                                                <img src="~/images/@item.LogoImgFileName" />
                                             </div>
                                         </div>
                                         <div class="">
-                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
+                                            <h4 class="card-title">@item.BMemberName</h4>
                                             <div class="topBorder">
                                                 <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
                                             </div>
@@ -400,17 +409,17 @@
                                 <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_6" style="margin-right:40px">
                                     <div class="state_timeDiv">
                                         <!-- 背景色依狀態更改: -->
-                                        <div class="state backgroundcolor5">@Html.DisplayFor(modelItem => item.OrderState)</div>
-                                        <div id="orderTime">@Html.DisplayFor(modelItem => item.OrderTime)</div>
+                                        <div class="state backgroundcolor5">@item.OrderState</div>
+                                        <div id="orderTime" class="orderTime">@item.OrderTime</div>
                                     </div>
                                     <div class="column">
                                         <div class="pic_Div">
                                             <div class="pic">
-                                                <img src="images/cat.jpg" class="card-img-top" alt="..." />
+                                                <img src="~/images/@item.LogoImgFileName" />
                                             </div>
                                         </div>
                                         <div class="">
-                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.BMemberName)</h4>
+                                            <h4 class="card-title">@item.BMemberName</h4>
                                             <div class="topBorder">
                                                 <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
                                             </div>

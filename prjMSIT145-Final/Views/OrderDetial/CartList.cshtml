@@ -288,6 +288,10 @@
             border: solid 0px;
             outline: none;
         }
+        .btnFinishSize{
+            height:50px;
+            width:600px;
+        }
     </style>
 }
 @*刪除*@
@@ -331,7 +335,7 @@
                             </div>
                             <h5>預計取餐時間</h5>
                             <fieldset class="Fieldset" id="pickUpTime">
-                                <input class="font-size borderNone"  id="changeDate" type="datetime-local" value="" min="2023-02-13T00:00" max="2023-02-24T12:00" />
+                            <input class="font-size borderNone" id="changeDate" type="datetime-local" value="" min="@DateTime.Now.ToString("s")" max="@DateTime.Now.AddDays(1).ToString("s")" />
                             </fieldset> 
                             <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
                             <h5>門市位置</h5>
@@ -351,7 +355,7 @@
                             <div class="flexAndItemsCenter">
                                 <!-- *待更改會員名稱及頭像 -->
                                 <div class="memberPic">
-                                    <img src="~/images/main.jpg" alt="會員頭像">
+                                    <img src="~/images/Customer/Member/@Model.MemberPhotoFile" />
                                 </div>
                                 <h5 id="memberName">@Model.PickUpPerson</h5>
                                 <div class="orderAbsolteForRight">
@@ -510,7 +514,7 @@
                     </div>
                 </div>
 
-        <div class="mainDiv ">
+                <div class="mainDiv ">
                     <div class="infoDiv cardBackgroundColor">
                         <div class="flexAndItemsCenter exclamationDiv">
                             <div class="exclamation">
@@ -540,7 +544,7 @@
                             </div>
                             <div class="spanFont div flexAndItemsCenter cardBorderColor">
                                 <div class="marginright">預計取餐時間</div>
-                                <div id="changeDate2"></div>
+                                <div id="changeDate2">@DateTime.Now.ToString("s")</div>
                             </div>
                             <div class="spanFont div flexAndItemsCenter cardBorderColor">
                                 <div class="marginright">付款方式</div>
@@ -552,25 +556,27 @@
                             </div>
                         </div>
                     </div>
-                    <form method="post" enctype="multipart/form-data" >
-                <div class="topMargin" id="app">
+                <div class="topMargin">
                         <div class="flexAndItemsCenter bottomBtn ">
-                            <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
+                            <input type="button" class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide2" value="上一頁"/>
+                   <form method="post" enctype="multipart/form-data" >
+                        <div id ="app">
                                 <input name="OrderState" value="1" hidden />
                                 <input name="PickUpType" value="自取"  hidden/>
                                 <input name="PayTermCatId" value="1" id="PayTermCatId" hidden />
                                 <input name="PickUpPerson" id="changePickUpPerson3" value="@Model.PickUpPerson" hidden />
                                 <input name="PickUpPersonPhone" id="changePickUpPersonPhone3" value="@Model.PickUpPersonPhone" hidden />
-                                <input name="pickUpDate" id="changeDate3" value="2023-02-13T00:00"  hidden/>
+                                <input name="pickUpDate" id="changeDate3" value="@DateTime.Now.ToString("s")"  hidden/>
                                 <input name="TotalAmount" value="@Model.TotalAmount" id="AddTotal" hidden />
                                 <input name="Memo" value="" id="Memo2" type="text" hidden>
-                                <div>
-                            <button class="btnToFinish" type="submit" id="btnSubmit">送出訂單</button>
-                            <button class="btnToFinish" type="submit" id="btnECPay" v-on:click="SendToNewebPay('CREDIT')">送出訂單EC</button>
-                                </div>
+                             <div>
+                                <button class="btnToFinish btnFinishSize" type="submit" id="btnSubmit" >送出訂單</button>
+                                <button class="btnToFinish btnFinishSize" type="submit" id="btnECPay" v-on:click="SendToNewebPay('CREDIT')" style="display:none">送出訂單</button>
+                            </div>
+                        </div>
+                   </form>
                         </div>
                      </div>
-                   </form>
                 </div>
             </div>
         
@@ -718,21 +724,23 @@
 
                     } else if (document.getElementById("slides").getAttribute("class") == "slides2") {
                         document.getElementById("slides").setAttribute("class", "slides3");
-
+                        
                     };
                 });
             @*上一頁*@
                 $(".btnToAdd").click(function () {
-                    event.preventDefault();
-                    if (document.getElementById("slides").getAttribute("class") == "slides3") {
-                        document.getElementById("slides").setAttribute("class", "slides2");
-
-                    } else if (document.getElementById("slides").getAttribute("class") == "slides2") {
+                    
+                    if (document.getElementById("slides").getAttribute("class") == "slides2") {
                         document.getElementById("slides").setAttribute("class", "slides1");
+                    
+
+                    } else if (document.getElementById("slides").getAttribute("class") == "slides3") {
+                        document.getElementById("slides").setAttribute("class", "slides2");
+                        
 
                     };
                 })
-        
+ 
 
         </script>
     <script>
@@ -785,8 +793,6 @@
                         dataType: 'json',
                         data: { inModel: postData, __RequestVerificationToken: $('@Html.AntiForgeryToken()').val() },
                         success: function (returnObj) {
-                            alert(returnObj);
-                            console.log(returnObj);
                             $("#divContent").html(returnObj);
                             $("#payForm").submit();
                         },
@@ -808,7 +814,6 @@
                         dataType: 'json',
                         data: { inModel: postData },
                         success: function (returnObj) {
-                            console.log(returnObj)
                         },
                         error: function (err) {
                             alert(err.status + " " + err.statusText + '\n' + err.responseText);
