@@ -22,11 +22,20 @@
              </div>
        <div class="divheadpic">
                     <div class="aui-info ">
-                            @*<img src="@Model.MemberPhotoFile" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />*@
-                          <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />
+                        @{
+                            if(Model.MemberPhotoFile!=null){
+                                <img src="@Model.MemberPhotoFile" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />
+                            }
+                            else{
+                                <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />
+                            }
+
+                        }
+                            
+                          
                             <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
                          <span class="sapnphoto">點擊頭像預覽及修改</span>
-                            @*<input type="hidden"value="@Model.MemberPhotoFile" name="MemberPhotoFile"/>*@
+                            <input type="hidden"value="@Model.MemberPhotoFile" name="MemberPhotoFile"/>
                     </div>
                 </div>
         <div class="regsterleftgroup">

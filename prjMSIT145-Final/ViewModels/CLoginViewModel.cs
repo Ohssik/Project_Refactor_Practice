@@ -4,6 +4,6 @@
     {
         public string txtPassword { get; set; }
         public string txtAccount { get; set; }
-
+        public string txtIsSus { get; set; }
     }
 }
