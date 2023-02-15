@@ -32,7 +32,7 @@ namespace prjMSIT145_Final.Controllers
             var OrderDatas = from O in _context.Orders
                              join B in _context.BusinessMembers
                              on O.BFid equals B.Fid
-                             join BI in _context.BusinessImgs 
+                             join BI in _context.BusinessImgs
                              on O.BFid equals BI.BFid
                              where O.NFid == NFid
                              select new
@@ -224,19 +224,43 @@ namespace prjMSIT145_Final.Controllers
 
         public IActionResult CartItemDelete(int? OrderFid, int? ItemFid)
         {
+
+            #region 扣除總金額
+            var OrderDeitalTotalAmount = from q in _context.ViewShowFullOrders
+                                         where q.ItemFid == ItemFid
+                                         select new
+                                         {
+                                             SubTotal = q.SubTotal,
+                                             TotalAmount = q.TotalAmount,
+                                         };
+            COrderDetialViewModel vm = new COrderDetialViewModel();
+            if (OrderDeitalTotalAmount != null)
+            {
+                foreach (var c in OrderDeitalTotalAmount.ToList())
+                {
+                    vm.TotalAmount = c.TotalAmount - c.SubTotal;
+                    Order prod = _context.Orders.FirstOrDefault(t => t.Fid == OrderFid);
+                    if (prod != null)
+                    {
+                        prod.TotalAmount = vm.TotalAmount;
+                    }
+                }
+            }
+            _context.SaveChanges();
+            #endregion
             #region 依據商品ID找出所屬配料資料並刪除 (刪除OrderOptionDetial)
             var OrderOptionsDetaildatasDelete = from OOD in _context.OrderOptionsDetails
                                                 where OOD.ItemFid == ItemFid
                                                 select OOD;
             _context.OrderOptionsDetails.RemoveRange(OrderOptionsDetaildatasDelete);
-            //_context.SaveChanges();
+            _context.SaveChanges();
             #endregion
             #region 依據商品ID找出對應資料並刪除 (刪除OrderItems)
             var OrderItemsdatasDelete = from OI in _context.OrderItems
                                         where OI.Fid == ItemFid
                                         select OI;
             _context.OrderItems.RemoveRange(OrderItemsdatasDelete);
-            //_context.SaveChanges();
+            _context.SaveChanges();
             #endregion
             #region 再次取得訂單內商品  
             var OrdersDatas = from o in _context.Orders
@@ -280,50 +304,53 @@ namespace prjMSIT145_Final.Controllers
                                                OptionName = p.OptionName,
                                                ItemPrice = p.UnitPrice
                                            };
-            COrderDetialViewModel OrderDetialList = new COrderDetialViewModel();
-            OrderDetialList.TotalQty = 0;
+            List<COrderDetialViewModel> OrderDetialList = new List<COrderDetialViewModel>();
             if (OrdersDatas != null)
             {
                 foreach (var OrderInfo in OrdersDatas.ToList())
                 {
-                    //OrderDetialList.OrderTime = OrderInfo.OrderTime;
-                    OrderDetialList.TotalAmount = Convert.ToInt32(OrderInfo.TotalAmount);
-                    //OrderDetialList.PickUpPerson = OrderInfo.PickUpPerson;
-                    //OrderDetialList.Address = OrderInfo.BAddress;
-                    //OrderDetialList.BMemberName = OrderInfo.BMemberName;
-                    //OrderDetialList.BMemberPhone = OrderInfo.BMemberPhone;
-                    //OrderDetialList.Fid = OrderInfo.Fid;
-                    //OrderDetialList.BFid = OrderInfo.BFid;
-                    //OrderDetialList.NFid = OrderInfo.NFid;
-                    //OrderDetialList.PickUpPersonPhone = OrderInfo.PickUpPersonPhone;
-                    //OrderDetialList.Memo = OrderInfo.Memo;
-
-                    OrderDetialList.items = new List<COrderItemViewModel>();
-                    var orderitems = from i in ItemsDatas
-                                     where i.OrderFid == OrderInfo.Fid
-                                     select i;
-                    foreach (var item in orderitems.ToList())
+                    OrderDetialList.Add(new COrderDetialViewModel()
                     {
-                        COrderItemViewModel ItemVM = new COrderItemViewModel();
-                        ItemVM.ProductName = item.ProductName;
-                        ItemVM.Productprice = item.Productprice;
-                        ItemVM.Qty = item.ProductQty;
-                        ItemVM.OptionName = new List<string>();
-                        ItemVM.OptionPrice = 0;
-                        OrderDetialList.TotalQty += item.ProductQty;
-                        ItemVM.Fid = item.Fid;
-
-                        var itemOption = from o in OrderOptionsDetailsDatas
-                                         where o.ItemFid == item.Fid
-                                         select o;
-                        foreach (var Option in itemOption)
-                        {
-                            ItemVM.OptionName.Add(Option.OptionName);
-                            ItemVM.OptionPrice += Option.ItemPrice;
-                        }
-                        OrderDetialList.items.Add(ItemVM);
-                    }
+                        Fid = OrderInfo.Fid,
+                        NFid = OrderInfo.NFid,
+                        BFid = OrderInfo.BFid,
+                        BMemberName = OrderInfo.BMemberName,
+                        BMemberPhone = OrderInfo.BMemberPhone,
+                        Address = OrderInfo.BAddress,
+                        PickUpPerson = OrderInfo.PickUpPerson,
+                        PickUpPersonPhone = OrderInfo.PickUpPersonPhone,
+                        OrderState = OrderInfo.OrderState,
+                        Memo = OrderInfo.Memo,
+                        OrderTime = OrderInfo.OrderTime,
+                        TotalAmount = Convert.ToInt32(OrderInfo.TotalAmount),
+                        items = new List<COrderItemViewModel>(),
+                    }) ;
                 }
+                var orderitems = from i in ItemsDatas
+                                 where i.OrderFid == OrderDetialList[0].Fid
+                                 select i;
+                foreach (var item in orderitems.ToList())
+                {
+                    COrderItemViewModel Itema = new COrderItemViewModel()
+                    {
+                        ProductName = item.ProductName,
+                        Productprice = item.Productprice,
+                        Qty = item.ProductQty,
+                        Fid = item.Fid,
+                        OptionName = new List<string>(),
+                        OptionPrice = 0,
+                    };
+                    var itemOption = from o in OrderOptionsDetailsDatas
+                                     where o.ItemFid == item.Fid
+                                     select o;
+                    foreach (var Option in itemOption)
+                    {
+                        Itema.OptionName.Add(Option.OptionName);
+                        Itema.OptionPrice += Option.ItemPrice;
+                    }
+                    OrderDetialList[0].items.Add(Itema);
+                }
+                
             }
             #endregion
             return Json(OrderDetialList);
@@ -350,9 +377,9 @@ namespace prjMSIT145_Final.Controllers
             }
             _context.SaveChanges();
             return RedirectToAction("List");
-            
+
         }
-        
+
         public IActionResult CartList(int Fid)
         {
             #region   
@@ -455,7 +482,7 @@ namespace prjMSIT145_Final.Controllers
 			ViewData["MerchantOrderNo"] = DateTime.Now.ToString("yyyyMMddHHmmss");  //訂單編號
 			ViewData["ExpireDate"] = DateTime.Now.AddDays(3).ToString("yyyyMMdd"); //繳費有效期限       
 
-			return View(vm);
+            return View(vm);
         }
     }
 }

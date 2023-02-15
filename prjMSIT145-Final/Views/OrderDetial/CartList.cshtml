@@ -286,9 +286,10 @@
             border: solid 0px;
             outline: none;
         }
-        .btnFinishSize{
-            height:50px;
-            width:600px;
+
+        .btnFinishSize {
+            height: 50px;
+            width: 600px;
         }
 
         .btnDeleteCheck {
@@ -325,7 +326,7 @@
 <div class="modal fade" id="btnDeleteModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header" >
+            <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">提醒</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -339,449 +340,444 @@
         </div>
     </div>
 </div>
-    <div class="changePage">
-            <input value="@Model.OrderISerialId" id="OrderISerialId" name="OrderISerialId" hidden/>
-            <input type="hidden" name="Fid" value="@Model.Fid" />
-            <div class="slides1" id="slides">
-                <div class="bodyBackgroundColor body_Icon_delete_Guide_fontColor body">
-                    <div class="mainDiv">
-                        <!-- 商家資訊 -->
-                        <div class="flexAndItemsCenter divMargin cardBackgroundColor">
-                            <div>
-                                <h4 id="storeName">@Model.BMemberName</h4>
-                                @* <h6 id="storePhone"><i class="fa-solid fa-phone name="BMemberPhone">@Model.BMemberPhone</i> </h6>*@
-                                <h6 id="storePhone"><i class="fa-solid fa-phone"></i><input class="fa-solid borderNone" value="&nbsp;@Model.BMemberPhone" style="color:#9F4E27" /> </h6>
-                            </div>
-                        </div>
-                        <!-- 取餐方式 -->
-                        <div class="divMargin cardBackgroundColor" id="pickUp">
-                            <h4>取餐方式</h4>
-                            <div class="pickUpMD">
-                                <input type="radio" checked="checked"  id="PickUpType" />
-                                <p>自取 </p>
-                            </div>
-                            <h5>預計取餐時間</h5>
-                            <fieldset class="Fieldset" id="pickUpTime">
-                            <input class="font-size borderNone" id="changeDate" type="datetime-local" value="@DateTime.Now.AddMinutes(15).ToString("s")" min="@DateTime.Now.ToString("s")" max="@DateTime.Now.AddDays(1).ToString("s")" />
-                            </fieldset> 
-                            <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
-                            <h5>門市位置</h5>
-                            <div class="font-size borderNone">@Model.Address</div>
-                        </div>
-                        <!-- 會員訂購資訊 -->
-                        <div class="divMargin cardBackgroundColor">
-                            <div class="flexAndItemsCenter">
-                                <h4>購物內容</h4>
-                                <div class="orderRefresh">
-                                    <!-- 觸發事件,重新整理 -->
-                                    <button id="btnReset">
-                                        <i class="fa-solid fa-arrows-rotate"></i>重新取得訂單資訊
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="flexAndItemsCenter">
-                                <!-- *待更改會員名稱及頭像 -->
-                                <div class="memberPic">
-                                    <img src="~/images/Customer/Member/@Model.MemberPhotoFile" />
-                                </div>
-                                <h5 id="memberName">@Model.PickUpPerson</h5>
-                                <div class="orderAbsolteForRight">
-                                    <span id="totalPrice">$ @Model.TotalAmount</span>
-                                    <span id="totalQty">/ @Model.TotalQty 份</span>
-                                </div>
-                            </div>
-                            <!-- *****動態產生*****至198行 -->
-                            @foreach (var item in Model.items)
-                            {
-                                            
-                                <div class="itemCard_padding_margin button_Icon_Guide_BackGroundColor">
-                            
-                                    <!-- *餐點資訊,依實際點選內容增加span -->
-                                    <h6>@item.ProductName</h6>
-                                    <div class="flexAndItemsCenter displayBetween ">
-                                        <div>
-                                            <span id="itemDetailFont" class="spanFont">
-                                                @foreach (var item2 in item.OptionName)
-                                                {
-                                                    <span><span>@item2</span> /</span>
-                                                }
-                                                <span><span>$@Convert.ToInt32(item.OptionAmount)</span> /</span>
-                                                <span><span>@item.Qty 份</span> </span>
-                                            </span>
-                                        </div>
-                                        <div class="orderTrashAndPen">
-                                            <!-- 設定觸發事件時更改背景顏色 -->
-                                            <div class="editBtn">
-                                                <button class="penBackGroundColor">
-                                                    <i class="fa-solid fa-pen"></i>
-                                                </button>
-                                            </div>
-                                            <div>
-                                                <input id="ItemFid" value="@item.Fid" hidden />
-                                                @*<button class="buteditgar" id="DELT @item.Fid" name="btnDelete" data-bs-toggle="modal" data-bs-target="btnDeleteModel"><img src="../images/Business/garbage.png"></button>*@
-                                                <button class="buteditgar"  name="btnDelete" data-bs-toggle="modal" data-bs-target="#btnDeleteModel" ><img src="../images/Business/garbage.png"></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                        <!-- 優惠券(可略) -->
-                        <div class="divMargin cardBackgroundColor" id="offerDiv">
-                            <h4>優惠券</h4>
-                            <div>
-                                <!-- checked後才可跳出button -->
-                                <input type="radio" checked /><span class="spanFont">優惠券</span>
-                            </div>
-                            <!-- 點擊跳出可用優惠券視窗 -->
-                            <div>
-                                <!-- 失去焦點,觸發blur,優惠折扣顯示在下方計算區 -->
-                                <input type="text" id="offerTxt" />
-                            </div>
-                        </div>
-                        <!-- 訂單資訊 -->
-                        <div class="divMargin cardBackgroundColor">
-                            <h4>訂單資訊</h4>
-                            <div class="flexAndItemsCenter orderDivBottomBorder" style="border-top: 1px solid rgb(198, 191, 191);">
-                                <div>商品&nbsp;x @Model.TotalQty</div>
-                                <div class="orderAbsolteForRight">$&nbsp;@Model.TotalAmount</div>
-                            </div>
-                            <!-- 優惠券輸入完成並確認有此券後折扣顯示於此 -->
-                            <!-- <div class="flexAndItemsCenter orderDivBottomBorder">
-                                 <div >優惠券</div>
-                                 <div id="offerPrice" class="orderAbsolteForRight">-$&nbsp;金額</div>
-                            </div> -->
-                            <div class="flexAndItemsCenter orderDivBottomBorder">
-                                <div>
-                                    <input type="checkbox" id="plastic" name="plastic">
-                                </div>
-                                <div class="flexAndItemsCenter plasticBad">
-                                    <div>
-                                        <h5><label for="plastic">是否加購塑膠袋</label></h5>
-                                    </div>
-                                    <div>
-                                        <span id="plasticPrice" class="spanFont">您未加購塑膠袋</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flexAndItemsCenter orderDivBottomBorder orderFinalPrice">
-                                <div id="pay"><h4>應付金額</h4></div>
-                                <div class="orderAbsolteForRight"><h4 id="TotalAmount">$&nbsp;@Model.TotalAmount</h4></div>
-                            </div>
-                        </div>
-                        <!-- 上下頁按鈕 -->
-                        <div>
-                            <div class="flexAndItemsCenter bottomBtn">
-                                <div><button class="btnToAdd button_Icon_Guide_BackGroundColor">繼續加點</button></div>
-                                <div><button class="btnToNext" id="nextSlide">下一頁</button></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mainDiv">
-                    <!-- 取餐人資料 -->
-                    <div class="divMargin cardBackgroundColor">
-                        <div>
-                            <h4>取餐人資料</h4>
-                            <fieldset class="Fieldset">
-                                <input class="font-size borderNone" value="@Model.PickUpPerson"  id="changePickUpPerson" />
-
-                            </fieldset>
-                            <fieldset class="Fieldset">
-                                <input class="font-size borderNone" value="@Model.PickUpPersonPhone" id="changePickUpPersonPhone" />
-                            </fieldset>
-                            <h4>留言給店家</h4>
-                            <fieldset id="msg" class="flex Fieldset">
-                                <div class="msgDiv">
-                                <input class="input spanFont" type="text" id="Memo" placeholder="可留下備用號碼,供店家聯繫">
-                                </div>
-                                <!-- <div>
-                                    <i class="fa-solid fa-chevron-right"></i>
-                                </div> -->
-                            </fieldset>
-                        </div>
-                    </div>
-                    <!-- 付款方式 -->
-                    <div class="divMargin cardBackgroundColor">
-                        <h4>付款方式</h4>
-                        <div class="flexAndItemsCenter exclamationDiv">
-                            <div class="exclamation">
-                                <span><i class="fa-solid fa-exclamation" style="color: aquamarine;"></i></span>
-                            </div>
-                            <div class="spanFont">
-                                欲使用環保杯，請選擇【現金】結帳，並在【留言給店家】備註。
-                            </div>
-                        </div>
-                        <div class="flexAndItemsCenter radioDiv">
-                            <div class="margin"><input type="radio" id="cash" name="PayTermCatId" value="1" checked></div>
-                            <div class="margin"><label for="cash"><span class="spanFont">現金</span></label></div>
-                        </div>
-                        <div class="flexAndItemsCenter radioDiv">
-                            <div class="margin"><input type="radio" id="cardit" name="PayTermCatId" value="2"></div>
-                            <div class="margin"><label for="cardit"><span class="spanFont">信用卡</span></label></div>
-                        </div>
-                        
-                    </div>
-                    <!-- 開立發票 -->
-                    <div class="divMargin cardBackgroundColor">
-                        <h4>開立發票</h4>
-                        <div class="flexAndItemsCenter radioDiv">
-                            <div class="margin"><input type="radio" id="paperInvoice" name="invoice" checked></div>
-                            <div class="margin"><label for="paperInvoice"><span class="spanFont">紙本發票</span></label></div>
-                            <div class="margin"><input type="radio" id="paperInvoice" name="invoice"></div>
-                            <div class="margin"><label for="paperInvoice"><span class="spanFont">電子發票</span></label></div>
-                        </div>
-                        <div>
-                        </div>
-                    </div>
-                    <!-- 上下頁按鈕 -->
+<div class="changePage">
+    <input type="hidden" name="Fid" value="@Model.Fid" id="Fid" />
+    <input value="@Model.OrderISerialId" id="OrderISerialId" name="OrderISerialId" hidden />
+    <div class="slides1" id="slides">
+        <div class="bodyBackgroundColor body_Icon_delete_Guide_fontColor body">
+            <div class="mainDiv">
+                <!-- 商家資訊 -->
+                <div class="flexAndItemsCenter divMargin cardBackgroundColor">
                     <div>
-                        <div class="flexAndItemsCenter bottomBtn">
-                            <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
-                            <div><button class="btnToNext" id="nextSlide">下一頁</button></div>
-                        </div>
+                        <h4 id="storeName">@Model.BMemberName</h4>
+                        @* <h6 id="storePhone"><i class="fa-solid fa-phone name="BMemberPhone">@Model.BMemberPhone</i> </h6>*@
+                        <h6 id="storePhone"><i class="fa-solid fa-phone"></i><input class="fa-solid borderNone" value="&nbsp;@Model.BMemberPhone" style="color:#9F4E27" /> </h6>
                     </div>
                 </div>
-
-                <div class="mainDiv ">
-                    <div class="infoDiv cardBackgroundColor">
-                        <div class="flexAndItemsCenter exclamationDiv">
-                            <div class="exclamation">
-                                <span><i class="fa-solid fa-exclamation" style="color: aquamarine;"></i></span>
-                            </div>
-                            <div class="spanFont">
-                                取餐時間依據各門市狀況調整
-                            </div>
+                <!-- 取餐方式 -->
+                <div class="divMargin cardBackgroundColor" id="pickUp">
+                    <h4>取餐方式</h4>
+                    <div class="pickUpMD">
+                        <input type="radio" checked="checked" id="PickUpType" />
+                        <p>自取 </p>
+                    </div>
+                    <h5>預計取餐時間</h5>
+                    <fieldset class="Fieldset" id="pickUpTime">
+                        <input class="font-size borderNone" id="changeDate" type="datetime-local" value="@DateTime.Now.AddMinutes(15).ToString("s")" min="@DateTime.Now.ToString("s")" max="@DateTime.Now.AddDays(1).ToString("s")" />
+                    </fieldset>
+                    <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
+                    <h5>門市位置</h5>
+                    <div class="font-size borderNone">@Model.Address</div>
+                </div>
+                <!-- 會員訂購資訊 -->
+                <div class="divMargin cardBackgroundColor">
+                    <div class="flexAndItemsCenter">
+                        <h4>購物內容</h4>
+                        <div class="orderRefresh">
+                            <!-- 觸發事件,重新整理 -->
+                            <button id="btnReset">
+                                <i class="fa-solid fa-arrows-rotate"></i>重新取得訂單資訊
+                            </button>
                         </div>
-                        <div class="divMargin topMargin">
-                            <h4>訂購資訊</h4>
-                            <div class="spanFont div flexAndItemsCenter cardBorderColor">
-                                <div class="marginright ">訂購店家</div>
-                                <div>@Model.BMemberName</div>
+                    </div>
+                    <div class="flexAndItemsCenter">
+                        <!-- *待更改會員名稱及頭像 -->
+                        <div class="memberPic">
+                            <img src="~/images/Customer/Member/@Model.MemberPhotoFile" />
+                        </div>
+                        <h5 id="memberName">@Model.PickUpPerson</h5>
+                        <div class="orderAbsolteForRight">
+                            <span id="totalPrice">$ @Model.TotalAmount</span>
+                            <span id="totalQty">/ @Model.TotalQty 份</span>
+                        </div>
+                    </div>
+                    <!-- *****動態產生*****至198行 -->
+                    @if (Model.items != null)
+                    {
+                        @foreach (var item in Model.items)
+                        {
+
+                            <div class="itemCard_padding_margin button_Icon_Guide_BackGroundColor">
+
+                                <!-- *餐點資訊,依實際點選內容增加span -->
+                                <h6>@item.ProductName</h6>
+                                <div class="flexAndItemsCenter displayBetween ">
+                                    <div>
+                                        <span id="itemDetailFont" class="spanFont">
+                                            @foreach (var item2 in item.OptionName)
+                                            {
+                                                <span><span>@item2</span> /</span>
+                                            }
+                                            <span><span>$@Convert.ToInt32(item.OptionAmount)</span> /</span>
+                                            <span><span>@item.Qty 份</span> </span>
+                                        </span>
+                                    </div>
+                                    <div class="orderTrashAndPen">
+                                        <!-- 設定觸發事件時更改背景顏色 -->
+                                        <div class="editBtn">
+                                            <button class="penBackGroundColor">
+                                                <i class="fa-solid fa-pen"></i>
+                                            </button>
+                                        </div>
+                                        <div>
+
+                                            @*<button class="buteditgar" id="DELT @item.Fid" name="btnDelete" data-bs-toggle="modal" data-bs-target="btnDeleteModel"><img src="../images/Business/garbage.png"></button>*@
+                                            <button class="buteditgar" name="btnDelete" data-bs-toggle="modal" data-bs-target="#btnDeleteModel" value="@item.Fid"><img src="../images/Business/garbage.png"></button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="spanFont div flexAndItemsCenter cardBorderColor">
-                                <div class="marginright">取餐人</div>
-                                <div id="changePickUpPerson2">@Model.PickUpPerson</div>
+                        }
+                    }
+                </div>
+                <!-- 優惠券(可略) -->
+                <div class="divMargin cardBackgroundColor" id="offerDiv">
+                    <h4>優惠券</h4>
+                    <div>
+                        <!-- checked後才可跳出button -->
+                        <input type="radio" checked /><span class="spanFont">優惠券</span>
+                    </div>
+                    <!-- 點擊跳出可用優惠券視窗 -->
+                    <div>
+                        <!-- 失去焦點,觸發blur,優惠折扣顯示在下方計算區 -->
+                        <input type="text" id="offerTxt" />
+                    </div>
+                </div>
+                <!-- 訂單資訊 -->
+                <div class="divMargin cardBackgroundColor">
+                    <h4>訂單資訊</h4>
+                    <div class="flexAndItemsCenter orderDivBottomBorder" style="border-top: 1px solid rgb(198, 191, 191);">
+                        <div>商品&nbsp;x @Model.TotalQty</div>
+                        <div class="orderAbsolteForRight">$&nbsp;@Model.TotalAmount</div>
+                    </div>
+                    <!-- 優惠券輸入完成並確認有此券後折扣顯示於此 -->
+                    <!-- <div class="flexAndItemsCenter orderDivBottomBorder">
+                         <div >優惠券</div>
+                         <div id="offerPrice" class="orderAbsolteForRight">-$&nbsp;金額</div>
+                    </div> -->
+                    <div class="flexAndItemsCenter orderDivBottomBorder">
+                        <div>
+                            <input type="checkbox" id="plastic" name="plastic">
+                        </div>
+                        <div class="flexAndItemsCenter plasticBad">
+                            <div>
+                                <h5><label for="plastic">是否加購塑膠袋</label></h5>
                             </div>
-                            <div class="spanFont div flexAndItemsCenter cardBorderColor">
-                                <div class="marginright">連絡電話</div>
-                                <div id="changePickUpPersonPhone2">@Model.PickUpPersonPhone</div>
-                            </div>
-                            <div class="spanFont div flexAndItemsCenter cardBorderColor">
-                                <div class="marginright">取餐方式</div>
-                                <div>自取</div>
-                            </div>
-                            <div class="spanFont div flexAndItemsCenter cardBorderColor">
-                                <div class="marginright">預計取餐時間</div>
-                                <div id="changeDate2">@DateTime.Now.AddMinutes(15).ToString("s")</div>
-                            </div>
-                            <div class="spanFont div flexAndItemsCenter cardBorderColor">
-                                <div class="marginright">付款方式</div>
-                                <div id="CPayTermCatId">現金</div>
-                            </div>
-                            <div class="spanFont div flexAndItemsCenter">
-                                <div class="marginright">應付金額</div>
-                                <div id="TotalAmount2">$@Model.TotalAmount</div>
+                            <div>
+                                <span id="plasticPrice" class="spanFont">您未加購塑膠袋</span>
                             </div>
                         </div>
                     </div>
-                <div class="topMargin">
-                        <div class="flexAndItemsCenter bottomBtn ">
-                            <input type="button" class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide2" value="上一頁"/>
-                   <form method="post" enctype="multipart/form-data" >
-                        <div id ="app">
-                                <input name="OrderState" value="1" hidden />
-                                <input name="PickUpType" value="自取"  hidden/>
-                                <input name="PayTermCatId" value="1" id="PayTermCatId" hidden />
-                                <input name="PickUpPerson" id="changePickUpPerson3" value="@Model.PickUpPerson" hidden />
-                                <input name="PickUpPersonPhone" id="changePickUpPersonPhone3" value="@Model.PickUpPersonPhone" hidden />
-                                <input name="pickUpDate" id="changeDate3" value="@DateTime.Now.AddMinutes(15).ToString("s")"  hidden/>
-                                <input name="TotalAmount" value="@Model.TotalAmount" id="AddTotal" hidden />
-                                <input name="Memo" value="" id="Memo2" type="text" hidden>
-                             <div>
-                                <button class="btnToFinish btnFinishSize" type="submit" id="btnSubmit" >送出訂單</button>
+                    <div class="flexAndItemsCenter orderDivBottomBorder orderFinalPrice">
+                        <div id="pay"><h4>應付金額</h4></div>
+                        <div class="orderAbsolteForRight"><h4 id="TotalAmount">$&nbsp;@Model.TotalAmount</h4></div>
+                    </div>
+                </div>
+                <!-- 上下頁按鈕 -->
+                <div>
+                    <div class="flexAndItemsCenter bottomBtn">
+                        <div><button class="btnToAdd button_Icon_Guide_BackGroundColor">繼續加點</button></div>
+                        <div><button class="btnToNext" id="nextSlide">下一頁</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mainDiv">
+            <!-- 取餐人資料 -->
+            <div class="divMargin cardBackgroundColor">
+                <div>
+                    <h4>取餐人資料</h4>
+                    <fieldset class="Fieldset">
+                        <input class="font-size borderNone" value="@Model.PickUpPerson" id="changePickUpPerson" />
+
+                    </fieldset>
+                    <fieldset class="Fieldset">
+                        <input class="font-size borderNone" value="@Model.PickUpPersonPhone" id="changePickUpPersonPhone" />
+                    </fieldset>
+                    <h4>留言給店家</h4>
+                    <fieldset id="msg" class="flex Fieldset">
+                        <div class="msgDiv">
+                            <input class="input spanFont" type="text" id="Memo" placeholder="可留下備用號碼,供店家聯繫">
+                        </div>
+                        <!-- <div>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div> -->
+                    </fieldset>
+                </div>
+            </div>
+            <!-- 付款方式 -->
+            <div class="divMargin cardBackgroundColor">
+                <h4>付款方式</h4>
+                <div class="flexAndItemsCenter exclamationDiv">
+                    <div class="exclamation">
+                        <span><i class="fa-solid fa-exclamation" style="color: aquamarine;"></i></span>
+                    </div>
+                    <div class="spanFont">
+                        欲使用環保杯，請選擇【現金】結帳，並在【留言給店家】備註。
+                    </div>
+                </div>
+                <div class="flexAndItemsCenter radioDiv">
+                    <div class="margin"><input type="radio" id="cash" name="PayTermCatId" value="1" checked></div>
+                    <div class="margin"><label for="cash"><span class="spanFont">現金</span></label></div>
+                </div>
+                <div class="flexAndItemsCenter radioDiv">
+                    <div class="margin"><input type="radio" id="cardit" name="PayTermCatId" value="2"></div>
+                    <div class="margin"><label for="cardit"><span class="spanFont">信用卡</span></label></div>
+                </div>
+
+            </div>
+            <!-- 開立發票 -->
+            <div class="divMargin cardBackgroundColor">
+                <h4>開立發票</h4>
+                <div class="flexAndItemsCenter radioDiv">
+                    <div class="margin"><input type="radio" id="paperInvoice" name="invoice" checked></div>
+                    <div class="margin"><label for="paperInvoice"><span class="spanFont">紙本發票</span></label></div>
+                    <div class="margin"><input type="radio" id="paperInvoice" name="invoice"></div>
+                    <div class="margin"><label for="paperInvoice"><span class="spanFont">電子發票</span></label></div>
+                </div>
+                <div>
+                </div>
+            </div>
+            <!-- 上下頁按鈕 -->
+            <div>
+                <div class="flexAndItemsCenter bottomBtn">
+                    <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
+                    <div><button class="btnToNext" id="nextSlide">下一頁</button></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mainDiv ">
+            <div class="infoDiv cardBackgroundColor">
+                <div class="flexAndItemsCenter exclamationDiv">
+                    <div class="exclamation">
+                        <span><i class="fa-solid fa-exclamation" style="color: aquamarine;"></i></span>
+                    </div>
+                    <div class="spanFont">
+                        取餐時間依據各門市狀況調整
+                    </div>
+                </div>
+                <div class="divMargin topMargin">
+                    <h4>訂購資訊</h4>
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                        <div class="marginright ">訂購店家</div>
+                        <div>@Model.BMemberName</div>
+                    </div>
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                        <div class="marginright">取餐人</div>
+                        <div id="changePickUpPerson2">@Model.PickUpPerson</div>
+                    </div>
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                        <div class="marginright">連絡電話</div>
+                        <div id="changePickUpPersonPhone2">@Model.PickUpPersonPhone</div>
+                    </div>
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                        <div class="marginright">取餐方式</div>
+                        <div>自取</div>
+                    </div>
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                        <div class="marginright">預計取餐時間</div>
+                        <div id="changeDate2">@DateTime.Now.AddMinutes(15).ToString("s")</div>
+                    </div>
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                        <div class="marginright">付款方式</div>
+                        <div id="CPayTermCatId">現金</div>
+                    </div>
+                    <div class="spanFont div flexAndItemsCenter">
+                        <div class="marginright">應付金額</div>
+                        <div id="TotalAmount2">$@Model.TotalAmount</div>
+                    </div>
+                </div>
+            </div>
+            <div class="topMargin">
+                <div class="flexAndItemsCenter bottomBtn ">
+                    <input type="button" class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide2" value="上一頁" />
+                    <form method="post" enctype="multipart/form-data">
+                        <div id="app">
+                            <input name="OrderState" value="1" hidden />
+                            <input name="PickUpType" value="自取" hidden />
+                            <input name="PayTermCatId" value="1" id="PayTermCatId" hidden />
+                            <input name="PickUpPerson" id="changePickUpPerson3" value="@Model.PickUpPerson" hidden />
+                            <input name="PickUpPersonPhone" id="changePickUpPersonPhone3" value="@Model.PickUpPersonPhone" hidden />
+                            <input name="pickUpDate" id="changeDate3" value="@DateTime.Now.AddMinutes(15).ToString("s")" hidden />
+                            <input name="TotalAmount" value="@Model.TotalAmount" id="AddTotal" hidden />
+                            <input name="Memo" value="" id="Memo2" type="text" hidden>
+                            <div>
+                                <button class="btnToFinish btnFinishSize" type="submit" id="btnSubmit">送出訂單</button>
                                 <button class="btnToFinish btnFinishSize" type="submit" id="btnECPay" v-on:click="SendToNewebPay('CREDIT')" style="display:none">送出訂單</button>
                             </div>
                         </div>
-                   </form>
-                        </div>
-                     </div>
+                    </form>
                 </div>
             </div>
-        
+        </div>
     </div>
-<div id="divContent"></div>
-    @section Scripts{
-        <script src="@Url.Content("~/js/jquery-3.6.2.js")"></script>
 
-        <script>
-            let DateValue = ``;
-            let PickupPersonValue = ``;
-            let PickUpPersonPhoneValue = ``;
-            let Memo =``;
-            const btnDelete = document.getElementsByName("btnDelete");
-            const btnDeleteCheck = document.querySelector("#btnDeleteCheck");
-            const ItemFid = document.querySelector("#ItemFid");
+</div>
+<div id="divContent"></div>
+@section Scripts{
+    <script src="@Url.Content("~/js/jquery-3.6.2.js")"></script>
+
+    <script>
+        let DateValue = ``;
+        let PickupPersonValue = ``;
+        let PickUpPersonPhoneValue = ``;
+        let Memo = ``;
+        const btnDelete = document.getElementsByName("btnDelete");
+        const btnDeleteCheck = document.querySelector("#btnDeleteCheck");
+        const ItemFid = document.querySelector("#ItemFid");
+
         @*刪除購物車內容*@
-            btnDelete.forEach(function(click){
-                click.addEventListener("click",function(){
-                    console.log("123");
-                        const id = this.parentElement.firstElementChild;
-                        console.log(id);
-                    btnDeleteCheck.addEventListener("click", function () {
-                        console.log("123");
-                        btnDeleteCheck.setAttribute("href", `@Url.Content("~/OrderDetial/CartItemDelete")?OrderFid=${@Model.OrderFid}&ItemFid=${id.value}`)
+            btnDelete.forEach(function (click) {
+                click.addEventListener("click", function () {
+                    const Itemid = this.value;
+                    const orderFid = @Model.Fid;
+
+                    btnDeleteCheck.addEventListener("click", async function () {
+                        const response = await fetch(`@Url.Content("~/OrderDetial/CartItemDelete")?OrderFid=${orderFid}&ItemFid=${Itemid}`)
+                        const datas = await response.json();
+                        console.log(datas);
+                        //location.href = "/OrderDetial/CartList";
                     })
                 })
 
             })
-            @*網頁重新整理*@
-                $("#btnReset").click(function () {
-                    location.reload();
-                })
-            @*有無加購塑膠袋*@
-                $("#plastic").click(function () {
-                    let checked = $("#plastic").prop("checked");
-                    if (checked) {
-                        console.log(checked)
-                        $("#plasticPrice").text("$ 2");
-                        $("#AddTotal").val(@Model.TotalAmount+2);
-                        $("#TotalAmount").text("$ " + (@Model.TotalAmount+2));
-                        $("#TotalAmount2").text("$ " + (@Model.TotalAmount+2));
-                    }
-                    else {
-                        $("#plasticPrice").text("您未加購塑膠袋");
-                        $("#AddTotal").val(@Model.TotalAmount);
-                        $("#TotalAmount").text("$ " + (@Model.TotalAmount));
-                        $("#TotalAmount2").text("$ " + (@Model.TotalAmount));
-                    }
-                })
 
-            @*選擇付款方式*@
+        @*網頁重新整理*@
+            $("#btnReset").click(function () {
+                location.reload();
+            })
+        @*有無加購塑膠袋*@
+            $("#plastic").click(function () {
+                let checked = $("#plastic").prop("checked");
+                if (checked) {
+                    console.log(checked)
+                    $("#plasticPrice").text("$ 2");
+                    $("#AddTotal").val(@Model.TotalAmount+2);
+                    $("#TotalAmount").text("$ " + (@Model.TotalAmount+2));
+                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount+2));
+                }
+                else {
+                    $("#plasticPrice").text("您未加購塑膠袋");
+                    $("#AddTotal").val(@Model.TotalAmount);
+                    $("#TotalAmount").text("$ " + (@Model.TotalAmount));
+                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount));
+                }
+            })
+
+        @*選擇付款方式*@
             $("#cash").click(function () {
 
-                    let checked = $("#cash").prop("checked");
-                    if (checked) {
-                        console.log(checked)
-                        $("#CPayTermCatId").text("現金");
-                        $("#cash").val("1");
-                        $("#PayTermCatId").val("1");
+                let checked = $("#cash").prop("checked");
+                if (checked) {
+                    console.log(checked)
+                    $("#CPayTermCatId").text("現金");
+                    $("#cash").val("1");
+                    $("#PayTermCatId").val("1");
                     $("#btnECPay").css("display", "none")//增加css
                     $("#btnSubmit").css("display", "")//移除css
-                    }
-                    else {
-                        $("#CPayTermCatId").text("信用卡");
+                }
+                else {
+                    $("#CPayTermCatId").text("信用卡");
                     $("#btnSubmit").css("display", "none")//增加css
                     $("#btnECPay").css("display", "")//移除css
                     console.log(document.querySelector("#btnECPay"))
-                    }
-                })
-            $("#cardit").click(function () {
-                let checked = $("#cardit").prop("checked");
-                if (checked) {
-                    console.log(checked)
-                    $("#CPayTermCatId").text("信用卡");
-                    $("#cardit").val("2")
-                    $("#PayTermCatId").val("2");
+                }
+            })
+        $("#cardit").click(function () {
+            let checked = $("#cardit").prop("checked");
+            if (checked) {
+                console.log(checked)
+                $("#CPayTermCatId").text("信用卡");
+                $("#cardit").val("2")
+                $("#PayTermCatId").val("2");
                 $("#btnSubmit").css("display", "none")  //增加css
                 $("#btnECPay").css("display", "") //移除css
                 console.log(document.querySelector("#btnECPay"))
                 console.log(document.querySelector("#btnSubmit"))
                 console.log($("#AddTotal").val())
-                }
-                else {
-                    $("#CPayTermCatId").text("現金");
+            }
+            else {
+                $("#CPayTermCatId").text("現金");
                 $("#CPayTermCatId").text("現金");
                 $("#btnECPay").css("display", "none")
                 $("#btnSubmit").css("display", "")//移除css
-                }
-            })
+            }
+        })
 
-            @*註冊刪除購物車內容事件*@
-            //let DeleteBTN = document.getElementsByClassName("buteditgar");
-            //for (let i = 0, maxDBTN = DeleteBTN.length; i < maxDBTN; i++) {
-            //    ItemsFid = i
-            //    DeleteBTN[i].addEventListener("click", function () {
-            //        DeleteOrderdatas(@Model.OrderFid, DeleteBTN[i].getAttribute("id").substring(0, 6))
-            //    });
-            //}
-
-            //async function DeleteOrderdatas(OrderFid,ItemFid) {
-            //    const response = await fetch(`@Url.Content("~/OrderDetial/CartItemDelete")?OrderFid=${OrderFid}&ItemFid=${ItemFid}`);
-            //    const datas = await response.json();
-            //    console.log(datas);
-            //}
-
-            @*改變日期*@
-            $("#changeDate").change(function () {
-
-                    DateValue = document.getElementById("changeDate").value
-                    $("#changeDate").val(`${DateValue}`)
-                })
+        @*改變日期*@
             $("#changeDate").change(function () {
 
                 DateValue = document.getElementById("changeDate").value
-                $("#changeDate2").text(`${DateValue}`)
-
+                $("#changeDate").val(`${DateValue}`)
             })
-            $("#changeDate").change(function () {
+        $("#changeDate").change(function () {
 
-                DateValue = document.getElementById("changeDate").value
-                $("#changeDate3").val(`${DateValue}`)
+            DateValue = document.getElementById("changeDate").value
+            $("#changeDate2").text(`${DateValue}`)
 
-            })
+        })
+        $("#changeDate").change(function () {
 
-            @*改變取餐人*@
-            $("#changePickUpPerson").change(function () {
-                    PickupPersonValue = document.getElementById("changePickUpPerson").value
-                    $("#changePickUpPerson2").text(`${PickupPersonValue}`)
-                })
+            DateValue = document.getElementById("changeDate").value
+            $("#changeDate3").val(`${DateValue}`)
+
+        })
+
+        @*改變取餐人*@
             $("#changePickUpPerson").change(function () {
                 PickupPersonValue = document.getElementById("changePickUpPerson").value
-                $("#changePickUpPerson3").val(`${PickupPersonValue}`)
+                $("#changePickUpPerson2").text(`${PickupPersonValue}`)
             })
+        $("#changePickUpPerson").change(function () {
+            PickupPersonValue = document.getElementById("changePickUpPerson").value
+            $("#changePickUpPerson3").val(`${PickupPersonValue}`)
+        })
 
-            @*改變取餐人電話*@
-            $("#changePickUpPersonPhone").change(function () {
-                    PickUpPersonPhoneValue = document.getElementById("changePickUpPersonPhone").value
-                    $("#changePickUpPersonPhone2").text(`${PickUpPersonPhoneValue}`)
-                })
+        @*改變取餐人電話*@
             $("#changePickUpPersonPhone").change(function () {
                 PickUpPersonPhoneValue = document.getElementById("changePickUpPersonPhone").value
-                $("#changePickUpPersonPhone3").val(`${PickUpPersonPhoneValue}`)
+                $("#changePickUpPersonPhone2").text(`${PickUpPersonPhoneValue}`)
             })
+        $("#changePickUpPersonPhone").change(function () {
+            PickUpPersonPhoneValue = document.getElementById("changePickUpPersonPhone").value
+            $("#changePickUpPersonPhone3").val(`${PickUpPersonPhoneValue}`)
+        })
 
-            @*備註*@
+        @*備註*@
             $("#Memo").change(function () {
                 Memo = document.getElementById("Memo").value
                 $("#Memo2").val(`${Memo}`)
             })
 
-            @*下一頁*@
-                $(".btnToNext").click(function () {
-                    event.preventDefault();
-                    if (document.getElementById("slides").getAttribute("class") == "slides1") {
-                        document.getElementById("slides").setAttribute("class", "slides2");
+        @*下一頁*@
+            $(".btnToNext").click(function () {
+                event.preventDefault();
+                if (document.getElementById("slides").getAttribute("class") == "slides1") {
+                    document.getElementById("slides").setAttribute("class", "slides2");
 
-                    } else if (document.getElementById("slides").getAttribute("class") == "slides2") {
-                        document.getElementById("slides").setAttribute("class", "slides3");
-                        
-                    };
-                });
-            @*上一頁*@
-                $(".btnToAdd").click(function () {
-                    
-                    if (document.getElementById("slides").getAttribute("class") == "slides2") {
-                        document.getElementById("slides").setAttribute("class", "slides1");
-                    
+                } else if (document.getElementById("slides").getAttribute("class") == "slides2") {
+                    document.getElementById("slides").setAttribute("class", "slides3");
 
-                    } else if (document.getElementById("slides").getAttribute("class") == "slides3") {
-                        document.getElementById("slides").setAttribute("class", "slides2");
-                    };
-                })
- 
-        </script>
+                };
+            });
+        @*上一頁*@
+            $(".btnToAdd").click(function () {
+
+                if (document.getElementById("slides").getAttribute("class") == "slides2") {
+                    document.getElementById("slides").setAttribute("class", "slides1");
+
+
+                } else if (document.getElementById("slides").getAttribute("class") == "slides3") {
+                    document.getElementById("slides").setAttribute("class", "slides2");
+
+
+                };
+            })
+
+
+    </script>
     <script>
         //綠界
         const price = $("#AddTotal").val();
