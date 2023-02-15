@@ -402,6 +402,8 @@
                         let docFrag=document.createDocumentFragment();
                         let count=0;
                         $(msg).each(function(i,value){
+                            let rt=new Date(value.receivedTime);
+                            
                             $(docFrag).append(`
                                                     <a class="dropdown-item d-flex align-items-center" href="@Url.Content("~/Admin/AServiceMailList")?fid=${value.fid}">
                                                 <div class="dropdown-list-image mr-3">
@@ -413,7 +415,7 @@
                                                     <div class="text-truncate">
                                                         ${value.subject}
                                                     </div>
-                                                    <div class="small text-gray-500">${value.senderName} - ${value.receivedTime}</div>
+                                                            <div class="small text-gray-500">${value.senderName} - ${rt.getFullYear()}-${rt.getMonth()}-${rt.getDate()} ${rt.getHours()}:${rt.getMinutes()}</div>
                                                 </div>
                                             </a>
                                 `);

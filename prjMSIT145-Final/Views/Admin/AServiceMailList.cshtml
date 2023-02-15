@@ -25,7 +25,7 @@
                     data: { data: fid },
                     dataType: 'json',
                     success: function (msg) {
-                        //console.log(msg);
+                        console.log(msg);
                         if (`${msg}`.indexOf('error:') == -1) {
                             $('#Context').val(`${msg.context}`);
                             $('#Reply').val(`${msg.reply}`);
@@ -33,8 +33,13 @@
                             $('#Phone').val(`${msg.phone}`);
                             $('#Email').val(`${msg.email}`);
                             $('#Subject').val(`${msg.subject}`);
-                            if (`${msg.reply}` != '')
+
+                            if (`${msg.reply}` == '' || `${msg.reply}` == 'null')
+                                $('#Reply').val('');                                
+                            else
                                 $('#buttonSend').hide();
+                            
+                                   
                         }
                         replyModal.show();
                     }
@@ -73,7 +78,10 @@
                         if (`${msg}`.indexOf('error:') == -1) {
                             $('#Context').val(`${msg.context}`);
                             $('#Reply').val(`${msg.reply}`);
-                            if (`${msg.reply}` != '')
+                            
+                            if (`${msg.reply}` == '' || `${msg.reply}` == 'null')
+                                $('#Reply').val('');                                
+                            else
                                 $('#buttonSend').hide();
                         }
                         replyModal.show();
@@ -111,6 +119,9 @@
                     })
 
                 }
+            });
+            $('#btnDemo').click(function(){
+                $('#Reply').val('已連絡對方協助解決問題。');
             });
             function clearData() {
                 $('input').val("");
@@ -200,7 +211,7 @@
                                 <td>                                    
                                     @{
                                         if(!string.IsNullOrEmpty(item.Reply)){
-                                                                        @:V
+                                                                                    @:V
                                         }
                                     }
                                 </td>
