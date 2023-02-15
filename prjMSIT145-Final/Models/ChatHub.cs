@@ -137,15 +137,12 @@ namespace prjMSIT145_Final.Models
             ).FirstOrDefault(c => c.user == MyData.ChatroomUserid && c.Otheruser == otheruserid);
             if (ChatRoom == null)
                 return;
-            List<ChatMessage> message = (List<ChatMessage>) _context.ChatMessages.Where(c => c.Chatid == ChatRoom.chatroomid);
+           var message = _context.ChatMessages.Where(c => c.Chatid == ChatRoom.chatroomid);
             if (message == null)
                 return;
             string Json = JsonSerializer.Serialize(message);
             await Clients.Client(Context.ConnectionId).SendAsync("ReNewChatRoomMain", Json);
         }
-
-
-
         //傳訊息
         public async Task SendMessage(string otheruserid, string message)
         {

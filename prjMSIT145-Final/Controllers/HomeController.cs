@@ -659,6 +659,23 @@ namespace prjMSIT145_Final.Controllers
             return Json(list);
         }
 
+        public IActionResult getProductInfo(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                return Json("This Product ID is invalid");
+
+            int id = Convert.ToInt32(data);
+
+            if(id<1)
+                return Json("This Product ID is invalid");
+
+            Product product = _context.Products.FirstOrDefault(p => p.Fid == id);
+            if(product == null)
+                return Json("This Product ID is invalid");
+
+            return Json(product);
+        }
+
         //-------------------------------------------------------------------------------------------------
         public IActionResult Privacy()
         {

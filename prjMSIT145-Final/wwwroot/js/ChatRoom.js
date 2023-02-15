@@ -99,7 +99,18 @@ function ChangeChatroom(otheruserid) {
 //聊天室載入聊天紀錄
 connection.on("ReNewChatRoomMain", function (data) {
     var messageData = JSON.parse(data);
-    messageData.forEach
+    console.log(messageData)
+    messageData.forEach(function (item) {
+        if (item.Senderid == ChatNowUserChatid.value) {
+            remotemessageShow(item.Message, "#");
+        }
+        else
+        {
+            localmessageShow(item.Message)
+        }
+        
+      
+    })
 })
 //按下訊息送出後
 document.getElementById("chatMessagebtn").addEventListener("click", function (event) {
@@ -114,18 +125,23 @@ document.getElementById("chatMessagebtn").addEventListener("click", function (ev
     event.preventDefault();
 
 });
-/*對方說的*/
+/*回傳對方說的*/
 connection.on("RemoteMessage", function (otherName, ChatroomUserid,Fid,message) {
-    
+     ChatNowUserName.innerHTML = otherName;
+    ChatNowUserid.value = `${Fid}`;
+    ChatNowUserChatid.value = `${ChatroomUserid}`;
+    console.log(ListChatMessageil);
+    remotemessageShow(message);
+});
+/*回傳自己說的*/
+connection.on("LocalMessage", function () { localmessageShow(message); });
+//對方說的話
+function remotemessageShow(message,otherUserimg) {
     var li = document.createElement("li");
     const ListChatMessageil = ChatMessageul.lastElementChild;
     li.setAttribute("class", "d-flex mb-2 mt-2");
-    console.log(ListChatMessageil);
-    ChatNowUserName.innerHTML = otherName;
-    ChatNowUserid.value = `${Fid}`;
-    ChatNowUserChatid.value = `${ChatroomUserid}`;
     if (ListChatMessageil == null) {
-        li.innerHTML = ` <img src="#"
+        li.innerHTML = ` <img src="${ otherUserimg }"
                                      alt="#"
                                      class="rounded-circle d-flex align-self-start me-3 shadow-1-strong mt-2"
                                      width="35"
@@ -138,13 +154,11 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid,Fid,message) 
                                     </div>
                                 </div>
                               `
-       
     }
-    else
-    {
-if (ListChatMessageil.getAttribute("class") == "d-flex mb-2 mt-2") {
+    else {
+        if (ListChatMessageil.getAttribute("class") == "d-flex mb-2 mt-2") {
 
-        li.innerHTML = ` <div class="rounded-circle d-flex align-self-start me-3 shadow-1-strong mt-2 "style="padding-right:35px">
+            li.innerHTML = ` <div class="rounded-circle d-flex align-self-start me-3 shadow-1-strong mt-2 "style="padding-right:35px">
                                 </div>
                                 <div class="card remotemessage">
                                     <div class="card-body p-2">
@@ -154,10 +168,9 @@ if (ListChatMessageil.getAttribute("class") == "d-flex mb-2 mt-2") {
                                     </div>
                                 </div>
                               `
-        
-    }
-    else {
-        li.innerHTML = `<img src="#"
+        }
+        else {
+            li.innerHTML = `<img src="#"
                                      alt="#"
                                      class="rounded-circle d-flex align-self-start me-3 shadow-1-strong mt-2"
                                      width="35"
@@ -170,34 +183,21 @@ if (ListChatMessageil.getAttribute("class") == "d-flex mb-2 mt-2") {
                                     </div>
                                 </div>
                               `
-        
+        }
     }
-    }
-    
-    
-   
-    
-    
-    console.log(message);
     document.getElementById("ChatMessageul").appendChild(li);
-   
-});
-/*自己說的*/
-connection.on("LocalMessage", function (message) {
-    console.log(message);
+}
+//自己說的話
+function localmessageShow(message)
+{
     var li = document.createElement("li");
     li.setAttribute("class", "d-flex justify-content-between mb-2 mt-2 flex-row-reverse");
-    li.innerHTML =` <div class="card  localmessage" >
+    li.innerHTML = ` <div class="card  localmessage" >
                                     <div class="card-body p-2">
                                         <p class="m-0 small text-end">
                                             ${message}
                                         </p>
                                     </div>
                                 </div>`
-
-   
     document.getElementById("ChatMessageul").appendChild(li);
-
-});
-
-
+}
