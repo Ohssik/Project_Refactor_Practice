@@ -362,7 +362,7 @@
                             </div>
                             <h5>預計取餐時間</h5>
                             <fieldset class="Fieldset" id="pickUpTime">
-                            <input class="font-size borderNone" id="changeDate" type="datetime-local" value="" min="@DateTime.Now.ToString("s")" max="@DateTime.Now.AddDays(1).ToString("s")" />
+                            <input class="font-size borderNone" id="changeDate" type="datetime-local" value="@DateTime.Now.AddMinutes(15).ToString("s")" min="@DateTime.Now.ToString("s")" max="@DateTime.Now.AddDays(1).ToString("s")" />
                             </fieldset> 
                             <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
                             <h5>門市位置</h5>
@@ -574,7 +574,7 @@
                             </div>
                             <div class="spanFont div flexAndItemsCenter cardBorderColor">
                                 <div class="marginright">預計取餐時間</div>
-                                <div id="changeDate2">@DateTime.Now.ToString("s")</div>
+                                <div id="changeDate2">@DateTime.Now.AddMinutes(15).ToString("s")</div>
                             </div>
                             <div class="spanFont div flexAndItemsCenter cardBorderColor">
                                 <div class="marginright">付款方式</div>
@@ -596,7 +596,7 @@
                                 <input name="PayTermCatId" value="1" id="PayTermCatId" hidden />
                                 <input name="PickUpPerson" id="changePickUpPerson3" value="@Model.PickUpPerson" hidden />
                                 <input name="PickUpPersonPhone" id="changePickUpPersonPhone3" value="@Model.PickUpPersonPhone" hidden />
-                                <input name="pickUpDate" id="changeDate3" value="@DateTime.Now.ToString("s")"  hidden/>
+                                <input name="pickUpDate" id="changeDate3" value="@DateTime.Now.AddMinutes(15).ToString("s")"  hidden/>
                                 <input name="TotalAmount" value="@Model.TotalAmount" id="AddTotal" hidden />
                                 <input name="Memo" value="" id="Memo2" type="text" hidden>
                              <div>
@@ -624,7 +624,6 @@
             const btnDeleteCheck = document.querySelector("#btnDeleteCheck");
             const ItemFid = document.querySelector("#ItemFid");
         @*刪除購物車內容*@
-           
             btnDelete.forEach(function(click){
                 click.addEventListener("click",function(){
                     console.log("123");
