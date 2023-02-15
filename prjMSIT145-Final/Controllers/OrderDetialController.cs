@@ -109,7 +109,8 @@ namespace prjMSIT145_Final.Controllers
                         Memo = o.Memo,
                         OrderTime = o.OrderTime,
                         TotalAmount = o.TotalAmount,
-                        LogoImgFileName = bi.LogoImgFileName
+                        LogoImgFileName = bi.LogoImgFileName,
+                        OrderISerialId = o.OrderISerialId
 
                     };
             var Pr = from o in _context.OrderItems
@@ -185,6 +186,7 @@ namespace prjMSIT145_Final.Controllers
                     vm.Memo = c.Memo;
                     vm.items = new List<COrderItemViewModel>();
                     vm.LogoImgFileName = c.LogoImgFileName;
+                    vm.OrderISerialId = c.OrderISerialId;
 
                     var orderitem = from i in Pr
                                     where i.OrderFid == c.Fid
