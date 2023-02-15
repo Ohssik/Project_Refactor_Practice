@@ -39,7 +39,7 @@
             <div class="card30">
             <h2 class="title2"> <img src="@Url.Content("~/images/Customer/Member/registerperson.png")" />註冊會員</h2>
                     <input type="hidden" name="LineUserid" id="LineUserid" value="@Model.LineUserid" />
-                    @*<input type="hidden" name="Fid" value="@Model.Fid" />*@
+                    <input type="hidden" name="Fid" value="@Model.Fid" />
             <div class="dashed">
             </div>
    
@@ -78,6 +78,30 @@
             </div>
             <span id="emailcorrect" class="spanerrormessage"></span>
         </div>
+                <span class="text3">
+                    <p class="color">*</p>
+                    <p class="text4">密碼<span class="necessspan">(必填)</span><span class="Formatspan">(大小寫英文加4個數字)</span></p>
+                </span>
+                <div class="divhint">
+                    <div class="div1">
+                        <input type="password" class="input" name="Password" value="@Model.Password" id="Password" />
+                        <i style="margin-top:10px;margin-left:-20px;" class="far fa-eye" id="togglePassword"></i>
+                    </div>
+                    <span id="passwordcorrect" class="spanerrormessage"></span>
+                </div>
+                <span class="text3">
+                    <p class="color">*</p>
+                    <p class="text4">確認密碼<span class="necessspan">(必填)</span><span class="Formatspan">(與密碼一致)</span></p>
+                </span>
+
+                <div class="divhint">
+                    <div class="div1">
+                        <input type="password" class="input" name="Password" value="@Model.Password" id="Password2" />
+                        <i style="margin-top:10px;margin-left:-20px;" class="far fa-eye" id="togglePassword2"></i>
+                    </div>
+                    <span id="password2correct" class="spanerrormessage"></span>
+
+                </div>
         <input type="hidden" name="GoogleEmail" id="emailgoogleemail" value="@Model.GoogleEmail" />
 
             <div class="display">
@@ -100,77 +124,75 @@
 
         var submitbtn = document.getElementById("submitid");   //按鈕
 
-        //document.getElementById("MemberName").addEventListener("change", checkPwd);   //名子
+        document.getElementById("MemberName").addEventListener("change", checkPwd);   //名子
 
-        //function checkPwd() {
-        //    var nameobj = document.getElementById("MemberName");
-        //    var spnameobj = document.getElementById("namecorrect");
-        //    var nameval = nameobj.value;
-        //    if (nameval == "") {
-        //        spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
-        //        submitbtn.setAttribute('disabled', 'disabled');
-        //        return;
-        //    }
-        //    else {
+        function checkPwd() {
+            var nameobj = document.getElementById("MemberName");
+            var spnameobj = document.getElementById("namecorrect");
+            var nameval = nameobj.value;
+            if (nameval == "") {
+                spnameobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+                return;
+            }
+            else {
 
-        //        spnameobj.innerHTML = "";
-        //        submitbtn.removeAttribute('disabled');
-        //        return;
-        //    }
+                spnameobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+                return;
+            }
 
-        //};
-
-
-       /* document.getElementById("Phone").addEventListener("change", checkPhone);     */            //電話
-
-        //function checkPhone() {
-        //    var phoneobj = document.getElementById("Phone");
-        //    var spnphoneobj = document.getElementById("phonecorrect");
-        //    var phoneval = phoneobj.value;
-        //    re = new RegExp(/^09[0-9]{8}$/);
-
-        //    if (phoneval == "") {
-        //        spnphoneobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
-        //        submitbtn.setAttribute('disabled', 'disabled');
-        //        return;
-        //    }
-        //    else {
-        //        if (re.test(phoneval)) {
-        //            spnphoneobj.innerHTML = "";
-        //            submitbtn.removeAttribute('disabled');
-        //            return;
-        //        }
-        //        else {
-
-        //            spnphoneobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
-        //            submitbtn.setAttribute('disabled', 'disabled');
-        //        }
+        };
 
 
+        document.getElementById("Phone").addEventListener("change", checkPhone);                // 電話
 
-        //    }
+        function checkPhone() {
+            var phoneobj = document.getElementById("Phone");
+            var spnphoneobj = document.getElementById("phonecorrect");
+            var phoneval = phoneobj.value;
+            re = new RegExp(/^09[0-9]{8}$/);
+
+            if (phoneval == "") {
+                spnphoneobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+                return;
+            }
+            else {
+                if (re.test(phoneval)) {
+                    spnphoneobj.innerHTML = "";
+                    submitbtn.removeAttribute('disabled');
+                    return;
+                }
+                else {
+
+                    spnphoneobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>格式錯誤";
+                    submitbtn.setAttribute('disabled', 'disabled');
+                }
 
 
 
-        //};
-        //document.getElementById("Email").addEventListener("change", checkEmail);
+            }
 
-        //function checkEmail() {
-        //    var emailobj = document.getElementById("Email");
-        //    var spnemailobj = document.getElementById("emailcorrect");
-        //    var emailval = emailobj.value;
+        };
+        document.getElementById("Email").addEventListener("change", checkEmail);
 
-        //    if (emailval == "") {
-        //        spnemailobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
-        //        submitbtn.setAttribute('disabled', 'disabled');
+        function checkEmail() {
+            var emailobj = document.getElementById("Email");
+            var spnemailobj = document.getElementById("emailcorrect");
+            var emailval = emailobj.value;
 
-        //        return;
-        //    }
-        //    else {
-        //        spnemailobj.innerHTML = "";
-        //        submitbtn.removeAttribute('disabled');
-        //    }
-        //};
+            if (emailval == "") {
+                spnemailobj.innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
+                submitbtn.setAttribute('disabled', 'disabled');
+
+                return;
+            }
+            else {
+                spnemailobj.innerHTML = "";
+                submitbtn.removeAttribute('disabled');
+            }
+        };
 
 
         document.getElementById("submitid").addEventListener("click", async () => {                //判斷帳號是否重複
@@ -197,6 +219,9 @@
             }
             else if (data == "Email格式錯誤") {
                 document.getElementById("emailcorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/> Email格式錯誤";
+            }
+            else if (data == "密碼欄位不能空值") {
+                document.getElementById("passwordcorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
             }
 
             else if (data == "電話欄位不能空值") {

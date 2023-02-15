@@ -124,8 +124,8 @@ namespace prjMSIT145_Final.Controllers
                     x.GoogleEmail = payload.Email;
                     x.MemberName = payload.Name;
 
-                    //return RedirectToAction("Register", x);
-                    return RedirectToAction("linegooleregister", x);
+                    return RedirectToAction("Register", x);
+                    //return RedirectToAction("linegooleregister", x);
                 }
 
             };
@@ -258,7 +258,8 @@ namespace prjMSIT145_Final.Controllers
                         newmember.LineUserid=ProfileObj.userId;
                         newmember.MemberName = ProfileObj.displayName;
                         newmember.MemberPhotoFile = ProfileObj.pictureUrl;
-                        return View("Register", newmember);                     
+                        return View("Register", newmember);
+                        //return View("linegooleregister", newmember);
                     }
                    
                 }
@@ -309,20 +310,48 @@ namespace prjMSIT145_Final.Controllers
         [HttpPost]
         public ActionResult linegooleregister(CNormalMemberViewModel member)
         {
-            if(member.Phone == null || member.Email==null || member.MemberName==null)
+            if(member.Phone == null || member.Email==null || member.MemberName==null ||member.Password==null )
             {
                 return View();
             }
             else
             {
-                NormalMember x = new NormalMember();
-                x.Phone = member.Phone;
-                x.Email = member.Email;
-                x.GoogleEmail = member.GoogleEmail;
-                x.LineUserid = member.LineUserid;
-                x.MemberName = member.MemberName;
-                _context.NormalMembers.Add(x);
+                Random rnd = new Random();
+                member.EmailCertified = rnd.Next(10000000, 90000000);
+                _context.NormalMembers.Add(member.member);
                 _context.SaveChanges();
+                string url = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={member.Fid}";
+                string smtpAddress = "smtp.gmail.com";
+                //設定Port
+                int portNumber = 587;
+                bool enableSSL = true;
+                //填入寄送方email和密碼
+                string emailFrom = "a29816668@gmail.com";
+                string emailpassword = "joksdquaswjdyzpu";
+                //收信方email 可以用逗號區分多個收件人
+                string emailTo = member.Email;
+                //主旨
+                string subject = "註冊驗證信";
+                //內容
+                string body = $"<h2>新會員你好請點此開通連結</h2><h3><br><a href={url}>請點此開通連結</a>並輸入此驗證碼<span style='color:red;'>{member.EmailCertified}</span></h3>";
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress(emailFrom, "日柴", System.Text.Encoding.UTF8);
+                    mail.To.Add(emailTo);
+                    mail.Subject = subject;
+                    mail.Body = body;
+                    // 若你的內容是HTML格式，則為True
+                    mail.IsBodyHtml = true;
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                    {
+                        smtp.Credentials = new NetworkCredential(emailFrom, emailpassword);
+                        smtp.EnableSsl = enableSSL;
+                        smtp.Send(mail);
+                    }
+
+
+                }
+
                 return Redirect("~/Home/CIndex");
             }
            
@@ -342,10 +371,35 @@ namespace prjMSIT145_Final.Controllers
             return View(x);
         }
         [HttpPost]
-        public IActionResult combineaccount()
+        public IActionResult combineaccount(NormalMember member)
         {
+            if (member == null)
+            {
+                return Redirect("~/Home/CIndex");
+            }
+            NormalMember x=_context.NormalMembers.FirstOrDefault(c=>c.Phone==member.Phone);
+            if (x == null)
+            {
+                return Redirect("~/Home/CIndex");
+            }
+            else
+            {
+                if (member.GoogleEmail != "NULL" && member.GoogleEmail!="1")
+                {
+                    x.GoogleEmail = member.GoogleEmail;
+                }
+                if(member.LineUserid != "NULL" && member.LineUserid != "1")
+                {
+                    x.LineUserid = member.LineUserid;
+                }
+              
+               _context.SaveChanges();
+                return Redirect("~/Home/CIndex");
+            }
 
-            return Redirect("~/Home/CIndex");
+
+
+           
         }
 
 
@@ -474,7 +528,7 @@ namespace prjMSIT145_Final.Controllers
             //主旨
             string subject = "註冊驗證信";
             //內容
-            string body =$"<h2>新會員你好請點此開通連結</h2><h3><br><a href={url}>請點此開通連結</a>並回表單輸入此驗證碼{vm.EmailCertified}</h3>";
+            string body =$"<h2>新會員你好請點此開通連結</h2><h3><br><a href={url}>請點此開通連結</a>並回表單輸入此驗證碼<span style='color:red;'>{vm.EmailCertified}</span></h3>";
             using (MailMessage mail = new MailMessage())
             {
                 mail.From = new MailAddress(emailFrom,"日柴", System.Text.Encoding.UTF8);
@@ -521,12 +575,12 @@ namespace prjMSIT145_Final.Controllers
                 }
             }
 
-            //if (vm.Password ==null)
-            //{
-            //    return Json("密碼欄位不能空值");
-            //}
-            
-            
+            if (vm.Password == null)
+            {
+                return Json("密碼欄位不能空值");
+            }
+
+
 
             var data = _context.NormalMembers.Select(c => c.Phone);
             foreach (var i in data)
@@ -758,9 +812,9 @@ namespace prjMSIT145_Final.Controllers
                     //收信方email 可以用逗號區分多個收件人
                     string emailTo = vm.Email;
                     //主旨
-                    string subject = "重製密碼";
+                    string subject = "重置密碼";
                     //內容
-                    string body = $"<h2>重製密碼</h2><h3><br><a href={url}>請在<span style='color:red;'>10分鐘內</span>點此連結重設密碼</a></h3>";
+                    string body = $"<h2>重置密碼</h2><h3><br><a href={url}>請在<span style='color:red;'>10分鐘內</span>點此連結重設密碼</a></h3>";
                     using (MailMessage mail = new MailMessage())
                     {
                         mail.From = new MailAddress(emailFrom,"日柴", System.Text.Encoding.UTF8);

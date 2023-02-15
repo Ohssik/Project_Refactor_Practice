@@ -216,7 +216,8 @@
     color: white;
     background-color: blue;
     border-radius:20px;
-    width:60px;
+    width:30px;
+    height:10px;
 }
 .demoerror {
     position: absolute;
@@ -225,5 +226,6 @@
     color: white;
     background-color: red;
     border-radius: 20px;
-    width:60px;
+    width: 30px;
+    height: 10px;
 }
