@@ -183,35 +183,7 @@ namespace prjMSIT145_Final.Controllers
         public IActionResult ANormalMemberOrder(int? id)
         {
             if (id == null)
-                return RedirectToAction("ANormalMemberDetails");
-
-            //var orderDatas = from order in _context.ViewShowFullOrders
-            //                 join bm in _context.BusinessImgs on order.BFid equals bm.BFid
-            //                 join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
-            //                 join payTerm in _context.PaymentTermCategories on order.PayTermCatId equals payTerm.Fid
-            //                 where order.OrderFid == (int)id
-            //                 select new
-            //                 {
-            //                     order.BMemberName,
-            //                     order.BMemberPhone,
-            //                     order.OrderISerialId,
-            //                     order.PickUpDate,
-            //                     order.PickUpPerson,
-            //                     order.PickUpPersonPhone,
-            //                     order.PickUpTime,
-            //                     order.PickUpType,
-            //                     order.PayTermCatId,
-            //                     order.Memo,
-            //                     order.TotalAmount,
-            //                     order.ProductName,
-            //                     order.Options,
-            //                     order.SubTotal,
-            //                     order.Qty,
-            //                     order.OrderState,
-            //                     bm.LogoImgFileName,
-            //                     bAdd.Address,
-            //                     payTerm.PaymentType
-            //                 };
+                return RedirectToAction("ANormalMemberDetails");            
 
             var orderDatas = from order in _context.Orders
                              join f in _context.ViewShowFullOrders on order.Fid equals f.OrderFid
@@ -359,36 +331,7 @@ namespace prjMSIT145_Final.Controllers
         {
             if (id == null)
                 return RedirectToAction("ABusinessMemberDetails");
-
-            //var orderDatas = from order in _context.ViewShowFullOrders
-            //                 join bm in _context.BusinessImgs on order.BFid equals bm.BFid
-            //                 join bAdd in _context.BusinessMembers on order.BFid equals bAdd.Fid
-            //                 join payTerm in _context.PaymentTermCategories on order.PayTermCatId equals payTerm.Fid
-            //                 join nm in _context.NormalMembers on order.NFid equals nm.Fid
-            //                 where order.OrderFid == (int)id
-            //                 select new
-            //                 {
-            //                     order.BMemberName,
-            //                     order.BMemberPhone,
-            //                     order.OrderISerialId,
-            //                     order.PickUpDate,
-            //                     order.PickUpPerson,
-            //                     order.PickUpPersonPhone,
-            //                     order.PickUpTime,
-            //                     order.PickUpType,
-            //                     order.PayTermCatId,
-            //                     order.Memo,
-            //                     order.TotalAmount,
-            //                     order.ProductName,
-            //                     order.Options,
-            //                     order.SubTotal,
-            //                     order.Qty,
-            //                     order.OrderState,
-            //                     bm.LogoImgFileName,
-            //                     bAdd.Address,
-            //                     payTerm.PaymentType,
-            //                     nm.MemberPhotoFile
-            //                 };
+           
 
             var orderDatas = from order in _context.Orders
                              join f in _context.ViewShowFullOrders on order.Fid equals f.OrderFid
@@ -945,81 +888,88 @@ namespace prjMSIT145_Final.Controllers
             return result;
         }
 
-        private string sendMail(string email, string mailBody, string mailSubject)//發信
-        {
-            var DemoMailServer = _config["DemoMailServer:pwd"];
-            MailMessage MyMail = new MailMessage();
-            MyMail.From = new MailAddress("ShibaAdmin@msit145shiba.com.tw", "日柴", System.Text.Encoding.UTF8);
-            MyMail.To.Add(email);
+        //private string sendMail(string email, string mailBody, string mailSubject)//發信
+        //{
+        //    var DemoMailServer = _config["DemoMailServer:pwd"];
+        //    MailMessage MyMail = new MailMessage();
+        //    MyMail.From = new MailAddress("ShibaAdmin@msit145shiba.com.tw", "日柴", System.Text.Encoding.UTF8);
+        //    MyMail.To.Add(email);
 
-            MyMail.Subject = mailSubject;
-            MyMail.Body = mailBody; //設定信件內容
-            MyMail.IsBodyHtml = true; //是否使用html格式
+        //    MyMail.Subject = mailSubject;
+        //    MyMail.Body = mailBody; //設定信件內容
+        //    MyMail.IsBodyHtml = true; //是否使用html格式
 
-            SmtpClient MySMTP = new SmtpClient();
-            //MySMTP.UseDefaultCredentials = true;
-            MySMTP.Credentials = new System.Net.NetworkCredential("b9809004@gapps.ntust.edu.tw", DemoMailServer); //這裡要填正確的帳號跟密碼
-            MySMTP.Host = "smtp.gmail.com"; //設定smtp Server
-            MySMTP.Port = 587;
-            MySMTP.EnableSsl = true; //gmail預設開啟驗證
+        //    SmtpClient MySMTP = new SmtpClient();
+        //    //MySMTP.UseDefaultCredentials = true;
+        //    MySMTP.Credentials = new System.Net.NetworkCredential("b9809004@gapps.ntust.edu.tw", DemoMailServer); //這裡要填正確的帳號跟密碼
+        //    MySMTP.Host = "smtp.gmail.com"; //設定smtp Server
+        //    MySMTP.Port = 587;
+        //    MySMTP.EnableSsl = true; //gmail預設開啟驗證
 
 
-            try
-            {
-                MySMTP.Send(MyMail);
-                return "success";
-            }
-            catch (Exception ex)
-            {
-                return $"Mail error:{ex.ToString()}";
-            }
-            finally
-            {
-                MyMail.Dispose(); //釋放資源
-            }
+        //    try
+        //    {
+        //        MySMTP.Send(MyMail);
+        //        return "success";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return $"Mail error:{ex.ToString()}";
+        //    }
+        //    finally
+        //    {
+        //        MyMail.Dispose(); //釋放資源
+        //    }
 
-        }
+        //}
         public IActionResult AServiceMailList()
         {
             List<CgetServiceMailViewModel> mailList = new List<CgetServiceMailViewModel>();
-            try
+            
+            #region ADO.NET測試
+            //var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
+            //using (SqlConnection conn = new SqlConnection(connStr))
+            //{
+            //    conn.Open();
+            //    using (SqlCommand cmd = new SqlCommand())
+            //    {
+            //        cmd.Connection = conn;
+            //        cmd.CommandText = "select Fid,SenderName,Email,Phone,Subject,Context,ReceivedTime,Reply from ServiceMailBox order by fid desc";
+            //        //cmd.Parameters.AddWithValue("Expire", Convert.ToDateTime(expire));
+            //        SqlDataReader reader = cmd.ExecuteReader();
+
+
+            //        while (reader.Read())
+            //        {
+            //            CgetServiceMailViewModel mail = new CgetServiceMailViewModel();
+            //            mail.Fid = Convert.ToInt32(reader["Fid"]);
+            //            mail.SenderName = Convert.ToString(reader["SenderName"]);
+            //            mail.Email = Convert.ToString(reader["Email"]);
+            //            mail.Phone = Convert.ToString(reader["Phone"]);
+            //            mail.Subject = Convert.ToString(reader["Subject"]);
+            //            mail.Context = Convert.ToString(reader["Context"]);
+            //            mail.ReceivedTime = Convert.ToDateTime(reader["ReceivedTime"]);
+            //            mail.Reply = Convert.ToString(reader["Reply"]);
+            //            mailList.Add(mail);
+            //        }
+
+            //        reader.Close();
+            //    }
+            //}
+            #endregion
+
+            IEnumerable<ServiceMailBox> list = from s in _context.ServiceMailBoxes
+                                                select s;
+            if(list != null)
             {
-                #region ADO.NET測試
-                var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
-                using (SqlConnection conn = new SqlConnection(connStr))
+                foreach(ServiceMailBox serviceMail in list)
                 {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand())
-                    {
-                        cmd.Connection = conn;
-                        cmd.CommandText = "select Fid,SenderName,Email,Phone,Subject,Context,ReceivedTime,Reply from ServiceMailBox order by fid desc";
-                        //cmd.Parameters.AddWithValue("Expire", Convert.ToDateTime(expire));
-                        SqlDataReader reader = cmd.ExecuteReader();
-
-
-                        while (reader.Read())
-                        {
-                            CgetServiceMailViewModel mail = new CgetServiceMailViewModel();
-                            mail.Fid = Convert.ToInt32(reader["Fid"]);
-                            mail.SenderName = Convert.ToString(reader["SenderName"]);
-                            mail.Email = Convert.ToString(reader["Email"]);
-                            mail.Phone = Convert.ToString(reader["Phone"]);
-                            mail.Subject = Convert.ToString(reader["Subject"]);
-                            mail.Context = Convert.ToString(reader["Context"]);
-                            mail.ReceivedTime = Convert.ToDateTime(reader["ReceivedTime"]);
-                            mail.Reply = Convert.ToString(reader["Reply"]);
-                            mailList.Add(mail);
-                        }
-
-                        reader.Close();
-                    }
+                    CgetServiceMailViewModel csm = new CgetServiceMailViewModel();
+                    csm.serviceMail = serviceMail;
+                    mailList.Add(csm);
                 }
-                #endregion
             }
-            catch (Exception err)
-            {
-                
-            }
+           
             return View(mailList.AsEnumerable());
         }
         public IActionResult getServiceMail()
@@ -1030,35 +980,48 @@ namespace prjMSIT145_Final.Controllers
             try
             {
                 #region ADO.NET測試
-                var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
-                using (SqlConnection conn = new SqlConnection(connStr))
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand())
-                    {
-                        cmd.Connection = conn;
-                        cmd.CommandText = "select Fid,SenderName,Email,Phone,Subject,Context,ReceivedTime from ServiceMailBox where Reply is null or Reply='' order by ReceivedTime desc";
-                        //cmd.Parameters.AddWithValue("Expire", Convert.ToDateTime(expire));
-                        SqlDataReader reader = cmd.ExecuteReader();
+                //var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
+                //using (SqlConnection conn = new SqlConnection(connStr))
+                //{
+                //    conn.Open();
+                //    using (SqlCommand cmd = new SqlCommand())
+                //    {
+                //        cmd.Connection = conn;
+                //        cmd.CommandText = "select Fid,SenderName,Email,Phone,Subject,Context,ReceivedTime from ServiceMailBox where Reply is null or Reply='' order by ReceivedTime desc";
+                //        //cmd.Parameters.AddWithValue("Expire", Convert.ToDateTime(expire));
+                //        SqlDataReader reader = cmd.ExecuteReader();
 
                         
-                        while (reader.Read())
-                        {
-                            CgetServiceMailViewModel mail = new CgetServiceMailViewModel();
-                            mail.Fid = Convert.ToInt32(reader["Fid"]);
-                            mail.SenderName = Convert.ToString(reader["SenderName"]);
-                            mail.Email = Convert.ToString(reader["Email"]);
-                            mail.Phone = Convert.ToString(reader["Phone"]);
-                            mail.Subject = Convert.ToString(reader["Subject"]);
-                            mail.Context = Convert.ToString(reader["Context"]);
-                            mail.ReceivedTime = Convert.ToDateTime(reader["ReceivedTime"]);
-                            mailList.Add(mail);
-                        }
+                //        while (reader.Read())
+                //        {
+                //            CgetServiceMailViewModel mail = new CgetServiceMailViewModel();
+                //            mail.Fid = Convert.ToInt32(reader["Fid"]);
+                //            mail.SenderName = Convert.ToString(reader["SenderName"]);
+                //            mail.Email = Convert.ToString(reader["Email"]);
+                //            mail.Phone = Convert.ToString(reader["Phone"]);
+                //            mail.Subject = Convert.ToString(reader["Subject"]);
+                //            mail.Context = Convert.ToString(reader["Context"]);
+                //            mail.ReceivedTime = Convert.ToDateTime(reader["ReceivedTime"]);
+                //            mailList.Add(mail);
+                //        }
 
-                        reader.Close();
+                //        reader.Close();
+                //    }
+                //}
+                #endregion
+
+                IEnumerable<ServiceMailBox> list = from s in _context.ServiceMailBoxes
+                                                   where string.IsNullOrEmpty(s.Reply)
+                                                   select s;
+                if (list != null)
+                {
+                    foreach (ServiceMailBox serviceMail in list)
+                    {
+                        CgetServiceMailViewModel csm = new CgetServiceMailViewModel();
+                        csm.serviceMail = serviceMail;
+                        mailList.Add(csm);
                     }
                 }
-                #endregion
             }
             catch (Exception err)
             {
@@ -1085,32 +1048,38 @@ namespace prjMSIT145_Final.Controllers
                 CgetServiceMailViewModel model = new CgetServiceMailViewModel();
 
                 #region ADO.NET測試
-                var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
-                using (SqlConnection conn = new SqlConnection(connStr))
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand())
-                    {
-                        cmd.Connection = conn;
-                        cmd.CommandText = "select * from ServiceMailBox where fid=@fid";
-                        cmd.Parameters.AddWithValue("fid", id);
-                        SqlDataReader reader = cmd.ExecuteReader();
+                //var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
+                //using (SqlConnection conn = new SqlConnection(connStr))
+                //{
+                //    conn.Open();
+                //    using (SqlCommand cmd = new SqlCommand())
+                //    {
+                //        cmd.Connection = conn;
+                //        cmd.CommandText = "select * from ServiceMailBox where fid=@fid";
+                //        cmd.Parameters.AddWithValue("fid", id);
+                //        SqlDataReader reader = cmd.ExecuteReader();
                        
 
-                        while (reader.Read())
-                        {
-                            model.Context = Convert.ToString(reader["Context"]);
-                            model.Reply = Convert.ToString(reader["Reply"]);
-                            model.SenderName = Convert.ToString(reader["SenderName"]);
-                            model.Email = Convert.ToString(reader["Email"]);
-                            model.Phone = Convert.ToString(reader["Phone"]);
-                            model.Subject = Convert.ToString(reader["Subject"]);
-                        }
+                //        while (reader.Read())
+                //        {
+                //            model.Context = Convert.ToString(reader["Context"]);
+                //            model.Reply = Convert.ToString(reader["Reply"]);
+                //            model.SenderName = Convert.ToString(reader["SenderName"]);
+                //            model.Email = Convert.ToString(reader["Email"]);
+                //            model.Phone = Convert.ToString(reader["Phone"]);
+                //            model.Subject = Convert.ToString(reader["Subject"]);
+                //        }
 
-                        reader.Close();
-                    }
-                }
+                //        reader.Close();
+                //    }
+                //}
                 #endregion
+
+                ServiceMailBox sm = _context.ServiceMailBoxes.FirstOrDefault(s => s.Fid == id);
+                                                   
+                if (sm != null)                                                            
+                    model.serviceMail = sm;
+                                       
                 return Json(model);
             }
             catch (Exception err)
@@ -1128,30 +1097,48 @@ namespace prjMSIT145_Final.Controllers
             if (mail != null)
             {
                 #region ADO.NET測試
-                var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
-                using (SqlConnection conn = new SqlConnection(connStr))
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand())
-                    {
-                        cmd.Connection = conn;
-                        cmd.CommandText = "update ServiceMailBox set Reply=@Reply,ReadTime=@ReadTime where fid=@fid";
-                        cmd.Parameters.AddWithValue("fid", mail.Fid);
-                        cmd.Parameters.AddWithValue("Reply", mail.Reply);
-                        cmd.Parameters.AddWithValue("ReadTime", Convert.ToDateTime(mail.ReadTime));
-                        try
-                        {
-                            cmd.ExecuteNonQuery();
-                            return Json("success");
-                        }
-                        catch(Exception err)
-                        {
-                            return Json($"error:{err.Message}");
-                        }
+                //var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
+                //using (SqlConnection conn = new SqlConnection(connStr))
+                //{
+                //    conn.Open();
+                //    using (SqlCommand cmd = new SqlCommand())
+                //    {
+                //        cmd.Connection = conn;
+                //        cmd.CommandText = "update ServiceMailBox set Reply=@Reply,ReadTime=@ReadTime where fid=@fid";
+                //        cmd.Parameters.AddWithValue("fid", mail.Fid);
+                //        cmd.Parameters.AddWithValue("Reply", mail.Reply);
+                //        cmd.Parameters.AddWithValue("ReadTime", Convert.ToDateTime(mail.ReadTime));
+                //        try
+                //        {
+                //            cmd.ExecuteNonQuery();
+                //            return Json("success");
+                //        }
+                //        catch(Exception err)
+                //        {
+                //            return Json($"error:{err.Message}");
+                //        }
                         
-                    }
-                }
+                //    }
+                //}
                 #endregion
+                try
+                {
+                    ServiceMailBox sm = _context.ServiceMailBoxes.FirstOrDefault(s => s.Fid == mail.Fid);
+
+                    if (sm != null)
+                    {
+                        sm.Reply = mail.Reply;
+                        sm.ReadTime = mail.ReadTime;
+                        _context.SaveChanges();
+                    }
+                        
+                    return Json("success");
+                }
+                catch (Exception err)
+                {
+                    return Json($"error:{err.Message}");
+                }
+                
             }
 
             return NoContent();

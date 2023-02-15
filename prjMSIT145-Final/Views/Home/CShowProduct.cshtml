@@ -29,7 +29,7 @@
                 </div>
                 <div class="btntext">問店家</div>
             </div>
-            <div class="iconwrap">
+            <div class="iconwrap search">
                 <div class="icon">
                     <img src="~/images/Customer/ShowProduct/search 24x24.png" />
                 </div>
@@ -51,43 +51,43 @@
                 {
                     if (item1.PlayregionID == 1)
                     {
-                        <div class="productclass">
-                            <h1 class="classtitle">@item1.CategoryName</h1>
-                            @foreach (var item2 in item1.ProductsList)
+                                                                                                                                                                                <div class="productclass">
+                                                                                                                                                                                    <h1 class="classtitle">@item1.CategoryName</h1>
+                                                                                                                                                                                    @foreach (var item2 in item1.ProductsList)
                             {
-                                @if (item2.IsForSale != 0)
+                                                                                                                                                                                        @if (item2.IsForSale != 0)
                                 {
-                                    @if (item2.IsForSale == 1)
+                                                                                                                                                                                            @if (item2.IsForSale == 1)
                                     {
-                                        <div class="productitem CursorPointer" id="Prod @item2.Fid" data-bs-toggle="modal" data-bs-target="#OptionModal">
-                                            <div class="PhotoandName">
-                                                <img src="~/images/@item2.Photo">
-                                                <p>@item2.ProductName</p>
-                                                @if (@item2.OrdetAmount > 0)
+                                                                                                                                                                                                <div class="productitem CursorPointer" id="Prod @item2.Fid" data-bs-toggle="modal" data-bs-target="#OptionModal" data-productName="@item2.ProductName" data-pid="@item2.Fid">
+                                                                                                                                                                                                    <div class="PhotoandName">
+                                                                                                                                                                                                        <img src="~/images/@item2.Photo">
+                                                                                                                                                                                                        <p>@item2.ProductName</p>
+                                                                                                                                                                                                        @if (@item2.OrdetAmount > 0)
                                                 {
-                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                                                                                                                                                                            <div class="AmountBall">@item2.OrdetAmount</div>
                                                 }
-                                            </div>
-                                            <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
-                                        </div>
+                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                    <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
+                                                                                                                                                                                                </div>
                                     }
                                     else
                                     {
-                                        <div class="productitem CursorDefault">
-                                            <div class="PhotoandName">
-                                                <img src="~/images/@item2.Photo">
-                                                <p>@item2.ProductName</p>
-                                                @if (@item2.OrdetAmount > 0)
+                                                                                                                                                                                                <div class="productitem CursorDefault" data-productName="@item2.ProductName">
+                                                                                                                                                                                                    <div class="PhotoandName">
+                                                                                                                                                                                                        <img src="~/images/@item2.Photo">
+                                                                                                                                                                                                        <p>@item2.ProductName</p>
+                                                                                                                                                                                                        @if (@item2.OrdetAmount > 0)
                                                 {
-                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                                                                                                                                                                            <div class="AmountBall">@item2.OrdetAmount</div>
                                                 }
-                                            </div>
-                                            <p class="productNotsale">停售</p>
-                                        </div>
+                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                    <p class="productNotsale">停售</p>
+                                                                                                                                                                                                </div>
                                     }
                                 }
                             }
-                        </div>
+                                                                                                                                                                                </div>
                     }
                 }
             }
@@ -101,43 +101,43 @@
                 {
                     if (item1.PlayregionID == 2)
                     {
-                        <div class="productclass">
-                            <h1 class="classtitle">@item1.CategoryName</h1>
-                            @foreach (var item2 in item1.ProductsList)
+                                                                                                                                                                                <div class="productclass">
+                                                                                                                                                                                    <h1 class="classtitle">@item1.CategoryName</h1>
+                                                                                                                                                                                    @foreach (var item2 in item1.ProductsList)
                             {
-                                @if (item2.IsForSale != 0)
+                                                                                                                                                                                        @if (item2.IsForSale != 0)
                                 {
-                                    @if (item2.IsForSale == 1)
+                                                                                                                                                                                            @if (item2.IsForSale == 1)
                                     {
-                                        <div class="productitem CursorPointer" id="Prod @item2.Fid" data-bs-toggle="modal" data-bs-target="#OptionModal">
-                                            <div class="PhotoandName">
-                                                <img src="~/images/@item2.Photo">
-                                                <p>@item2.ProductName</p>
-                                                @if (@item2.OrdetAmount > 0)
+                                                        <div class="productitem CursorPointer" id="Prod @item2.Fid" data-bs-toggle="modal" data-bs-target="#OptionModal" data-productName="@item2.ProductName" data-pid="@item2.Fid">
+                                                                                                                                                                                                    <div class="PhotoandName">
+                                                                                                                                                                                                        <img src="~/images/@item2.Photo">
+                                                                                                                                                                                                        <p>@item2.ProductName</p>
+                                                                                                                                                                                                        @if (@item2.OrdetAmount > 0)
                                                 {
-                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                                                                                                                                                                            <div class="AmountBall">@item2.OrdetAmount</div>
                                                 }
-                                            </div>
-                                            <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
-                                        </div>
+                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                    <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
+                                                                                                                                                                                                </div>
                                     }
                                     else
                                     {
-                                        <div class="productitem CursorDefault">
-                                            <div class="PhotoandName">
-                                                <img src="~/images/@item2.Photo">
-                                                <p>@item2.ProductName</p>
-                                                @if (@item2.OrdetAmount > 0)
+                                                                                                                            <div class="productitem CursorDefault" data-productName="@item2.ProductName">
+                                                                                                                                                                                                    <div class="PhotoandName">
+                                                                                                                                                                                                        <img src="~/images/@item2.Photo">
+                                                                                                                                                                                                        <p>@item2.ProductName</p>
+                                                                                                                                                                                                        @if (@item2.OrdetAmount > 0)
                                                 {
-                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                                                                                                                                                                            <div class="AmountBall">@item2.OrdetAmount</div>
                                                 }
-                                            </div>
-                                            <p class="productNotsale">停售</p>
-                                        </div>
+                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                    <p class="productNotsale">停售</p>
+                                                                                                                                                                                                </div>
                                     }
                                 }
                             }
-                        </div>
+                                                                                                                                                                                </div>
                     }
                 }
             }
@@ -151,43 +151,43 @@
                 {
                     if (item1.PlayregionID == 3)
                     {
-                        <div class="productclass">
-                            <h1 class="classtitle">@item1.CategoryName</h1>
-                            @foreach (var item2 in item1.ProductsList)
+                                                                                                                                                                                <div class="productclass">
+                                                                                                                                                                                    <h1 class="classtitle">@item1.CategoryName</h1>
+                                                                                                                                                                                    @foreach (var item2 in item1.ProductsList)
                             {
-                                @if (item2.IsForSale != 0)
+                                                                                                                                                                                        @if (item2.IsForSale != 0)
                                 {
-                                    @if (item2.IsForSale == 1)
+                                                                                                                                                                                            @if (item2.IsForSale == 1)
                                     {
-                                        <div class="productitem CursorPointer" id="Prod @item2.Fid" data-bs-toggle="modal" data-bs-target="#OptionModal">
-                                            <div class="PhotoandName">
-                                                <img src="~/images/@item2.Photo">
-                                                <p>@item2.ProductName</p>
-                                                @if (@item2.OrdetAmount > 0)
+                                                        <div class="productitem CursorPointer" id="Prod @item2.Fid" data-bs-toggle="modal" data-bs-target="#OptionModal" data-productName="@item2.ProductName" data-pid="@item2.Fid">
+                                                                                                                                                                                                    <div class="PhotoandName">
+                                                                                                                                                                                                        <img src="~/images/@item2.Photo">
+                                                                                                                                                                                                        <p>@item2.ProductName</p>
+                                                                                                                                                                                                        @if (@item2.OrdetAmount > 0)
                                                 {
-                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                                                                                                                                                                            <div class="AmountBall">@item2.OrdetAmount</div>
                                                 }
-                                            </div>
-                                            <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
-                                        </div>
+                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                    <p class="producttext">$ @Convert.ToInt32(item2.UnitPrice)</p>
+                                                                                                                                                                                                </div>
                                     }
                                     else
                                     {
-                                        <div class="productitem CursorDefault">
-                                            <div class="PhotoandName">
-                                                <img src="~/images/@item2.Photo">
-                                                <p>@item2.ProductName</p>
-                                                @if (@item2.OrdetAmount > 0)
+                                                                                                                                                                                                <div class="productitem CursorDefault" data-productName="@item2.ProductName">
+                                                                                                                                                                                                    <div class="PhotoandName">
+                                                                                                                                                                                                        <img src="~/images/@item2.Photo">
+                                                                                                                                                                                                        <p>@item2.ProductName</p>
+                                                                                                                                                                                                        @if (@item2.OrdetAmount > 0)
                                                 {
-                                                    <div class="AmountBall">@item2.OrdetAmount</div>
+                                                                                                                                                                                                            <div class="AmountBall">@item2.OrdetAmount</div>
                                                 }
-                                            </div>
-                                            <p class="productNotsale">停售</p>
-                                        </div>
+                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                    <p class="productNotsale">停售</p>
+                                                                                                                                                                                                </div>
                                     }
                                 }
                             }
-                        </div>
+                                                                                                                                                                                </div>
                     }
                 }
             }
@@ -239,7 +239,7 @@
         </div>
     </div>
 </form>
-
+<div id="searchDiv"></div>
 @section UpperScripts{
     <script>
 
@@ -247,6 +247,7 @@
 }
 @section Scripts{
     <script>
+        $(function () {
         let Membercheck = `@Context.Session.GetString(CDictionary.SK_LOGINED_USER)`;
         let BasePriceRecord = 0;
         let BasePrice = 0;
@@ -267,27 +268,27 @@
         @{
             foreach (var ProductClass in Model[0].ProductClassList)
             {
-                @if (ProductClass.ProductsList.Count != 0)
+                                                                                                                                                                        @if (ProductClass.ProductsList.Count != 0)
                 {
-                    @foreach (var Product in ProductClass.ProductsList)
+                                                                                                                                                                            @foreach (var Product in ProductClass.ProductsList)
                     {
-                        @if (Product.IsForSale == 1)
+                                                                                                                                                                                @if (Product.IsForSale == 1)
                         {
                             //-----------------Modal-Header
-                            @:document.getElementById("Prod @(Product.Fid)").addEventListener("click", function () {
-                            @:check = 0;
-                            @:document.getElementById("PFid").value=@(Product.Fid);
-                            @:document.getElementById("ProductTitle").innerHTML="@(Product.ProductName)";
+                                                                                                                                                                                    @:document.getElementById("Prod @(Product.Fid)").addEventListener("click", function () {
+                                                                                                                                                                                    @:check = 0;
+                                                                                                                                                                                    @:document.getElementById("PFid").value=@(Product.Fid);
+                                                                                                                                                                                    @:document.getElementById("ProductTitle").innerHTML="@(Product.ProductName)";
                             //-----------------Modal-Body
-                            @:getOptiondatas(@(Product.Fid));
+                                                                                                                                                                                    @:getOptiondatas(@(Product.Fid));
                             //-----------------Modal-Footer
-                            @:BasePriceRecord ="@(Product.UnitPrice)";
-                            @:BasePrice = BasePriceRecord;
-                            @:document.getElementById("Total").innerHTML="@(Product.UnitPrice)";
-                            @:document.getElementById("TotalAmount").value="@(Product.UnitPrice)";
-                            @:document.getElementById("Count").innerHTML= "1";
-                            @:document.getElementById("Qty").value = "1";
-                            @:});
+                                                                                                                                                                                    @:BasePriceRecord ="@(Product.UnitPrice)";
+                                                                                                                                                                                    @:BasePrice = BasePriceRecord;
+                                                                                                                                                                                    @:document.getElementById("Total").innerHTML="@(Product.UnitPrice)";
+                                                                                                                                                                                    @:document.getElementById("TotalAmount").value="@(Product.UnitPrice)";
+                                                                                                                                                                                    @:document.getElementById("Count").innerHTML= "1";
+                                                                                                                                                                                    @:document.getElementById("Qty").value = "1";
+                                                                                                                                                                                    @:});
                         }
                     }
                 }
@@ -456,7 +457,107 @@
             }
         }
 
+        
+        @*找商品*@
+            let searchBlock;
+            $('.iconwrap.search').css('cursor','pointer');
+            $('.iconwrap.search').click(function () {
+                $('#searchDiv').append(`
+                                <div class="modal fade modal-dialog-centered" id="searchBlock" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable">
+                                <div class="modal-content">
 
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">請輸入關鍵字</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" name="btnCloseWindow"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+
+                                        <div class="mb-3">
+                                            <label for="message-text" class="col-form-label"></label>
+                                                <input class="form-control" id="txtKeyword" name="txtKeyword" type="text" style='width:50%'/>
+                                        </div>
+                                    </div>
+                                     <div class="modal-body searchItems">
+                                         <div class="mb-3">
+
+                                        </div>
+                                     </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" name="btnCloseWindow">關閉</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+
+                let docFrag = document.createDocumentFragment();
+                $('.productitem.CursorPointer').each(function () {
+                    $(docFrag).append($(this).clone());
+                });
+                $('#searchDiv .searchItems>.mb-3').append(docFrag);
+                //console.log(docFrag);
+                searchBlock = new bootstrap.Modal(document.getElementById('searchBlock'), {
+                    keyboard: false
+                });
+
+                searchBlock.show();
+
+            });
+
+            $('#searchDiv').on('click','[name=btnCloseWindow]',function(){
+                searchBlock.hide();
+                $('#searchDiv').html('');
+            });
+            $('#searchDiv').on('click', '.productitem.CursorPointer', function () {
+                searchBlock.hide();
+                $('#searchDiv').html('');
+                let productId=$(this).data('pid');
+                showProductInfo(productId);
+            });
+            $('#searchDiv').on('change','[name=txtKeyword]',function(){
+                 $('#searchDiv .productitem.CursorPointer').hide();
+                let txtKeyword=$(this).val().trim();
+                if(txtKeyword == ''){
+                    $('#searchDiv .productitem.CursorPointer').show();
+                    return false;
+                }
+                    
+                $('#searchDiv .productitem.CursorPointer').filter(`[data-productName*=${txtKeyword}]`).show()
+                
+            });
+
+            function showProductInfo(productId) {
+
+                $.ajax({
+                    url:`@Url.Content("~/Home/getProductInfo")`,
+                    type:'post',
+                    data:{
+                        data: productId
+                    },
+                    dataType:'json',
+                    success:function(product){
+                        $('#searchDiv').html('');
+                        if (`${product}`!='This Product ID is invalid'){
+                            check = 0;
+                            document.getElementById("PFid").value = productId;
+                            document.getElementById("ProductTitle").innerHTML = product.productName;
+            //-----------------Modal-Body
+                            getOptiondatas(productId);
+            //-----------------Modal-Footer
+                            BasePriceRecord = product.unitPrice;
+                            BasePrice = BasePriceRecord;
+                            document.getElementById("Total").innerHTML= product.unitPrice;
+                            document.getElementById("TotalAmount").value = product.unitPrice;
+                            document.getElementById("Count").innerHTML= "1";
+                            document.getElementById("Qty").value = "1";
+                        }                        
+                    }
+                });
+
+            }
+        });
     </script>
 }
 
