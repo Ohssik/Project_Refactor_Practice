@@ -10,7 +10,6 @@ namespace prjMSIT145_Final.Models
         public int Senderid { get; set; }
         public string? Message { get; set; }
         public DateTime? SendTime { get; set; }
-
         public virtual Chatroom Chat { get; set; } = null!;
         public virtual ChatroomUser Sender { get; set; } = null!;
     }
