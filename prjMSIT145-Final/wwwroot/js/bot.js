@@ -107,8 +107,8 @@ document.addEventListener("scroll", function () {
     else {
         azureLogo.setAttribute("style", "bottom:5%");
         logoDiv.setAttribute("style", "bottom:5%");
-        document.querySelector(".logo").setAttribute("style", "bottom:16%;")
-        document.querySelector(".azure").setAttribute("style", "bottom:16%;")
+        document.querySelector(".logo").setAttribute("style", "bottom:15%;")
+        document.querySelector(".azure").setAttribute("style", "bottom:15%;")
     }
 })
 

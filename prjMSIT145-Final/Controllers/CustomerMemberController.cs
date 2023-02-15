@@ -902,34 +902,54 @@ namespace prjMSIT145_Final.Controllers
 
             result += " ";
             #region ADO.NET測試
-            var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
-            using (SqlConnection conn = new SqlConnection(connStr))
-            {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand())
-                {
-                    cmd.Connection = conn;
-                    cmd.CommandText = "insert into ServiceMailBox(SenderName,Email,Phone,Subject,Context,ReceivedTime)" +
-                        "values(@SenderName,@Email,@Phone,@Subject,@Context,@ReceivedTime)";
-                    cmd.Parameters.AddWithValue("SenderName", mail.txtSenderName);
-                    cmd.Parameters.AddWithValue("Email", mail.txtEmailAddress);
-                    cmd.Parameters.AddWithValue("Phone", mail.txtPhone);
-                    cmd.Parameters.AddWithValue("Subject", mail.txtMailSubject);
-                    cmd.Parameters.AddWithValue("Context", mail.txtMailContent);
-                    cmd.Parameters.AddWithValue("ReceivedTime", DateTime.Now);
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                        result += "success";
-                    }
-                    catch (Exception err)
-                    {
-                        result += $"error:{err.Message}";
-                    }
+            //var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
+            //using (SqlConnection conn = new SqlConnection(connStr))
+            //{
+            //    conn.Open();
+            //    using (SqlCommand cmd = new SqlCommand())
+            //    {
+            //        cmd.Connection = conn;
+            //        cmd.CommandText = "insert into ServiceMailBox(SenderName,Email,Phone,Subject,Context,ReceivedTime)" +
+            //            "values(@SenderName,@Email,@Phone,@Subject,@Context,@ReceivedTime)";
+            //        cmd.Parameters.AddWithValue("SenderName", mail.txtSenderName);
+            //        cmd.Parameters.AddWithValue("Email", mail.txtEmailAddress);
+            //        cmd.Parameters.AddWithValue("Phone", mail.txtPhone);
+            //        cmd.Parameters.AddWithValue("Subject", mail.txtMailSubject);
+            //        cmd.Parameters.AddWithValue("Context", mail.txtMailContent);
+            //        cmd.Parameters.AddWithValue("ReceivedTime", DateTime.Now);
+            //        try
+            //        {
+            //            cmd.ExecuteNonQuery();
+            //            result += "success";
+            //        }
+            //        catch (Exception err)
+            //        {
+            //            result += $"error:{err.Message}";
+            //        }
 
-                }
-            }
+            //    }
+            //}
             #endregion
+
+            try
+            {
+                ServiceMailBox sm = new ServiceMailBox();
+                               
+                sm.SenderName = mail.txtSenderName;
+                sm.Email = mail.txtEmailAddress;
+                sm.Phone = mail.txtPhone;
+                sm.Subject = mail.txtMailSubject;
+                sm.Context = mail.txtMailContent;
+                sm.ReceivedTime = DateTime.Now;
+                _context.ServiceMailBoxes.Add(sm);
+                _context.SaveChanges();
+                
+                result += "success";
+            }
+            catch (Exception err)
+            {
+                result += $"error:{err.Message}";
+            }
 
 
             return Json(result);

@@ -77,8 +77,6 @@
 
         .orderTrashAndPen {
             display: flex;
-            /* position: absolute;
-                                                                            right:20px; */
         }
 
             .orderTrashAndPen button {
@@ -292,28 +290,57 @@
             height:50px;
             width:600px;
         }
+
+        .btnDeleteCheck {
+            border: none;
+            width: 15%;
+            color: red;
+            font-size: 15px;
+            background-color: transparent;
+        }
+
+        .btnDeleteCancel {
+            border: none;
+            width: 15%;
+            color: black;
+            font-size: 15px;
+            background-color: transparent;
+        }
+
+        .btnModal-footer {
+            text-align: right;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border-top: 1px solid #dee2e6;
+            border-bottom-right-radius: calc(0.3rem - 1px);
+            border-bottom-left-radius: calc(0.3rem - 1px);
+        }
+
     </style>
 }
 @*刪除*@
 <div class="modal fade" id="btnDeleteModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header" style="width:100%">
+            <div class="modal-header" >
                 <h5 class="modal-title" id="exampleModalLabel">提醒</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 確定要刪除嗎?
             </div>
-            <div class="modal-footer" style="width:100%">
+            <div class="btnModal-footer">
                 <button type="button" class="btnDeleteCancel" data-bs-dismiss="modal">取消</button>
-                <a id="linkDelete"><button style="width:70px;" class="btnDeleteCheck" data-bs-dismiss="modal">刪除</button></a>
+                <a id="btnDeleteCheck"><button class="btnDeleteCheck" data-bs-dismiss="modal">刪除</button></a>
             </div>
         </div>
     </div>
 </div>
     <div class="changePage">
-
+            <input value="@Model.OrderISerialId" id="OrderISerialId" name="OrderISerialId" hidden/>
             <input type="hidden" name="Fid" value="@Model.Fid" />
             <div class="slides1" id="slides">
                 <div class="bodyBackgroundColor body_Icon_delete_Guide_fontColor body">
@@ -335,7 +362,7 @@
                             </div>
                             <h5>預計取餐時間</h5>
                             <fieldset class="Fieldset" id="pickUpTime">
-                            <input class="font-size borderNone" id="changeDate" type="datetime-local" value="" min="@DateTime.Now.ToString("s")" max="@DateTime.Now.AddDays(1).ToString("s")" />
+                            <input class="font-size borderNone" id="changeDate" type="datetime-local" value="@DateTime.Now.AddMinutes(15).ToString("s")" min="@DateTime.Now.ToString("s")" max="@DateTime.Now.AddDays(1).ToString("s")" />
                             </fieldset> 
                             <!-- **linK的href=> https://www.google.com.tw/maps/place/店家地址** -->
                             <h5>門市位置</h5>
@@ -366,8 +393,9 @@
                             <!-- *****動態產生*****至198行 -->
                             @foreach (var item in Model.items)
                             {
+                                            
                                 <div class="itemCard_padding_margin button_Icon_Guide_BackGroundColor">
-
+                            
                                     <!-- *餐點資訊,依實際點選內容增加span -->
                                     <h6>@item.ProductName</h6>
                                     <div class="flexAndItemsCenter displayBetween ">
@@ -389,7 +417,9 @@
                                                 </button>
                                             </div>
                                             <div>
-                                                <button class="buteditgar" id="DELT @item.Fid" name="btnDelete" data-bs-toggle="modal" data-bs-target="btnDeleteModel"><img src="../images/Business/garbage.png"></button>
+                                                <input id="ItemFid" value="@item.Fid" hidden />
+                                                @*<button class="buteditgar" id="DELT @item.Fid" name="btnDelete" data-bs-toggle="modal" data-bs-target="btnDeleteModel"><img src="../images/Business/garbage.png"></button>*@
+                                                <button class="buteditgar"  name="btnDelete" data-bs-toggle="modal" data-bs-target="#btnDeleteModel" ><img src="../images/Business/garbage.png"></button>
                                             </div>
                                         </div>
                                     </div>
@@ -544,7 +574,7 @@
                             </div>
                             <div class="spanFont div flexAndItemsCenter cardBorderColor">
                                 <div class="marginright">預計取餐時間</div>
-                                <div id="changeDate2">@DateTime.Now.ToString("s")</div>
+                                <div id="changeDate2">@DateTime.Now.AddMinutes(15).ToString("s")</div>
                             </div>
                             <div class="spanFont div flexAndItemsCenter cardBorderColor">
                                 <div class="marginright">付款方式</div>
@@ -566,7 +596,7 @@
                                 <input name="PayTermCatId" value="1" id="PayTermCatId" hidden />
                                 <input name="PickUpPerson" id="changePickUpPerson3" value="@Model.PickUpPerson" hidden />
                                 <input name="PickUpPersonPhone" id="changePickUpPersonPhone3" value="@Model.PickUpPersonPhone" hidden />
-                                <input name="pickUpDate" id="changeDate3" value="@DateTime.Now.ToString("s")"  hidden/>
+                                <input name="pickUpDate" id="changeDate3" value="@DateTime.Now.AddMinutes(15).ToString("s")"  hidden/>
                                 <input name="TotalAmount" value="@Model.TotalAmount" id="AddTotal" hidden />
                                 <input name="Memo" value="" id="Memo2" type="text" hidden>
                              <div>
@@ -591,9 +621,21 @@
             let PickUpPersonPhoneValue = ``;
             let Memo =``;
             const btnDelete = document.getElementsByName("btnDelete");
-            const btnDeleteCheck = document.querySelector("#linkDelete")
+            const btnDeleteCheck = document.querySelector("#btnDeleteCheck");
+            const ItemFid = document.querySelector("#ItemFid");
+        @*刪除購物車內容*@
+            btnDelete.forEach(function(click){
+                click.addEventListener("click",function(){
+                    console.log("123");
+                        const id = this.parentElement.firstElementChild;
+                        console.log(id);
+                    btnDeleteCheck.addEventListener("click", function () {
+                        console.log("123");
+                        btnDeleteCheck.setAttribute("href", `@Url.Content("~/OrderDetial/CartItemDelete")?OrderFid=${@Model.OrderFid}&ItemFid=${id.value}`)
+                    })
+                })
 
-
+            })
             @*網頁重新整理*@
                 $("#btnReset").click(function () {
                     location.reload();
@@ -657,19 +699,19 @@
             })
 
             @*註冊刪除購物車內容事件*@
-            let DeleteBTN = document.getElementsByClassName("buteditgar");
-            for (let i = 0, maxDBTN = DeleteBTN.length; i < maxDBTN; i++) {
-                ItemsFid = i
-                DeleteBTN[i].addEventListener("click", function () {
-                    DeleteOrderdatas(@Model.OrderFid, DeleteBTN[i].getAttribute("id").substring(0, 6))
-                });
-            }
+            //let DeleteBTN = document.getElementsByClassName("buteditgar");
+            //for (let i = 0, maxDBTN = DeleteBTN.length; i < maxDBTN; i++) {
+            //    ItemsFid = i
+            //    DeleteBTN[i].addEventListener("click", function () {
+            //        DeleteOrderdatas(@Model.OrderFid, DeleteBTN[i].getAttribute("id").substring(0, 6))
+            //    });
+            //}
 
-            async function DeleteOrderdatas(OrderFid,ItemFid) {
-                const response = await fetch(`@Url.Content("~/OrderDetial/CartItemDelete")?OrderFid=${OrderFid}&ItemFid=${ItemFid}`);
-                const datas = await response.json();
-                console.log(datas);
-            }
+            //async function DeleteOrderdatas(OrderFid,ItemFid) {
+            //    const response = await fetch(`@Url.Content("~/OrderDetial/CartItemDelete")?OrderFid=${OrderFid}&ItemFid=${ItemFid}`);
+            //    const datas = await response.json();
+            //    console.log(datas);
+            //}
 
             @*改變日期*@
             $("#changeDate").change(function () {
@@ -736,27 +778,22 @@
 
                     } else if (document.getElementById("slides").getAttribute("class") == "slides3") {
                         document.getElementById("slides").setAttribute("class", "slides2");
-                        
-
                     };
                 })
  
-
         </script>
     <script>
         //綠界
-        //const price = Math.round($("#TotalAmount2").text().substring(1));
         const price = $("#AddTotal").val();
+        const OrderISerialId = $("#OrderISerialId").val();
         console.log(price)
         const app = Vue.createApp({
             data() {
                 return {
-                    // 表單資料 //, ItemDesc1: '測試商品1'
-                    //, ItemDesc2: '測試商品2'//, Amt1: '813'
-                    //, Amt2: '814' , , ChannelID:'@ViewData["ChannelID"]'
+
                     addForm: {
                         MerchantOrderNo: '@ViewData["MerchantOrderNo"]'
-                        , ItemDesc: '測試商品'
+                        , ItemDesc: '日柴商品訂單編號 : '+OrderISerialId
                         , Amt: `${price}`
                         , ExpireDate: '@ViewData["ExpireDate"]'
                         , PayOption: 'ECPay'
@@ -776,15 +813,10 @@
                     postData['ChannelID'] = ChannelID;
                     postData['MerchantOrderNo'] = self.addForm.MerchantOrderNo;
                     postData['ItemDesc'] = self.addForm.ItemDesc;
-                    //postData['ItemDesc[1]'] = self.addForm.ItemDesc;
-                    //postData['ItemDesc[2]'] = self.addForm.ItemDesc;
                     postData['Amt'] = self.addForm.Amt;
-                    //postData['Amt[1]'] = self.addForm.Amt1;
-                    //postData['Amt[2]'] = self.addForm.Amt2;
                     postData['ExpireDate'] = self.addForm.ExpireDate;
                     postData['PayOption'] = self.addForm.PayOption;
                     postData['Email'] = self.addForm.Email;
-
 
                     // 使用 jQuery Ajax 傳送至後端
                     $.ajax({

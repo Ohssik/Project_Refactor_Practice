@@ -60,25 +60,6 @@ namespace prjMSIT145_Final.Controllers
 			return Json(GetReturnValue(service, inModel));
 		}
 
-		//[HttpPost]
-		//public async Task<IActionResult> GetReturn(SendToNewebPayIn inModel)
-		//{
-		//    var obj = await new ECPayService().GetQueryCallBack(inModel.MerchantOrderNo, inModel.Amt);
-		//    return Json(obj);
-		//}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		//[HttpPost]
-		//public async Task<string> UpdatePeriodCallBack(string orderNo, string PeriodN)
-		//{
-		//    var result = await new NewebpayService().GetUpdatePeriodCallBackAsync(orderNo, PeriodN);
-
-		//    return result;
-		//}
-
 		/// <summary>
 		/// 支付完成返回網址
 		/// </summary>
