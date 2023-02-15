@@ -48,8 +48,8 @@ namespace prjMSIT145_Final.Service
                 //交易描述
                 { "TradeDesc",  inModel.ItemDesc},
 
-                //商品名稱
-                { "ItemName", inModel.ItemDesc},
+                //商品名稱inModel.ItemDesc
+                { "ItemName", orderId},
 
                 //允許繳費有效天數(付款方式為 ATM 時，需設定此值)
                 //{ "ExpireDate",  "3"},
@@ -72,13 +72,6 @@ namespace prjMSIT145_Final.Service
                 //付款完成後導頁  $"{Config.GetSection("HostURL").Value}/OrderDetial/List"}  ?option=ECPay
                 { "OrderResultURL",$"{Config.GetSection("HostURL").Value}/CreditPay/CallbackReturn"},
 
-
-                //付款方式為 ATM 時，當使用者於綠界操作結束時，綠界回傳 虛擬帳號資訊至 此URL
-                //{ "PaymentInfoURL",$"{Config.GetSection("HostURL").Value}/Home/CallbackCustomer?option=ECPay"},
-
-                //付款方式為 ATM 時，當使用者於綠界操作結束時，綠界會轉址至 此URL。
-                //{ "ClientRedirectURL",  $"{Config.GetSection("HostURL").Value}/Home/CallbackCustomer?option=ECPay"},
-
                 //特店編號， 2000132 測試綠界編號  3002599   3003008
                 { "MerchantID",  "3003008"},
 
@@ -94,7 +87,12 @@ namespace prjMSIT145_Final.Service
                 //CheckMacValue 加密類型 固定填入 1 (SHA256)
                 { "EncryptType",  "1"},
 			};
-
+			//int count = 0;
+			//foreach(var pro in inModel.ItemName)
+			//{
+			//	order[$"ItemName[{count}]"] = pro;
+			//	count++;
+			//}
 			//檢查碼
 			order["CheckMacValue"] = GetCheckMacValue(order);
 
@@ -109,92 +107,6 @@ namespace prjMSIT145_Final.Service
 
 			return s.ToString();
 		}
-
-		//ATM付款
-		//public string GetPeriodCallBack(SendToNewebPayIn inModel)
-		//{
-		//    var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
-
-		//    //需填入 你的網址
-		//    var website = $"{Config.GetSection("HostURL").Value}/Home";
-
-		//    var order = new Dictionary<string, object>
-		//    {
-		//        //選擇預設付款方式 固定Credit
-		//        { "ChoosePayment",  "Credit"},
-
-		//        //交易金額
-		//        { "PeriodAmount",  int.Parse(inModel.Amt)},
-
-		//        //自訂名稱欄位2
-		//        { "PeriodType ",  "D"},
-
-		//        //自訂名稱欄位2
-		//        { "Frequency",  1},
-
-		//        //自訂名稱欄位2
-		//        { "ExecTimes",  5},
-
-		//        //完成後發通知
-		//        { "PeriodReturnURL",  $"{Config.GetSection("HostURL").Value}/Home/CallbackNotify?option=ECPay"},                
-
-
-		//        //交易金額
-		//        { "TotalAmount",  int.Parse(inModel.Amt)},
-
-		//        //特店交易編號
-		//        { "MerchantTradeNo",  orderId},
-
-		//        //特店交易時間 yyyy/MM/dd HH:mm:ss
-		//        { "MerchantTradeDate",  DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")},
-
-		//        //交易描述
-		//        { "TradeDesc",  inModel.ItemDesc},
-
-		//        //商品名稱
-		//        { "ItemName", inModel.ItemDesc},              
-
-		//        //自訂名稱欄位1
-		//        { "Email",  inModel.Email},
-
-		//       //完成後發通知
-		//        { "ReturnURL",  $"{Config.GetSection("HostURL").Value}/Notify/CallbackNotify?option=ECPay"},
-
-		//        //付款完成後導頁/Home/CallbackReturn?option=ECPay
-		//        { "OrderResultURL", $"https://{Config.GetSection("HostURL").Value}/Home/CallbackReturn?option=ECPay"},
-
-
-		//        //付款方式為 ATM 時，當使用者於綠界操作結束時，綠界回傳 虛擬帳號資訊至 此URL
-		//        //{ "PaymentInfoURL",$"{Config.GetSection("HostURL").Value}/Home/CallbackCustomer?option=ECPay"},
-
-		//        //付款方式為 ATM 時，當使用者於綠界操作結束時，綠界會轉址至 此URL。
-		//        //{ "ClientRedirectURL",  $"{Config.GetSection("HostURL").Value}/Home/CallbackCustomer?option=ECPay"},
-
-		//        //特店編號， 2000132  測試綠界編號 
-		//        { "MerchantID",  "3002599"},
-
-		//        //交易類型 固定填入 aio
-		//        { "PaymentType",  "aio"},
-
-
-		//        //CheckMacValue 加密類型 固定填入 1 (SHA256)
-		//        { "EncryptType",  "1"},
-		//    };
-
-		//    //檢查碼
-		//    order["CheckMacValue"] = GetCheckMacValue(order);
-
-		//    StringBuilder s = new StringBuilder();
-		//    s.AppendFormat("<form id='payForm' action='{0}' method='post'>", "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5");
-		//    foreach (KeyValuePair<string, object> item in order)
-		//    {
-		//        s.AppendFormat("<input type='hidden' name='{0}' value='{1}' />", item.Key, item.Value);
-		//    }
-
-		//    s.Append("</form>");
-
-		//    return s.ToString();
-		//}
 
 		/// <summary>
 		/// 取得 檢查碼
@@ -222,27 +134,6 @@ namespace prjMSIT145_Final.Service
 
 			return checkValue.ToUpper();
 		}
-
-		//private string GetCheckMacValue(Dictionary<string, string> order)
-		//{
-		//    var param = order.Keys.OrderBy(x => x).Select(key => key + "=" + order[key]).ToList();
-
-		//    var checkValue = string.Join("&", param);
-
-		//    //測試用的 HashKey
-		//    var hashKey = "dALAm7IGaqMq8ebH";
-
-		//    //測試用的 HashIV
-		//    var HashIV = "ZV1cJFulEf25mRCG";
-
-		//    checkValue = $"HashKey={hashKey}" + "&" + checkValue + $"&HashIV={HashIV}";
-
-		//    checkValue = HttpUtility.UrlEncode(checkValue).ToLower();
-
-		//    checkValue = EncryptSHA256(checkValue);
-
-		//    return checkValue.ToUpper();
-		//}
 
 		/// <summary>
 		/// 支付通知網址
@@ -276,21 +167,6 @@ namespace prjMSIT145_Final.Service
 
 			return result;
 		}
-		//public async Task<NewebPayReturn<NewebPayQueryResult>> GetQueryCallBack(string orderId, string amt)
-		//{
-		//    var dict = new Dictionary<string, string>
-		//    {
-		//        { "MerchantID", "1039919" },
-		//        { "MerchantTradeNo", "141871950171249" },
-		//        { "TimeStamp", DateTime.Now.ToString() }
-		//    };
-
-		//    dict.Add("CheckMacValue", GetCheckMacValue(dict));
-
-		//    var result = GetApiInvokeResult("https://payment.ecpay.com.tw/Cashier/QueryTradeInfo/V5", string.Join("&", dict.Select(a => a.Key + "=" + a.Value)), contentType: "application/x-www-form-urlencoded");
-
-		//    return null;
-		//}
 
 		public NewebPayReturn<NewebPayQueryResult> GetApiInvokeResult(string url, string postData = null, string contentType = null)
 		{

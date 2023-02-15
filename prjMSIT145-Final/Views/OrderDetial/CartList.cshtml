@@ -778,27 +778,21 @@
 
                     } else if (document.getElementById("slides").getAttribute("class") == "slides3") {
                         document.getElementById("slides").setAttribute("class", "slides2");
-                        
-
                     };
                 })
  
-
         </script>
     <script>
         //綠界
-        //const price = Math.round($("#TotalAmount2").text().substring(1));
         const price = $("#AddTotal").val();
         console.log(price)
         const app = Vue.createApp({
             data() {
                 return {
-                    // 表單資料 //, ItemDesc1: '測試商品1'
-                    //, ItemDesc2: '測試商品2'//, Amt1: '813'
-                    //, Amt2: '814' , , ChannelID:'@ViewData["ChannelID"]'
+
                     addForm: {
                         MerchantOrderNo: '@ViewData["MerchantOrderNo"]'
-                        , ItemDesc: '測試商品'
+                        , ItemDesc: '日柴商品訂單編號 : '+
                         , Amt: `${price}`
                         , ExpireDate: '@ViewData["ExpireDate"]'
                         , PayOption: 'ECPay'
@@ -818,15 +812,10 @@
                     postData['ChannelID'] = ChannelID;
                     postData['MerchantOrderNo'] = self.addForm.MerchantOrderNo;
                     postData['ItemDesc'] = self.addForm.ItemDesc;
-                    //postData['ItemDesc[1]'] = self.addForm.ItemDesc;
-                    //postData['ItemDesc[2]'] = self.addForm.ItemDesc;
                     postData['Amt'] = self.addForm.Amt;
-                    //postData['Amt[1]'] = self.addForm.Amt1;
-                    //postData['Amt[2]'] = self.addForm.Amt2;
                     postData['ExpireDate'] = self.addForm.ExpireDate;
                     postData['PayOption'] = self.addForm.PayOption;
                     postData['Email'] = self.addForm.Email;
-
 
                     // 使用 jQuery Ajax 傳送至後端
                     $.ajax({

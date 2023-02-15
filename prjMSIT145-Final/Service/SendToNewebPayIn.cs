@@ -6,7 +6,8 @@
 		public string MerchantID { get; set; }
 		public string MerchantOrderNo { get; set; }
 		public string ItemDesc { get; set; }
-		public string Amt { get; set; }
+		public string[] ItemName { get; set; }  //新加
+        public string Amt { get; set; }
 		public string ExpireDate { get; set; }
 		public string ReturnURL { get; set; }
 		public string CustomerURL { get; set; }
