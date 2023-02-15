@@ -48,8 +48,8 @@ namespace prjMSIT145_Final.Service
                 //交易描述
                 { "TradeDesc",  inModel.ItemDesc},
 
-                //商品名稱inModel.ItemDesc
-                { "ItemName", orderId},
+                //商品名稱
+                { "ItemName", inModel.ItemDesc},
 
                 //允許繳費有效天數(付款方式為 ATM 時，需設定此值)
                 //{ "ExpireDate",  "3"},

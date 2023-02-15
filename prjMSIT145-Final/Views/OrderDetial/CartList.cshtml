@@ -786,6 +786,7 @@
     <script>
         //綠界
         const price = $("#AddTotal").val();
+        const OrderISerialId = $("#OrderISerialId").val();
         console.log(price)
         const app = Vue.createApp({
             data() {
@@ -793,7 +794,7 @@
 
                     addForm: {
                         MerchantOrderNo: '@ViewData["MerchantOrderNo"]'
-                        , ItemDesc: '日柴商品訂單編號 : '+
+                        , ItemDesc: '日柴商品訂單編號 : '+OrderISerialId
                         , Amt: `${price}`
                         , ExpireDate: '@ViewData["ExpireDate"]'
                         , PayOption: 'ECPay'
