@@ -124,8 +124,8 @@ namespace prjMSIT145_Final.Controllers
                     x.GoogleEmail = payload.Email;
                     x.MemberName = payload.Name;
 
-                    return RedirectToAction("Register", x);
-
+                    //return RedirectToAction("Register", x);
+                    return RedirectToAction("linegooleregister", x);
                 }
 
             };
@@ -300,6 +300,56 @@ namespace prjMSIT145_Final.Controllers
             return Redirect("~/Home/CIndex");
             //return RedirectToAction("Index", "CustomerMember");
         }
+
+        public ActionResult linegooleregister(NormalMember member)
+        {
+            return View(member);
+        }
+
+        [HttpPost]
+        public ActionResult linegooleregister(CNormalMemberViewModel member)
+        {
+            if(member.Phone == null || member.Email==null || member.MemberName==null)
+            {
+                return View();
+            }
+            else
+            {
+                NormalMember x = new NormalMember();
+                x.Phone = member.Phone;
+                x.Email = member.Email;
+                x.GoogleEmail = member.GoogleEmail;
+                x.LineUserid = member.LineUserid;
+                x.MemberName = member.MemberName;
+                _context.NormalMembers.Add(x);
+                _context.SaveChanges();
+                return Redirect("~/Home/CIndex");
+            }
+           
+        }
+
+        public IActionResult combineaccount(string Phone,string LineUserid, string GoogleEmail)
+        {   
+            if(Phone == null || LineUserid == null || GoogleEmail == null)
+            {
+                 return Redirect("~/CustomerMember/linegooleregister");
+            }
+
+            NormalMember x = new NormalMember();
+            x.Phone=Phone;
+            x.GoogleEmail = GoogleEmail;
+            x.LineUserid= LineUserid;
+            return View(x);
+        }
+        [HttpPost]
+        public IActionResult combineaccount()
+        {
+
+            return Redirect("~/Home/CIndex");
+        }
+
+
+
         public IActionResult Register(NormalMember member)
         {
 
@@ -471,10 +521,10 @@ namespace prjMSIT145_Final.Controllers
                 }
             }
 
-            if (vm.Password ==null)
-            {
-                return Json("密碼欄位不能空值");
-            }
+            //if (vm.Password ==null)
+            //{
+            //    return Json("密碼欄位不能空值");
+            //}
             
             
 

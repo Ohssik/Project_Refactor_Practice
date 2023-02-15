@@ -1,0 +1,57 @@
+﻿@model prjMSIT145_Final.Models.NormalMember
+
+@{
+    ViewData["Title"] = "combineaccount";
+}
+
+@section Styles{
+
+    <link rel="stylesheet" href="~/css/Customer_css/Register.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/Customer_css/CBSonlyClass.css" />
+
+}
+<form asp-action="combineaccount" id="combineaccountid" name="combineaccountname">
+    <div>
+        <h1>輸入正確帳號密碼已整合帳號</h1>
+        <input type="hidden" name="LineUserid" value="@Model.LineUserid"/>
+        <input type="hidden" name="GoogleEmail" value="@Model.GoogleEmail" />
+        <span class="text3">
+            <p class="color">*</p>
+            <p class="text4">手機號碼<span class="necessspan">(必填)</span><span class="Formatspan">(台灣手機號碼)</span></p>
+        </span>
+
+        <div class="divhint">
+            <div class="div1">
+                <input type="text" class="input" name="Phone" value="@Model.Phone" id="Phone" />
+            </div>
+            <span id="phonecorrect" class="spanerrormessage"></span>
+        </div>
+        <span class="text3">
+            <p class="color">*</p>
+            <p class="text4">密碼<span class="necessspan">(必填)</span><span class="Formatspan">(大小寫英文加4個數字)</span></p>
+        </span>
+
+        <div class="divhint">
+            <div class="div1">
+                <input type="password" class="input" name="Password" value="" id="Password" />
+                <i style="margin-top:10px;margin-left:-20px;" class="far fa-eye" id="togglePassword"></i>
+            </div>
+            <span id="passwordcorrect" class="spanerrormessage"></span>
+        </div>
+
+        <div class="display">
+            <input id="submitid" type="submit" class="enter" value="確認" />
+
+        </div>
+
+
+    </div>
+
+
+
+
+    </form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
