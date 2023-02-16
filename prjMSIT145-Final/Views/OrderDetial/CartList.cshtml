@@ -638,7 +638,7 @@
                         const response = await fetch(`@Url.Content("~/OrderDetial/CartItemDelete")?OrderFid=${orderFid}&ItemFid=${Itemid}`)
                         const datas = await response.json();
                         console.log(datas);
-                        //location.href = "/OrderDetial/CartList";
+                        location.href = `/OrderDetial/CartList?Fid=${orderFid}`;
                     })
                 })
 
