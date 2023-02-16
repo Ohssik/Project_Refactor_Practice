@@ -6,12 +6,16 @@ using NuGet.Packaging.Signing;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
 using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Security.Cryptography;
 using System.Text.Json;
 using static NuGet.Packaging.PackagingConstants;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace prjMSIT145_Final.Controllers
 {
@@ -56,6 +60,7 @@ namespace prjMSIT145_Final.Controllers
                     IsOpened = item.IsOpened,
                     LogoImgFileName = item.LogoImgFileName,
                     SighImgFileName = item.SighImgFileName,
+                    Distance = null,
                 });
             }
             CUtility.BusinessMemberList = BusinessMemberList;
@@ -70,7 +75,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 AdImgList.Add(ad);
             }
-            CUtility.AdImgList= AdImgList;
+            CUtility.AdImgList = AdImgList;
             #endregion
             List<VCUtilityViewModel> CUL = new List<VCUtilityViewModel>();
             CUL.Add(new VCUtilityViewModel
@@ -79,6 +84,46 @@ namespace prjMSIT145_Final.Controllers
                 AdImgList = CUtility.AdImgList,
             });
             return View(CUL);
+        }
+
+        public IActionResult CDistanceCount(double latitude, double longitude)
+        {
+            IConfiguration Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
+            string GoogleAPIKey = Config.GetSection("AppSettings:GoogleAPIKey").Value;
+            List<List<string>> LocationList = new List<List<string>>();
+            foreach (var item1 in CUtility.BusinessMemberList)
+            {
+                string address = item1.Address;
+                string json = GoogleAPIUtilities.ConvertAddressToJsonString(address, GoogleAPIKey);
+                double[] latLng = GoogleAPIUtilities.ConvertJsonTolanAndlng(json);
+                List<string> location = new List<string>();
+                foreach (var item2 in latLng)
+                {
+                    location.Add(item2.ToString());
+                }
+                LocationList.Add(location);
+            }
+            const double EARTH_RADIUS = 6378.137;
+            int i = 0;
+            foreach (var item in LocationList)
+            {
+                double lat1 = latitude * Math.PI / 180.0;
+                double lat2 = Convert.ToDouble(item[0]) * Math.PI / 180.0;
+                double a = lat1 - lat2;
+                double b = (longitude * Math.PI / 180.0) - (Convert.ToDouble(item[1]) * Math.PI / 180.0);
+                double s = 2 * Math.Asin(Math.Sqrt(Math.Pow(Math.Sin(a / 2), 2) + Math.Cos(lat1) * Math.Cos(lat2) * Math.Pow(Math.Sin(b / 2), 2)));
+                s = s * EARTH_RADIUS; 
+                s = Math.Round(s * 10000) / 10000 * 1000;
+                string dis = Convert.ToString(s / 1000).Substring(0,3);
+                CUtility.BusinessMemberList[i].Distance = dis;
+                i++;
+            }
+            List<VCUtilityViewModel> CUL = new List<VCUtilityViewModel>();
+            CUL.Add(new VCUtilityViewModel
+            {
+                BusinessMemberList = CUtility.BusinessMemberList,
+            });
+            return Json(CUL);
         }
 
         public IActionResult CShowProduct(int? BFid, int? OrderFid)
@@ -100,6 +145,7 @@ namespace prjMSIT145_Final.Controllers
                 Gps = BM.Gps,
                 IsOpened = BM.IsOpened,
                 LogoImgFileName = BI.LogoImgFileName,
+                SighImgFileName = BI.SighImgFileName,
                 BannerImgFileName1 = BI.BannerImgFileName1,
                 ChatroomUserid = BM.ChatroomUserid,
             }).Where(BM => BM.FID == BFid).OrderBy(BM => BM.FID);
@@ -118,6 +164,7 @@ namespace prjMSIT145_Final.Controllers
                     Gps = item.Gps,
                     IsOpened = item.IsOpened,
                     LogoImgFileName = item.LogoImgFileName,
+                    SighImgFileName = item.SighImgFileName,
                     BannerImgFileName1 = item.BannerImgFileName1,
                     ChatroomUserid = item.ChatroomUserid,
                 });
@@ -406,7 +453,7 @@ namespace prjMSIT145_Final.Controllers
                                    join OTP in _context.OptionsToProducts on P.Fid equals OTP.ProductFid
                                    join OG in _context.ProductOptionGroups on OTP.OptionGroupFid equals OG.Fid
                                    where P.Fid == PFid
-                                   orderby P.Fid,OG.IsMultiple
+                                   orderby P.Fid, OG.IsMultiple
                                    select new
                                    {
                                        Fid = OG.Fid,
@@ -513,7 +560,7 @@ namespace prjMSIT145_Final.Controllers
                         Memo = "",
                         OrderTime = DateTime.Now,
                         TotalAmount = Convert.ToDecimal(NewOrder[NewOrder.Keys.ToList()[3]]),
-                        OrderISerialId = $"{Convert.ToString(DateTime.Now).Substring(0, 4)}{DateTime.Now.ToString("MM")}{Convert.ToString(SNIDCount+1).Substring(6, 4)}",
+                        OrderISerialId = $"{Convert.ToString(DateTime.Now).Substring(0, 4)}{DateTime.Now.ToString("MM")}{Convert.ToString(SNIDCount + 1).Substring(6, 4)}",
                     });
                     _context.SaveChanges();
 
@@ -535,7 +582,7 @@ namespace prjMSIT145_Final.Controllers
                     CUtility.OrderitemID = OrderitemsID.Max();
                     #endregion
                     #region 將新訂單產品配料內容寫入OrderOptionsDetail
-                    for (int i = 5; i < NewOrder.Keys.ToList().Count-1; i++)
+                    for (int i = 5; i < NewOrder.Keys.ToList().Count - 1; i++)
                     {
                         if (NewOrder[NewOrder.Keys.ToList()[i]] != "0")
                         {
@@ -576,7 +623,7 @@ namespace prjMSIT145_Final.Controllers
                     CUtility.OrderitemID = OrderitemsID.Max();
                     #endregion
                     #region 將既有訂單新增產品配料內容寫入OrderOptionsDetail
-                    for (int i = 5; i < NewOrder.Keys.ToList().Count-1; i++)
+                    for (int i = 5; i < NewOrder.Keys.ToList().Count - 1; i++)
                     {
                         if (NewOrder[NewOrder.Keys.ToList()[i]] != "0")
                         {
@@ -593,23 +640,40 @@ namespace prjMSIT145_Final.Controllers
             }
             else //未登入則轉向登入頁面
                 return Redirect("CustomerMember/Login");
-            return RedirectToAction("CShowProduct", new { BFid = Convert.ToInt32(NewOrder[NewOrder.Keys.ToList()[1]]), OrderFid =CUtility.OrderID});
+            return RedirectToAction("CShowProduct", new { BFid = Convert.ToInt32(NewOrder[NewOrder.Keys.ToList()[1]]), OrderFid = CUtility.OrderID });
         }
 
-        
+
         public IActionResult CgetAdImgList()//抓廣告輪播圖的資料
         {
             List<AdImg> list = new List<AdImg>();
             var ads = from ad in _context.AdImgs
-                        where ad.OrderBy > 0
-                        orderby ad.OrderBy
-                        select ad;
+                      where ad.OrderBy > 0
+                      orderby ad.OrderBy
+                      select ad;
 
-            foreach(var ad in ads)
+            foreach (var ad in ads)
             {
                 list.Add(ad);
             }
             return Json(list);
+        }
+
+        public IActionResult getProductInfo(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+                return Json("This Product ID is invalid");
+
+            int id = Convert.ToInt32(data);
+
+            if(id<1)
+                return Json("This Product ID is invalid");
+
+            Product product = _context.Products.FirstOrDefault(p => p.Fid == id);
+            if(product == null)
+                return Json("This Product ID is invalid");
+
+            return Json(product);
         }
 
         //-------------------------------------------------------------------------------------------------

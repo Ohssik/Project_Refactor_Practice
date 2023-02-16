@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json;
+using NuGet.Common;
 using NuGet.Protocol;
 using prjMSIT145_Final.Models;
 using prjMSIT145_Final.ViewModels;
@@ -58,8 +59,9 @@ namespace prjMSIT145_Final.Controllers
 
                         return Redirect("~/Home/CIndex");
                     }
-                   
+
                     return View();
+                    
                 }
             }
             return View();
@@ -112,6 +114,7 @@ namespace prjMSIT145_Final.Controllers
                     CLoginViewModel vm = new CLoginViewModel();
                     vm.txtAccount = member.Phone;
                     vm.txtPassword = member.Password;
+                  
                     Login(vm);
                 }
                 else
@@ -233,22 +236,29 @@ namespace prjMSIT145_Final.Controllers
                     NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.LineUserid == ProfileObj.userId);
                     if (member != null)
                     {
+                        
+
                         CLoginViewModel loginmember =new CLoginViewModel();
                         loginmember.txtAccount = member.Phone;
                         loginmember.txtPassword = member.Password;
-                        Login(loginmember);
+                        if (member.IsSuspensed != 0)
+                        {
+                            return RedirectToAction("Login", new { isSus = "f" });
+                        }
+                        else {
+
+                            Login(loginmember);
+                        }
+                           
 
                     }
                     else
-                    {
-                        CNormalMemberViewModel x = new CNormalMemberViewModel();
+                    {      
                         NormalMember newmember = new NormalMember();
                         newmember.LineUserid=ProfileObj.userId;
                         newmember.MemberName = ProfileObj.displayName;
                         newmember.MemberPhotoFile = ProfileObj.pictureUrl;
-
-                        return View("Register", newmember);
-
+                        return View("Register", newmember);                     
                     }
                    
                 }
@@ -261,7 +271,7 @@ namespace prjMSIT145_Final.Controllers
             return Redirect("~/Home/CIndex");
         }
 
-             public class LineLoginToken
+             public class LineLoginToken                                                                              //line
              {
             public string access_token { get; set; }
             public int expires_in { get; set; }
@@ -296,7 +306,7 @@ namespace prjMSIT145_Final.Controllers
             return View(member);
         }
         [HttpPost]
-        public IActionResult Register(CNormalMemberViewModel vm, IFormFile photo)                                               //註冊動作
+        public async Task<IActionResult> Register(CNormalMemberViewModel vm, IFormFile photo)                                               //註冊動作
         {
             var data = _context.NormalMembers.Select(c => c.Phone);
             foreach (var i in data)
@@ -312,44 +322,69 @@ namespace prjMSIT145_Final.Controllers
                     ViewBag.birthday = vm.Birthday;
                     ViewBag.MemberPhotoFile = vm.MemberPhotoFile;
                     ViewBag.password = vm.Password;
-                    return View();
-                   
+                    //return View();
+                    return await Task.Run(() => View());
+
                 }
             }
             if (vm.MemberName == null && vm.Password == null)
             {
-                return View();
+                //return View();
+                return await Task.Run(() => View());
             }
             if (vm.Phone == null)
             {
-                return View();
+                //return View();
+                return await Task.Run(() => View());
             }
             else
             {
                 bool correct = Regex.IsMatch(vm.Phone, @"^09[0-9]{8}$");
                 if (!(correct))
                 {
-                    return View();
+                    //return View();
+                    return await Task.Run(() => View());
                 }
                 
             }
             if (vm.Email == null)
             {
-                return View();
+                //return View();
+                return await Task.Run(() => View());
             }
             else
             {
                 bool correct = Regex.IsMatch(vm.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
                 if (!(correct))
                 {
-                    return View();
+                    //return View();
+                    return await Task.Run(() => View());
                 }
             }
-            
+            string fileName = Guid.NewGuid().ToString() + ".jpg";
+            if (vm.MemberPhotoFile != null)
+            {
+                string imgaeURL = vm.MemberPhotoFile;
 
+                string filePath2 = Path.Combine(_eviroment.WebRootPath, "images/Customer/Member", fileName);
+                using (HttpClient client = new HttpClient())
+                {
+                    using (var response = await client.GetAsync(imgaeURL))
+                    {
+                        using (var stream = await response.Content.ReadAsStreamAsync())
+                        {
+                            using (var fileStream = System.IO.File.Create(filePath2))
+                            {
+                                await stream.CopyToAsync(fileStream);
+                            }
+                        }
+                    }
+                }
+                vm.MemberPhotoFile = fileName;
+            }
             if (photo != null)
             {
-                string fileName = Guid.NewGuid().ToString() + ".jpg";
+                //string fileName = Guid.NewGuid().ToString() + ".jpg";
                 string filePath = Path.Combine(_eviroment.WebRootPath, "images/Customer/Member", fileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
@@ -357,6 +392,7 @@ namespace prjMSIT145_Final.Controllers
                 }
                 vm.MemberPhotoFile = fileName;
             }
+            
             Random rnd = new Random();
             vm.EmailCertified = rnd.Next(10000000, 90000000);
             _context.Add(vm.member);
@@ -406,9 +442,9 @@ namespace prjMSIT145_Final.Controllers
 
 
             }
+            return await Task.Run(() => Redirect("~/Home/CIndex"));
+            //return Redirect("~/Home/CIndex");
 
-                return Redirect("~/Home/CIndex");
-          
         }
         public IActionResult Verifyaccount(NormalMember vm)
         {
@@ -649,12 +685,24 @@ namespace prjMSIT145_Final.Controllers
                 }
                 else
                 {
+                    string token = Guid.NewGuid().ToString();
+                    ChangeRequestPassword request = new ChangeRequestPassword();
+                    request.Token = token;
+                    request.Account = member.Phone;
+                    request.Email = member.Email;
+                    request.Expire = DateTime.Now.AddMinutes(10);
+                    _context.ChangeRequestPasswords.Add(request);
+                    _context.SaveChanges();
+
+
+
                     string smtpAddress = "smtp.gmail.com";
                     //設定Port
                     int portNumber = 587;
                     bool enableSSL = true;
                     //填入寄送方email和密碼
-                    string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?Fid={member.Fid}";
+                    //string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?token={token}&Fid={member.Fid}";
+                    string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?token={request.Token}&Account={request.Account}&Email={request.Email}";
                     string emailFrom = "a29816668@gmail.com";
                     string emailpassword = "joksdquaswjdyzpu";
                     //收信方email 可以用逗號區分多個收件人
@@ -662,7 +710,7 @@ namespace prjMSIT145_Final.Controllers
                     //主旨
                     string subject = "重製密碼";
                     //內容
-                    string body = $"<h2>重製密碼</h2><h3><br><a href={url}>請點此連結重設密碼</a></h3>";
+                    string body = $"<h2>重製密碼</h2><h3><br><a href={url}>請在<span style='color:red;'>10分鐘內</span>點此連結重設密碼</a></h3>";
                     using (MailMessage mail = new MailMessage())
                     {
                         mail.From = new MailAddress(emailFrom,"日柴", System.Text.Encoding.UTF8);
@@ -696,7 +744,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 NormalMember member =_context.NormalMembers.FirstOrDefault(c=>c.Email== vm.Email && c.Phone==vm.Phone);
                 if (member != null) {
-                    return Json("已送出重置密碼信件");
+                    return Json("已送出重置密碼信件,請於10鐘內重製密碼");
                     }
                 else
                 {
@@ -709,41 +757,63 @@ namespace prjMSIT145_Final.Controllers
         }
 
 
-        public IActionResult forgetalterpassword(int? Fid)
+        public IActionResult forgetalterpassword(string Account,string token ,string Email)
         {
-            if (Fid != null)
+
+            ChangeRequestPassword request = _context.ChangeRequestPasswords.FirstOrDefault(c => c.Token == token);
+            if (request != null)
             {
-                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Fid == Fid);
-                if (member != null)
+                string expire = request.Expire.ToString();
+                if (DateTime.Now > Convert.ToDateTime(expire))
                 {
-                    return View(member);
+                    
+                    return Redirect("~/Home/CIndex");
+
+                }
+                else
+                {
+                    if ( Account!= null && Email!=null)
+                    {
+                        //NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Fid == Fid);
+                        if (request != null)
+                        {
+                            CResetPwdViewModel creset=new CResetPwdViewModel();
+                            creset.txtAccount = request.Account;
+                            creset.token = request.Token;
+                            return View(creset);
+                            //return View(member);
+                        }
+                        return Redirect("~/Home/CIndex");
+
+                    }
+
                 }
 
-                return Redirect("~/Home/CIndex");
-
-
             }
-
-
             return Redirect("~/Home/CIndex");
+            
+           
         }
         [HttpPost]
-        public IActionResult forgetalterpassword(NormalMember member)
+        public IActionResult forgetalterpassword(CResetPwdViewModel vm)
         {
-            if(member.Password == null)
+            if( vm.txtPassword !=vm.txtConfirmPwd)
             {
-                return View(member);
+                return View(vm);
             }
             else
             {
-                NormalMember x=_context.NormalMembers.FirstOrDefault(c=>c.Fid==member.Fid);
+                NormalMember x=_context.NormalMembers.FirstOrDefault(c=>c.Phone==vm.txtAccount);
+                
                 if (x == null)
                 {
                     return View();
                 }
                 else
                 {
-                    x.Password = member.Password;
+                    ChangeRequestPassword request = _context.ChangeRequestPasswords.First(c => c.Token == vm.token && c.Account == vm.txtAccount);
+                    x.Password = vm.txtPassword;
+                    _context.ChangeRequestPasswords.Remove(request);
                     _context.SaveChanges();
                     return Redirect("~/Home/CIndex");
                 }
@@ -752,17 +822,12 @@ namespace prjMSIT145_Final.Controllers
          }
 
 
-
-
-
-
-
         public IActionResult getCartOrderQty(string data)
         {
             if (!string.IsNullOrEmpty(data))
             {
                 int nfid = Convert.ToInt32(data);
-                int ordersQty = _context.ViewShowFullOrders.Where(o => o.NFid == nfid && o.OrderState=="0").Count();
+                int ordersQty = _context.Orders.Where(o => o.NFid == nfid && o.OrderState=="0").Count();
                 string showQty = ordersQty > 0 ? ordersQty.ToString() : "";
                 return Json(showQty);
             }
@@ -787,34 +852,54 @@ namespace prjMSIT145_Final.Controllers
 
             result += " ";
             #region ADO.NET測試
-            var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
-            using (SqlConnection conn = new SqlConnection(connStr))
-            {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand())
-                {
-                    cmd.Connection = conn;
-                    cmd.CommandText = "insert into ServiceMailBox(SenderName,Email,Phone,Subject,Context,ReceivedTime)" +
-                        "values(@SenderName,@Email,@Phone,@Subject,@Context,@ReceivedTime)";
-                    cmd.Parameters.AddWithValue("SenderName", mail.txtSenderName);
-                    cmd.Parameters.AddWithValue("Email", mail.txtEmailAddress);
-                    cmd.Parameters.AddWithValue("Phone", mail.txtPhone);
-                    cmd.Parameters.AddWithValue("Subject", mail.txtMailSubject);
-                    cmd.Parameters.AddWithValue("Context", mail.txtMailContent);
-                    cmd.Parameters.AddWithValue("ReceivedTime", DateTime.Now);
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                        result += "success";
-                    }
-                    catch (Exception err)
-                    {
-                        result += $"error:{err.Message}";
-                    }
+            //var connStr = _config["ConnectionStrings:ispanMsit145shibaconnection"];
+            //using (SqlConnection conn = new SqlConnection(connStr))
+            //{
+            //    conn.Open();
+            //    using (SqlCommand cmd = new SqlCommand())
+            //    {
+            //        cmd.Connection = conn;
+            //        cmd.CommandText = "insert into ServiceMailBox(SenderName,Email,Phone,Subject,Context,ReceivedTime)" +
+            //            "values(@SenderName,@Email,@Phone,@Subject,@Context,@ReceivedTime)";
+            //        cmd.Parameters.AddWithValue("SenderName", mail.txtSenderName);
+            //        cmd.Parameters.AddWithValue("Email", mail.txtEmailAddress);
+            //        cmd.Parameters.AddWithValue("Phone", mail.txtPhone);
+            //        cmd.Parameters.AddWithValue("Subject", mail.txtMailSubject);
+            //        cmd.Parameters.AddWithValue("Context", mail.txtMailContent);
+            //        cmd.Parameters.AddWithValue("ReceivedTime", DateTime.Now);
+            //        try
+            //        {
+            //            cmd.ExecuteNonQuery();
+            //            result += "success";
+            //        }
+            //        catch (Exception err)
+            //        {
+            //            result += $"error:{err.Message}";
+            //        }
 
-                }
-            }
+            //    }
+            //}
             #endregion
+
+            try
+            {
+                ServiceMailBox sm = new ServiceMailBox();
+                               
+                sm.SenderName = mail.txtSenderName;
+                sm.Email = mail.txtEmailAddress;
+                sm.Phone = mail.txtPhone;
+                sm.Subject = mail.txtMailSubject;
+                sm.Context = mail.txtMailContent;
+                sm.ReceivedTime = DateTime.Now;
+                _context.ServiceMailBoxes.Add(sm);
+                _context.SaveChanges();
+                
+                result += "success";
+            }
+            catch (Exception err)
+            {
+                result += $"error:{err.Message}";
+            }
 
 
             return Json(result);

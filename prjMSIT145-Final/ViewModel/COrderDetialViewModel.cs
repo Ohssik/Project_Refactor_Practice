@@ -15,14 +15,11 @@ namespace prjMSIT145_Final.ViewModels
             get { return _order; }
             set { _order = value; }
         }
-
         public string? Address
         {
             get;
             set;
         }
-
-
         public int OrderFid
         {
             get { return _order.OrderFid; }
@@ -148,6 +145,8 @@ namespace prjMSIT145_Final.ViewModels
         public List<COrderItemViewModel> items { get; set; }
 
         public int? TotalQty { get; set; }
+        public string? LogoImgFileName { get; set; }
+        public string? MemberPhotoFile { get; set; }
 
     }
 }

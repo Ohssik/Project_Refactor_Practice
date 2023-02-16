@@ -5,30 +5,27 @@
 }
 @section Styles{
     <style>
-
-        
-
         .div1 {
-            margin: 5px auto;
-            width: 70%;
+            margin: 90px auto;
+            width: 75%;
             box-sizing: border-box;
             display: flex;
             padding: 15px;
+            
         }
-
         .leftArea {
-            width: 40%;
+            width: 50%;
             border-right: 2px dashed #9F4E27;
             box-sizing: border-box;
             padding: 8px 8px 8px 0;
         }
-
         .storeImg {
-            width: 50px;
-            height: 50px;
+            width: 85px;
+            height: 100px;
             margin-right: 15px;
+            box-sizing:border-box;
+            padding:8px 0;
         }
-
             .storeImg img {
                 width: 100%;
                 height: 100%;
@@ -60,20 +57,22 @@
         
 
         .leftDiv_infoDiv {
-            height: 40px;
+            height: 45px;
             box-sizing: border-box;
-            padding: 10px 0;
+            padding: 0 0 5px 5px;
+            margin:8px 0 10px 0;
         }
 
         .leftDiv_rightSpan {
             width: 150px;
-            font-size: 10px;
+            font-size: 12px;
             border-radius: 5px;
+            margin:0 0 0 65px;
         }
 
         .rightDiv_rightSpan {
             width: 709px;
-            font-size: 10px;
+            font-size: 12px;
             border-radius: 5px;
             text-align:right;
         }
@@ -124,9 +123,9 @@
 
         .rightItemDiv {
             width: 100%;
-            height: 50px;
+            height: 70px;
             box-sizing: border-box;
-            padding: 0 10px;
+            padding: 3px 15px;
         }
 
         .mainDiv {
@@ -145,6 +144,7 @@
         h4, h5, h6 {
             margin: 5px 0;
             color: #9F4E27;
+            font-size:18px;
         }
 
         .Fieldset {
@@ -152,13 +152,17 @@
             color: gray;
             height: 30px;
             margin: 10px 0;
-            font-size: 10px;
+            font-size: 12px;
             border: 1px solid gray;
         }
 
         .spanFont {
-            font-size: 10px;
+            font-size: 12px;
         }
+
+            .spanFont p{
+                margin:5px 0 10px 5px;
+            }
 
         .exclamation {
             box-sizing: border-box;
@@ -204,7 +208,11 @@
 
         
         p,span{
-            font-size:14px;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        .allDiv{
+            border-radius:10px;
         }
     </style>
 }
@@ -216,13 +224,12 @@
     
 
 <div >
-    <div class="div1 cardBackgroundColor">
+    <div class="div1 cardBackgroundColor allDiv">
         <!-- 左邊 -->
-  
         <div class="leftArea">
             <!-- 店家全區 -->
             <div class="flex bottomBorder">
-                <div class="storeImg"></div>
+                <div class="storeImg"><img src="~/images/@Model.LogoImgFileName" /></div>
                 <div class="spanFont ">
                     <p>店家名稱:@Model.BMemberName</p>
                     <p>連絡電話:@Model.BMemberPhone</p>
@@ -239,11 +246,19 @@
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
+                <div class="leftDiv_leftSpan">
+                    <span>訂單編號</span>
+                </div>
+                <div class="leftDiv_rightSpan">
+                    <span>@Model.OrderISerialId</span>
+                </div>
+            </div>
+            <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
                 <div class="leftDiv_leftSpan ">
                     <span>取餐時間</span>
                 </div>
                 <div class="leftDiv_rightSpan legtDiv_StateSpan">
-                    <span name="time1" id="time1">@Convert.ToString(Model.PickUpDate).Substring(0,9) @Model.PickUpTime</span>
+                    <span name="time1" id="time1">@Convert.ToString(Model.PickUpDate).Substring(0,9) @Convert.ToString(Model.PickUpTime).Substring(0,8)</span>
                 </div>
             </div>
             <div class="flexAndItemsCenter bottomBorder leftDiv_infoDiv">
@@ -292,7 +307,7 @@
                     <span>@Model.PickUpPersonPhone</span>
                 </div>
             </div>
-            <div class="flexAndItemsCenter leftDiv_infoDiv">
+           @* <div class="flexAndItemsCenter leftDiv_infoDiv">
                 <div class="leftDiv_leftSpan">
                     <span>評價</span>
                 </div>
@@ -308,7 +323,7 @@
             <div class="leftDiv_RateDiv">
                 <textarea class="leftDiv_Rate cardBorderColor" name="" id="rateArea"></textarea>
                 <input type="submit" value="送出評論" />
-            </div>
+            </div>*@
            
         </div>
         
@@ -334,50 +349,50 @@
         
 
 
-        let check = true;
-        for (let i = 1; i <= 5; i++) {
-            document.getElementById(`img${i}`).addEventListener("mouseover", mouseover);
-            document.getElementById(`img${i}`).addEventListener("mouseout", mouseout);
-            document.getElementById(`img${i}`).addEventListener("click", click);
-        }
+        //let check = true;
+        //for (let i = 1; i <= 5; i++) {
+        //    document.getElementById(`img${i}`).addEventListener("mouseover", mouseover);
+        //    document.getElementById(`img${i}`).addEventListener("mouseout", mouseout);
+        //    document.getElementById(`img${i}`).addEventListener("click", click);
+        //}
 
-        function mouseover(e) {
-            let num = e.currentTarget.id.substr(3);
-            for (let i = 1; i <= num; i++) {
-            document.getElementById(`img${i}`).src = `@Url.Content("~/images/changstar.png")`;
-            }
+        //function mouseover(e) {
+        //    let num = e.currentTarget.id.substr(3);
+        //    for (let i = 1; i <= num; i++) {
+        //    document.getElementById(`img${i}`).src = `@Url.Content("~/images/changstar.png")`;
+        //    }
 
-        }
+        //}
 
-        function mouseout(e) {
-            for (let i = 1; i <= 5; i++) {
-            document.getElementById(`img${i}`).src = `@Url.Content("~/images/star.png")`;
-            }
+        //function mouseout(e) {
+        //    for (let i = 1; i <= 5; i++) {
+        //    document.getElementById(`img${i}`).src = `@Url.Content("~/images/star.png")`;
+        //    }
 
-        }
+        //}
 
-        function click(e) {
-            if (check) {
-                let num = e.currentTarget.id.substr(3);
-                for (let i = 1; i <= num; i++) {
-                document.getElementById(`img${i}`).src = `@Url.Content("~/images/changstar.png")`;
-                }
+        //function click(e) {
+        //    if (check) {
+        //        let num = e.currentTarget.id.substr(3);
+        //        for (let i = 1; i <= num; i++) {
+        //        document.getElementById(`img${i}`).src = `@Url.Content("~/images/changstar.png")`;
+        //        }
 
-                for (let i = 1; i <= 5; i++) {
-                    document.getElementById(`img${i}`).removeEventListener("mouseover", mouseover);
-                    document.getElementById(`img${i}`).removeEventListener("mouseout", mouseout);
-                }
-                check = false;
-            } else {
-                for (let i = 1; i <= 5; i++) {
-                document.getElementById(`img${i}`).src = `@Url.Content("~/images/star.png")`;
-                    document.getElementById(`img${i}`).addEventListener("mouseover", mouseover);
-                    document.getElementById(`img${i}`).addEventListener("mouseout", mouseout);
-                }
+        //        for (let i = 1; i <= 5; i++) {
+        //            document.getElementById(`img${i}`).removeEventListener("mouseover", mouseover);
+        //            document.getElementById(`img${i}`).removeEventListener("mouseout", mouseout);
+        //        }
+        //        check = false;
+        //    } else {
+        //        for (let i = 1; i <= 5; i++) {
+        //        document.getElementById(`img${i}`).src = `@Url.Content("~/images/star.png")`;
+        //            document.getElementById(`img${i}`).addEventListener("mouseover", mouseover);
+        //            document.getElementById(`img${i}`).addEventListener("mouseout", mouseout);
+        //        }
 
-                check = true;
-            }
-        }
+        //        check = true;
+        //    }
+        //}
 
         
 

@@ -30,12 +30,12 @@
         }
     </style>
 }
-    <div style="width:100%; display:flex;">
+   @* <div style="width:100%; display:flex;">
         <div style="margin:10px auto; box-sizing:border-box;">
             <a href="@Url.Content("~/BusinessMember/Blogin")"><img src="~/images/Customer/Navigation/person 32x32.png" />店家登入</a>
             <a href="@Url.Content("~/Admin/ALogin")"><img src="~/images/Customer/Navigation/person 32x32.png" />平台登入</a>
         </div>
-    </div>
+    </div>*@
 
 
 @*@using (Html.BeginForm())
@@ -292,17 +292,28 @@
 
 
         });
+        $('#spanresponse').text('');
+        let isSus = getUrlParameter('isSus');
+        if(isSus){
+            $('#spanresponse').text('帳號未開通');
+        }
 
-        
+        //抓 url get 參數
+        function getUrlParameter(sParam) {
+            var sPageURL = window.location.search.substring(1),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
 
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
 
-
-
-
-
-
-
-
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                }
+            }
+            return false;
+        }
 
 
 
@@ -372,7 +383,7 @@
 
 
 
-        //})
+        //});
          
            
     </script>   
