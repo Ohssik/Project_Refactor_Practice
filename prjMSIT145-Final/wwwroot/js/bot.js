@@ -93,12 +93,13 @@ document.addEventListener("scroll", function () {
 
     //console.log("top:" + top);
     console.log("hight:" + hight);
+    console.log("hight-top:" + hight-top);
     //console.log(hight-top)
     //console.log(document.body.scrollHeight);
     //console.log("clientHeight: "+document.documentElement.clientHeight);
     //接近頁面最底時修改定位
 
-    if ((hight - top) <= 1100) {
+    if ((hight - top) <= 1100 ) {
          azureLogo.setAttribute("style", "bottom:8%;");
         logoDiv.setAttribute("style", "bottom:8%");
         document.querySelector(".logo").setAttribute("style", "bottom:20%;")

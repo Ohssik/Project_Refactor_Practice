@@ -121,20 +121,26 @@ namespace prjMSIT145_Final.Controllers
                     }
                     vm.product.Photo = fileName;
                 }
-                var proCFid = _context.ProductCategories.FirstOrDefault(o => o.CategoryName == vm.CategoryName && o.BFid == vm.BFid);
-                vm.product.CategoryFid = proCFid.Fid;
-                vm.product.BFid = vm.BFid;
-                _context.Products.Add(vm.product);
-                _context.SaveChanges();
-                foreach (var d in vm.productOp)
+                if (_context.Products.Any(p => p.ProductName == vm.ProductName))
+                    return RedirectToAction("BList");
+                else
                 {
-                    OptionsToProduct OPtoPro = new OptionsToProduct();
-                    OPtoPro.ProductFid = vm.Fid;
-                    OPtoPro.OptionGroupFid = d;
-                    _context.OptionsToProducts.Add(OPtoPro);
+                    var proCFid = _context.ProductCategories.FirstOrDefault(o => o.CategoryName == vm.CategoryName && o.BFid == vm.BFid);
+                    vm.product.CategoryFid = proCFid.Fid;
+                    vm.product.BFid = vm.BFid;
+                    _context.Products.Add(vm.product);
+                    _context.SaveChanges();
+                    foreach (var d in vm.productOp)
+                    {
+                        OptionsToProduct OPtoPro = new OptionsToProduct();
+                        OPtoPro.ProductFid = vm.Fid;
+                        OPtoPro.OptionGroupFid = d;
+                        _context.OptionsToProducts.Add(OPtoPro);
+                    }
+                    _context.SaveChanges();
+                    return RedirectToAction("BList");
                 }
-                _context.SaveChanges();
-                return RedirectToAction("BList");
+
             }
             catch
             {
@@ -168,23 +174,28 @@ namespace prjMSIT145_Final.Controllers
                     else if (vm.Photo == null)
                         pro.Photo = null;
 
-                    pro.IsForSale = vm.IsForSale;
-                    pro.CategoryFid = proC.Fid;
-                    pro.ProductName = vm.ProductName;
-                    pro.UnitPrice = vm.UnitPrice;
-                    pro.Memo = vm.Memo;
-                    var opToProList = _context.OptionsToProducts.Where(p => p.ProductFid == vm.Fid).OrderBy(p => p.OptionGroupFid);
-                    _context.OptionsToProducts.RemoveRange(opToProList);
-                    _context.SaveChanges();
-                    foreach (var d in vm.productOp)
+                    if (_context.Products.Any(p => p.ProductName == vm.ProductName))
+                        return RedirectToAction("BList");
+                    else
                     {
-                        OptionsToProduct opToPro = new OptionsToProduct();
-                        opToPro.ProductFid = vm.Fid;
-                        opToPro.OptionGroupFid = d;
-                        _context.OptionsToProducts.Add(opToPro);
+                        pro.IsForSale = vm.IsForSale;
+                        pro.CategoryFid = proC.Fid;
+                        pro.ProductName = vm.ProductName;
+                        pro.UnitPrice = vm.UnitPrice;
+                        pro.Memo = vm.Memo;
+                        var opToProList = _context.OptionsToProducts.Where(p => p.ProductFid == vm.Fid).OrderBy(p => p.OptionGroupFid);
+                        _context.OptionsToProducts.RemoveRange(opToProList);
+                        _context.SaveChanges();
+                        foreach (var d in vm.productOp)
+                        {
+                            OptionsToProduct opToPro = new OptionsToProduct();
+                            opToPro.ProductFid = vm.Fid;
+                            opToPro.OptionGroupFid = d;
+                            _context.OptionsToProducts.Add(opToPro);
+                        }
+                        _context.SaveChanges();
                     }
-                    _context.SaveChanges();
-                }
+                } 
                 return RedirectToAction("BList");
             }
             else
