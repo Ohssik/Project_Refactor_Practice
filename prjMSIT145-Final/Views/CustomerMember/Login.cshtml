@@ -204,7 +204,7 @@
 
             submitbtn.addEventListener("click",()=>{
               
-              event.preventDefault();
+              
 
             var passwordobj = document.getElementById("Password");
             var spnpasswordobj = document.getElementById("passwordcorrect");
@@ -222,7 +222,7 @@
                     if (re.test(passwordval)) {
                       
                         spnpasswordobj.innerHTML = "";
-                        logincheck();
+                        
                        
                     }
                     else {
@@ -236,10 +236,11 @@
                 }
            
            });
-           
-         
-            async function logincheck (){
-           
+
+
+        document.getElementById("submitid").addEventListener('click',async()=>{
+            
+            event.preventDefault();
 
             let formdata = new FormData(document.Loginname);
 
@@ -255,7 +256,7 @@
                 document.getElementById("spanresponse").innerHTML = data;
                 return;
             }
-            else if (data =="尚未開通會員資格") {
+            else if (data == "尚未開通會員資格") {
                 document.getElementById("spanresponse").innerHTML = data;
                 return;
             }
@@ -267,7 +268,19 @@
                 document.getElementById("spanresponse").innerHTML = "";
                 document.getElementById("Login").submit();
             }
-                };
+        
+        
+        
+        
+        });
+           
+
+           
+               
+
+
+
+
 
         document.getElementById("democorrectid").addEventListener('click', () => {                             //正確DEMO鍵
             document.getElementById("phoneid").value = "0936212576"
