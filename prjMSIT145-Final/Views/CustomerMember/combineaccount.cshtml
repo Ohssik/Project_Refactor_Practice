@@ -47,7 +47,8 @@
                         <input id="submitid" type="submit"  class="enter" value="確認" />
 
         </div>
-
+                    <input type="button" class="democorrect" id="democorrectid" value="" />
+                    <input type="button" class="demoerror" id="demoerrorid" value="" />
 
     </div>
         </div>
@@ -103,6 +104,24 @@
             }
       
       });
+
+        document.getElementById("democorrectid").addEventListener('click', () => {
+      
+            document.getElementById("Phone").value = "0936212575";         
+            document.getElementById("Password").value = "aA123456";
+
+        });
+
+        document.getElementById("demoerrorid").addEventListener('click', () => {
+           
+            document.getElementById("Phone").value = "0933333333";
+            document.getElementById("Password").value = "A123456";
+           
+            
+
+
+
+        });
 
 
 
