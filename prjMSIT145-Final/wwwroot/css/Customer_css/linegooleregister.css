@@ -1,0 +1,263 @@
+﻿.wrap {
+    width: 1800px;
+    margin: 50px auto;
+    display: flex;
+    text-align: center;
+    justify-items: center;
+}
+
+.card30 {
+    margin-left: 40px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+
+.text {
+    font-size: 14px;
+    color: whitesmoke;
+    text-align: center;
+    background-color: transparent;
+    margin-top: 12px;
+    font-weight: bold;
+}
+
+.card3 {
+    background-color: white;
+    border: solid 2px;
+    border-color: transparent;
+    width: 636px;
+    border-radius: 20px;
+    border-collapse: collapse;
+    text-align: center;
+    padding: 10px;
+    margin: 0 auto;
+    box-shadow: 6px 6px 6px rgba(20%,20%,40%,0.5),inset 1px 1px 4px 2px rgba(20%,20%,40%,0.5);
+}
+
+.necessspan {
+    color: red;
+    font-size: 14px;
+}
+
+.title2 {
+    background-color: white;
+    margin: 10px;
+    margin-right: 50px;
+}
+
+.dashed {
+    border: 0.1px solid rgb(236, 229, 229);
+    margin-bottom: 10px;
+}
+
+.divhint {
+    display: flex;
+    text-align: center;
+}
+
+.text2 {
+    font-size: 15px;
+    background-color: transparent;
+    margin: 10px;
+    padding-bottom: 20px;
+    font-weight: bold;
+}
+
+.title3 {
+    background-color: white;
+    margin: 40px;
+}
+
+.input {
+    width: 180px;
+    padding-left: 10px;
+    background-color: transparent;
+    font-size: 14px;
+    border-radius: 10px;
+    border-color: transparent;
+    font-weight: bold;
+    outline: none;
+}
+
+.div1 {
+    width: 200px;
+    height: 30px;
+    background-color: transparent;
+    font-size: 14px;
+    border-radius: 10px;
+    border: solid 1px rgb(99, 99, 99);
+    display: flex;
+    margin-bottom: 30px;
+}
+
+.text3 {
+    font-size: 15px;
+    background-color: transparent;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: left;
+    display: flex;
+}
+
+.color {
+    background-color: white;
+    color: blue;
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.display {
+    display: flex;
+    background-color: transparent;
+}
+
+.text4 {
+    font-size: 18px;
+    background-color: transparent;
+    font-weight: bold;
+    text-align: left;
+}
+
+.text5 {
+    font-size: 16px;
+    margin: 0px 20px 0px 20px;
+    font-weight: bold;
+}
+
+.date {
+    width: 600px;
+    margin: auto;
+    margin-left: 0;
+    height: 18px;
+    background-color: transparent;
+    font-size: 14px;
+    border-radius: 3px;
+    border-color: transparent;
+    outline: none;
+}
+
+.div2 {
+    width: 100px;
+    height: 30px;
+    background-color: transparent;
+    font-size: 14px;
+    border-radius: 3px;
+    border: solid 1px rgb(99, 99, 99);
+    display: flex;
+    margin-bottom: 30px;
+    margin-right: 80px;
+}
+
+.enter {
+    width: 157px;
+    height: 65px;
+    /* background-color: #ff5e7d;*/
+    background-color: #0292f4;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    border: transparent;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.dog {
+    background-color: #9f4e27;
+    width: 100px;
+    height: 100px;
+}
+
+.backcolor {
+    background-color: transparent;
+}
+
+.text6 {
+    font-size: 16px;
+    background-color: transparent;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.aui-info {
+    position: relative;
+}
+
+.fileInput {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    display: block;
+    width: 10rem;
+    clear: both;
+    display: block;
+    margin: auto;
+    background-color: red;
+}
+
+.spancorrect {
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.divheadpic {
+    margin-left: 400px;
+    width: 140px;
+    height: 120px;
+}
+
+.sapnphoto {
+    color: forestgreen;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.spanerrormessage {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.Formatspan {
+    font-size: 10px;
+    color: darkgray;
+}
+
+.regsterleftgroup {
+    margin-top: -80px;
+}
+
+.democorrect {
+    position: absolute;
+    bottom: 20px;
+    right: 100px;
+    color: white;
+    background-color: blue;
+    border-radius: 20px;
+    width: 30px;
+    height: 10px;
+}
+
+.demoerror {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: white;
+    background-color: red;
+    border-radius: 20px;
+    width: 30px;
+    height: 10px;
+}
+.integrateclass {
+    background-color: pink;
+    color: blue;
+    font-weight: bold;
+    width: 70px;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}

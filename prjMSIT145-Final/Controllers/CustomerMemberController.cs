@@ -258,8 +258,8 @@ namespace prjMSIT145_Final.Controllers
                         newmember.LineUserid=ProfileObj.userId;
                         newmember.MemberName = ProfileObj.displayName;
                         newmember.MemberPhotoFile = ProfileObj.pictureUrl;
-                        return View("Register", newmember);
-                        //return View("linegooleregister", newmember);
+                        //return View("Register", newmember);
+                        return View("linegooleregister", newmember);
                     }
                    
                 }
@@ -550,7 +550,7 @@ namespace prjMSIT145_Final.Controllers
             //return Redirect("~/Home/CIndex");
 
         }
-        public IActionResult Verifyaccount(NormalMember vm)
+        public IActionResult Verifyaccount(NormalMember vm)                                                 //驗證電話重複和格式
         {
             if (vm.MemberName == null)
             {
@@ -858,6 +858,24 @@ namespace prjMSIT145_Final.Controllers
             }
 
                  return Json("請兩格都不要空白");
+        }
+        public IActionResult combineapi(CNormalMemberViewModel vm)
+        {
+            if (vm.Password != null && vm.Phone != null)
+            {
+                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Password == vm.Password && c.Phone == vm.Phone);
+                if (member != null)
+                {
+                    return Json("整合成功");
+                }
+                else
+                {
+                    return Json("帳號或Email錯誤");
+                }
+
+            }
+
+            return Json("請兩格都不要空白");
         }
 
 
