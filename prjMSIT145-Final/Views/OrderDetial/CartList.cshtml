@@ -10,6 +10,8 @@
     <link href="~/css/OrderDetial_css/divMainCenter.css" rel="stylesheet" />
     <link href="~/css/OrderDetial_css/divMargin.css" rel="stylesheet" />
     <link href="~/css/OrderDetial_css/pickUp.css" rel="stylesheet" />
+    <link href="~/css/Customer_css/CBSonlyClass.css" rel="stylesheet" />
+    <link href="~/css/Customer_css/CShowProduct.css" rel="stylesheet" />
     <style>
         .body {
             position: relative;
@@ -340,6 +342,51 @@
         </div>
     </div>
 </div>
+
+@*編輯*@
+<form asp-controller="Home" asp-action="CAddtoCart" method="post" enctype="multipart/form-data">
+    <input type="text" name="OFid" id="OFid" value="@Model.Fid" hidden />
+    <input type="text" name="BFid" id="BFid" value="@Model.BFid" hidden />
+    <input type="text" name="PFid" id="PFid" value="無變化" hidden />
+    <input type="text" name="TotalAmount" id="TotalAmount" value="無變化" hidden />
+    <input type="text" name="Qty" id="Qty" value="無變化" hidden />
+    <!-- Modal -->
+    <div class="modal fade" id="OptionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h2 class="ModalTitle" id="ProductTitle">標題</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body" id="OptionDisplayArea"></div>
+
+                <div class="modal-footer">
+                    <div class="DisplayColumn">
+                        <p class="TotalPrice">總金額：︁<span class="TotalPrice" id="Total"> 60 </span>元</p>
+                        <div class="DisplayFlex">
+                            <div class="Minusbtn CursorPointer" id="Minus">-</div>
+                            <div class="Countarea CursorDefault" id="Count">99</div>
+                            <div class="Plusbtn CursorPointer" id="Plus">+</div>
+                        </div>
+                    </div>
+                    <button type="button" class="Submitbtn CursorPointer" id="submit">
+                        @if (!Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+                        {
+                            @:請登入會員
+                        }
+                        else
+                        {
+                            @:必選項未選
+                        }
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
 <div class="changePage">
     <input type="hidden" name="Fid" value="@Model.Fid" id="Fid" />
     <input value="@Model.OrderISerialId" id="OrderISerialId" name="OrderISerialId" hidden />
@@ -392,43 +439,36 @@
                         </div>
                     </div>
                     <!-- *****動態產生*****至198行 -->
-                    @if (Model.items != null)
-                    {
-                        @foreach (var item in Model.items)
+                    <div id="optionDetial">
+                        @if (Model.items != null)
                         {
-
-                            <div class="itemCard_padding_margin button_Icon_Guide_BackGroundColor">
-
-                                <!-- *餐點資訊,依實際點選內容增加span -->
-                                <h6>@item.ProductName</h6>
-                                <div class="flexAndItemsCenter displayBetween ">
-                                    <div>
-                                        <span id="itemDetailFont" class="spanFont">
-                                            @foreach (var item2 in item.OptionName)
-                                            {
-                                                <span><span>@item2</span> /</span>
-                                            }
-                                            <span><span>$@Convert.ToInt32(item.OptionAmount)</span> /</span>
-                                            <span><span>@item.Qty 份</span> </span>
-                                        </span>
-                                    </div>
-                                    <div class="orderTrashAndPen">
-                                        <!-- 設定觸發事件時更改背景顏色 -->
-                                        <div class="editBtn">
-                                            <button class="penBackGroundColor">
-                                                <i class="fa-solid fa-pen"></i>
-                                            </button>
-                                        </div>
+                            @foreach (var item in Model.items)
+                            {
+                                <div class="itemCard_padding_margin button_Icon_Guide_BackGroundColor" >
+                                    <!-- *餐點資訊,依實際點選內容增加span -->
+                                    <h6>@item.ProductName</h6>
+                                    <div class="flexAndItemsCenter displayBetween ">
                                         <div>
-
-                                            @*<button class="buteditgar" id="DELT @item.Fid" name="btnDelete" data-bs-toggle="modal" data-bs-target="btnDeleteModel"><img src="../images/Business/garbage.png"></button>*@
-                                            <button class="buteditgar" name="btnDelete" data-bs-toggle="modal" data-bs-target="#btnDeleteModel" value="@item.Fid"><img src="../images/Business/garbage.png"></button>
+                                            <span id="itemDetailFont" class="spanFont">
+                                                @foreach (var item2 in item.OptionName)
+                                                {
+                                                    <span><span>@item2</span> /</span>
+                                                }
+                                                <span><span>$@Convert.ToInt32(item.OptionAmount)</span> /</span>
+                                                <span><span>@item.Qty 份</span> </span>
+                                            </span>
+                                        </div>
+                                        <div class="orderTrashAndPen">
+                                            <div>
+                                                <button class="buteditgar" name="btnEdit" data-bs-toggle="modal" data-bs-target="#OptionModal" data-productName="@Model.ProductName" data-pid="@Model.Fid"><img src="../images/Business/edit.png"></button>
+                                                <button class="buteditgar" name="btnDelete" data-bs-toggle="modal" data-bs-target="#btnDeleteModel" value="@item.Fid"><img src="../images/Business/garbage.png"></button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         }
-                    }
+                    </div>
                 </div>
                 <!-- 優惠券(可略) -->
                 <div class="divMargin cardBackgroundColor" id="offerDiv">
@@ -476,7 +516,7 @@
                 <!-- 上下頁按鈕 -->
                 <div>
                     <div class="flexAndItemsCenter bottomBtn">
-                        <div><button class="btnToAdd button_Icon_Guide_BackGroundColor">繼續加點</button></div>
+                        <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="AddProduct">繼續加點</button></div>
                         <div><button class="btnToNext" id="nextSlide">下一頁</button></div>
                     </div>
                 </div>
@@ -543,7 +583,7 @@
             <div>
                 <div class="flexAndItemsCenter bottomBtn">
                     <div><button class="btnToAdd button_Icon_Guide_BackGroundColor" id="prevSlide">上一頁</button></div>
-                    <div><button class="btnToNext" id="nextSlide">下一頁</button></div>
+                    <div><button class="btnToNext" >下一頁</button></div>
                 </div>
             </div>
         </div>
@@ -604,8 +644,8 @@
                             <input name="TotalAmount" value="@Model.TotalAmount" id="AddTotal" hidden />
                             <input name="Memo" value="" id="Memo2" type="text" hidden>
                             <div>
-                                <button class="btnToFinish btnFinishSize" type="submit" id="btnSubmit">送出訂單</button>
-                                <button class="btnToFinish btnFinishSize" type="submit" id="btnECPay" v-on:click="SendToNewebPay('CREDIT')" style="display:none">送出訂單</button>
+                                <button class="btnToFinish btnFinishSize" type="button" id="btnSubmit">購物車內無商品</button>
+                                <button class="btnToFinish btnFinishSize" type="button" id="btnECPay" v-on:click="SendToNewebPay('CREDIT')" style="display:none">購物車內無商品</button>
                             </div>
                         </div>
                     </form>
@@ -613,7 +653,6 @@
             </div>
         </div>
     </div>
-
 </div>
 <div id="divContent"></div>
 @section Scripts{
@@ -625,9 +664,220 @@
         let PickUpPersonPhoneValue = ``;
         let Memo = ``;
         const btnDelete = document.getElementsByName("btnDelete");
+        const btnEdit = document.getElementsByName("btnEdit");
         const btnDeleteCheck = document.querySelector("#btnDeleteCheck");
         const ItemFid = document.querySelector("#ItemFid");
+        const optionDetial = document.querySelector("#optionDetial");
 
+        //@*取得購物車內容*@
+        //$(function () {
+            
+        //    let BasePriceRecord = 0;
+        //    let BasePrice = 0;
+        //    let TotalPrice = 0;
+        //    let OrderNumber = 1;
+        //    let ModalBody = document.getElementById('OptionDisplayArea');
+        //    let OptionsAreaList = document.getElementsByClassName('OptionsArea');
+        //    let check = 0;
+        //    let innercheck = 0;
+        //    });
+        //@{
+        //    foreach (var ProductClass in )
+        //    {
+        //        @if (ProductClass.ProductsList.Count != 0)
+        //        {
+        //            @foreach (var Product in ProductClass.ProductsList)
+        //            {
+        //                @if (Product.IsForSale == 1)
+        //                {
+        //                    //-----------------Modal-Header
+        //                    @:document.getElementById("Prod @(Product.Fid)").addEventListener("click", function () {
+        //                    @:check = 0;
+        //                    @:document.getElementById("PFid").value=@(Product.Fid);
+        //                    @:document.getElementById("ProductTitle").innerHTML="@(Product.ProductName)";
+        //                    //-----------------Modal-Body
+        //                    @:getOptiondatas(@(Product.Fid));
+        //                    //-----------------Modal-Footer
+        //                    @:BasePriceRecord ="@(Product.UnitPrice)";
+        //                    @:BasePrice = BasePriceRecord;
+        //                    @:document.getElementById("Total").innerHTML="@(Product.UnitPrice)";
+        //                    @:document.getElementById("TotalAmount").value="@(Product.UnitPrice)";
+        //                    @:document.getElementById("Count").innerHTML= "1";
+        //                    @:document.getElementById("Qty").value = "1";
+        //                    @:});
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        //    document.getElementById("Minus").addEventListener("click", function () {
+        //        OrderNumber--;
+        //        if (OrderNumber < 1)
+        //            OrderNumber = 1;
+        //        document.getElementById("Count").innerHTML = OrderNumber;
+        //        document.getElementById("Qty").value = OrderNumber;
+        //        TotalPrice = BasePrice * OrderNumber;
+        //        document.getElementById("Total").innerHTML = TotalPrice;
+        //        document.getElementById("TotalAmount").value = TotalPrice;
+        //    });
+
+        //document.getElementById("Plus").addEventListener("click", function () {
+        //    OrderNumber++;
+        //    if (OrderNumber > 99)
+        //        OrderNumber = 99;
+        //    document.getElementById("Count").innerHTML = OrderNumber;
+        //    document.getElementById("Qty").value = OrderNumber;
+        //    TotalPrice = BasePrice * OrderNumber;
+        //    document.getElementById("Total").innerHTML = TotalPrice;
+        //    document.getElementById("TotalAmount").value = TotalPrice;
+        //});
+        //async function getOptiondatas(PFid) {
+        //    const response = await fetch(`@Url.Content("~/Home/CShowProductOption?PFid=${PFid}")`);
+        //    const datas = await response.json();
+        //    ModalBody.innerHTML = `<img id="ProductPhoto" class = "ProductPhoto" src = "/images/${datas[0].productBasicInfoList[0].photo}" />`;
+        //    ModalBody.innerHTML += `<div id="ProductMemo" class = "MemoArea" />${datas[0].productBasicInfoList[0].memo}<div>`;
+        //    for (let i = 0, maxPCL = datas[0].optionGroupList.length; i < maxPCL; i++) {
+        //        if (datas[0].optionGroupList[i].isMultiple == 0) {
+        //            ModalBody.innerHTML += `<p class="OptionGroupTitle"><span class="NeedChoose">✱</span>${datas[0].optionGroupList[i].optionGroupName}</p >`;
+        //            ModalBody.innerHTML += `<div class="OptionsArea" id = "S ${datas[0].optionGroupList[i].fid}"></div>`;
+        //        } else {
+        //            ModalBody.innerHTML += `<p class="OptionGroupTitle">${datas[0].optionGroupList[i].optionGroupName}</p >`;
+        //            ModalBody.innerHTML += `<div class="OptionsArea" id = "M ${datas[0].optionGroupList[i].fid}"></div>`;
+        //        }
+        //    }
+        //    for (let i = 0, maxPCL = datas[0].optionGroupList.length; i < maxPCL; i++) {
+        //        for (let j = 0, maxPL = datas[0].optionGroupList[i].optionList.length; j < maxPL; j++) {
+        //            if (datas[0].optionGroupList[i].optionList[j].unitPrice == 0) {
+        //                OptionsAreaList[i].innerHTML += `<div class="Optiondiv NChoosedOptiondiv CursorPointer" id="${datas[0].optionGroupList[i].optionList[j].fid}"><p>${datas[0].optionGroupList[i].optionList[j].optionName}</p></div>`;
+        //            } else {
+        //                if (datas[0].optionGroupList[i].optionList[j].unitPrice < 0) {
+        //                    OptionsAreaList[i].innerHTML += `<div class="Optiondiv NChoosedOptiondiv CursorPointer" id="${datas[0].optionGroupList[i].optionList[j].fid}"><p>${datas[0].optionGroupList[i].optionList[j].optionName}</p><p>${datas[0].optionGroupList[i].optionList[j].unitPrice} 元</p ></div>`;
+        //                } else {
+        //                    OptionsAreaList[i].innerHTML += `<div class="Optiondiv NChoosedOptiondiv CursorPointer" id="${datas[0].optionGroupList[i].optionList[j].fid}"><p>${datas[0].optionGroupList[i].optionList[j].optionName}</p><p>+${datas[0].optionGroupList[i].optionList[j].unitPrice} 元</p ></div>`;
+        //                }
+        //            }
+        //            OptionsAreaList[i].innerHTML += `<input type = "text" name = "OPT ${datas[0].optionGroupList[i].optionList[j].fid}" id = "OPT ${datas[0].optionGroupList[i].optionList[j].fid}" value = "0" hidden/>`;
+        //        }
+        //    }
+
+        //    for (let i = 0, max = document.getElementsByClassName("OptionsArea").length; i < max; i++) {
+        //        if (OptionsAreaList[i].getAttribute("id").substring(0, 1) == "S") {
+        //            check -= 1;
+        //            for (let j = 0, maxCH = document.getElementsByClassName("OptionsArea")[i].children.length; j < maxCH; j += 2) {
+        //                OptionsAreaList[i].children[j].addEventListener("click", function () {
+        //                    innercheck = 0;
+        //                    if (OptionsAreaList[i].children[j + 1].value == 0) {
+        //                        innercheck = 1;
+
+        //                        for (let k = 0, max2 = OptionsAreaList[i].children.length; k < max2; k += 2) {
+        //                            if (OptionsAreaList[i].children[k + 1].value != "0") {
+        //                                check -= 1;
+        //                                OptionsAreaList[i].children[k + 1].value = "0";
+        //                                OptionsAreaList[i].children[k].setAttribute("class", "Optiondiv NChoosedOptiondiv CursorPointer");
+        //                                if (OptionsAreaList[i].children[k].children.length > 1) {
+        //                                    if (OptionsAreaList[i].children[k].children[1].innerHTML.split(" ")[0].substring(0, 1) == "-") {
+        //                                        BasePrice -= -parseInt(OptionsAreaList[i].children[k].children[1].innerHTML.split(" ")[0].substring(1), 10);
+        //                                    } else {
+        //                                        BasePrice -= parseInt(OptionsAreaList[i].children[k].children[1].innerHTML.split(" ")[0].substring(1), 10);
+        //                                    }
+        //                                    TotalPrice = BasePrice * OrderNumber;
+        //                                    document.getElementById("Total").innerHTML = TotalPrice;
+        //                                    document.getElementById("TotalAmount").value = TotalPrice;
+        //                                }
+        //                            }
+        //                        }
+
+        //                        OptionsAreaList[i].children[j + 1].value = `${OptionsAreaList[i].children[j].getAttribute("id")}`;
+        //                        OptionsAreaList[i].children[j].setAttribute("class", "Optiondiv CursorPointer");
+        //                        if (OptionsAreaList[i].children[j].children.length > 1) {
+        //                            if (OptionsAreaList[i].children[j].children[1].innerHTML.split(" ")[0].substring(0, 1) == "-") {
+        //                                BasePrice -= parseInt(OptionsAreaList[i].children[j].children[1].innerHTML.split(" ")[0].substring(1), 10);
+        //                            } else {
+        //                                BasePrice -= -parseInt(OptionsAreaList[i].children[j].children[1].innerHTML.split(" ")[0].substring(1), 10);
+        //                            }
+        //                            TotalPrice = BasePrice * OrderNumber;
+        //                            document.getElementById("Total").innerHTML = TotalPrice;
+        //                            document.getElementById("TotalAmount").value = TotalPrice;
+        //                        }
+        //                    } else {
+        //                        innercheck = 0;
+        //                        OptionsAreaList[i].children[j + 1].value = "0";
+        //                        OptionsAreaList[i].children[j].setAttribute("class", "Optiondiv NChoosedOptiondiv CursorPointer");
+        //                        if (OptionsAreaList[i].children[j].children.length > 1) {
+        //                            if (OptionsAreaList[i].children[j].children[1].innerHTML.split(" ")[0].substring(0, 1) == "-") {
+        //                                BasePrice -= -parseInt(OptionsAreaList[i].children[j].children[1].innerHTML.split(" ")[0].substring(1), 10);
+        //                            } else {
+        //                                BasePrice -= parseInt(OptionsAreaList[i].children[j].children[1].innerHTML.split(" ")[0].substring(1), 10);
+        //                            }
+        //                            TotalPrice = BasePrice * OrderNumber;
+        //                            document.getElementById("Total").innerHTML = TotalPrice;
+        //                            document.getElementById("TotalAmount").value = TotalPrice;
+        //                        }
+        //                    }
+
+        //                    if (innercheck == 1) {
+        //                        check -= -1;
+        //                    } else {
+        //                        check -= 1;
+        //                    }
+        //                    if (Membercheck == "") {
+        //                        document.getElementById("submit").setAttribute("type", "button");
+        //                        document.getElementById("submit").innerHTML = "請登入會員";
+        //                    } else {
+        //                        if (check == 0) {
+        //                            document.getElementById("submit").setAttribute("type", "submit");
+        //                            document.getElementById("submit").innerHTML = "加入購物車";
+        //                        } else {
+        //                            document.getElementById("submit").setAttribute("type", "button");
+        //                            document.getElementById("submit").innerHTML = "必選項未選";
+        //                        }
+        //                    }
+        //                });
+        //            }
+        //        } else {
+        //            for (let j = 0, maxCH = document.getElementsByClassName("OptionsArea")[i].children.length; j < maxCH; j += 2) {
+        //                OptionsAreaList[i].children[j].addEventListener("click", function () {
+        //                    if (OptionsAreaList[i].children[j + 1].value == 0) {
+        //                        OptionsAreaList[i].children[j + 1].value = `${OptionsAreaList[i].children[j].getAttribute("id")}`;
+        //                        OptionsAreaList[i].children[j].setAttribute("class", "Optiondiv CursorPointer");
+        //                        if (OptionsAreaList[i].children[j].children.length > 1) {
+        //                            if (OptionsAreaList[i].children[j].children[1].innerHTML.split(" ")[0].substring(0, 1) == "-") {
+        //                                BasePrice -= parseInt(OptionsAreaList[i].children[j].children[1].innerHTML.split(" ")[0].substring(1), 10);
+        //                            } else {
+        //                                BasePrice -= -parseInt(OptionsAreaList[i].children[j].children[1].innerHTML.split(" ")[0].substring(1), 10);
+        //                            }
+        //                            TotalPrice = BasePrice * OrderNumber;
+        //                            document.getElementById("Total").innerHTML = TotalPrice;
+        //                            document.getElementById("TotalAmount").value = TotalPrice;
+        //                        }
+        //                    } else {
+        //                        OptionsAreaList[i].children[j + 1].value = "0";
+        //                        OptionsAreaList[i].children[j].setAttribute("class", "Optiondiv NChoosedOptiondiv CursorPointer");
+        //                        if (OptionsAreaList[i].children[j].children.length > 1) {
+        //                            if (OptionsAreaList[i].children[j].children[1].innerHTML.split(" ")[0].substring(0, 1) == "-") {
+        //                                BasePrice -= -parseInt(OptionsAreaList[i].children[j].children[1].innerHTML.split(" ")[0].substring(1), 10);
+        //                            } else {
+        //                                BasePrice -= parseInt(OptionsAreaList[i].children[j].children[1].innerHTML.split(" ")[0].substring(1), 10);
+        //                            }
+        //                            TotalPrice = BasePrice * OrderNumber;
+        //                            document.getElementById("Total").innerHTML = TotalPrice;
+        //                            document.getElementById("TotalAmount").value = TotalPrice;
+        //                        }
+        //                    }
+        //                });
+        //            }
+        //        }
+            }
+        }
+        @*編輯購物車內容*@
+            btnEdit.forEach(function(click){
+                click.addEventListener("click",function(){
+                    const BFid= this.value;
+                    const orderFid = @Model.Fid;
+
+                })
+            })
         @*刪除購物車內容*@
             btnDelete.forEach(function (click) {
                 click.addEventListener("click", function () {
@@ -641,9 +891,23 @@
                         location.href = `/OrderDetial/CartList?Fid=${orderFid}`;
                     })
                 })
-
             })
-
+         @*防止沒有內容送出*@
+            $("#nextSlide").click(function(){
+                console.log(optionDetial.innerText);
+                if (optionDetial.innerText == "") {
+                    $("#btnSubmit").attr("type", "button");
+                    $("#btnSubmit").html('購物車內無商品');
+                    $("#btnECPay").attr("type", "button");
+                    $("#btnECPay").html('購物車內無商品');
+                } else {
+                    $("#btnSubmit").attr("type", "submit");
+                    $("#btnSubmit").html('送出訂單');
+                    $("#btnECPay").attr("type", "submit");
+                    $("#btnECPay").html('送出訂單');
+                }
+            })
+            
         @*網頁重新整理*@
             $("#btnReset").click(function () {
                 location.reload();
@@ -664,6 +928,11 @@
                     $("#TotalAmount").text("$ " + (@Model.TotalAmount));
                     $("#TotalAmount2").text("$ " + (@Model.TotalAmount));
                 }
+            })
+
+        @*繼續加點*@
+            $("#AddProduct").click(function () {
+                location.href = `/Home/CShowProduct?BFid=${@Model.BFid}&OrderFid=${@Model.Fid}`
             })
 
         @*選擇付款方式*@
@@ -707,7 +976,7 @@
         })
 
         @*改變日期*@
-            $("#changeDate").change(function () {
+        $("#changeDate").change(function () {
 
                 DateValue = document.getElementById("changeDate").value
                 $("#changeDate").val(`${DateValue}`)
@@ -726,7 +995,7 @@
         })
 
         @*改變取餐人*@
-            $("#changePickUpPerson").change(function () {
+        $("#changePickUpPerson").change(function () {
                 PickupPersonValue = document.getElementById("changePickUpPerson").value
                 $("#changePickUpPerson2").text(`${PickupPersonValue}`)
             })
@@ -736,7 +1005,7 @@
         })
 
         @*改變取餐人電話*@
-            $("#changePickUpPersonPhone").change(function () {
+        $("#changePickUpPersonPhone").change(function () {
                 PickUpPersonPhoneValue = document.getElementById("changePickUpPersonPhone").value
                 $("#changePickUpPersonPhone2").text(`${PickUpPersonPhoneValue}`)
             })
@@ -779,9 +1048,10 @@
 
     </script>
     <script>
-        //綠界
+        //綠界 'sean24163@hotmail.com'
         const price = $("#AddTotal").val();
         const OrderISerialId = $("#OrderISerialId").val();
+        const changePickUpPersonPhone3 = $("#changePickUpPersonPhone3").val();
         console.log(price)
         const app = Vue.createApp({
             data() {
@@ -789,11 +1059,11 @@
 
                     addForm: {
                         MerchantOrderNo: '@ViewData["MerchantOrderNo"]'
-                        , ItemDesc: '日柴商品訂單編號 : '+OrderISerialId
+                        , ItemDesc: '日柴商品訂單編號 : ' + OrderISerialId
                         , Amt: `${price}`
                         , ExpireDate: '@ViewData["ExpireDate"]'
                         , PayOption: 'ECPay'
-                        , Email: 'sean24163@hotmail.com'
+                        , Email: `${changePickUpPersonPhone3}`
                     }
                 }
             }
@@ -821,6 +1091,7 @@
                         dataType: 'json',
                         data: { inModel: postData, __RequestVerificationToken: $('@Html.AntiForgeryToken()').val() },
                         success: function (returnObj) {
+                            alert(returnObj)
                             $("#divContent").html(returnObj);
                             $("#payForm").submit();
                         },
