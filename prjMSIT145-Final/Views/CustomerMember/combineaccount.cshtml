@@ -6,14 +6,17 @@
 
 @section Styles{
 
-    <link rel="stylesheet" href="~/css/Customer_css/Register.css">
+    <link rel="stylesheet" href="~/css/Customer_css/combineaccount.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
     <link rel="stylesheet" href="~/css/Customer_css/CBSonlyClass.css" />
 
 }
 <form asp-action="combineaccount" id="combineaccountid" name="combineaccountname">
-    <div>
-        <h1>輸入正確帳號密碼已整合帳號</h1>
+        <div class="wrap">
+    <div class="card3">
+    <div class="card30">
+            <h2 class="title2">輸入正確帳號密碼已整合帳號</h2>
+            <span id="spanresponse" class="spanresponseclass"></span>
         <input type="hidden" name="LineUserid" value="@Model.LineUserid"/>
         <input type="hidden" name="GoogleEmail" value="@Model.GoogleEmail" />
         <span class="text3">
@@ -34,24 +37,87 @@
 
         <div class="divhint">
             <div class="div1">
-                <input type="password" class="input" name="Password" value="" id="Password" />
+                <input type="password" class="input" name="Password" value="@Model.Password" id="Password" />
                 <i style="margin-top:10px;margin-left:-20px;" class="far fa-eye" id="togglePassword"></i>
             </div>
             <span id="passwordcorrect" class="spanerrormessage"></span>
         </div>
 
         <div class="display">
-            <input id="submitid" type="submit" class="enter" value="確認" />
+                        <input id="submitid" type="submit"  class="enter" value="確認" />
 
         </div>
 
 
     </div>
-
-
+        </div>
+        </div>
 
 
     </form>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        
+        
+        const passwordicon = document.querySelector("#togglePassword");                 //顯示密碼
+        const password = document.querySelector("#Password");
+
+        passwordicon.addEventListener("click", () => {
+
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            passwordicon.classList.toggle('fa-eye-slash');
+        });
+
+
+        document.getElementById("submitid").addEventListener('click', async()=>{
+
+            event.preventDefault();
+            let formdata = new FormData(document.combineaccountname);
+
+            const request = await fetch(`@Url.Content("~/CustomerMember/loginmailverify")`, {
+
+                body: formdata,
+                method: "Post",
+
+            })
+            const data = await request.json();
+            console.log(data);
+            if (data == "帳號或密碼有錯") {
+                document.getElementById("spanresponse").innerHTML = data;
+                return;
+            }
+            else if (data == "尚未開通會員資格") {
+                document.getElementById("spanresponse").innerHTML = data;
+                return;
+            }
+            else if (data == "此帳號被停權") {
+                document.getElementById("spanresponse").innerHTML = data;
+                return;
+            }
+            else {
+                document.getElementById("spanresponse").innerHTML = "";
+                document.getElementById("combineaccountname").submit();
+            }
+      
+      });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
 }

@@ -258,8 +258,8 @@ namespace prjMSIT145_Final.Controllers
                         newmember.LineUserid=ProfileObj.userId;
                         newmember.MemberName = ProfileObj.displayName;
                         newmember.MemberPhotoFile = ProfileObj.pictureUrl;
-                        return View("Register", newmember);
-                        //return View("linegooleregister", newmember);
+                        //return View("Register", newmember);
+                        return View("linegooleregister", newmember);
                     }
                    
                 }
@@ -550,7 +550,7 @@ namespace prjMSIT145_Final.Controllers
             //return Redirect("~/Home/CIndex");
 
         }
-        public IActionResult Verifyaccount(NormalMember vm)
+        public IActionResult Verifyaccount(NormalMember vm)                                                 //驗證電話重複和格式
         {
             if (vm.MemberName == null)
             {
