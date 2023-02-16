@@ -859,6 +859,24 @@ namespace prjMSIT145_Final.Controllers
 
                  return Json("請兩格都不要空白");
         }
+        public IActionResult combineapi(CNormalMemberViewModel vm)
+        {
+            if (vm.Password != null && vm.Phone != null)
+            {
+                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Password == vm.Password && c.Phone == vm.Phone);
+                if (member != null)
+                {
+                    return Json("整合成功");
+                }
+                else
+                {
+                    return Json("帳號或Email錯誤");
+                }
+
+            }
+
+            return Json("請兩格都不要空白");
+        }
 
 
         public IActionResult forgetalterpassword(string Account,string token ,string Email)

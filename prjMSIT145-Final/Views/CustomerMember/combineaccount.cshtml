@@ -78,7 +78,7 @@
             event.preventDefault();
             let formdata = new FormData(document.combineaccountname);
 
-            const request = await fetch(`@Url.Content("~/CustomerMember/loginmailverify")`, {
+            const request = await fetch(`@Url.Content("~/CustomerMember/combineapi")`, {
 
                 body: formdata,
                 method: "Post",
@@ -90,17 +90,16 @@
                 document.getElementById("spanresponse").innerHTML = data;
                 return;
             }
-            else if (data == "尚未開通會員資格") {
-                document.getElementById("spanresponse").innerHTML = data;
-                return;
-            }
-            else if (data == "此帳號被停權") {
-                document.getElementById("spanresponse").innerHTML = data;
+           
+            else if (data == "整合成功") {
+                document.getElementById("spanresponse").innerHTML = "";
+                document.getElementById("combineaccountid").submit();
+                alert("整合成功");
                 return;
             }
             else {
-                document.getElementById("spanresponse").innerHTML = "";
-                document.getElementById("combineaccountname").submit();
+                document.getElementById("spanresponse").innerHTML = data;
+                return;
             }
       
       });
