@@ -6,7 +6,7 @@ const ChatMessageul = document.getElementById("ChatMessageul");
 const chatMessageInput = document.getElementById("chatMessageInput");
 const chatMessagebtn = document.getElementById("chatMessagebtn");
 const ChatroomItemul = document.getElementById("ChatroomItem");
-
+const ChatNowUserimg = document.getElementById("ChatNowUserimg");
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
@@ -22,23 +22,13 @@ connection.start().then(function () {
         
     
 }).catch(function (err) {
-
+   
     return console.error(err.toString());
 });
 //按下聊天室後
 document.getElementById("showChatRoomBtn").addEventListener("click", async function () {
-    if (document.getElementById("showChatRoomBtn").getAttribute("style")=="right:10px;bottom:0px;width:90px")
-    {
-        document.getElementById("showChatRoomBtn").setAttribute("style", "right:10px;bottom:530px;width:90px");
-        connection.invoke("ReNewChatRoom").catch(function (err) {
-            return console.error(err.toString());
-        }); 
-    }
-    else
-    {
-        document.getElementById("showChatRoomBtn").setAttribute("style", "right:10px;bottom:0px;width:90px");
-    }
-
+    clickChatroomBtn();
+ 
 });
 //回傳聊天室的Item
 connection.on("ReNewChatRoom", function (data) {
@@ -47,10 +37,8 @@ connection.on("ReNewChatRoom", function (data) {
     JSON.parse(data).forEach(function (item)
     {
         var li = document.createElement("li");
-        console.log(document.getElementById("ChatroomItem"));
-        console.log(item.chatroomid);
         li.setAttribute("class", "p-2 border-bottom");
-        console.log(item.chatroomid);
+        
         li.innerHTML =`
                                     <a href="#!" class="d-flex justify-content-between">
                                         <div class="d-flex flex-row">
@@ -74,16 +62,7 @@ connection.on("ReNewChatRoom", function (data) {
                                         </div>
                                     </a>
                                 `
-        console.log(item.chatroomid);
         document.getElementById("ChatroomItem").appendChild(li);
-        console.log(item.chatroomid);
-        console.log(item.chatroomUserid);
-        console.log(item.Memberfid);
-        console.log(item.MemberName);
-        console.log(item.UserType);
-        console.log(item.MemberImg);
-        console.log(item.LastOnlineTime);
-
     })
 
 
@@ -91,7 +70,7 @@ connection.on("ReNewChatRoom", function (data) {
 })
 //聊天室改變時
 function ChangeChatroom(otheruserid) {
-    console.log(otheruserid+"改變")
+    
     connection.invoke("ChangeChatroom", otheruserid).catch(function (err) {
         return console.error(err.toString());
     });
@@ -99,10 +78,10 @@ function ChangeChatroom(otheruserid) {
 //聊天室載入聊天紀錄
 connection.on("ReNewChatRoomMain", function (data) {
     var messageData = JSON.parse(data);
-    console.log(messageData)
+   
     messageData.forEach(function (item) {
         if (item.Senderid == ChatNowUserChatid.value) {
-            remotemessageShow(item.Message, "#");
+            remotemessageShow(item.Message);
         }
         else
         {
@@ -127,21 +106,22 @@ document.getElementById("chatMessagebtn").addEventListener("click", function (ev
 });
 /*回傳對方說的*/
 connection.on("RemoteMessage", function (otherName, ChatroomUserid,Fid,message) {
-     ChatNowUserName.innerHTML = otherName;
-    ChatNowUserid.value = `${Fid}`;
-    ChatNowUserChatid.value = `${ChatroomUserid}`;
-    console.log(ListChatMessageil);
+    // ChatNowUserName.innerHTML = otherName;
+    //ChatNowUserid.value = `${Fid}`;
+    //ChatNowUserChatid.value = `${ChatroomUserid}`;
+    //console.log(ListChatMessageil);
     remotemessageShow(message);
 });
 /*回傳自己說的*/
 connection.on("LocalMessage", function () { localmessageShow(message); });
 //對方說的話
-function remotemessageShow(message,otherUserimg) {
+function remotemessageShow(message) {
     var li = document.createElement("li");
     const ListChatMessageil = ChatMessageul.lastElementChild;
     li.setAttribute("class", "d-flex mb-2 mt-2");
     if (ListChatMessageil == null) {
-        li.innerHTML = ` <img src="${ otherUserimg }"
+      
+        li.innerHTML = ` <img src="${ChatNowUserimg.value}"
                                      alt="#"
                                      class="rounded-circle d-flex align-self-start me-3 shadow-1-strong mt-2"
                                      width="35"
@@ -170,7 +150,7 @@ function remotemessageShow(message,otherUserimg) {
                               `
         }
         else {
-            li.innerHTML = `<img src="#"
+            li.innerHTML = `<img src="${ChatNowUserimg.value}"
                                      alt="#"
                                      class="rounded-circle d-flex align-self-start me-3 shadow-1-strong mt-2"
                                      width="35"
@@ -200,4 +180,19 @@ function localmessageShow(message)
                                     </div>
                                 </div>`
     document.getElementById("ChatMessageul").appendChild(li);
+}
+//按下聊天室
+function clickChatroomBtn()
+{
+    if (document.getElementById("showChatRoomBtn").getAttribute("style") == "right:10px;bottom:0px;width:90px") {
+        document.getElementById("showChatRoomBtn").setAttribute("style", "right:10px;bottom:530px;width:90px");
+       
+    connection.invoke("ReNewChatRoom").catch(function (err) {
+            return console.error(err.toString());
+        }); 
+    }
+    else {
+        document.getElementById("showChatRoomBtn").setAttribute("style", "right:10px;bottom:0px;width:90px");
+        ChatroomItem.innerHTML = "";
+    }
 }
