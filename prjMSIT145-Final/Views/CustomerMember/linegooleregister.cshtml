@@ -19,11 +19,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div style="font-size:24px;font-weight:bold" class=" modal-body">
-                    讓帳號一致姓,前往整合?
+                    讓帳號一致性,前往整合?
                 </div>
                 <div class="modal-footer">
                     <button id="btncancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button id="btncorrect" type="button" class="btn btn-primary"><整合</button>
+                    <button id="btncorrect" type="button" class="btn btn-primary">整合</button>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
     <div class="wrap">
         <div class="card3">
             <div class="card30">
-            <h2 class="title2"> <img src="@Url.Content("~/images/Customer/Member/registerperson.png")" />第三方註冊會員</h2>
+                    <h2 class="title2"> <img src="@Url.Content("~/images/Customer/Member/registerperson.png")" /><span class="h2span">第三方登入</span>註冊會員</h2>
                     <input type="hidden" name="LineUserid" id="LineUserid" value="@Model.LineUserid" />
                     <input type="hidden" name="Fid" value="@Model.Fid" />
             <div class="dashed">
@@ -364,9 +364,9 @@
 
         document.getElementById("democorrectid").addEventListener('click', () => {
 
-            document.getElementById("MemberName").value = "Demoline";
+            document.getElementById("MemberName").value = "林峻宏";
             document.getElementById("Phone").value = "0936212576";
-            document.getElementById("Email").value = "a29803385@hotmail.com";
+            document.getElementById("Email").value = "a29816668@gmail.com";
             document.getElementById("Password").value = "aA1234";
             document.getElementById("Password2").value = "aA1234";         
             checkPwd();
