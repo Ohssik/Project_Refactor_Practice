@@ -55,7 +55,7 @@ namespace prjMSIT145_Final.Service
                 //{ "ExpireDate",  "3"},
 
                 //自訂名稱欄位1
-                { "Email",  inModel.Email},
+                { "Phone",  inModel.Email},
 
                 ////自訂名稱欄位2
                 //{ "CustomField2",  ""},
@@ -135,11 +135,32 @@ namespace prjMSIT145_Final.Service
 			return checkValue.ToUpper();
 		}
 
-		/// <summary>
-		/// 支付通知網址
-		/// </summary>
-		/// <returns></returns>
-		public Result GetCallbackResult(IFormCollection form)
+        private string GetCheckMacValue(Dictionary<string, string> order)
+        {
+            var param = order.Keys.OrderBy(x => x).Select(key => key + "=" + order[key]).ToList();
+
+            var checkValue = string.Join("&", param);
+
+            //測試用的 HashKey
+            var hashKey = "dALAm7IGaqMq8ebH";
+
+            //測試用的 HashIV
+            var HashIV = "ZV1cJFulEf25mRCG";
+
+            checkValue = $"HashKey={hashKey}" + "&" + checkValue + $"&HashIV={HashIV}";
+
+            checkValue = HttpUtility.UrlEncode(checkValue).ToLower();
+
+            checkValue = EncryptSHA256(checkValue);
+
+            return checkValue.ToUpper();
+        }
+
+        /// <summary>
+        /// 支付通知網址
+        /// </summary>
+        /// <returns></returns>
+        public Result GetCallbackResult(IFormCollection form)
 		{
 			// 接收參數
 			StringBuilder receive = new StringBuilder();
@@ -168,7 +189,23 @@ namespace prjMSIT145_Final.Service
 			return result;
 		}
 
-		public NewebPayReturn<NewebPayQueryResult> GetApiInvokeResult(string url, string postData = null, string contentType = null)
+        public async Task<NewebPayReturn<NewebPayQueryResult>> GetQueryCallBack(string orderId, string amt)
+        {
+            var dict = new Dictionary<string, string>
+            {
+                { "MerchantID", "1039919" },
+                { "MerchantTradeNo", "141871950171249" },
+                { "TimeStamp", DateTime.Now.ToString() }
+            };
+
+            dict.Add("CheckMacValue", GetCheckMacValue(dict));
+
+            var result = GetApiInvokeResult("https://payment.ecpay.com.tw/Cashier/QueryTradeInfo/V5", string.Join("&", dict.Select(a => a.Key + "=" + a.Value)), contentType: "application/x-www-form-urlencoded");
+
+            return null;
+        }
+
+        public NewebPayReturn<NewebPayQueryResult> GetApiInvokeResult(string url, string postData = null, string contentType = null)
 		{
 
 			var request = (HttpWebRequest)WebRequest.Create(url);

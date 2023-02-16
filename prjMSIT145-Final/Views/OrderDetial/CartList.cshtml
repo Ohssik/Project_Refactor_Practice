@@ -613,7 +613,6 @@
             </div>
         </div>
     </div>
-
 </div>
 <div id="divContent"></div>
 @section Scripts{
@@ -779,9 +778,10 @@
 
     </script>
     <script>
-        //綠界
+        //綠界 'sean24163@hotmail.com'
         const price = $("#AddTotal").val();
         const OrderISerialId = $("#OrderISerialId").val();
+        const changePickUpPersonPhone3 = $("#changePickUpPersonPhone3").val();
         console.log(price)
         const app = Vue.createApp({
             data() {
@@ -793,7 +793,7 @@
                         , Amt: `${price}`
                         , ExpireDate: '@ViewData["ExpireDate"]'
                         , PayOption: 'ECPay'
-                        , Email: 'sean24163@hotmail.com'
+                        , Email: `${changePickUpPersonPhone3}`
                     }
                 }
             }
@@ -821,6 +821,7 @@
                         dataType: 'json',
                         data: { inModel: postData, __RequestVerificationToken: $('@Html.AntiForgeryToken()').val() },
                         success: function (returnObj) {
+                            alert(returnObj)
                             $("#divContent").html(returnObj);
                             $("#payForm").submit();
                         },

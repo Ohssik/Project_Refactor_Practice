@@ -60,11 +60,18 @@ namespace prjMSIT145_Final.Controllers
 			return Json(GetReturnValue(service, inModel));
 		}
 
-		/// <summary>
-		/// 支付完成返回網址
-		/// </summary>
-		/// <returns></returns>string option
-		public IActionResult CallbackReturn()
+        [HttpPost]
+        public async Task<IActionResult> GetReturn(SendToNewebPayIn inModel)
+        {
+            var obj = await new ECPayService().GetQueryCallBack(inModel.MerchantOrderNo, inModel.Amt);
+            return Json(obj);
+        }
+
+        /// <summary>
+        /// 支付完成返回網址
+        /// </summary>
+        /// <returns></returns>string option
+        public IActionResult CallbackReturn()
 		{
 			//var service = GetPayType(option);
 			//var result = service.GetCallbackResult(Request.Form);
@@ -75,7 +82,6 @@ namespace prjMSIT145_Final.Controllers
 			return RedirectToAction("List", "OrderDetial");
 		}
 
-		//沒用到
 		/// <summary>
 		/// 支付通知網址
 		/// </summary>
