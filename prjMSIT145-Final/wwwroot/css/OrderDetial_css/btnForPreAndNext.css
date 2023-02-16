@@ -15,10 +15,10 @@
     border: none;
     border-radius: 10px 0 0 10px;
 }
-.btnToNext{
+.btnToNext {
     height: 100%;
     width: 100%;
-    background-color: rgb(210, 208, 208);
+    background-color: #9F4E27;
     color: rgb(255, 255, 255);
     font-size: 16px;
     border: none;
@@ -27,7 +27,7 @@
 .btnToFinish {
     height: 100%;
     width: 100%;
-    background-color: rgb(210, 208, 208);
+    background-color: #9F4E27;
     color: rgb(255, 255, 255);
     font-size: 16px;
     border: none;

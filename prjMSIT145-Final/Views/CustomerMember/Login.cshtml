@@ -45,7 +45,7 @@
         <div class="Content">
 
             <div class="Head">
-                <p class="toptitle">歡迎使用線上訂餐系統</p>
+                <p class="toptitle">歡迎使用Daily線上訂餐系統</p>
                 <p class="toptitle2">請選擇登入/註冊方式，通過驗證後即可使用</p>
                 <div>
                     <input type="button" onclick=location.href="@Url.Content("~/CustomerMember/Register")" class="btnregister divbutton" value="註冊" />
@@ -107,9 +107,9 @@
                 <p class="text3"><a href=@Url.Action("Forgetpassword","CustomerMember") class="forgotspan" id="forgotPwd">忘記密碼</a></p>
             </div>
                 <div class="demobtnlogin">
-                    <input type="button" class="democorrect" id="democorrectid" value="democorrect" />
-                    <input type="button" class="demoerror" id="demoerrorid" value="demoerror" />
-                    <input type="button" class="overclass" id="overid" value="demoover" />
+                    <input type="button" class="democorrect" id="democorrectid" value="" />
+                    <input type="button" class="demoerror" id="demoerrorid" value="" />
+                    <input type="button" class="overclass" id="overid" value="" />
                 </div>
             <div class="dashed"></div>
             <div>
@@ -204,7 +204,7 @@
 
             submitbtn.addEventListener("click",()=>{
               
-              event.preventDefault();
+              
 
             var passwordobj = document.getElementById("Password");
             var spnpasswordobj = document.getElementById("passwordcorrect");
@@ -222,7 +222,7 @@
                     if (re.test(passwordval)) {
                       
                         spnpasswordobj.innerHTML = "";
-                        logincheck();
+                        
                        
                     }
                     else {
@@ -236,10 +236,11 @@
                 }
            
            });
-           
-         
-       async function logincheck (){
-           
+
+
+        document.getElementById("submitid").addEventListener('click',async()=>{
+            
+            event.preventDefault();
 
             let formdata = new FormData(document.Loginname);
 
@@ -255,7 +256,7 @@
                 document.getElementById("spanresponse").innerHTML = data;
                 return;
             }
-            else if (data =="尚未開通會員資格") {
+            else if (data == "尚未開通會員資格") {
                 document.getElementById("spanresponse").innerHTML = data;
                 return;
             }
@@ -267,7 +268,19 @@
                 document.getElementById("spanresponse").innerHTML = "";
                 document.getElementById("Login").submit();
             }
-                };
+        
+        
+        
+        
+        });
+           
+
+           
+               
+
+
+
+
 
         document.getElementById("democorrectid").addEventListener('click', () => {                             //正確DEMO鍵
             document.getElementById("phoneid").value = "0936212576"

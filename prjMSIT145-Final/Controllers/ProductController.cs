@@ -23,7 +23,7 @@ namespace prjMSIT145_Final.Controllers
                 if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
                     return View();
                 else
-                return RedirectToAction("Blogin", "BusinessMember");
+                    return RedirectToAction("Blogin", "BusinessMember");
             }
             catch
             {
@@ -56,7 +56,7 @@ namespace prjMSIT145_Final.Controllers
                                      pro.CategoryFid,
                                      proC.CategoryName
                                  }).Where(p => p.BFid == member.Fid).OrderBy(b => b.CategoryFid);
-                 
+
                     List<CProductsViewModel> list = new List<CProductsViewModel>();
                     foreach (var p in datas)
                     {
@@ -91,8 +91,16 @@ namespace prjMSIT145_Final.Controllers
                 BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
                 CProductsViewModel vm = new CProductsViewModel();
                 vm.BFid = member.Fid;
+                //var datas = _context.Products.Where(i => i.BFid == member.Fid);  //判斷店家中的商品是否有此商品
+                //List<CProductsViewModel> list = new List<CProductsViewModel>();
+                //foreach (var d in datas)
+                //{
+                //    vm.ProductName = d.ProductName;
+                //    list.Add(vm);
+                //}
 
                 return View(vm);
+                //return View(list);
             }
             else
                 return RedirectToAction("Blogin", "BusinessMember");
@@ -165,16 +173,16 @@ namespace prjMSIT145_Final.Controllers
                     pro.ProductName = vm.ProductName;
                     pro.UnitPrice = vm.UnitPrice;
                     pro.Memo = vm.Memo;
-                    var opToProList = _context.OptionsToProducts.Where(p => p.ProductFid == vm.Fid).OrderBy(p=>p.OptionGroupFid);
+                    var opToProList = _context.OptionsToProducts.Where(p => p.ProductFid == vm.Fid).OrderBy(p => p.OptionGroupFid);
                     _context.OptionsToProducts.RemoveRange(opToProList);
                     _context.SaveChanges();
-                        foreach (var d in vm.productOp)
-                        {
+                    foreach (var d in vm.productOp)
+                    {
                         OptionsToProduct opToPro = new OptionsToProduct();
                         opToPro.ProductFid = vm.Fid;
-                        opToPro.OptionGroupFid = d; 
-                                _context.OptionsToProducts.Add(opToPro);
-                        }
+                        opToPro.OptionGroupFid = d;
+                        _context.OptionsToProducts.Add(opToPro);
+                    }
                     _context.SaveChanges();
                 }
                 return RedirectToAction("BList");
@@ -182,12 +190,12 @@ namespace prjMSIT145_Final.Controllers
             else
                 return RedirectToAction("Blogin", "BusinessMember");
         }
-        public ActionResult BDelete(Product pro,int? id)
+        public ActionResult BDelete(Product pro, int? id)
         {
             if (id != null)
             {
                 pro = _context.Products.FirstOrDefault(p => p.Fid == id);
-                var  opToPro = _context.OptionsToProducts.Where(p => p.ProductFid == id);
+                var opToPro = _context.OptionsToProducts.Where(p => p.ProductFid == id);
 
                 if (pro != null)
                     _context.Products.Remove(pro);

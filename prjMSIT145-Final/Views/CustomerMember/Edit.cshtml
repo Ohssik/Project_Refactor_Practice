@@ -152,8 +152,8 @@
                     <input type="submit" class="enter" value="修改" id="submitid"  />
 
         </div>
-                <input type="button" class="democorrect" id="democorrectid" value="democorrect" />
-                <input type="button" class="demoerror" id="demoerrorid" value="demoerror" />
+                <input type="button" class="democorrect" id="democorrectid" value="" />
+                <input type="button" class="demoerror" id="demoerrorid" value="" />
             </div>
         </div>
     </div>
@@ -272,8 +272,8 @@
 
         document.getElementById("democorrectid").addEventListener('click', () => {                             //正確DEMO鍵
             
-            document.getElementById("MemberName").value="張知恩"
-            document.getElementById("Email").value="a29803385@hotmail.com";
+            document.getElementById("MemberName").value="林阿宏"
+            document.getElementById("Email").value = "a29816668@gmail.com";
             document.getElementById("radiogirl").setAttribute("checked", "checked");
             checkPwd();
             checkEmail();

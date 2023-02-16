@@ -249,7 +249,7 @@ namespace prjMSIT145_Final.Controllers
                 PaymenttermList.Add(new VPaymenttermViewModel
                 {
                     BFid = BFid,
-                    PaymentType = "店家未提供付款方式",
+                    PaymentType = "現金、信用卡",
                 });
             }
             CUtility.PaymenttermList = PaymenttermList;

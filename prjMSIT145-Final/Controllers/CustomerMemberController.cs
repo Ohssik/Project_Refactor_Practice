@@ -125,7 +125,7 @@ namespace prjMSIT145_Final.Controllers
                     x.MemberName = payload.Name;
 
                     return RedirectToAction("Register", x);
-
+                    //return RedirectToAction("linegooleregister", x);
                 }
 
             };
@@ -258,7 +258,8 @@ namespace prjMSIT145_Final.Controllers
                         newmember.LineUserid=ProfileObj.userId;
                         newmember.MemberName = ProfileObj.displayName;
                         newmember.MemberPhotoFile = ProfileObj.pictureUrl;
-                        return View("Register", newmember);                     
+                        //return View("Register", newmember);
+                        return View("linegooleregister", newmember);
                     }
                    
                 }
@@ -300,6 +301,109 @@ namespace prjMSIT145_Final.Controllers
             return Redirect("~/Home/CIndex");
             //return RedirectToAction("Index", "CustomerMember");
         }
+
+        public ActionResult linegooleregister(NormalMember member)
+        {
+            return View(member);
+        }
+
+        [HttpPost]
+        public ActionResult linegooleregister(CNormalMemberViewModel member)
+        {
+            if(member.Phone == null || member.Email==null || member.MemberName==null ||member.Password==null )
+            {
+                return View();
+            }
+            else
+            {
+                Random rnd = new Random();
+                member.EmailCertified = rnd.Next(10000000, 90000000);
+                _context.NormalMembers.Add(member.member);
+                _context.SaveChanges();
+                string url = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={member.Fid}";
+                string smtpAddress = "smtp.gmail.com";
+                //設定Port
+                int portNumber = 587;
+                bool enableSSL = true;
+                //填入寄送方email和密碼
+                string emailFrom = "a29816668@gmail.com";
+                string emailpassword = "joksdquaswjdyzpu";
+                //收信方email 可以用逗號區分多個收件人
+                string emailTo = member.Email;
+                //主旨
+                string subject = "註冊驗證信";
+                //內容
+                string body = $"<h2>新會員你好請點此開通連結</h2><h3><br><a href={url}>請點此開通連結</a>並輸入此驗證碼<span style='color:red;'>{member.EmailCertified}</span></h3>";
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress(emailFrom, "日柴", System.Text.Encoding.UTF8);
+                    mail.To.Add(emailTo);
+                    mail.Subject = subject;
+                    mail.Body = body;
+                    // 若你的內容是HTML格式，則為True
+                    mail.IsBodyHtml = true;
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                    {
+                        smtp.Credentials = new NetworkCredential(emailFrom, emailpassword);
+                        smtp.EnableSsl = enableSSL;
+                        smtp.Send(mail);
+                    }
+
+
+                }
+
+                return Redirect("~/Home/CIndex");
+            }
+           
+        }
+
+        public IActionResult combineaccount(string Phone,string LineUserid, string GoogleEmail)
+        {   
+            if(Phone == null || LineUserid == null || GoogleEmail == null)
+            {
+                 return Redirect("~/CustomerMember/linegooleregister");
+            }
+
+            NormalMember x = new NormalMember();
+            x.Phone=Phone;
+            x.GoogleEmail = GoogleEmail;
+            x.LineUserid= LineUserid;
+            return View(x);
+        }
+        [HttpPost]
+        public IActionResult combineaccount(NormalMember member)
+        {
+            if (member == null)
+            {
+                return Redirect("~/Home/CIndex");
+            }
+            NormalMember x=_context.NormalMembers.FirstOrDefault(c=>c.Phone==member.Phone);
+            if (x == null)
+            {
+                return Redirect("~/Home/CIndex");
+            }
+            else
+            {
+                if (member.GoogleEmail != "NULL" && member.GoogleEmail!="1")
+                {
+                    x.GoogleEmail = member.GoogleEmail;
+                }
+                if(member.LineUserid != "NULL" && member.LineUserid != "1")
+                {
+                    x.LineUserid = member.LineUserid;
+                }
+              
+               _context.SaveChanges();
+                return Redirect("~/Home/CIndex");
+            }
+
+
+
+           
+        }
+
+
+
         public IActionResult Register(NormalMember member)
         {
 
@@ -424,7 +528,7 @@ namespace prjMSIT145_Final.Controllers
             //主旨
             string subject = "註冊驗證信";
             //內容
-            string body =$"<h2>新會員你好請點此開通連結</h2><h3><br><a href={url}>請點此開通連結</a>並回表單輸入此驗證碼{vm.EmailCertified}</h3>";
+            string body =$"<h2>新會員你好請點此開通連結</h2><h3><br><a href={url}>請點此開通連結</a>並回表單輸入此驗證碼<span style='color:red;'>{vm.EmailCertified}</span></h3>";
             using (MailMessage mail = new MailMessage())
             {
                 mail.From = new MailAddress(emailFrom,"日柴", System.Text.Encoding.UTF8);
@@ -446,7 +550,7 @@ namespace prjMSIT145_Final.Controllers
             //return Redirect("~/Home/CIndex");
 
         }
-        public IActionResult Verifyaccount(NormalMember vm)
+        public IActionResult Verifyaccount(NormalMember vm)                                                 //驗證電話重複和格式
         {
             if (vm.MemberName == null)
             {
@@ -471,12 +575,12 @@ namespace prjMSIT145_Final.Controllers
                 }
             }
 
-            if (vm.Password ==null)
+            if (vm.Password == null)
             {
                 return Json("密碼欄位不能空值");
             }
-            
-            
+
+
 
             var data = _context.NormalMembers.Select(c => c.Phone);
             foreach (var i in data)
@@ -708,9 +812,9 @@ namespace prjMSIT145_Final.Controllers
                     //收信方email 可以用逗號區分多個收件人
                     string emailTo = vm.Email;
                     //主旨
-                    string subject = "重製密碼";
+                    string subject = "重置密碼";
                     //內容
-                    string body = $"<h2>重製密碼</h2><h3><br><a href={url}>請在<span style='color:red;'>10分鐘內</span>點此連結重設密碼</a></h3>";
+                    string body = $"<h2>重置密碼</h2><h3><br><a href={url}>請在<span style='color:red;'>10分鐘內</span>點此連結重設密碼</a></h3>";
                     using (MailMessage mail = new MailMessage())
                     {
                         mail.From = new MailAddress(emailFrom,"日柴", System.Text.Encoding.UTF8);
@@ -754,6 +858,24 @@ namespace prjMSIT145_Final.Controllers
             }
 
                  return Json("請兩格都不要空白");
+        }
+        public IActionResult combineapi(CNormalMemberViewModel vm)
+        {
+            if (vm.Password != null && vm.Phone != null)
+            {
+                NormalMember member = _context.NormalMembers.FirstOrDefault(c => c.Password == vm.Password && c.Phone == vm.Phone);
+                if (member != null)
+                {
+                    return Json("整合成功");
+                }
+                else
+                {
+                    return Json("帳號或Email錯誤");
+                }
+
+            }
+
+            return Json("請兩格都不要空白");
         }
 
 

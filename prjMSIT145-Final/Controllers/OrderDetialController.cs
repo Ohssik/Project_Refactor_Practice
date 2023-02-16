@@ -32,7 +32,7 @@ namespace prjMSIT145_Final.Controllers
             var OrderDatas = from O in _context.Orders
                              join B in _context.BusinessMembers
                              on O.BFid equals B.Fid
-                             join BI in _context.BusinessImgs 
+                             join BI in _context.BusinessImgs
                              on O.BFid equals BI.BFid
                              where O.NFid == NFid
                              select new
@@ -56,13 +56,13 @@ namespace prjMSIT145_Final.Controllers
                         vm.OrderState = "未接單";
                         break;
                     case "2":
-                        vm.OrderState = "已接單";
-                        break;
-                    case "3":
                         vm.OrderState = "商家準備中";
                         break;
+                    case "3":
+                        vm.OrderState = "商品準備完成";
+                        break;
                     case "4":
-                        vm.OrderState = "已完成";
+                        vm.OrderState = "訂單已完成";
                         break;
                     case "5":
                         vm.OrderState = "商家退單";
@@ -151,14 +151,14 @@ namespace prjMSIT145_Final.Controllers
                             vm.OrderState = "未接單";
                             break;
                         case "2":
-                            vm.OrderState = "已接單";
+                            vm.OrderState = "商家準備中";
                             break;
                         case "3":
-                            vm.OrderState = "商家準備中";
+                            vm.OrderState = "商品準備完成";
                             break;
 
                         case "4":
-                            vm.OrderState = "已完成";
+                            vm.OrderState = "訂單已完成";
                             break;
                         case "5":
                             vm.OrderState = "商家退單";
@@ -224,109 +224,143 @@ namespace prjMSIT145_Final.Controllers
 
         public IActionResult CartItemDelete(int? OrderFid, int? ItemFid)
         {
+
+            #region 扣除總金額
+            var OrderDeitalTotalAmount = from q in _context.ViewShowFullOrders
+                                         where q.ItemFid == ItemFid
+                                         select new
+                                         {
+                                             SubTotal = q.SubTotal,
+                                             TotalAmount = q.TotalAmount,
+                                         };
+            COrderDetialViewModel vm = new COrderDetialViewModel();
+            if (OrderDeitalTotalAmount != null)
+            {
+                foreach (var c in OrderDeitalTotalAmount.ToList())
+                {
+                    vm.TotalAmount = c.TotalAmount - c.SubTotal;
+                    Order prod = _context.Orders.FirstOrDefault(t => t.Fid == OrderFid);
+                    if (prod != null)
+                    {
+                        prod.TotalAmount = vm.TotalAmount;
+                    }
+                }
+            }
+            _context.SaveChanges();
+            #endregion
             #region 依據商品ID找出所屬配料資料並刪除 (刪除OrderOptionDetial)
             var OrderOptionsDetaildatasDelete = from OOD in _context.OrderOptionsDetails
                                                 where OOD.ItemFid == ItemFid
                                                 select OOD;
             _context.OrderOptionsDetails.RemoveRange(OrderOptionsDetaildatasDelete);
-            //_context.SaveChanges();
+            _context.SaveChanges();
             #endregion
             #region 依據商品ID找出對應資料並刪除 (刪除OrderItems)
             var OrderItemsdatasDelete = from OI in _context.OrderItems
                                         where OI.Fid == ItemFid
                                         select OI;
             _context.OrderItems.RemoveRange(OrderItemsdatasDelete);
-            //_context.SaveChanges();
+            _context.SaveChanges();
             #endregion
-            #region 再次取得訂單內商品  
-            var OrdersDatas = from o in _context.Orders
-                              join b in _context.BusinessMembers
-                              on o.BFid equals b.Fid
-                              where o.Fid == OrderFid
-                              select new
-                              {
-                                  Fid = o.Fid,
-                                  NFid = o.NFid,
-                                  BFid = o.BFid,
-                                  BMemberName = b.MemberName,
-                                  BMemberPhone = b.Phone,
-                                  BAddress = b.Address,
-                                  PickUpPerson = o.PickUpPerson,
-                                  PickUpPersonPhone = o.PickUpPersonPhone,
-                                  OrderState = o.OrderState,
-                                  Memo = o.Memo,
-                                  OrderTime = o.OrderTime,
-                                  TotalAmount = o.TotalAmount
-                              };
-            var ItemsDatas = from OI in _context.OrderItems
-                             join p in _context.Products
-                             on OI.ProductFid equals p.Fid
-                             where OI.OrderFid == OrderFid
-                             select new
-                             {
-                                 Fid = OI.Fid,
-                                 ProductName = p.ProductName,
-                                 ProductQty = OI.Qty,
-                                 Productprice = p.UnitPrice,
-                                 OrderFid = OI.OrderFid
-                             };
-            var OrderOptionsDetailsDatas = from OOD in _context.OrderOptionsDetails
-                                           join p in _context.ProductOptions
-                                           on OOD.OptionFid equals p.Fid
-                                           select new
-                                           {
-                                               Fid = OOD.Fid,
-                                               ItemFid = OOD.ItemFid,
-                                               OptionName = p.OptionName,
-                                               ItemPrice = p.UnitPrice
-                                           };
-            COrderDetialViewModel OrderDetialList = new COrderDetialViewModel();
-            OrderDetialList.TotalQty = 0;
-            if (OrdersDatas != null)
-            {
-                foreach (var OrderInfo in OrdersDatas.ToList())
-                {
-                    //OrderDetialList.OrderTime = OrderInfo.OrderTime;
-                    OrderDetialList.TotalAmount = Convert.ToInt32(OrderInfo.TotalAmount);
-                    //OrderDetialList.PickUpPerson = OrderInfo.PickUpPerson;
-                    //OrderDetialList.Address = OrderInfo.BAddress;
-                    //OrderDetialList.BMemberName = OrderInfo.BMemberName;
-                    //OrderDetialList.BMemberPhone = OrderInfo.BMemberPhone;
-                    //OrderDetialList.Fid = OrderInfo.Fid;
-                    //OrderDetialList.BFid = OrderInfo.BFid;
-                    //OrderDetialList.NFid = OrderInfo.NFid;
-                    //OrderDetialList.PickUpPersonPhone = OrderInfo.PickUpPersonPhone;
-                    //OrderDetialList.Memo = OrderInfo.Memo;
-
-                    OrderDetialList.items = new List<COrderItemViewModel>();
-                    var orderitems = from i in ItemsDatas
-                                     where i.OrderFid == OrderInfo.Fid
-                                     select i;
-                    foreach (var item in orderitems.ToList())
+            #region 再次取得資料
+            var qa = from o in _context.Orders
+                    join b in _context.BusinessMembers
+                    on o.BFid equals b.Fid
+                    join nm in _context.NormalMembers
+                    on o.NFid equals nm.Fid
+                    where o.Fid == OrderFid
+                    select new
                     {
-                        COrderItemViewModel ItemVM = new COrderItemViewModel();
-                        ItemVM.ProductName = item.ProductName;
-                        ItemVM.Productprice = item.Productprice;
-                        ItemVM.Qty = item.ProductQty;
-                        ItemVM.OptionName = new List<string>();
-                        ItemVM.OptionPrice = 0;
-                        OrderDetialList.TotalQty += item.ProductQty;
-                        ItemVM.Fid = item.Fid;
+                        Fid = o.Fid,
+                        NFid = o.NFid,
+                        BFid = o.BFid,
+                        BMemberName = b.MemberName,
+                        BMemberPhone = b.Phone,
+                        BAddress = b.Address,
+                        PickUpPerson = o.PickUpPerson,
+                        PickUpPersonPhone = o.PickUpPersonPhone,
+                        OrderState = o.OrderState,
+                        Memo = o.Memo,
+                        OrderTime = o.OrderTime,
+                        TotalAmount = o.TotalAmount,
+                        MemberPhotoFile = nm.MemberPhotoFile,
+                        OrderISerialId = o.OrderISerialId,
+                    };
+            var Pr = from o in _context.OrderItems
+                     join p in _context.Products
+                     on o.ProductFid equals p.Fid
+                     where o.OrderFid == OrderFid
+                     select new
+                     {
+                         Fid = o.Fid,
+                         ProductName = p.ProductName,
+                         ProductQty = o.Qty,
+                         Productprice = p.UnitPrice,
+                         OrderFid = o.OrderFid
+                     };
 
-                        var itemOption = from o in OrderOptionsDetailsDatas
+            var ItemName = from i in _context.OrderOptionsDetails
+                           join p in _context.ProductOptions
+                           on i.OptionFid equals p.Fid
+                           select new
+                           {
+                               Fid = i.Fid,
+                               ItemFid = i.ItemFid,
+                               OptionName = p.OptionName,
+                               ItemPrice = p.UnitPrice
+                           };
+            List<COrderDetialViewModel> list = new List<COrderDetialViewModel>();
+            if (qa != null)
+            {
+             COrderDetialViewModel vm2 = new COrderDetialViewModel();
+                vm2.TotalQty = 0;
+                foreach (var c in qa.ToList())
+                {
+                    vm2.OrderTime = c.OrderTime;
+                    vm2.TotalAmount = Convert.ToInt32(c.TotalAmount);
+                    vm2.PickUpPerson = c.PickUpPerson;
+                    vm2.Address = c.BAddress;
+                    vm2.BMemberName = c.BMemberName;
+                    vm2.BMemberPhone = c.BMemberPhone;
+                    vm2.Fid = c.Fid;
+                    vm2.BFid = c.BFid;
+                    vm2.NFid = c.NFid;
+                    vm2.PickUpPersonPhone = c.PickUpPersonPhone;
+                    vm2.Memo = c.Memo;
+                    vm2.MemberPhotoFile = c.MemberPhotoFile;
+                    vm2.OrderISerialId = c.OrderISerialId;
+
+                    vm2.items = new List<COrderItemViewModel>();
+                    var orderitem = from i in Pr
+                                    where i.OrderFid == c.Fid
+                                    select i;
+                    foreach (var item in orderitem.ToList())
+                    {
+                        COrderItemViewModel item2 = new COrderItemViewModel();
+                        item2.ProductName = item.ProductName;
+                        item2.Productprice = item.Productprice;
+                        item2.Qty = item.ProductQty;
+                        item2.OptionName = new List<string>();
+                        item2.OptionPrice = 0;
+                        vm2.TotalQty += item.ProductQty;
+                        item2.Fid = item.Fid;
+
+                        var itemOption = from o in ItemName
                                          where o.ItemFid == item.Fid
                                          select o;
+
                         foreach (var Option in itemOption)
                         {
-                            ItemVM.OptionName.Add(Option.OptionName);
-                            ItemVM.OptionPrice += Option.ItemPrice;
+                            item2.OptionName.Add(Option.OptionName);
+                            item2.OptionPrice += Option.ItemPrice;
                         }
-                        OrderDetialList.items.Add(ItemVM);
+                        vm2.items.Add(item2);
                     }
                 }
+                list.Add(vm2);
             }
             #endregion
-            return Json(OrderDetialList);
+            return Json(list);
         }
 
         [HttpPost]
@@ -350,9 +384,9 @@ namespace prjMSIT145_Final.Controllers
             }
             _context.SaveChanges();
             return RedirectToAction("List");
-            
+
         }
-        
+
         public IActionResult CartList(int Fid)
         {
             #region   
@@ -455,7 +489,7 @@ namespace prjMSIT145_Final.Controllers
 			ViewData["MerchantOrderNo"] = DateTime.Now.ToString("yyyyMMddHHmmss");  //訂單編號
 			ViewData["ExpireDate"] = DateTime.Now.AddDays(3).ToString("yyyyMMdd"); //繳費有效期限       
 
-			return View(vm);
+            return View(vm);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿.wrap {
-    margin: 50px auto;
+    margin: 100px auto;
     width: 400px;
-    margin-bottom: 300px;
+   /* margin-bottom: 100px;*/
 }
 
 .Content {
@@ -136,7 +136,7 @@
 .forgotspan {
     text-decoration: none;
     font-size: 14px;
-    margin-right:20px;
+    margin-right:10px;
 }
 
 .text3 {
@@ -168,11 +168,12 @@
 .democorrect {
    position:absolute;
     bottom: 20px;
-    right: 100px;
+    right: 80px;
     color: white;
     background-color: blue;
     border-radius: 20px;
-    width: 40px;
+    width: 20px;
+    height:10px;
 }
 
 .demoerror {
@@ -182,16 +183,18 @@
     color: white;
     background-color: red;
     border-radius: 20px;
-    width: 40px;
+    width: 20px;
+    height:10px;
 }
 .overclass{
     position: absolute;
     bottom: 20px;
-    right: 0px;
+    right: 20px;
     color: white;
     background-color:yellow;
     border-radius: 20px;
-    width: 40px;
+    width: 20px;
+    height:10px;
 }
 .spanresponseclass {
     color: red;
