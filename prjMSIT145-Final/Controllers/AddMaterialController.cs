@@ -79,46 +79,38 @@ namespace prjMSIT145_Final.Controllers
 		[HttpPost]
 		public ActionResult BCreate(CProductOptionViewModel vm)
 		{
-			var optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName && o.BFid == vm.BFid);
-			vm.options.OptionGroupFid = optGp.Fid;
-			
-			_context.ProductOptions.Add(vm.options);
-			_context.SaveChanges();
-			return RedirectToAction("BList");
+			if (_context.ProductOptions.Any(op => op.OptionName == vm.OptionName))
+				return RedirectToAction("BList");
+			else
+			{
+				var optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName && o.BFid == vm.BFid);
+				vm.options.OptionGroupFid = optGp.Fid;
+
+				_context.ProductOptions.Add(vm.options);
+				_context.SaveChanges();
+				return RedirectToAction("BList");
+			}
 		}
 		
-		//public ActionResult BEdit(int? id)
-		//{
-		//	string json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
-		//	BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
-		//	var datas = _context.ViewOptionsToGroups.Where(o => o.Fid == id);
-		//	CProductOptionViewModel vm = new CProductOptionViewModel();
-		//	foreach (var d in datas)
-		//	{
-		//		vm.Fid = d.Fid;
-		//		vm.BFid = member.Fid;
-		//		vm.UnitPrice = Math.Round(Convert.ToDouble(d.UnitPrice));
-		//		vm.OptionGroupFid = d.OptionGroupFid;
-		//		vm.OptionName = d.OptionName;
-		//		vm.OptionGroupName = d.OptionGroupName;
-		//	}
-		//	return View(vm);
-		//}
-		//[HttpPost]
 		public ActionResult BEdit(CProductOptionViewModel vm)
 		{
 			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
-				ProductOptionGroup optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName && o.BFid == vm.BFid);
-				ProductOption opt = _context.ProductOptions.FirstOrDefault(o => o.Fid == vm.Fid);
-				if (optGp != null && opt != null)
+				if (_context.ProductOptions.Any(op => op.OptionName == vm.OptionName))
+					return RedirectToAction("BList");
+				else
 				{
-					opt.UnitPrice = Convert.ToDecimal(vm.UnitPrice);
-					opt.OptionName = vm.OptionName;
-					opt.OptionGroupFid = optGp.Fid;
-					_context.SaveChanges();
+					ProductOptionGroup optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName && o.BFid == vm.BFid);
+					ProductOption opt = _context.ProductOptions.FirstOrDefault(o => o.Fid == vm.Fid);
+					if (optGp != null && opt != null)
+					{
+						opt.UnitPrice = Convert.ToDecimal(vm.UnitPrice);
+						opt.OptionName = vm.OptionName;
+						opt.OptionGroupFid = optGp.Fid;
+						_context.SaveChanges();
+					}
+					return RedirectToAction("BList");
 				}
-				return RedirectToAction("BList");
 			}
 			else
 				return RedirectToAction("Blogin", "BusinessMember");

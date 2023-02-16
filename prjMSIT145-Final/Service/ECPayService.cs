@@ -55,7 +55,7 @@ namespace prjMSIT145_Final.Service
                 //{ "ExpireDate",  "3"},
 
                 //自訂名稱欄位1
-                { "Phone",  inModel.Email},
+                { "Email",  inModel.Email},
 
                 ////自訂名稱欄位2
                 //{ "CustomField2",  ""},
