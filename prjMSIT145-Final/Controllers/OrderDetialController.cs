@@ -56,13 +56,13 @@ namespace prjMSIT145_Final.Controllers
                         vm.OrderState = "未接單";
                         break;
                     case "2":
-                        vm.OrderState = "已接單";
-                        break;
-                    case "3":
                         vm.OrderState = "商家準備中";
                         break;
+                    case "3":
+                        vm.OrderState = "商品準備完成";
+                        break;
                     case "4":
-                        vm.OrderState = "已完成";
+                        vm.OrderState = "訂單已完成";
                         break;
                     case "5":
                         vm.OrderState = "商家退單";
@@ -151,14 +151,14 @@ namespace prjMSIT145_Final.Controllers
                             vm.OrderState = "未接單";
                             break;
                         case "2":
-                            vm.OrderState = "已接單";
+                            vm.OrderState = "商家準備中";
                             break;
                         case "3":
-                            vm.OrderState = "商家準備中";
+                            vm.OrderState = "商品準備完成";
                             break;
 
                         case "4":
-                            vm.OrderState = "已完成";
+                            vm.OrderState = "訂單已完成";
                             break;
                         case "5":
                             vm.OrderState = "商家退單";
