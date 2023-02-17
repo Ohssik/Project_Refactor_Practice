@@ -29,7 +29,7 @@ namespace prjMSIT145_Final.Models
             SmtpClient MySmtp = new SmtpClient("smtp.gmail.com", 587);
 
             //您在gmail的帳號密碼
-            MySmtp.Credentials = new System.Net.NetworkCredential("ms60416@gmail.com", "jaonxjtzwntbsotn");
+            MySmtp.Credentials = new System.Net.NetworkCredential("b9809004@gapps.ntust.edu.tw", "Gknt824nut");
 
             //開啟ssl
             MySmtp.EnableSsl = true;
