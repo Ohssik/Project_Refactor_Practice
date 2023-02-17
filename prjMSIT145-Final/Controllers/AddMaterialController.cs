@@ -79,7 +79,7 @@ namespace prjMSIT145_Final.Controllers
 		[HttpPost]
 		public ActionResult BCreate(CProductOptionViewModel vm)
 		{
-			if (_context.ProductOptions.Any(op => op.OptionName == vm.OptionName))
+			if (_context.ProductOptions.Any(op => op.OptionName == vm.OptionName && op.BFid == vm.BFid))
 				return RedirectToAction("BList");
 			else
 			{
@@ -96,7 +96,7 @@ namespace prjMSIT145_Final.Controllers
 		{
 			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
-				if (_context.ProductOptions.Any(op => op.OptionName == vm.OptionName))
+				if (_context.ProductOptions.Any(op => op.OptionName == vm.OptionName && op.BFid == vm.BFid))
 					return RedirectToAction("BList");
 				else
 				{

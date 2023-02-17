@@ -117,7 +117,7 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid,Fid,message) 
     remotemessageShow(message);
 });
 /*回傳自己說的*/
-connection.on("LocalMessage", function () { localmessageShow(message); });
+connection.on("LocalMessage", function (message) { localmessageShow(message); });
 //對方說的話
 function remotemessageShow(message) {
     var li = document.createElement("li");
