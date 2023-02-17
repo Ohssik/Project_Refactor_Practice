@@ -38,6 +38,9 @@
             </div>
         </div>
       </form>
+    @*測試按鈕*@
+    <button id="DemobtnBlogin" class="position-fixed btn " style="bottom:0px;right:1500px;" type="button">demo平台用戶1</button>
+    <button id="DemobtnBlogin2" class="position-fixed btn" style="bottom:0px;right:1350px;" type="button">demo平台用戶2</button>
     </main>
 
 @section Scripts{
@@ -50,6 +53,25 @@
         const emailinput = document.getElementById("floatingInput");
         const passwordmessage = document.getElementById("passwordmessage");
         const emailmessage = document.getElementById("emailmessage");
+        const DemobtnBlogin = document.getElementById("DemobtnBlogin");
+        const DemobtnBlogin2 = document.getElementById("DemobtnBlogin2");
+
+
+
+        //DEMO按鈕事件
+
+        DemobtnBlogin.addEventListener("click",function(){
+            emailinput.value = "b9809004@gapps.ntust.edu.tw";
+            PassWordInput.value = "Aa12345678";
+        });
+        DemobtnBlogin2.addEventListener("click",function(){
+            emailinput.value = "azsxdc91008816@gmail.com";
+            PassWordInput.value = "Qqq910088";
+        });
+
+
+
+
         //驗證字串
         const emailRule = /^\w+((-\w+)|(\.\w+))*\@@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
         var Registerok ="";

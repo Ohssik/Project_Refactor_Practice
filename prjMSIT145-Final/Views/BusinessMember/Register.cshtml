@@ -109,6 +109,7 @@
                             </form>
 
                             <a asp-action="BLogin">登入</a>
+                            <button id="DemobtnReister" class="position-fixed btn" style="bottom:0px;right:1500px;" type="button">demo平台用戶1</button>
                         </div>
                     </div>
                 </div>
@@ -217,8 +218,17 @@
             return;
             }
             Sibmitbutton.setAttribute('type', "submit")
+    });
+    DemobtnReister.addEventListener("click",function(){
+        Passwordinput.value = "Aa12345678";
+        MemberNameinput.value = "柴米油鹽大安店";
+        ShopTypeinput.value = "複合式餐廳";
+        Brandinput.value = "柴米油鹽";
+        Phoneinput.value = "0266316588";
+        Addressinput.value = "台北市大安區信義路四段2號";
+        ContactPersoninput.value = "吳冠甫";
     })
-
+    
 
 
 

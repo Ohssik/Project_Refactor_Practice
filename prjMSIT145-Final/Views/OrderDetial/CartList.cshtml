@@ -854,6 +854,7 @@
         const OrderISerialId = $("#OrderISerialId").val();
         const changePickUpPersonPhone3 = $("#changePickUpPersonPhone3").val();
         console.log(price)
+        console.log(changePickUpPersonPhone3)
         const app = Vue.createApp({
             data() {
                 return {
@@ -864,7 +865,7 @@
                         , Amt: `${price}`
                         , ExpireDate: '@ViewData["ExpireDate"]'
                         , PayOption: 'ECPay'
-                        , Email: `${changePickUpPersonPhone3}`
+                        , Email: 'shibaDaily145@gmail.com'
                     }
                 }
             }
