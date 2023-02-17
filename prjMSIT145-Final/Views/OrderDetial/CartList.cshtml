@@ -893,7 +893,7 @@
                         dataType: 'json',
                         data: { inModel: postData, __RequestVerificationToken: $('@Html.AntiForgeryToken()').val() },
                         success: function (returnObj) {
-                            alert(returnObj)
+                            //alert(returnObj)
                             $("#divContent").html(returnObj);
                             $("#payForm").submit();
                         },
