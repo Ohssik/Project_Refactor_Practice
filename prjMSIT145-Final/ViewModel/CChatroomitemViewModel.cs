@@ -9,5 +9,8 @@
         public int? UserType { get; set; }
         public string? MemberImg { get; set; }
         public DateTime? LastOnlineTime { get; set; }
+        //public string? LastMessage { get; set; }
+        //public DateTime? LastMessageTime { get; set; }
+
     }
 }

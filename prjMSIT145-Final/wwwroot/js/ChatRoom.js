@@ -50,18 +50,23 @@ connection.on("ReNewChatRoom", function (data) {
                                                 <p class="fw-bold mb-0 small">${item.MemberName}</p>
                                                
                                                 <p class="small m-0 text-truncate">
-                                                    Hello, Are you there? Hello, Are you there? Hello,
-                                                    Are you there? Hello, Are you there? Hello, Are you
-                                                    there?
+                                                 
                                                 </p>
                                             </div>
                                         </div>
                                         <div class="pt-1">
                                             <span class="badge bg-danger float-end">1</span>
-                                            <p class="small text-muted mb-1">現在</p>
+                                            <p class="small text-muted mb-1">    </p>
                                         </div>
                                     </a>
                                 `
+        li.addEventListener("click", function () {
+            ChatNowUserName.innerHTML = item.MemberName;
+            ChatNowUserid.value = item.Memberfid;
+            ChatNowUserChatid.value = item.chatroomUserid;
+            document.getElementById("ChatNowUserimg").value = item.MemberImg;
+            ChangeChatroom(item.chatroomUserid);
+        });
         document.getElementById("ChatroomItem").appendChild(li);
     })
 
@@ -70,7 +75,7 @@ connection.on("ReNewChatRoom", function (data) {
 })
 //聊天室改變時
 function ChangeChatroom(otheruserid) {
-    
+    document.getElementById("ChatMessageul").innerHTML = "";
     connection.invoke("ChangeChatroom", otheruserid).catch(function (err) {
         return console.error(err.toString());
     });
@@ -78,7 +83,7 @@ function ChangeChatroom(otheruserid) {
 //聊天室載入聊天紀錄
 connection.on("ReNewChatRoomMain", function (data) {
     var messageData = JSON.parse(data);
-   
+    document.getElementById("ChatMessageul").innerHTML = "";
     messageData.forEach(function (item) {
         if (item.Senderid == ChatNowUserChatid.value) {
             remotemessageShow(item.Message);
@@ -87,9 +92,8 @@ connection.on("ReNewChatRoomMain", function (data) {
         {
             localmessageShow(item.Message)
         }
-        
-      
     })
+    document.getElementById("ChatMessageul").lastElementChild.scrollIntoView({ behavior: "smooth" })
 })
 //按下訊息送出後
 document.getElementById("chatMessagebtn").addEventListener("click", function (event) {

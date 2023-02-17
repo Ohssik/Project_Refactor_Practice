@@ -36,7 +36,7 @@ namespace prjMSIT145_Final.Models
                 fid = c1.Fid,
                 chatroomid = c1.Chatid,
                 user = c1.Userid,
-                Otheruser = c2.Userid
+                Otheruser = c2.Userid,
             }
             ).Where(c => c.user == MyData.ChatroomUserid && c.Otheruser != MyData.ChatroomUserid);
 
@@ -50,7 +50,21 @@ namespace prjMSIT145_Final.Models
                 ChatroomId = other.chatroomid,
                 MemberId = u.Memberfid,
                 LastOnlineTime = u.LastOnlineTime
-            }); ;
+            });
+            //合併訊息
+
+
+
+            var LastMassage = _context.ChatMessages.Join(ChatRoomuser, m => m.Chatid, c => c.ChatroomId, (m, c) => new
+            {
+                ChatroomUserid = c.ChatroomUserid,
+                UserType = c.UserType,
+                ChatroomId = c.ChatroomId,
+                MemberId = c.MemberId,
+                LastOnlineTime = c.LastOnlineTime,
+                LastMassage = m.Message,
+                LastMassagetime = m .SendTime
+            });
             //商家與照片合併
             var Businessimg = _context.BusinessMembers.Join(_context.BusinessImgs, b => b.Fid, i => i.BFid, (b, i) => new
             {
@@ -68,7 +82,8 @@ namespace prjMSIT145_Final.Models
                    MemberName = b.BusinessName,
                    Membertype = c.UserType,
                    MemberImg = b.LogoImg,
-                   LastOnlineTime = c.LastOnlineTime
+                   LastOnlineTime = c.LastOnlineTime,
+                  
                }); 
             //合併User與一般會員
             var NChatRoomUser = ChatRoomuser.Where(u => u.UserType == 0)
@@ -81,6 +96,7 @@ namespace prjMSIT145_Final.Models
                    Membertype = c.UserType,
                    MemberImg = n.MemberPhotoFile,
                    LastOnlineTime = c.LastOnlineTime,
+                  
                });
 
                //統一user格式
@@ -96,6 +112,7 @@ namespace prjMSIT145_Final.Models
                 vm.UserType = User.Membertype;
                 vm.MemberImg = "../images/"+User.MemberImg;
                 vm.LastOnlineTime = User.LastOnlineTime;
+                
                 ChatRoomList.Add(vm);
               }
           
@@ -110,6 +127,7 @@ namespace prjMSIT145_Final.Models
                 vm.UserType = User.Membertype;
                 vm.MemberImg ="../images/Customer/Member/"+ User.MemberImg;
                 vm.LastOnlineTime = User.LastOnlineTime;
+               
                 ChatRoomList.Add(vm);
             }
             string Json = JsonSerializer.Serialize(ChatRoomList);
