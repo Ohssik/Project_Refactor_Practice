@@ -324,6 +324,7 @@
 
     </style>
 }
+<p>@ViewBag.data</p>
 @*刪除*@
 <div class="modal fade" id="btnDeleteModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -354,12 +355,10 @@
     <div class="modal fade" id="OptionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-
                 <div class="modal-header">
                     <h2 class="ModalTitle" id="ProductTitle">標題</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-
                 <div class="modal-body" id="OptionDisplayArea"></div>
 
                 <div class="modal-footer">
@@ -382,7 +381,6 @@
                         }
                     </button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -481,6 +479,7 @@
                     <div>
                         <!-- 失去焦點,觸發blur,優惠折扣顯示在下方計算區 -->
                         <input type="text" id="offerTxt" />
+                        <input type="button" value="確認" id="offerTxt2"/>
                     </div>
                 </div>
                 <!-- 訂單資訊 -->
@@ -491,10 +490,10 @@
                         <div class="orderAbsolteForRight">$&nbsp;@Model.TotalAmount</div>
                     </div>
                     <!-- 優惠券輸入完成並確認有此券後折扣顯示於此 -->
-                    <!-- <div class="flexAndItemsCenter orderDivBottomBorder">
+                     <div class="flexAndItemsCenter orderDivBottomBorder">
                          <div >優惠券</div>
                          <div id="offerPrice" class="orderAbsolteForRight">-$&nbsp;金額</div>
-                    </div> -->
+                    </div>
                     <div class="flexAndItemsCenter orderDivBottomBorder">
                         <div>
                             <input type="checkbox" id="plastic" name="plastic">
@@ -510,7 +509,7 @@
                     </div>
                     <div class="flexAndItemsCenter orderDivBottomBorder orderFinalPrice">
                         <div id="pay"><h4>應付金額</h4></div>
-                        <div class="orderAbsolteForRight"><h4 id="TotalAmount">$&nbsp;@Model.TotalAmount</h4></div>
+                        <div class="orderAbsolteForRight"><h4 id="TotalAmountText">$&nbsp;@Model.TotalAmount</h4></div>
                     </div>
                 </div>
                 <!-- 上下頁按鈕 -->
@@ -659,6 +658,7 @@
     <script src="@Url.Content("~/js/jquery-3.6.2.js")"></script>
 
     <script>
+
         let DateValue = ``;
         let PickupPersonValue = ``;
         let PickUpPersonPhoneValue = ``;
@@ -668,9 +668,28 @@
         const btnDeleteCheck = document.querySelector("#btnDeleteCheck");
         const ItemFid = document.querySelector("#ItemFid");
         const optionDetial = document.querySelector("#optionDetial");
+        const offerTxt = document.querySelector("#offerTxt");
+
+        
+
+        
+        @*優惠卷折扣*@
+        $("#offerTxt2").click(function(){
+            if (offerTxt.value == "e1242180-0") {
+                $("#offerPrice").text("-$ 5")
+                $("#AddTotal").val(@Model.TotalAmount-5);
+                    $("#TotalAmountText").text("$ " + (@Model.TotalAmount-5));
+                $("#TotalAmount2").text("$ " + (@Model.TotalAmount-5));
+            }else{
+                $("#offerPrice").text("-$ 金額")
+                $("#AddTotal").val(@Model.TotalAmount);
+                $("#TotalAmountText").text("$ " + (@Model.TotalAmount));
+                $("#TotalAmount2").text("$ " + (@Model.TotalAmount));
+            }
+        })
 
         @*取得購物車內容*@
-        
+            
         @*編輯購物車內容*@
             btnEdit.forEach(function(click){
                 click.addEventListener("click",function(){
@@ -720,13 +739,13 @@
                     console.log(checked)
                     $("#plasticPrice").text("$ 2");
                     $("#AddTotal").val(@Model.TotalAmount+2);
-                    $("#TotalAmount").text("$ " + (@Model.TotalAmount+2));
+                    $("#TotalAmountText").text("$ " + (@Model.TotalAmount+2));
                     $("#TotalAmount2").text("$ " + (@Model.TotalAmount+2));
                 }
                 else {
                     $("#plasticPrice").text("您未加購塑膠袋");
                     $("#AddTotal").val(@Model.TotalAmount);
-                    $("#TotalAmount").text("$ " + (@Model.TotalAmount));
+                    $("#TotalAmountText").text("$ " + (@Model.TotalAmount));
                     $("#TotalAmount2").text("$ " + (@Model.TotalAmount));
                 }
             })

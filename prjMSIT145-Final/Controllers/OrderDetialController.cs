@@ -488,7 +488,7 @@ namespace prjMSIT145_Final.Controllers
 
 			ViewData["MerchantOrderNo"] = DateTime.Now.ToString("yyyyMMddHHmmss");  //訂單編號
 			ViewData["ExpireDate"] = DateTime.Now.AddDays(3).ToString("yyyyMMdd"); //繳費有效期限       
-
+            ViewBag.data = "行不行書瑋";
             return View(vm);
         }
     }
