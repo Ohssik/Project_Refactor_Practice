@@ -7,6 +7,7 @@ using System.Net;
 using prjMSIT145_Final.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
+using System.Collections.Generic;
 
 namespace prjMSIT145_Final.Controllers
 {
@@ -368,6 +369,7 @@ namespace prjMSIT145_Final.Controllers
         {
 
             Order prod = _context.Orders.FirstOrDefault(t => t.Fid == vm.Fid);
+            Coupon coup = _context.Coupons.FirstOrDefault(t => t.Fid == vm.NFid);
 
             if (prod != null)
             {
@@ -381,6 +383,10 @@ namespace prjMSIT145_Final.Controllers
                 prod.TotalAmount = Convert.ToInt32(vm.TotalAmount);
                 prod.PickUpPerson = vm.PickUpPerson;
                 prod.PickUpPersonPhone = vm.PickUpPersonPhone;
+            }
+            if(coup != null)
+            {
+              coup.IsUsed = vm.IsUsed;
             }
             _context.SaveChanges();
             return RedirectToAction("List");
@@ -436,6 +442,17 @@ namespace prjMSIT145_Final.Controllers
                                OptionName = p.OptionName,
                                ItemPrice = p.UnitPrice
                            };
+            var coupons = from c in _context.Coupons
+                          join cn in _context.Coupon2NormalMembers 
+                          on c.Fid equals cn.CouponId
+                          select new
+                          {
+                              c.Price,
+                              c.CouponCode,
+                              c.Title,
+                              c.Memo,
+                              c.IsUsed,
+                          };
             #endregion
             COrderDetialViewModel vm = new COrderDetialViewModel();
             vm.TotalQty = 0;
@@ -456,6 +473,16 @@ namespace prjMSIT145_Final.Controllers
                     vm.Memo = c.Memo;
                     vm.MemberPhotoFile = c.MemberPhotoFile;
                     vm.OrderISerialId = c.OrderISerialId;
+
+                    foreach (var covm in coupons.ToList())
+                    {
+
+                        vm.Price = Convert.ToInt32(covm.Price);
+                        vm.CouponCode = covm.CouponCode;
+                        vm.Memo2 = covm.Memo;
+                        vm.Title = covm.Title;
+                        vm.IsUsed = covm.IsUsed;
+                    }
 
                     vm.items = new List<COrderItemViewModel>();
                     var orderitem = from i in Pr
@@ -482,13 +509,12 @@ namespace prjMSIT145_Final.Controllers
                             item2.OptionPrice += Option.ItemPrice;
                         }
                         vm.items.Add(item2);
-                    }
+                    } 
                 }
             }
 
 			ViewData["MerchantOrderNo"] = DateTime.Now.ToString("yyyyMMddHHmmss");  //訂單編號
 			ViewData["ExpireDate"] = DateTime.Now.AddDays(3).ToString("yyyyMMdd"); //繳費有效期限       
-            ViewBag.data = "行不行書瑋";
             return View(vm);
         }
     }

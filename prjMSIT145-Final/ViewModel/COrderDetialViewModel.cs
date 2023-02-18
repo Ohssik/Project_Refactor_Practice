@@ -6,14 +6,21 @@ namespace prjMSIT145_Final.ViewModels
     public class COrderDetialViewModel
     {
         private ViewShowFullOrder _order;
+        private Coupon _coupon;
         public COrderDetialViewModel()
         {
             _order = new ViewShowFullOrder();
+            _coupon = new Coupon();
         }
         public ViewShowFullOrder Order
         {
             get { return _order; }
             set { _order = value; }
+        }
+        public Coupon coupon
+        {
+            get { return _coupon; }
+            set { _coupon = value; }
         }
         public string? Address
         {
@@ -147,6 +154,31 @@ namespace prjMSIT145_Final.ViewModels
         public int? TotalQty { get; set; }
         public string? LogoImgFileName { get; set; }
         public string? MemberPhotoFile { get; set; }
+        public string? CouponCode
+        {
+            get { return _coupon.CouponCode; }
+            set { _coupon.CouponCode = value; }
+        }
+        public decimal? Price
+        {
+            get { return _coupon.Price; }
+            set { _coupon.Price = value; }
+        }
+        public int? IsUsed
+        {
+            get { return _coupon.IsUsed; }
+            set { _coupon.IsUsed = value; }
+        }
+        public string? Memo2
+        {
+            get { return _coupon.Memo; }
+            set { _coupon.Memo = value; }
+        }
+        public string? Title
+        {
+            get { return _coupon.Title; }
+            set { _coupon.Title = value; }
+        }
 
     }
 }
