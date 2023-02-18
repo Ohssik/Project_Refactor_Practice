@@ -11,7 +11,18 @@
             <div id="shopInfo">
                 <div>
                     <figure id="norMemPhoto">
-                        <img src="~/NormalMemberPhoto/@Model.normalImgFile" alt="">
+                       
+                        @{
+                            if (string.IsNullOrEmpty(Model.normalImgFile))
+                            {
+                                <img src="~/images/Customer/Member/NMember_Icon.png" alt="">
+                            }
+                            else
+                            {
+                                <img src="~/images/Customer/Member/@Model.normalImgFile" alt="">
+                            }
+                        }
+
                     </figure>
                 </div>
 
