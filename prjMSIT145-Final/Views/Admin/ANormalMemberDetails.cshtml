@@ -12,7 +12,14 @@
             <div class="card shadow mb-4" id="norMemPhotoDiv">
                 <div>
                     <figure id="norMemPhoto">
-                        <img src="~/images/Customer/Member/@Model.MemberPhotoFile" alt="">
+                        @{
+                            if(string.IsNullOrEmpty(Model.MemberPhotoFile)){
+                                <img src="~/images/Customer/Member/NMember_Icon.png" alt="">
+                            }else{
+                                <img src="~/images/Customer/Member/@Model.MemberPhotoFile" alt="">
+                            }
+                        }
+                        
                     </figure>
 
                 </div>

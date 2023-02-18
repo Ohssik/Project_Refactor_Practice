@@ -47,11 +47,29 @@ namespace prjMSIT145_Final.ViewModels
             get 
             {
                 string openT = "";
-                
-                if(_businessMember.OpenTime!=null)
-                    openT += ((TimeSpan)_businessMember.OpenTime).Hours+":"+((TimeSpan)_businessMember.OpenTime).Minutes+" - ";
+
+                if (_businessMember.OpenTime!=null)
+                {
+                    int minute = ((TimeSpan)_businessMember.OpenTime).Minutes;
+                    string m = "";
+                    if (minute>9)
+                        m = minute.ToString();
+                    else
+                        m = $"0{minute.ToString()}";
+                    openT += ((TimeSpan)_businessMember.OpenTime).Hours+":"+ m +" - ";
+                }
+                    
                 if (_businessMember.CloseTime!=null)
-                    openT += ((TimeSpan)_businessMember.CloseTime).Hours+":"+((TimeSpan)_businessMember.CloseTime).Minutes;
+                {
+                    int minute = ((TimeSpan)_businessMember.CloseTime).Minutes;
+                    string m = "";
+                    if (minute>9)
+                        m = minute.ToString();
+                    else
+                        m = $"0{minute.ToString()}";
+                    openT += ((TimeSpan)_businessMember.CloseTime).Hours+":"+m;
+
+                }
 
                 return openT;
             }

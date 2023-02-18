@@ -191,7 +191,7 @@
             <div class="modal-footer">
                 
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnNo">取消</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnDemo">Demo</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnYes">確定</button>
             </div>
         </div>
     </div>
@@ -199,7 +199,7 @@
 @section Scripts{
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>        
-            $('.nav-item').eq(3).addClass('active').siblings().removeClass('active');
+        $('.nav-item').eq(3).addClass('active').siblings().removeClass('active');
         let addModal = new bootstrap.Modal(document.getElementById('addModal'), {
             keyboard: false
         });
@@ -209,6 +209,12 @@
         let confirmDele = new bootstrap.Modal(document.getElementById('confirmDele'), {
             keyboard: false
         });
+
+        //用fid desc排序
+        let oTable = $('#dataTable').dataTable();		 
+		// Sort immediately with columns 0 and 1
+        oTable.fnSort([[0, 'desc']/*, [1,'asc']*/]);
+
 
         $('#btnDemo').click(function () {           
             $('#Price').val('20');
@@ -230,7 +236,8 @@
         const url = '@Url.Content("~/Coupon/ACouponEdit/")';
         $('#buttonSend').click(function () {
             //隱藏欄位中有Fid 的資料我們就是要做修改
-            const id = $('#Fid').val()
+            const id = $('#Fid').val();
+            
             if (id) {
                 //資料修改
                 
