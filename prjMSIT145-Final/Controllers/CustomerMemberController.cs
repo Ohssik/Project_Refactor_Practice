@@ -617,7 +617,10 @@ namespace prjMSIT145_Final.Controllers
                 x.IsSuspensed = 0;
                 x.EmailCertified = 1;
                 _context.SaveChanges();
-                return Redirect("~/Home/CIndex");
+                //return Redirect("~/Home/CIndex");
+
+                //新註冊會員的優惠券
+                AddNewMemberCoupon(member.Fid);
             }
             
             return Redirect("~/Home/CIndex");
@@ -1025,6 +1028,25 @@ namespace prjMSIT145_Final.Controllers
 
 
             return Json(result);
+        }
+        private void AddNewMemberCoupon(int id)
+        {
+            Coupon newCoup = new Coupon();
+            newCoup.CouponCode = Guid.NewGuid().ToString().Substring(0, 10);
+            newCoup.IsUsed = 1;
+            newCoup.Title = "新會員首次消費優惠";
+            newCoup.Memo = "註冊新會員即免費贈送一張10元優惠券，立刻下單享受吧！";
+            newCoup.Price = 10;
+            _context.Coupons.Add(newCoup);
+            _context.SaveChanges();
+
+            int cfid = _context.Coupons.FirstOrDefault(c => c.CouponCode==newCoup.CouponCode).Fid;
+            Coupon2NormalMember newC2n = new Coupon2NormalMember();
+            newC2n.MemberId = id;
+            newC2n.CouponId = cfid;
+            _context.Coupon2NormalMembers.Add(newC2n);
+            _context.SaveChanges();
+
         }
     }
 }

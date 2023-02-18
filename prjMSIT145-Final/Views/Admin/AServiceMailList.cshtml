@@ -25,7 +25,7 @@
                     data: { data: fid },
                     dataType: 'json',
                     success: function (msg) {
-                        console.log(msg);
+                        //console.log(msg);
                         if (`${msg}`.indexOf('error:') == -1) {
                             $('#Context').val(`${msg.context}`);
                             $('#Reply').val(`${msg.reply}`);
@@ -48,7 +48,13 @@
 
             $('#btnCloseMsg').click(function () {
                 $('#msgAlert>label').text('');
-                location.reload(true);
+                $('#dataTable tr>td:nth-child(1)').each(function(i,value){
+                    //console.log(value);
+                    if ($(value).text().trim() == msgFid) {
+                        $(value).parents('tr').find('td:nth-child(7)').text('V');
+                    }
+                });
+                //location.reload(true);
             });
             $('#dataTable>tbody').on('click', 'button:nth-child(1)', function () {
                 // 編輯
@@ -89,8 +95,11 @@
                 });
             });
 
+            let msgFid;
             $('#buttonSend').click(function () {                
-                const id = $('#Fid').val()
+                let id = $('#Fid').val();
+                if (id == '')
+                    id = getUrlParameter('fid');
                 if (id) {
                     //資料修改
                     $.ajax({
@@ -115,6 +124,7 @@
 
                         }
                     }).done(function (data) {
+                        msgFid = id;
                         clearData();
                     })
 
@@ -211,7 +221,7 @@
                                 <td>                                    
                                     @{
                                         if(!string.IsNullOrEmpty(item.Reply)){
-                                                                                    @:V
+                                                                                                                        @:V
                                         }
                                     }
                                 </td>
@@ -236,7 +246,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">回覆訊息<span></span></h5>
+                <h5 class="modal-title" id="exampleModalLabel">訊息處理回報<span></span></h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -269,7 +279,7 @@
                         <textarea type="text" class="form-control" name="Context" id="Context" placeholder=""></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="Reply">回覆</label>
+                        <label for="Reply">回報處理進度</label>
                         <textarea type="text" class="form-control" name="Reply" id="Reply" placeholder=""></textarea>
                     </div>
                                         
