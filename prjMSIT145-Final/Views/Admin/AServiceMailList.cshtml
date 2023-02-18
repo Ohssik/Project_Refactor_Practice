@@ -48,13 +48,13 @@
 
             $('#btnCloseMsg').click(function () {
                 $('#msgAlert>label').text('');
-                $('#dataTable tr>td:nth-child(1)').each(function(i,value){
-                    //console.log(value);
-                    if ($(value).text().trim() == msgFid) {
-                        $(value).parents('tr').find('td:nth-child(7)').text('V');
-                    }
-                });
-                //location.reload(true);
+                //$('#dataTable tr>td:nth-child(1)').each(function(i,value){
+                //    //console.log(value);
+                //    if ($(value).text().trim() == msgFid) {
+                //        $(value).parents('tr').find('td:nth-child(7)').text('V');
+                //    }
+                //});
+                location.assign('@Url.Content("~/admin/AServiceMailList")');
             });
             $('#dataTable>tbody').on('click', 'button:nth-child(1)', function () {
                 // 編輯
@@ -133,6 +133,12 @@
             $('#btnDemo').click(function(){
                 $('#Reply').val('已連絡對方協助解決問題。');
             });
+
+            //用收信時間desc排序
+            let oTable = $('#dataTable').dataTable();		 
+		    // Sort immediately with columns 0 and 1
+            oTable.fnSort([[5, 'desc']/*, [1,'asc']*/]);
+         
             function clearData() {
                 $('input').val("");
                 $('textarea').val("");
