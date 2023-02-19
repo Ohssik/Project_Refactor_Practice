@@ -179,6 +179,10 @@ namespace prjMSIT145_Final.ViewModels
             get { return _coupon.Title; }
             set { _coupon.Title = value; }
         }
-
+        public int CouponFid
+        {
+            get { return _coupon.Fid; }
+            set { _coupon.Fid = value; }
+        }
     }
 }

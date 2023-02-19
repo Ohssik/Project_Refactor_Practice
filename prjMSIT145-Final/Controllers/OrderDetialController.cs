@@ -369,7 +369,6 @@ namespace prjMSIT145_Final.Controllers
         {
 
             Order prod = _context.Orders.FirstOrDefault(t => t.Fid == vm.Fid);
-            Coupon coup = _context.Coupons.FirstOrDefault(t => t.Fid == vm.NFid);
 
             if (prod != null)
             {
@@ -383,12 +382,15 @@ namespace prjMSIT145_Final.Controllers
                 prod.TotalAmount = Convert.ToInt32(vm.TotalAmount);
                 prod.PickUpPerson = vm.PickUpPerson;
                 prod.PickUpPersonPhone = vm.PickUpPersonPhone;
+
+                Coupon coup = _context.Coupons.FirstOrDefault(t => t.Fid == 7);
+                if (coup != null)
+                {
+
+                  coup.IsUsed = vm.IsUsed;
+                }
             }
-            if(coup != null)
-            {
-              coup.IsUsed = vm.IsUsed;
-            }
-            _context.SaveChanges();
+            //_context.SaveChanges();
             return RedirectToAction("List");
 
         }
@@ -452,6 +454,7 @@ namespace prjMSIT145_Final.Controllers
                               c.Title,
                               c.Memo,
                               c.IsUsed,
+                              c.Fid,
                           };
             #endregion
             COrderDetialViewModel vm = new COrderDetialViewModel();
@@ -482,6 +485,7 @@ namespace prjMSIT145_Final.Controllers
                         vm.Memo2 = covm.Memo;
                         vm.Title = covm.Title;
                         vm.IsUsed = covm.IsUsed;
+                        vm.CouponFid = covm.Fid;
                     }
 
                     vm.items = new List<COrderItemViewModel>();
