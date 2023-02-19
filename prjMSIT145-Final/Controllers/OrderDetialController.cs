@@ -390,7 +390,7 @@ namespace prjMSIT145_Final.Controllers
                   coup.IsUsed = vm.IsUsed;
                 }
             }
-            //_context.SaveChanges();
+            _context.SaveChanges();
             return RedirectToAction("List");
 
         }
