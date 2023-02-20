@@ -264,10 +264,11 @@ namespace prjMSIT145_Final.Controllers
                 }
                 catch (Exception ex)
                 {
+                    NormalMember newmember = new NormalMember();
                     //string msg = ex.Message;
                     //throw;
-                    return Redirect("~/Home/CIndex");
-
+                    //return Redirect("~/Home/CIndex");
+                    return View("linegooleregister", newmember);
                 }
             }
             return Redirect("~/Home/CIndex");
@@ -887,7 +888,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 NormalMember member =_context.NormalMembers.FirstOrDefault(c=>c.Email== vm.Email && c.Phone==vm.Phone);
                 if (member != null) {
-                    return Json("已送出重置密碼信件,請於10鐘內重製密碼");
+                    return Json("已送出重置密碼信件,請於10鐘內重置密碼");
                     }
                 else
                 {
