@@ -606,6 +606,7 @@ namespace prjMSIT145_Final.Controllers
 
                 AdminMember updateItem = _context.AdminMembers.FirstOrDefault(a => a.Fid == cas.Fid);
                 updateItem.Password = cas.txtPassword;
+                updateItem.Email = cas.Email;
 
                 _context.SaveChanges();
                 result = "1";

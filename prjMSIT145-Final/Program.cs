@@ -14,7 +14,7 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddDbContext<ispanMsit145shibaContext>(
  options => options.UseSqlServer(
- builder.Configuration.GetConnectionString("ispanMsit145shibaconnection" /**//*"localconnection"*/)
+ builder.Configuration.GetConnectionString("ispanMsit145shibaconnection" /*"localconnection"*/)
 ));
 
 

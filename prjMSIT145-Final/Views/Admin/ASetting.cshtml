@@ -23,7 +23,10 @@
             <div class="form-group">
                 <h3 asp-for="Account" class="control-label">@Model.Account</h3>                
             </div>
-           
+            <div class="form-group">
+                <label asp-for="txtPassword" class="control-label">Email</label>
+                <input asp-for="Email" class="form-control" id="Email" value="@Model.Email"/>
+            </div>
             <div class="form-group">
                 <label asp-for="txtPassword" class="control-label">輸入新密碼</label>
                 <input asp-for="txtPassword" class="form-control" id="txtPassword" />
@@ -70,12 +73,13 @@
                 event.preventDefault();
                 txtPwd = $('#txtPassword').val();
                 txtConPwd = $('#txtConfirmPwd').val();
+                email = $('#Email').val();
                 pwdInvalid.text('');
                 if ((txtPwd != '' || txtConPwd != '') && txtPwd != txtConPwd) {
                     pwdInvalid.text('兩次輸入的密碼不符');
                     return false;
                 }
-                if (txtPwd.trim() == '' || txtConPwd.trim() == '') {
+                if (txtPwd.trim() == '' || txtConPwd.trim() == '' || email.trim() == '') {
                     return false;
                 }
 
@@ -85,7 +89,8 @@
                     data:{
                         data:JSON.stringify({
                             Fid:@Model.Fid,
-                            Account:'@Model.Account',
+                            Account: '@Model.Account',
+                            Email: email,
                             txtPassword: txtPwd,
                             txtConfirmPwd: txtConPwd,
                             RoleLevel:@Model.RoleLevel,
