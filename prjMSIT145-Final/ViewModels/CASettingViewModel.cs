@@ -24,6 +24,11 @@ namespace prjMSIT145_Final.ViewModels
             get { return _admin.Account; }
             set { _admin.Account = value; }
         }
+        public string? Email
+        {
+            get { return _admin.Email; }
+            set { _admin.Email = value; }
+        }
         public int? RoleLevel
         {
             get { return _admin.RoleLevel; }

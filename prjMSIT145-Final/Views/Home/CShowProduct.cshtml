@@ -291,7 +291,14 @@
                             @:document.getElementById("Qty").value = "1";
                             @:check = 0;
                             @:document.getElementById("submit").setAttribute("type", "button");
-                            @:document.getElementById("submit").innerHTML = "必選項未選";
+                            @if (!Context.Session.Keys.Contains(CDictionary.SK_LOGINED_USER))
+                            {
+                                @:document.getElementById("submit").innerHTML = "請登入會員";
+                            }
+                            else
+                            {
+                                @:document.getElementById("submit").innerHTML = "必選項未選";
+                            }
                             @:});
                         }
                     }

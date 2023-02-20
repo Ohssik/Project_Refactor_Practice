@@ -19,7 +19,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div style="font-size:24px;font-weight:bold" class=" modal-body">
-                    讓帳號一致性,前往整合?
+                    讓line綁定帳號，前往整合?
                 </div>
                 <div class="modal-footer">
                     <button id="btncancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
@@ -42,7 +42,26 @@
                     <input type="hidden" name="Fid" value="@Model.Fid" />
             <div class="dashed">
             </div>
-   
+                <div class="divheadpic">
+                    <div class="aui-info ">
+                        @{
+                            if (Model.MemberPhotoFile != null)
+                            {
+                                <img src="@Model.MemberPhotoFile" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />
+                            }
+                            else
+                            {
+                                <img src="@Url.Content("~/images/Customer/Member/photo.png")" id="img-txz" style="width:150px;height:150px;border-radius:80px" class="aui-img-round user-img " />
+                            }
+
+                        }
+
+
+                        <input type="file" accept="image/*" id="file-txz" name="photo" onchange="upload('#file-txz','#img-txz');" class="fileInput " value="" />
+                        <span class="sapnphoto">點擊頭像預覽及修改</span>
+                        <input type="hidden" value="@Model.MemberPhotoFile" name="MemberPhotoFile" />
+                    </div>
+                </div>
         <span class="text3">
             <p class="color">*</p>
             <p class="text4">真實姓名<span class="necessspan">(必填)</span></p>
@@ -121,6 +140,19 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
+
+         var upload = function (c, d) {                        //圖片點擊 預覽
+            "use strict";
+            var $c = document.querySelector(c),
+                $d = document.querySelector(d),
+                file = $c.files[0],
+                reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+
+                $d.setAttribute("src", e.target.result);
+            };
+        };
 
         var submitbtn = document.getElementById("submitid");   //按鈕
 
@@ -321,7 +353,7 @@
                 document.getElementById("phonecorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>此欄位必填";
             }
             else {
-                document.getElementById("phonecorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>電話重複<input id='submitbtn' type='button' class='integrateclass' value='整合帳號' data-bs-toggle='modal' data-bs-target='#exampleModal' />";
+                document.getElementById("phonecorrect").innerHTML = "<img src='@Url.Content("~/images/Customer/Member/error.png")'/>電話重複<input id='submitbtn' type='button' class='integrateclass' value='整合帳號' data-bs-toggle='modal' data-bs-target='#exampleModal'></>";
                 
                 return;
 
