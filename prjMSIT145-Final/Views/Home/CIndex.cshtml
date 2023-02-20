@@ -54,7 +54,7 @@
         foreach (var item in Model[0].AdImgList)
         {
             Count++;
-            png = @$"https://localhost:7266/adminImg/adDisplay/{item.ImgName}";
+            png = @$"{Url.Content("~/adminImg/adDisplay/")}{item.ImgName}";
             if (Count == 1)
             {
                                 <div class="LeftAD" style="background-image:url('@png')"></div>
