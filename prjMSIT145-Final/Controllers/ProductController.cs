@@ -40,7 +40,6 @@ namespace prjMSIT145_Final.Controllers
                     json = HttpContext.Session.GetString(CDictionary.SK_LOGINED_Business);
                     BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
 
-                    //_context.ProductCategories.Where(p => p.BFid == login.Business_fId).Join(_context.Products, proC => proC.Fid, pro => pro.CategoryFid, (proC, pro) => new
                     var datas = (from pro in _context.Products
                                  join proC in _context.ProductCategories
                                  on pro.CategoryFid equals proC.Fid
@@ -91,16 +90,8 @@ namespace prjMSIT145_Final.Controllers
                 BusinessMember member = JsonSerializer.Deserialize<BusinessMember>(json);
                 CProductsViewModel vm = new CProductsViewModel();
                 vm.BFid = member.Fid;
-                //var datas = _context.Products.Where(i => i.BFid == member.Fid);  //判斷店家中的商品是否有此商品
-                //List<CProductsViewModel> list = new List<CProductsViewModel>();
-                //foreach (var d in datas)
-                //{
-                //    vm.ProductName = d.ProductName;
-                //    list.Add(vm);
-                //}
 
                 return View(vm);
-                //return View(list);
             }
             else
                 return RedirectToAction("Blogin", "BusinessMember");
