@@ -82,7 +82,7 @@
             @*async*@ function SendOrderdatas(OFid) {
                 @*const response = await fetch(`@Url.Content("~/Order/CCartSend?OrderFid=${OFid}")`);
                 const datas = await response.json();*@
-                location.href = `/OrderDetial/CartList?Fid=${OFid}`;
+                    location.href = `/OrderDetial/CartList?Fid=${OFid}`;
             }
     </script>
 }

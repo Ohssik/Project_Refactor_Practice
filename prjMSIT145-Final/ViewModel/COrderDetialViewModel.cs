@@ -184,5 +184,6 @@ namespace prjMSIT145_Final.ViewModels
             get { return _coupon.Fid; }
             set { _coupon.Fid = value; }
         }
+        public int? NmemberID { get; set; }
     }
 }
