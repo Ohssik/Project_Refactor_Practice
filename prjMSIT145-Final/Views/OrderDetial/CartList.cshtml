@@ -657,6 +657,7 @@
                             <input name="TotalAmount" value="@Model.TotalAmount" id="AddTotal" hidden />
                             <input name="Memo" value="" id="Memo2" type="text" hidden>
                             <input name="IsUsed" value="@Model.IsUsed"  id="IsUsed" hidden />
+                            <input name="CouponFid" value="@Model.CouponFid" hidden />
                             <div>
                                 <button class="btnToFinish btnFinishSize" type="button" id="btnSubmit">購物車內無商品</button>
                                 <button class="btnToFinish btnFinishSize" type="button" id="btnECPay" v-on:click="SendToNewebPay('CREDIT')" style="display:none">購物車內無商品</button>
@@ -691,10 +692,10 @@
         })
         @*優惠卷折扣*@
         $("#offerTxt").click(function(){
-                $("#offerPrice").text("-$ 5")
-                $("#AddTotal").val(@Model.TotalAmount-5);
-                $("#TotalAmountText").text("$ " + (@Model.TotalAmount-5));
-                $("#TotalAmount2").text("$ " + (@Model.TotalAmount-5));
+                $("#offerPrice").text("-$ 10")
+                $("#AddTotal").val(@Model.TotalAmount-10);
+                $("#TotalAmountText").text("$ " + (@Model.TotalAmount-10));
+                $("#TotalAmount2").text("$ " + (@Model.TotalAmount-10));
                 $("#IsUsed").val("0");
  
         })
@@ -746,15 +747,15 @@
                 if (checked) {
                     console.log(checked)
                     $("#plasticPrice").text("$ 2");
-                    $("#AddTotal").val(@Model.TotalAmount-3);
-                    $("#TotalAmountText").text("$ " + (@Model.TotalAmount-3));
-                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount-3));
+                    $("#AddTotal").val(@Model.TotalAmount-8);
+                    $("#TotalAmountText").text("$ " + (@Model.TotalAmount-8));
+                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount-8));
                 }
                 else {
                     $("#plasticPrice").text("您未加購塑膠袋");
-                    $("#AddTotal").val(@Model.TotalAmount-5);
-                    $("#TotalAmountText").text("$ " + (@Model.TotalAmount-5));
-                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount-5));
+                    $("#AddTotal").val(@Model.TotalAmount-10);
+                    $("#TotalAmountText").text("$ " + (@Model.TotalAmount-10));
+                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount-10));
                 }
             })
 
