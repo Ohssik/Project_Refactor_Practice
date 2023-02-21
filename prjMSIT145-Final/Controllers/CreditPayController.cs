@@ -17,7 +17,7 @@ namespace prjMSIT145_Final.Controllers
 		private readonly ILogger<HomeController> _logger;
 		private readonly IConfiguration Config;
         private readonly IWebHostEnvironment _host;
-		string url;
+		
 
         public CreditPayController(ILogger<HomeController> logger, IWebHostEnvironment host)
 		{
@@ -26,7 +26,8 @@ namespace prjMSIT145_Final.Controllers
 			_host = host;
             
         }
-		private string getUrl()
+        string url;
+        private string getUrl()
 		{
 			string urlStr;
             //urlStr = HttpContext.Request.Scheme;
