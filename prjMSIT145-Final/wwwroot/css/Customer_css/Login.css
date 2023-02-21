@@ -168,7 +168,7 @@
 .democorrect {
    position:absolute;
     bottom: 20px;
-    right: 80px;
+    right: 100px;
     color: white;
     background-color: blue;
     border-radius: 20px;
@@ -179,7 +179,7 @@
 .demoerror {
     position:absolute;
     bottom: 20px;
-    right: 50px;
+    right: 70px;
     color: white;
     background-color: red;
     border-radius: 20px;
@@ -189,7 +189,7 @@
 .overclass{
     position: absolute;
     bottom: 20px;
-    right: 20px;
+    right: 40px;
     color: white;
     background-color:yellow;
     border-radius: 20px;
@@ -216,4 +216,14 @@
 }
 .imgline{
     width:41px;
+}
+.tingclass {
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    color: white;
+    background-color: greenyellow;
+    border-radius: 20px;
+    width: 20px;
+    height: 10px;
 }

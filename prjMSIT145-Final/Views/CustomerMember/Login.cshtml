@@ -110,6 +110,7 @@
                     <input type="button" class="democorrect" id="democorrectid" value="" />
                     <input type="button" class="demoerror" id="demoerrorid" value="" />
                     <input type="button" class="overclass" id="overid" value="" />
+                    <input type="button" class="tingclass" id="tingid" value="" />
                 </div>
             <div class="dashed"></div>
             <div>
@@ -305,6 +306,17 @@
 
 
         });
+
+        document.getElementById("tingid").addEventListener('click', () => {
+
+            document.getElementById("phoneid").value = "0911223344";
+            document.getElementById("Password").value = "Aa4444";
+
+
+
+
+        });
+
         $('#spanresponse').text('');
         let isSus = getUrlParameter('isSus');
         if(isSus){
