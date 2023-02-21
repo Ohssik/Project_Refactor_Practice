@@ -372,6 +372,9 @@ namespace prjMSIT145_Final.Controllers
 
             if (prod != null)
             {
+                #region 儲存目前網址
+                //HttpContext.Session.SetString("txtWebLink", vm.txtWeblink);
+                #endregion
 
                 prod.PickUpType = vm.PickUpType;
                 prod.PickUpDate = vm.PickUpDate;

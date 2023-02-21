@@ -658,6 +658,7 @@
                             <input name="Memo" value="" id="Memo2" type="text" hidden>
                             <input name="IsUsed" value="@Model.IsUsed"  id="IsUsed" hidden />
                             <input name="CouponFid" value="@Model.CouponFid" hidden />
+                            @*<input name="txtWeblink" value="" hidden />*@
                             <div>
                                 <button class="btnToFinish btnFinishSize" type="button" id="btnSubmit">購物車內無商品</button>
                                 <button class="btnToFinish btnFinishSize" type="button" id="btnECPay" v-on:click="SendToNewebPay('CREDIT')" style="display:none">購物車內無商品</button>

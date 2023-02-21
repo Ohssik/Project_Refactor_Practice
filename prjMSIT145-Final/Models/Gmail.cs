@@ -4,7 +4,7 @@ namespace prjMSIT145_Final.Models
 {
     public class Gmail
     {
-        public void sendGmail(string sendto)
+        public void sendGmail(string sendto,string emailUrl)
         {
             MailMessage mail = new MailMessage();
             //前面是發信email後面是顯示的名稱
@@ -20,7 +20,8 @@ namespace prjMSIT145_Final.Models
             mail.Subject = "企業驗證信";
 
             //內容
-            mail.Body = $"親愛的使用者你好 以下是你的註冊網址 https://localhost:7266/BusinessMember/Register/?email={sendto}   日柴Daily";
+            //mail.Body = $"親愛的使用者你好 以下是你的註冊網址 https://localhost:7266/BusinessMember/Register/?email={sendto}   日柴Daily";
+            mail.Body = $"親愛的使用者你好 以下是你的註冊網址 {emailUrl}/BusinessMember/Register/?email={sendto}   日柴Daily";
 
             //內容使用html
             mail.IsBodyHtml = true;

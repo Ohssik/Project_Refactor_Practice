@@ -7,6 +7,7 @@ namespace prjMSIT145_Final.ViewModels
     {
         private ViewShowFullOrder _order;
         private Coupon _coupon;
+        //public string? txtWeblink { get; set; }
         public COrderDetialViewModel()
         {
             _order = new ViewShowFullOrder();

@@ -16,19 +16,35 @@ namespace prjMSIT145_Final.Controllers
 	{
 		private readonly ILogger<HomeController> _logger;
 		private readonly IConfiguration Config;
+        private readonly IWebHostEnvironment _host;
+		string url;
 
-		public CreditPayController(ILogger<HomeController> logger)
+        public CreditPayController(ILogger<HomeController> logger, IWebHostEnvironment host)
 		{
 			_logger = logger;
 			Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
-		}
+			_host = host;
+            
+        }
+		private string getUrl()
+		{
+			string urlStr;
+            //urlStr = HttpContext.Request.Scheme;
+            urlStr = "https";
+            urlStr += "://";
+            urlStr += HttpContext.Request.Host;
+            urlStr += HttpContext.Request.PathBase;
+			return urlStr; 
+        }
+
 		//取得選擇的類別
 		private ICommerce GetPayType(string option)
 		{
-			switch (option)
+            url= getUrl();
+            switch (option)
 			{
 				case "ECPay":
-					return new ECPayService();
+					return new ECPayService(url);
 
 				default: throw new ArgumentException("No Such option");
 			}
@@ -63,7 +79,8 @@ namespace prjMSIT145_Final.Controllers
         [HttpPost]
         public async Task<IActionResult> GetReturn(SendToNewebPayIn inModel)
         {
-            var obj = await new ECPayService().GetQueryCallBack(inModel.MerchantOrderNo, inModel.Amt);
+            url = getUrl();
+            var obj = await new ECPayService(url).GetQueryCallBack(inModel.MerchantOrderNo, inModel.Amt);
             return Json(obj);
         }
 
@@ -79,8 +96,8 @@ namespace prjMSIT145_Final.Controllers
 			//ViewData["TradeInfo"] = result.TradeInfo;
 
 			//return RedirectToAction("")  返回歷史訂單明細OrderDetial/List
-			return RedirectToAction("List", "OrderDetial");
-		}
+			return RedirectToAction("List", "OrderDetial");            
+        }
 
 		/// <summary>
 		/// 支付通知網址
