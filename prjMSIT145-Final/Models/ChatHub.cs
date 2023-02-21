@@ -112,7 +112,9 @@ namespace prjMSIT145_Final.Models
                 vm.UserType = User.Membertype;
                 vm.MemberImg = "../images/"+User.MemberImg;
                 vm.LastOnlineTime = User.LastOnlineTime;
-                
+                var lastmessageitem = _context.ChatMessages.Where(m => m.Chatid == User.chatroomid).ToList();
+                vm.LastMessage = lastmessageitem[lastmessageitem.Count()-1].Message;
+                vm.LastMessageTime = lastmessageitem[lastmessageitem.Count() - 1].SendTime;
                 ChatRoomList.Add(vm);
               }
           
@@ -127,7 +129,10 @@ namespace prjMSIT145_Final.Models
                 vm.UserType = User.Membertype;
                 vm.MemberImg ="../images/Customer/Member/"+ User.MemberImg;
                 vm.LastOnlineTime = User.LastOnlineTime;
-               
+                var lastmessageitem = _context.ChatMessages.Where(m => m.Chatid == User.chatroomid).ToList();
+                vm.LastMessage = lastmessageitem[lastmessageitem.Count() - 1].Message;
+                vm.LastMessageTime = lastmessageitem[lastmessageitem.Count() - 1].SendTime;
+
                 ChatRoomList.Add(vm);
             }
             string Json = JsonSerializer.Serialize(ChatRoomList);
@@ -206,10 +211,15 @@ namespace prjMSIT145_Final.Models
                await Clients.Client(Context.ConnectionId).SendAsync("LocalMessage", message); 
             //找出要發給的那個人的資料
             var user = users.FirstOrDefault(u => u.ChatroomUserid == _otheruserid);
-            if(user != null)
+                //找LOGO
+                var LOGO = _context.BusinessImgs.FirstOrDefault(l => l.BFid == member.Fid);
+                if (LOGO == null)
+                    return;
+                string img = "../images/"+LOGO.LogoImgFileName;
+            if (user != null)
             {
                 //對對方發出訊息
-               await Clients.Client(user.ConnectionId).SendAsync("RemoteMessage", member.MemberName,member.ChatroomUserid ,member.Fid, message);
+               await Clients.Client(user.ConnectionId).SendAsync("RemoteMessage", member.MemberName,member.ChatroomUserid ,member.Fid, message, img);
             }
              //把訊息存入聊天室
                 ChatMessage chatMessage = new ChatMessage();
@@ -259,10 +269,11 @@ namespace prjMSIT145_Final.Models
                 await Clients.Client(Context.ConnectionId).SendAsync("LocalMessage", message);
                 //找出要發給的那個人的資料
                 var user = users.FirstOrDefault(u => u.ChatroomUserid == _otheruserid);
+                string img = "../images/Customer/Member/"+ member.MemberPhotoFile;
                 if (user != null)
                 {
                     //對對方發出訊息
-                    await Clients.Client(user.ConnectionId).SendAsync("RemoteMessage", member.MemberName, member.ChatroomUserid, member.Fid, message);
+                    await Clients.Client(user.ConnectionId).SendAsync("RemoteMessage", member.MemberName, member.ChatroomUserid, member.Fid, message, img);
                 }
                 //把訊息存入聊天室
                 ChatMessage chatMessage = new ChatMessage();

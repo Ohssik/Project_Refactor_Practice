@@ -28,7 +28,7 @@
                         <th class=" col-1 align-middle">#@count</th>
                         <td class="col-4 align-middle">@Html.DisplayFor(modelItem => item.OrderISerialId)</td>
                         <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.NmbName)</td>
-                        <td class="col-2 align-middle">@Html.DisplayFor(modelItem => item.TotalAmount)</td>
+                    <td class="col-2 align-middle">@Convert.ToInt32(item.TotalAmount)元</td>
                         <td class="col-3 align-middle">
                          
                         </td>
@@ -112,7 +112,7 @@
                                                                 </div>
                                                                 <div class="col-8"></div>
                                                                 <div class="col-2">
-                                                                <p class="p-0 m-0">取餐時間:${item.pickUpTime}</p>
+                                                                <p class="p-0 m-0">取餐時間:${item.pickUpTime.substr(0,8)}</p>
                                                                 <p class="p-0 m-0">餐點數量:${item.totalQty}</p>
                                                                 </div>
                                                             </div>

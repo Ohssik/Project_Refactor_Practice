@@ -41,7 +41,7 @@ connection.on("ReNewChatRoom", function (data) {
         
         li.innerHTML =`
                                     <a href="#!" class="d-flex justify-content-between">
-                                        <div class="d-flex flex-row">
+                                        <div class="d-flex flex-row" id="chatroomitem${item.chatroomUserid}">
                                             <img src="${item.MemberImg}"
                                                  alt="avatar"
                                                  class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
@@ -50,13 +50,13 @@ connection.on("ReNewChatRoom", function (data) {
                                                 <p class="fw-bold mb-0 small">${item.MemberName}</p>
                                                
                                                 <p class="small m-0 text-truncate">
-                                                 
+                                                 ${item.LastMessage}
                                                 </p>
                                             </div>
                                         </div>
                                         <div class="pt-1">
-                                            <span class="badge bg-danger float-end">1</span>
-                                            <p class="small text-muted mb-1">    </p>
+                                            <span class="badge bg-danger float-end"id="${"span" + item.chatroomUserid}"></span>
+                                            <p class="small text-muted mb-1"></p>
                                         </div>
                                     </a>
                                 `
@@ -76,6 +76,7 @@ connection.on("ReNewChatRoom", function (data) {
 //聊天室改變時
 function ChangeChatroom(otheruserid) {
     document.getElementById("ChatMessageul").innerHTML = "";
+    document.getElementById(`span${otheruserid}`).innerHTML = "";
     connection.invoke("ChangeChatroom", otheruserid).catch(function (err) {
         return console.error(err.toString());
     });
@@ -90,6 +91,7 @@ connection.on("ReNewChatRoomMain", function (data) {
         }
         else
         {
+            
             localmessageShow(item.Message)
         }
     })
@@ -109,12 +111,62 @@ document.getElementById("chatMessagebtn").addEventListener("click", function (ev
 
 });
 /*回傳對方說的*/
-connection.on("RemoteMessage", function (otherName, ChatroomUserid,Fid,message) {
+connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message, img) {
     // ChatNowUserName.innerHTML = otherName;
     //ChatNowUserid.value = `${Fid}`;
     //ChatNowUserChatid.value = `${ChatroomUserid}`;
     //console.log(ListChatMessageil);
-    remotemessageShow(message);
+    if (document.getElementById(`chatroomitem${ChatroomUserid}`) == "") {
+        const li = document.createElement("li");
+        li.innerHTML = `
+                                    <a href="#!" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row" id="chatroomitem${ChatroomUserid}">
+                                            <img src="${img}"
+                                                 alt="avatar"
+                                                 class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                                                 width="30" />
+                                            <div class="pt-1" style="max-width: 150px">
+                                                <p class="fw-bold mb-0 small">${otherName}</p>
+                                               ${message}
+                                                <p class="small m-0 text-truncate">
+                                                 
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-1">
+                                            <span class="badge bg-danger float-end"id="${"span" + item.chatroomUserid}"></span>
+                                            <p class="small text-muted mb-1"></p>
+                                        </div>
+                                    </a>
+                                `;
+        ChatroomItemul.insertBefore(li, ChatroomItemul.firstChild);
+    }
+    else {
+        //複製元素
+        const cosli = document.getElementById(`chatroomitem${ChatroomUserid}`).parentElement.parentElement.cloneNode(true);
+
+        //插到第一行
+        ChatroomItemul.insertBefore(cosli, ChatroomItemul.firstChild);
+       
+        //刪除元素
+        ChatroomItemul.removeChild(document.getElementById(`chatroomitem${ChatroomUserid}`).parentElement.parentElement);
+    if (ChatNowUserChatid.value == ChatroomUserid)
+    {
+        remotemessageShow(message);
+    }
+    else
+    {
+        if (document.getElementById(`span${ChatroomUserid}`).innerHTML == "") {
+            document.getElementById(`span${ChatroomUserid}`).innerHTML = 1;
+        }
+        else {
+        document.getElementById(`span${ChatroomUserid}`).innerHTML++;
+        }
+       
+    }
+    }
+   
+   
 });
 /*回傳自己說的*/
 connection.on("LocalMessage", function (message) { localmessageShow(message); });
