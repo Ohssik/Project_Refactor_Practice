@@ -155,6 +155,9 @@
             let msgAlert = new bootstrap.Modal(document.getElementById('msgAlert'), {
                 keyboard: false
             });
+            $('#btnDemo').click(function(){
+                $('[name="txtMessage"]').val('清明節快樂');
+            });
             $('#btnSendCoup').click(function(){
                 $('.showCoup>.mb-3').html('');
                 let txtGiverNfid=$('.checkMark').data('nfid');
@@ -322,35 +325,35 @@
         foreach(var item in Model){
             price = ((decimal)item.Price).ToString("###,###");
             showShortMemo = item.Memo;
-                                            @if (showShortMemo.Length > 50)
+                                                    @if (showShortMemo.Length > 50)
             {
                 showShortMemo = showShortMemo.Substring(0, 50)+"   ......more";
             }
 
-                                            <div class="exch row coupon" name="coupon" data-cid="@item.Fid" data-used="@item.IsUsed">
-                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                <div class="exch col-md-4 ">
-                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                    <div class="form-group">
+                                                    <div class="exch row coupon" name="coupon" data-cid="@item.Fid" data-used="@item.IsUsed">
                                                                                                                                                                                                                                                                                                                                                                                                                                         
-                                                        <h3 name="lblTitle">@item.Title</h3>
-                                                        <p class="control-label">@showShortMemo</p>
-                                                        <input type="hidden" name="txtMemo" value="@item.Memo"/>
-                                                    </div>
-                                                    <div class="form-group">
-                                                    <img class="checkMark" data-cid="@item.Fid" data-nfid="@item.NmemberID" src="@Url.Content("~/images/Coupon/radio-button.png")">
-                                                    <h2 name="lblPrice" class="control-label">@price 元</h2>
-                                                    @if(item.IsUsed==1)
+                                                        <div class="exch col-md-4 ">
+                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                                            <div class="form-group">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                <h3 name="lblTitle">@item.Title</h3>
+                                                                <p class="control-label">@showShortMemo</p>
+                                                                <input type="hidden" name="txtMemo" value="@item.Memo"/>
+                                                            </div>
+                                                            <div class="form-group">
+                                                            <img class="checkMark" data-cid="@item.Fid" data-nfid="@item.NmemberID" src="@Url.Content("~/images/Coupon/radio-button.png")">
+                                                            <h2 name="lblPrice" class="control-label">@price 元</h2>
+                                                            @if(item.IsUsed==1)
                     {
-                                                        <button class="btn btn-success isUsed">可使用</button>
+                                                                <button class="btn btn-success isUsed">可使用</button>
                     }
                     else{
-                                                        <button class="btn btn-secondary isUsed">已使用</button>
+                                                                <button class="btn btn-secondary isUsed">已使用</button>
                     }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
         }
     }    
 </div>
@@ -405,6 +408,7 @@
                 </div>
              </div>
             <div class="modal-footer">                             
+                <button type="button" class="btn btn-primary" id="btnDemo">demo</button>
                 <button type="button" class="btn btn-primary" id="btnSend">送出</button>
             </div>
         </div>

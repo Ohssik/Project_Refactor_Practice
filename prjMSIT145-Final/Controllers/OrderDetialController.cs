@@ -369,10 +369,12 @@ namespace prjMSIT145_Final.Controllers
         {
 
             Order prod = _context.Orders.FirstOrDefault(t => t.Fid == vm.Fid);
-            Coupon coup = _context.Coupons.FirstOrDefault(t => t.Fid == vm.NFid);
 
             if (prod != null)
             {
+                #region 儲存目前網址
+                //HttpContext.Session.SetString("txtWebLink", vm.txtWeblink);
+                #endregion
 
                 prod.PickUpType = vm.PickUpType;
                 prod.PickUpDate = vm.PickUpDate;
@@ -383,18 +385,28 @@ namespace prjMSIT145_Final.Controllers
                 prod.TotalAmount = Convert.ToInt32(vm.TotalAmount);
                 prod.PickUpPerson = vm.PickUpPerson;
                 prod.PickUpPersonPhone = vm.PickUpPersonPhone;
-            }
-            if(coup != null)
-            {
-              coup.IsUsed = vm.IsUsed;
+
+                Coupon coup = _context.Coupons.FirstOrDefault(t => t.Fid == vm.CouponFid);
+                if (coup != null)
+                {
+
+                  coup.IsUsed = vm.IsUsed;
+                }
             }
             _context.SaveChanges();
             return RedirectToAction("List");
 
         }
 
-        public IActionResult CartList(int Fid)
+        public IActionResult CartList(int Fid ,int? NFid)
         {
+            if (HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER) == null)
+            {
+                return Redirect("/CustomerMember/Login");
+            }
+            NormalMember Memberdatas = JsonSerializer.Deserialize<NormalMember>(HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER));
+            NFid = Memberdatas.Fid;
+
             #region   
             var q = from o in _context.Orders
                     join b in _context.BusinessMembers
@@ -445,6 +457,7 @@ namespace prjMSIT145_Final.Controllers
             var coupons = from c in _context.Coupons
                           join cn in _context.Coupon2NormalMembers 
                           on c.Fid equals cn.CouponId
+                          where cn.MemberId == NFid
                           select new
                           {
                               c.Price,
@@ -452,6 +465,8 @@ namespace prjMSIT145_Final.Controllers
                               c.Title,
                               c.Memo,
                               c.IsUsed,
+                              c.Fid,
+                              cn.MemberId
                           };
             #endregion
             COrderDetialViewModel vm = new COrderDetialViewModel();
@@ -482,6 +497,8 @@ namespace prjMSIT145_Final.Controllers
                         vm.Memo2 = covm.Memo;
                         vm.Title = covm.Title;
                         vm.IsUsed = covm.IsUsed;
+                        vm.CouponFid = covm.Fid;
+                        vm.NmemberID = covm.MemberId;
                     }
 
                     vm.items = new List<COrderItemViewModel>();

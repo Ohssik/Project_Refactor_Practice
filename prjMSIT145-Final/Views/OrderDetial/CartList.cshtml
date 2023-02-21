@@ -494,8 +494,6 @@
                               </div>
                                   <input type="button" value="折價 @Model.Price 元" class="btncoupon" id="offerTxt"/>
                         </div>
-                        @*<input type="text" id="offerTxt" />
-                        <input type="button" value="確認" id="offerTxt2"/>*@
                     </div>
                 </div>
                 <!-- 訂單資訊 -->
@@ -658,7 +656,9 @@
                             <input name="pickUpDate" id="changeDate3" value="@DateTime.Now.AddMinutes(15).ToString("s")" hidden />
                             <input name="TotalAmount" value="@Model.TotalAmount" id="AddTotal" hidden />
                             <input name="Memo" value="" id="Memo2" type="text" hidden>
-                            <input name="IsUsed" value=""  id="IsUsed" hidden />
+                            <input name="IsUsed" value="@Model.IsUsed"  id="IsUsed" hidden />
+                            <input name="CouponFid" value="@Model.CouponFid" hidden />
+                            @*<input name="txtWeblink" value="" hidden />*@
                             <div>
                                 <button class="btnToFinish btnFinishSize" type="button" id="btnSubmit">購物車內無商品</button>
                                 <button class="btnToFinish btnFinishSize" type="button" id="btnECPay" v-on:click="SendToNewebPay('CREDIT')" style="display:none">購物車內無商品</button>
@@ -693,10 +693,10 @@
         })
         @*優惠卷折扣*@
         $("#offerTxt").click(function(){
-                $("#offerPrice").text("-$ 5")
-                $("#AddTotal").val(@Model.TotalAmount-5);
-                $("#TotalAmountText").text("$ " + (@Model.TotalAmount-5));
-                $("#TotalAmount2").text("$ " + (@Model.TotalAmount-5));
+                $("#offerPrice").text("-$ 10")
+                $("#AddTotal").val(@Model.TotalAmount-10);
+                $("#TotalAmountText").text("$ " + (@Model.TotalAmount-10));
+                $("#TotalAmount2").text("$ " + (@Model.TotalAmount-10));
                 $("#IsUsed").val("0");
  
         })
@@ -748,15 +748,15 @@
                 if (checked) {
                     console.log(checked)
                     $("#plasticPrice").text("$ 2");
-                    $("#AddTotal").val(@Model.TotalAmount-3);
-                    $("#TotalAmountText").text("$ " + (@Model.TotalAmount-3));
-                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount-3));
+                    $("#AddTotal").val(@Model.TotalAmount-8);
+                    $("#TotalAmountText").text("$ " + (@Model.TotalAmount-8));
+                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount-8));
                 }
                 else {
                     $("#plasticPrice").text("您未加購塑膠袋");
-                    $("#AddTotal").val(@Model.TotalAmount);
-                    $("#TotalAmountText").text("$ " + (@Model.TotalAmount));
-                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount));
+                    $("#AddTotal").val(@Model.TotalAmount-10);
+                    $("#TotalAmountText").text("$ " + (@Model.TotalAmount-10));
+                    $("#TotalAmount2").text("$ " + (@Model.TotalAmount-10));
                 }
             })
 

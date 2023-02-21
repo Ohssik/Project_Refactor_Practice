@@ -169,7 +169,47 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message
    
 });
 /*回傳自己說的*/
-connection.on("LocalMessage", function (message) { localmessageShow(message); });
+connection.on("LocalMessage", function (message) {
+
+    if (document.getElementById(`chatroomitem${ChatroomUserid}`) == "") {
+        const li = document.createElement("li");
+        li.innerHTML = `
+                                    <a href="#!" class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row" id="chatroomitem${ChatroomUserid}">
+                                            <img src="${img}"
+                                                 alt="avatar"
+                                                 class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
+                                                 width="30" />
+                                            <div class="pt-1" style="max-width: 150px">
+                                                <p class="fw-bold mb-0 small">${otherName}</p>
+                                               ${message}
+                                                <p class="small m-0 text-truncate">
+                                                 
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="pt-1">
+                                            <span class="badge bg-danger float-end"id=""></span>
+                                            <p class="small text-muted mb-1"></p>
+                                        </div>
+                                    </a>
+                                `;
+        ChatroomItemul.insertBefore(li, ChatroomItemul.firstChild);
+    }
+    else
+    {
+        //複製元素
+        const cosli = document.getElementById(`chatroomitem${ChatroomUserid}`).parentElement.parentElement.cloneNode(true);
+
+        //插到第一行
+        ChatroomItemul.insertBefore(cosli, ChatroomItemul.firstChild);
+
+        //刪除元素
+        ChatroomItemul.removeChild(document.getElementById(`chatroomitem${ChatroomUserid}`).parentElement.parentElement);
+    }
+
+    localmessageShow(message);
+});
 //對方說的話
 function remotemessageShow(message) {
     var li = document.createElement("li");

@@ -606,6 +606,7 @@ namespace prjMSIT145_Final.Controllers
 
                 AdminMember updateItem = _context.AdminMembers.FirstOrDefault(a => a.Fid == cas.Fid);
                 updateItem.Password = cas.txtPassword;
+                updateItem.Email = cas.Email;
 
                 _context.SaveChanges();
                 result = "1";
@@ -671,9 +672,14 @@ namespace prjMSIT145_Final.Controllers
 
         private string setForgetPwdMail(CForgetPwdViewModel fm)//DB建立忘記密碼請求並發信
         {
+            string emailUrl = HttpContext.Request.Scheme;
+            emailUrl += "://";
+            emailUrl += HttpContext.Request.Host;
+            emailUrl += HttpContext.Request.PathBase;
             string result;
             string token = Guid.NewGuid().ToString();
-            string url = $"https://localhost:7266/Admin/ResetPwd?token={token}&acc={fm.txtAccount}&tp={fm.memberType}";
+            //string url = $"https://localhost:7266/Admin/ResetPwd?token={token}&acc={fm.txtAccount}&tp={fm.memberType}";
+            string url = $"{emailUrl}/Admin/ResetPwd?token={token}&acc={fm.txtAccount}&tp={fm.memberType}";
 
             #region ADO.NET測試
             //var connStr = _config["ConnectionStrings:localconnection"];

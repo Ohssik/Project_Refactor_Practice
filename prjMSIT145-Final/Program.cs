@@ -14,7 +14,7 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddDbContext<ispanMsit145shibaContext>(
  options => options.UseSqlServer(
- builder.Configuration.GetConnectionString("ispanMsit145shibaconnection" /**//*"localconnection"*/)
+ builder.Configuration.GetConnectionString("ispanMsit145shibaconnection" /*"localconnection"*/)
 ));
 
 
@@ -26,6 +26,11 @@ builder.Services.AddSession(op =>
     op.Cookie.IsEssential = true;
 });
 
+//var builder = WebApplication.CreateBuilder(args);
+
+//builder.Services.AddControllersWithViews();
+//builder.Services.AddHttpContextAccessor();
+//builder.Services.AddTransient<IUserRepository, UserRepository>();
 
 //builder.Services.AddDbContext<ispanMsit145shibaContext>(
 // options => options.UseSqlServer(
