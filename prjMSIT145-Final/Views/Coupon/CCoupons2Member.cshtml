@@ -301,6 +301,17 @@
                 $('[name=txtCfid]').val('');
                 $('#txtGiverNfid').val('');
             });
+            $('select.form-control').change(function(){
+                let shellHeight = $('#shell').height();
+                let windowHeight = $(window).height() - 90;
+
+                if (windowHeight < shellHeight) {
+                    $('.Copyright').removeClass('fixed_footer');
+                }
+                else {
+                    $('.Copyright').addClass('fixed_footer');
+                }
+            });
         });
     </script>
 }
