@@ -224,6 +224,7 @@ namespace prjMSIT145_Final.Controllers
                     nvc.Add("redirect_uri", "https://localhost:7266/CustomerMember/CALLBACKLOGIN");
                     nvc.Add("client_id", "1657900734");
                     nvc.Add("client_secret", "8a686ccc1f01658c94ff67511e5d46b3");
+
                     string JsonStr = Encoding.UTF8.GetString(wc.UploadValues(ApiUrl_Token, "POST", nvc));
                     LineLoginToken ToKenObj = JsonConvert.DeserializeObject<LineLoginToken>(JsonStr);
                     wc.Headers.Clear();
@@ -249,8 +250,6 @@ namespace prjMSIT145_Final.Controllers
 
                             Login(loginmember);
                         }
-                           
-
                     }
                     else
                     {      
@@ -265,8 +264,11 @@ namespace prjMSIT145_Final.Controllers
                 }
                 catch (Exception ex)
                 {
-                    string msg = ex.Message;
-                    throw;
+                    NormalMember newmember = new NormalMember();
+                    //string msg = ex.Message;
+                    //throw;
+                    //return Redirect("~/Home/CIndex");
+                    return View("linegooleregister", newmember);
                 }
             }
             return Redirect("~/Home/CIndex");
@@ -308,7 +310,7 @@ namespace prjMSIT145_Final.Controllers
         }
 
         [HttpPost]
-        public ActionResult linegooleregister(CNormalMemberViewModel member)
+        public async Task<IActionResult>  linegooleregister(CNormalMemberViewModel member,IFormFile photo)                                                      //第三方註冊
         {
             if(member.Phone == null || member.Email==null || member.MemberName==null ||member.Password==null )
             {
@@ -316,6 +318,41 @@ namespace prjMSIT145_Final.Controllers
             }
             else
             {
+                string fileName = Guid.NewGuid().ToString() + ".jpg";
+                if (member.MemberPhotoFile != null)
+                {
+                    string imgaeURL = member.MemberPhotoFile;
+
+                    string filePath2 = Path.Combine(_eviroment.WebRootPath, "images/Customer/Member", fileName);
+                    using (HttpClient client = new HttpClient())
+                    {
+                        using (var response = await client.GetAsync(imgaeURL))
+                        {
+                            using (var stream = await response.Content.ReadAsStreamAsync())
+                            {
+                                using (var fileStream = System.IO.File.Create(filePath2))
+                                {
+                                    await stream.CopyToAsync(fileStream);
+                                }
+                            }
+                        }
+                    }
+                    member.MemberPhotoFile = fileName;
+                }
+                if (photo != null)
+                {
+                    //string fileName = Guid.NewGuid().ToString() + ".jpg";
+                    string filePath = Path.Combine(_eviroment.WebRootPath, "images/Customer/Member", fileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        photo.CopyTo(fileStream);
+                    }
+                    member.MemberPhotoFile = fileName;
+                }
+
+
+
+
                 Random rnd = new Random();
                 member.EmailCertified = rnd.Next(10000000, 90000000);
                 _context.NormalMembers.Add(member.member);
@@ -351,8 +388,8 @@ namespace prjMSIT145_Final.Controllers
 
 
                 }
-
-                return Redirect("~/Home/CIndex");
+                return await Task.Run(() => Redirect("~/Home/CIndex"));
+                //return Redirect("~/Home/CIndex");
             }
            
         }
@@ -528,7 +565,7 @@ namespace prjMSIT145_Final.Controllers
             //主旨
             string subject = "註冊驗證信";
             //內容
-            string body =$"<h2>新會員你好請點此開通連結</h2><h3><br><a href={url}>請點此開通連結</a>並回表單輸入此驗證碼<span style='color:red;'>{vm.EmailCertified}</span></h3>";
+            string body =$"<h2>新進會員你好</h2><h3><br><a href={url}>請點此開通連結</a>並回表單輸入此正確驗證碼<span style='color:red;'>{vm.EmailCertified}</span>以開通會員權限</h3>";
             using (MailMessage mail = new MailMessage())
             {
                 mail.From = new MailAddress(emailFrom,"日柴", System.Text.Encoding.UTF8);
@@ -851,7 +888,7 @@ namespace prjMSIT145_Final.Controllers
             {
                 NormalMember member =_context.NormalMembers.FirstOrDefault(c=>c.Email== vm.Email && c.Phone==vm.Phone);
                 if (member != null) {
-                    return Json("已送出重置密碼信件,請於10鐘內重製密碼");
+                    return Json("已送出重置密碼信件,請於10鐘內重置密碼");
                     }
                 else
                 {
@@ -862,7 +899,7 @@ namespace prjMSIT145_Final.Controllers
 
                  return Json("請兩格都不要空白");
         }
-        public IActionResult combineapi(CNormalMemberViewModel vm)
+        public IActionResult combineapi(CNormalMemberViewModel vm)                                                          //整合api
         {
             if (vm.Password != null && vm.Phone != null)
             {

@@ -177,7 +177,7 @@
                     <div class="dashed"></div>
                    
         <div class="display">
-            <input id="submitid" type="submit" class="enter" value="確認"/>
+            <input id="submitid" type="submit" class="enter" value="註冊"/>
                        
         </div>
                     </div>
@@ -403,7 +403,7 @@
             
            const data= await request.json();
            if(data=="已發送驗證信"){
-               alert("已發送驗證信");
+               alert("已發送驗證信，請收到信件後，照以下步驟");
                 document.getElementById("phonecorrect").innerHTML ="";
                document.getElementById('Register').submit();
             }
@@ -440,7 +440,7 @@
         document.getElementById("democorrectid").addEventListener('click',()=>{
            
             document.getElementById("MemberName").value="林峻宏";
-            document.getElementById("Phone").value = "0936212333";
+            document.getElementById("Phone").value = "0936212575";
             document.getElementById("Email").value="a29816668@gmail.com";
             document.getElementById("Password").value="aA1234";
             document.getElementById("Password2").value="aA1234";

@@ -29,6 +29,7 @@ namespace prjMSIT145_Final.Controllers
         {
             if (cLoginViewModel.fEmailRegister == null)
             {
+                
                 //帳戶帳號密碼確認
                 BusinessMember b = _context.BusinessMembers.FirstOrDefault(b => b.Email.Equals(cLoginViewModel.fEmail) && b.Password.Equals(cLoginViewModel.fPassword));
                 if (b != null)
@@ -53,7 +54,13 @@ namespace prjMSIT145_Final.Controllers
                 return View();
             }
             Gmail gmail = new Gmail();
-            gmail.sendGmail(cLoginViewModel.fEmailRegister);
+            string emailUrl = HttpContext.Request.Scheme;
+            emailUrl += "://";
+            emailUrl += HttpContext.Request.Host;
+            emailUrl += HttpContext.Request.PathBase;
+            //emailUrl += HttpContext.Request.Path;
+
+            gmail.sendGmail(cLoginViewModel.fEmailRegister, emailUrl);
             return View();
 
         }

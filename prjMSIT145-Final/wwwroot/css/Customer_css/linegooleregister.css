@@ -260,7 +260,23 @@
     padding: 5px;
     font-size: 14px;
     cursor: pointer;
+   
 }
 .h2span{
     color:red;
 }
+.hint:hover::before{
+    
+    position: absolute;
+    left:100px;
+    content: '整合好處:用line綁定原本平台帳號的優惠卷，點餐紀錄，個人基本資料。並且快速登入，不用在記額外的密碼。';
+    color:blue;
+    width:260px;
+    font-size:14px;
+    font-weight:bold;
+}
+.diva {
+    position: relative;
+    width:100px;
+}
+

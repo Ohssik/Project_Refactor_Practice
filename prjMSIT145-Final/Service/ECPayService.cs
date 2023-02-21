@@ -13,28 +13,39 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.SignalR;
+
+
 namespace prjMSIT145_Final.Service
 {
 	public class ECPayService : ICommerce
 	{
 		public IConfiguration Config { get; set; }
-
-		public ECPayService()
+		string _url;
+        public ECPayService(string url)
 		{
 			Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
+			_url = url;
 		}
 
 
-		//回傳回綠界
-		public string GetCallBack(SendToNewebPayIn inModel)
+        //回傳回綠界
+        public string GetCallBack(SendToNewebPayIn inModel)
 		{
 			//跟資料庫相同*
 			var orderId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);
 
 			//需填入 你的網址
-			var website = $"{Config.GetSection("HostURL").Value}/Home";
+			//var website = $"{Config.GetSection("HostURL").Value}/Home";
+			//StringBuilder sb = new StringBuilder();
+			//sb.Append(HttpContext.Re())
+			var website = $"{_url}/home";
 
-			var order = new Dictionary<string, object>
+
+
+
+            var order = new Dictionary<string, object>
 			{
                 //特店交易編號
                 { "MerchantTradeNo",  orderId},
@@ -67,10 +78,12 @@ namespace prjMSIT145_Final.Service
                 //{ "CustomField4",  ""},
 
                 //完成後發通知
-                { "ReturnURL",  $"{Config.GetSection("HostURL").Value}/CreditPay/CallbackNotify?option=ECPay"},
+                //{ "ReturnURL",  $"{Config.GetSection("HostURL").Value}/CreditPay/CallbackNotify?option=ECPay"},
+                { "ReturnURL",  $"{_url}/CreditPay/CallbackNotify?option=ECPay"},
 
                 //付款完成後導頁  $"{Config.GetSection("HostURL").Value}/OrderDetial/List"}  ?option=ECPay
-                { "OrderResultURL",$"{Config.GetSection("HostURL").Value}/CreditPay/CallbackReturn"},
+                //{ "OrderResultURL",$"{Config.GetSection("HostURL").Value}/CreditPay/CallbackReturn"},
+                { "OrderResultURL",$"{_url}/CreditPay/CallbackReturn"},
 
                 //特店編號， 2000132 測試綠界編號  3002599   3003008
                 { "MerchantID",  "3003008"},
