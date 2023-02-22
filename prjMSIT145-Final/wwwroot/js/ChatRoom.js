@@ -165,7 +165,8 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message
     }
     }
 
-    document.getElementById(`${"Lastmessage" + ChatNowUserChatid}`).innerHTML = message
+    document.getElementById(`${"Lastmessage" + ChatNowUserChatid.value}`).innerHTML = message
+   
    
 });
 /*回傳自己說的*/
@@ -206,7 +207,8 @@ connection.on("LocalMessage", function (message) {
     }
 
     localmessageShow(message);
-    document.getElementById(`${"Lastmessage" + ChatNowUserChatid}`).innerHTML = message
+    document.getElementById(`${"Lastmessage" + ChatNowUserChatid.value}`).innerHTML = message;
+    
 });
 //對方說的話
 function remotemessageShow(message) {

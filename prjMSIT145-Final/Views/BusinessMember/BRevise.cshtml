@@ -8,17 +8,13 @@
 <section class="shopinfocard" style="" >
     <div class="shopinfoarea p-0 m-0" style="height:365px;width:480px">
         <div class="shopinfo" style="height:280px;width:480px">
-            <img class="Shoplogo p-0 m-0" src="/images/@Model.LogoImgFileName" id="LogoImgFile">
+            <img class="Shoplogo p-0 m-0" src="/images/@Model.LogoImgFileName" alt=" @Url.Content("~/images/Customer/Mainpage/shibaLogo_row2.png")" id="LogoImgFile">
             <div>
                 <div class="shoptitle"id="showShopName" ></div>
                 <div class="infoblock">
                     <div class="InfoArea">店家資訊</div>
                     <div class="InfoArea">
-                        <img src="/images/Customer/ShowProduct/Ystar 16x16.png" class="p-0 m-0">
-                        <img src="/images/Customer/ShowProduct/Ystar 16x16.png" class="p-0 m-0">
-                        <img src="/images/Customer/ShowProduct/Ystar 16x16.png" class="p-0 m-0">
-                        <img src="/images/Customer/ShowProduct/Ystar 16x16.png" class="p-0 m-0">
-                        <img src="/images/Customer/ShowProduct/Ystar 16x16.png" class="p-0 m-0">
+                        
                         <p class="p-0 m-0"></p>
                     </div>
                     <div class="InfoArea"><img src="/images/Customer/ShowProduct/opentime 20x20.png"><p id="showopentime" class="p-0 m-0">@Model.OpenTime</p> <p class ="p-0 m-0">~</p> <p id="showclosetime" class="p-0 m-0">@Model.CloseTime</p> </div>
@@ -50,7 +46,7 @@
         </div>
     </div>
     <section class="ADarea">
-        <img class="Shopcardcover" src="/images/@Model.SighImgFileName" id="SighImgFile">
+        <img class="Shopcardcover" src="/images/@Model.SighImgFileName" alt=" @Url.Content("~/images/Customer/Mainpage/shibaLogo_row2.png")" id="SighImgFile">
     </section>
 </section>
 <div class="p-3 m-3"></div>
@@ -193,7 +189,7 @@
                             <span asp-validation-for="BFid" class="text-danger"></span>
                         </div>
                         @*按鈕*@
-                                    <input id="Sibmitbutton" type="button" value="儲存" class="btn btn-primary" />
+                                    <input id="Sibmitbutton" type="button" value="儲存" class="btn btn-primary mt-2" />
                                     <span id="Sibmitvalidation" class="text-danger"></span>
                                 </div>
                             </form>
