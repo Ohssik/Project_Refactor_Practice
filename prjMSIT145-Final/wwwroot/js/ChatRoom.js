@@ -49,7 +49,7 @@ connection.on("ReNewChatRoom", function (data) {
                                             <div class="pt-1" style="max-width: 150px">
                                                 <p class="fw-bold mb-0 small">${item.MemberName}</p>
                                                
-                                                <p class="small m-0 text-truncate">
+                                                <p class="small m-0 text-truncate" id="${"Lastmessage" + item.chatroomUserid}">
                                                  ${item.LastMessage}
                                                 </p>
                                             </div>
@@ -127,14 +127,14 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message
                                                  width="30" />
                                             <div class="pt-1" style="max-width: 150px">
                                                 <p class="fw-bold mb-0 small">${otherName}</p>
-                                               ${message}
-                                                <p class="small m-0 text-truncate">
-                                                 
+                                              
+                                                <p class="small m-0 text-truncate" id="${"Lastmessage" + ChatroomUserid}">
+                                                  ${message}
                                                 </p>
                                             </div>
                                         </div>
                                         <div class="pt-1">
-                                            <span class="badge bg-danger float-end"id="${"span" + item.chatroomUserid}"></span>
+                                            <span class="badge bg-danger float-end"id="${"span" + item.chatroomUserid}">1</span>
                                             <p class="small text-muted mb-1"></p>
                                         </div>
                                     </a>
@@ -142,14 +142,13 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message
         ChatroomItemul.insertBefore(li, ChatroomItemul.firstChild);
     }
     else {
-        //複製元素
-        const cosli = document.getElementById(`chatroomitem${ChatroomUserid}`).parentElement.parentElement.cloneNode(true);
-
+      
+        const cosli = document.getElementById(`chatroomitem${ChatroomUserid}`).parentElement.parentElement
+       
         //插到第一行
         ChatroomItemul.insertBefore(cosli, ChatroomItemul.firstChild);
        
-        //刪除元素
-        ChatroomItemul.removeChild(document.getElementById(`chatroomitem${ChatroomUserid}`).parentElement.parentElement);
+       
     if (ChatNowUserChatid.value == ChatroomUserid)
     {
         remotemessageShow(message);
@@ -165,26 +164,27 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message
        
     }
     }
-   
+
+    document.getElementById(`${"Lastmessage" + ChatNowUserChatid}`).innerHTML = message
    
 });
 /*回傳自己說的*/
 connection.on("LocalMessage", function (message) {
 
-    if (document.getElementById(`chatroomitem${ChatroomUserid}`) == "") {
+    if (document.getElementById(`chatroomitem${ChatNowUserChatid.value}`) == "") {
         const li = document.createElement("li");
         li.innerHTML = `
                                     <a href="#!" class="d-flex justify-content-between">
-                                        <div class="d-flex flex-row" id="chatroomitem${ChatroomUserid}">
-                                            <img src="${img}"
+                                        <div class="d-flex flex-row" id="chatroomitem${ChatNowUserChatid.value}">
+                                            <img src="${ChatNowUserimg.value}"
                                                  alt="avatar"
                                                  class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
                                                  width="30" />
                                             <div class="pt-1" style="max-width: 150px">
-                                                <p class="fw-bold mb-0 small">${otherName}</p>
-                                               ${message}
-                                                <p class="small m-0 text-truncate">
-                                                 
+                                                <p class="fw-bold mb-0 small">${ChatNowUserName.value}</p>
+                                              
+                                                <p class="small m-0 text-truncate" id="${"Lastmessage" + ChatNowUserChatid}">
+                                                  ${message}
                                                 </p>
                                             </div>
                                         </div>
@@ -198,17 +198,15 @@ connection.on("LocalMessage", function (message) {
     }
     else
     {
-        //複製元素
-        const cosli = document.getElementById(`chatroomitem${ChatroomUserid}`).parentElement.parentElement.cloneNode(true);
-
+      
+        const cosli = document.getElementById(`chatroomitem${ChatNowUserChatid.value}`).parentElement.parentElement
         //插到第一行
         ChatroomItemul.insertBefore(cosli, ChatroomItemul.firstChild);
 
-        //刪除元素
-        ChatroomItemul.removeChild(document.getElementById(`chatroomitem${ChatroomUserid}`).parentElement.parentElement);
     }
 
     localmessageShow(message);
+    document.getElementById(`${"Lastmessage" + ChatNowUserChatid}`).innerHTML = message
 });
 //對方說的話
 function remotemessageShow(message) {
