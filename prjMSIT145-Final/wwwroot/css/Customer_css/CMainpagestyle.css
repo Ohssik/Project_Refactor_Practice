@@ -21,10 +21,10 @@
     .ADblock > img {
         position: absolute;
         /*調整骨頭顯示圖片區塊大小*/
-        width: 700px;
-        height: 262.5px;
-        top: 43.75px;
-        left: 150px;
+        width: 600px;
+        height: 225px;
+        top: 62.5px;
+        left: 200px;
     }
 
 .wrapper {
@@ -185,3 +185,11 @@ section.Displayarea p {
     .Showshoptilte h2 {
         color: #000000;
     }
+
+.CursorPointer {
+    cursor: pointer;
+}
+
+.CursorDefault {
+    cursor: default;
+}

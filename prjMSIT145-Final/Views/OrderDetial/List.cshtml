@@ -285,150 +285,150 @@
                     foreach (var item in Model)
                     {
                         count++;
-                        @if (item.OrderState != "")
+                            @if (item.OrderState != "")
                         {
-                            @if (item.OrderState == "未接單")
+                                @if (item.OrderState == "未接單")
                             {
-                                <!-- *****動態產生****至140行為止 -->
-                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_1" style="margin-right:40px">
-                                    <div class="state_timeDiv">
-                                        <!-- 背景色依狀態更改: -->
-                                        <div class="state backgroundcolor1" name="tab_1">@item.OrderState</div>
-                                        <div id="orderTime" class="orderTime">@item.OrderTime</div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="pic_Div">
-                                            <div class="pic">
-                                                <img src="~/images/@item.LogoImgFileName" />
+                                    <!-- *****動態產生****至140行為止 -->
+                                    <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_1" style="margin-right:40px">
+                                        <div class="state_timeDiv">
+                                            <!-- 背景色依狀態更改: -->
+                                            <div class="state backgroundcolor1" name="tab_1">@item.OrderState</div>
+                                            <div id="orderTime" class="orderTime">@item.OrderTime</div>
+                                        </div>
+                                        <div class="column">
+                                            <div class="pic_Div">
+                                                <div class="pic">
+                                                    <img src="~/images/@item.LogoImgFileName" />
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <h4 class="card-title">@item.BMemberName</h4>
+                                                <div class="topBorder">
+                                                    <p class="card-text card_Guide_FontColor ">共 @Convert.ToInt32(item.TotalAmount) 元</p>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="">
-                                            <h4 class="card-title">@item.BMemberName</h4>
-                                            <div class="topBorder">
-                                                <p class="card-text card_Guide_FontColor ">共 @Convert.ToInt32(item.TotalAmount) 元</p>
-                                            </div>
-                                        </div>
                                     </div>
-                                </div>
                             }
                             else if (item.OrderState == "商家準備中")
                             {
-                                <!-- *****動態產生****至140行為止 -->
-                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_2" style="margin-right:40px">
-                                    <div class="state_timeDiv">
-                                        <!-- 背景色依狀態更改: -->
-                                        <div class="state backgroundcolor2">@item.OrderState</div>
-                                        <div id="orderTime" class="orderTime">@item.OrderTime</div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="pic_Div">
-                                            <div class="pic">
-                                                <img src="~/images/@item.LogoImgFileName" />
+                                    <!-- *****動態產生****至140行為止 -->
+                                    <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_2" style="margin-right:40px">
+                                        <div class="state_timeDiv">
+                                            <!-- 背景色依狀態更改: -->
+                                            <div class="state backgroundcolor2">@item.OrderState</div>
+                                            <div id="orderTime" class="orderTime">@item.OrderTime</div>
+                                        </div>
+                                        <div class="column">
+                                            <div class="pic_Div">
+                                                <div class="pic">
+                                                    <img src="~/images/@item.LogoImgFileName" />
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <h4 class="card-title">@item.BMemberName</h4>
+                                                <div class="topBorder">
+                                                    <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="">
-                                            <h4 class="card-title">@item.BMemberName</h4>
-                                            <div class="topBorder">
-                                                <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
-                                            </div>
-                                        </div>
                                     </div>
-                                </div>
                             }
                             else if (item.OrderState == "商品準備完成")
                             {
-                                <!-- *****動態產生****至140行為止 -->
-                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_3" style="margin-right:40px">
-                                    <div class="state_timeDiv">
-                                        <!-- 背景色依狀態更改: -->
-                                        <div class="state backgroundcolor3">@item.OrderState</div>
-                                        <div id="orderTime" class="orderTime">@item.OrderTime</div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="pic_Div">
-                                            <div class="pic">
-                                                <img src="~/images/@item.LogoImgFileName" />
+                                    <!-- *****動態產生****至140行為止 -->
+                                    <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_3" style="margin-right:40px">
+                                        <div class="state_timeDiv">
+                                            <!-- 背景色依狀態更改: -->
+                                            <div class="state backgroundcolor3">@item.OrderState</div>
+                                            <div id="orderTime" class="orderTime">@item.OrderTime</div>
+                                        </div>
+                                        <div class="column">
+                                            <div class="pic_Div">
+                                                <div class="pic">
+                                                    <img src="~/images/@item.LogoImgFileName" />
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <h4 class="card-title">@item.BMemberName</h4>
+                                                <div class="topBorder">
+                                                    <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="">
-                                            <h4 class="card-title">@item.BMemberName</h4>
-                                            <div class="topBorder">
-                                                <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
-                                            </div>
-                                        </div>
                                     </div>
-                                </div>
                             }
                             else if (item.OrderState == "訂單已完成")
                             {
-                                <!-- *****動態產生****至140行為止 -->
-                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_4" style="margin-right:40px">
-                                    <div class="state_timeDiv">
-                                        <!-- 背景色依狀態更改: -->
-                                        <div class="state backgroundcolor4">@item.OrderState</div>
-                                        <div id="orderTime" class="orderTime">@item.OrderTime</div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="pic_Div">
-                                            <div class="pic">
-                                                <img src="~/images/@item.LogoImgFileName" />
+                                    <!-- *****動態產生****至140行為止 -->
+                                    <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_4" style="margin-right:40px">
+                                        <div class="state_timeDiv">
+                                            <!-- 背景色依狀態更改: -->
+                                            <div class="state backgroundcolor4">@item.OrderState</div>
+                                            <div id="orderTime" class="orderTime">@item.OrderTime</div>
+                                        </div>
+                                        <div class="column">
+                                            <div class="pic_Div">
+                                                <div class="pic">
+                                                    <img src="~/images/@item.LogoImgFileName" />
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <h4 class="card-title">@item.BMemberName</h4>
+                                                <div class="topBorder">
+                                                    <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="">
-                                            <h4 class="card-title">@item.BMemberName</h4>
-                                            <div class="topBorder">
-                                                <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
-                                            </div>
-                                        </div>
                                     </div>
-                                </div>
                             }
                             else if (item.OrderState == "商家退單")
                             {
-                                <!-- *****動態產生****至140行為止 -->
-                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_5" style="margin-right:40px">
-                                    <div class="state_timeDiv">
-                                        <!-- 背景色依狀態更改: -->
-                                        <div class="state backgroundcolor5">@item.OrderState</div>
-                                        <div id="orderTime" class="orderTime">@item.OrderTime</div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="pic_Div">
-                                            <div class="pic">
-                                                <img src="~/images/@item.LogoImgFileName" />
+                                    <!-- *****動態產生****至140行為止 -->
+                                    <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_5" style="margin-right:40px">
+                                        <div class="state_timeDiv">
+                                            <!-- 背景色依狀態更改: -->
+                                            <div class="state backgroundcolor5">@item.OrderState</div>
+                                            <div id="orderTime" class="orderTime">@item.OrderTime</div>
+                                        </div>
+                                        <div class="column">
+                                            <div class="pic_Div">
+                                                <div class="pic">
+                                                    <img src="~/images/@item.LogoImgFileName" />
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <h4 class="card-title">@item.BMemberName</h4>
+                                                <div class="topBorder">
+                                                    <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="">
-                                            <h4 class="card-title">@item.BMemberName</h4>
-                                            <div class="topBorder">
-                                                <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
-                                            </div>
-                                        </div>
                                     </div>
-                                </div>
                             }
                             else
                             {
-                                <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_6" style="margin-right:40px">
-                                    <div class="state_timeDiv">
-                                        <!-- 背景色依狀態更改: -->
-                                        <div class="state backgroundcolor5">@item.OrderState</div>
-                                        <div id="orderTime" class="orderTime">@item.OrderTime</div>
-                                    </div>
-                                    <div class="column">
-                                        <div class="pic_Div">
-                                            <div class="pic">
-                                                <img src="~/images/@item.LogoImgFileName" />
+                                    <div class="cartDiv cardBorderColor cardBackgroundColor padding" id="Click @item.Fid" name="tab_6" style="margin-right:40px">
+                                        <div class="state_timeDiv">
+                                            <!-- 背景色依狀態更改: -->
+                                            <div class="state backgroundcolor5">@item.OrderState</div>
+                                            <div id="orderTime" class="orderTime">@item.OrderTime</div>
+                                        </div>
+                                        <div class="column">
+                                            <div class="pic_Div">
+                                                <div class="pic">
+                                                    <img src="~/images/@item.LogoImgFileName" />
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <h4 class="card-title">@item.BMemberName</h4>
+                                                <div class="topBorder">
+                                                    <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="">
-                                            <h4 class="card-title">@item.BMemberName</h4>
-                                            <div class="topBorder">
-                                                <p class="card-text card_Guide_FontColor">共 @Convert.ToInt32(item.TotalAmount) 元</p>
-                                            </div>
-                                        </div>
                                     </div>
-                                </div>
                             }
                         }
 
@@ -466,6 +466,18 @@
                 $(sltValue).show();
             });
 
+            $('[name="orderState"]').change(function(){
+                let shellHeight = $('#shell').height();
+                let windowHeight = $(window).height() - 90;
+
+                if (windowHeight < shellHeight) {
+                    $('.Copyright').removeClass('fixed_footer');
+                }
+                else {
+                    $('.Copyright').addClass('fixed_footer');
+                }
+            });
+            
         });
 
 

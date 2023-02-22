@@ -164,9 +164,6 @@ namespace prjMSIT145_Final.Controllers
                     }
                     else if (vm.Photo == null)
                         pro.Photo = null;
-
-                    if (_context.Products.Any(p => p.ProductName == vm.ProductName && p.BFid == vm.BFid))
-                        return RedirectToAction("BList");
                     else
                     {
                         pro.IsForSale = vm.IsForSale;

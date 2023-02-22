@@ -321,7 +321,9 @@ namespace prjMSIT145_Final.Controllers
                 string result = "";
                 if (cco != null)
                 {
-                    NormalMember member = _context.NormalMembers.FirstOrDefault(m => m.Fid == cco.receiverNfid);
+                    string[] NMemberNum = cco.receiverNfid.Split('-');
+                    int receiverId = Convert.ToInt32(NMemberNum[1]);
+                    NormalMember member = _context.NormalMembers.FirstOrDefault(m => m.Fid == receiverId);
                     if (member == null)
                         return Json("error:Receiver Member ID not exist");
                     
@@ -341,8 +343,8 @@ namespace prjMSIT145_Final.Controllers
                         Coupon2NormalMember c2n = _context.Coupon2NormalMembers.FirstOrDefault(c => c.CouponId == id && c.MemberId == cco.giverNfid);
                         if (c2n == null)
                             return Json($"error:CouponID:{id} not belong to NmemberID:{cco.giverNfid}");
-
-                        c2n.MemberId = cco.receiverNfid;
+                        
+                        c2n.MemberId = receiverId;
                         try
                         {
                             _context.SaveChanges();

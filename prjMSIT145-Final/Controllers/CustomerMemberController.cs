@@ -188,12 +188,24 @@ namespace prjMSIT145_Final.Controllers
             }
             return payload;
         }
-
+        string url;
+        private string getUrl()
+        {
+            string urlStr;
+            //urlStr = HttpContext.Request.Scheme;
+            urlStr = "https";
+            urlStr += "://";
+            urlStr += HttpContext.Request.Host;
+            urlStr += HttpContext.Request.PathBase;
+            return urlStr;
+        }
         public ActionResult LineLoginDirect()                                                                                    //line
         {
+            url=getUrl();
             string response_type = "code";
             string client_id = "1657900734";
-            string redirect_uri = HttpUtility.UrlEncode("https://localhost:7266/CustomerMember/CALLBACKLOGIN");
+            //string redirect_uri = HttpUtility.UrlEncode("https://localhost:7266/CustomerMember/CALLBACKLOGIN");
+            string redirect_uri = HttpUtility.UrlEncode($"{url}/CustomerMember/CALLBACKLOGIN");
             string state = "aaa";
             string LineLoginUrl = string.Format("https://access.line.me/oauth2/v2.1/authorize?response_type={0}&client_id={1}&redirect_uri={2}&state={3}&scope=openid%20profile&nonce=09876xyz",
                 response_type,
@@ -221,7 +233,9 @@ namespace prjMSIT145_Final.Controllers
                     string ApiUrl_Token = "https://api.line.me/oauth2/v2.1/token";
                     nvc.Add("grant_type", "authorization_code");
                     nvc.Add("code", code);
-                    nvc.Add("redirect_uri", "https://localhost:7266/CustomerMember/CALLBACKLOGIN");
+                    //nvc.Add("redirect_uri", "https://localhost:7266/CustomerMember/CALLBACKLOGIN");
+                    url = getUrl();
+                    nvc.Add("redirect_uri", $"{url}/CustomerMember/CALLBACKLOGIN");
                     nvc.Add("client_id", "1657900734");
                     nvc.Add("client_secret", "8a686ccc1f01658c94ff67511e5d46b3");
 
@@ -357,7 +371,9 @@ namespace prjMSIT145_Final.Controllers
                 member.EmailCertified = rnd.Next(10000000, 90000000);
                 _context.NormalMembers.Add(member.member);
                 _context.SaveChanges();
-                string url = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={member.Fid}";
+                string _getUrl = getUrl();
+                //string url = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={member.Fid}";
+                string url = $"{_getUrl}/CustomerMember/Emailcheck/?Fid={member.Fid}";
                 string smtpAddress = "smtp.gmail.com";
                 //設定Port
                 int portNumber = 587;
@@ -552,7 +568,9 @@ namespace prjMSIT145_Final.Controllers
 
 
 
-            string url = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={vm.Fid}";
+            //string url = $"https://localhost:7266/CustomerMember/Emailcheck/?Fid={vm.Fid}";
+            string _url = getUrl();
+            string url = $"{_url}/CustomerMember/Emailcheck/?Fid={vm.Fid}";
             string smtpAddress = "smtp.gmail.com";
             //設定Port
             int portNumber = 587;
@@ -846,7 +864,9 @@ namespace prjMSIT145_Final.Controllers
                     bool enableSSL = true;
                     //填入寄送方email和密碼
                     //string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?token={token}&Fid={member.Fid}";
-                    string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?token={request.Token}&Account={request.Account}&Email={request.Email}";
+                    //string url = $"https://localhost:7266/CustomerMember/forgetalterpassword/?token={request.Token}&Account={request.Account}&Email={request.Email}";
+                    string _url = getUrl();
+                    string url = $"{_url}/CustomerMember/forgetalterpassword/?token={request.Token}&Account={request.Account}&Email={request.Email}";
                     string emailFrom = "a29816668@gmail.com";
                     string emailpassword = "joksdquaswjdyzpu";
                     //收信方email 可以用逗號區分多個收件人

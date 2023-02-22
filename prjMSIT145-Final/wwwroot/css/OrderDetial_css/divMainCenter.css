@@ -10,9 +10,10 @@
     display: flex;
     align-items: center;
 }
-h4,h5,h6{
+h4, h5, h6 {
     margin: 5px 0;
-    color:#9F4E27;
+    color: #9F4E27;
+    font-size: 16px;
 }
 .Fieldset{
     border-radius: 10px;
