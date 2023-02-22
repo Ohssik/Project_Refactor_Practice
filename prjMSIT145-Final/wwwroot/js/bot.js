@@ -51,13 +51,13 @@ btnSubmitProblem.addEventListener("click", async function () {
     if (img.userImg !== "") {
         fragForUser = `<div class="displayProblem userDiv">
                                     <div class="userMsg">${txt.value}</div>
-                                        <div class="imgDiv" id='userImgProblem' style='width:75px;height:75px'><img src="../images/Customer/Member/${img.userImg}" alt="SessionImg"/></div>
+                                        <div class="imgDiv" id='userImgProblem'><img src="../images/Customer/Member/${img.userImg}" alt="SessionImg"/></div>
                                     </div > `;
     }
     else {
         fragForUser = `<div class="displayProblem userDiv">
                                     <div class="userMsg">${txt.value}</div>
-                                        <div class="imgDiv" id='userImg'><img src="../images/Problem/chicken.jpg" alt="UserImg"/></div>
+                                        <div class="imgDiv" id='userImg' style='width:80px;height:75px'><img src="../images/Problem/chicken.jpg" alt="UserImg"/></div>
                                     </div > `;
     }
     resultDiv.innerHTML += fragForUser;
