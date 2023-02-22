@@ -378,7 +378,7 @@ namespace prjMSIT145_Final.Controllers
 
                 prod.PickUpType = vm.PickUpType;
                 prod.PickUpDate = vm.PickUpDate;
-                prod.PickUpTime = vm.PickUpDate - DateTime.Now;
+                prod.PickUpTime = vm.PickUpDate - DateTime.Today;
                 prod.OrderState = vm.OrderState;
                 prod.PayTermCatId = Convert.ToInt32(vm.PayTermCatId);
                 prod.Memo = vm.Memo;
