@@ -328,6 +328,9 @@
             font-size: 14px;
             margin: 5px 0px 5px 0px;
         }
+        .fontSize{
+            font-size:14px;
+        }
     </style>
 }
 @*刪除*@
@@ -407,9 +410,9 @@
                 <!-- 取餐方式 -->
                 <div class="divMargin cardBackgroundColor" id="pickUp">
                     <h4>取餐方式</h4>
-                    <div class="pickUpMD">
-                        <input type="radio" checked="checked" id="PickUpType" />
-                        <p>自取 </p>
+                    <div class="pickUpMD fontSize">
+                        <input type="radio" checked="checked" id="PickUpType"  />
+                        <p class="fontSize"> 自取 </p>
                     </div>
                     <h5>預計取餐時間</h5>
                     <fieldset class="Fieldset" id="pickUpTime">
@@ -452,7 +455,7 @@
                                     <h6>@item.ProductName</h6>
                                     <div class="flexAndItemsCenter displayBetween ">
                                         <div>
-                                            <span id="itemDetailFont" class="spanFont">
+                                            <span id="itemDetailFont" class="spanFont fontSize">
                                                 @foreach (var item2 in item.OptionName)
                                                 {
                                                     <span><span>@item2</span> /</span>
@@ -478,7 +481,7 @@
                     <h4>優惠券</h4>
                     <div>
                         <!-- checked後才可跳出button -->
-                        <input type="radio"  id="couponsCheck"/><span class="spanFont"> 優惠券</span>
+                        <input type="radio" id="couponsCheck" /><span class="spanFont fontSize"> 優惠券</span>
                     </div>
                     <!-- 點擊跳出可用優惠券視窗 -->
                     <div>
@@ -499,12 +502,12 @@
                 <!-- 訂單資訊 -->
                 <div class="divMargin cardBackgroundColor">
                     <h4>訂單資訊</h4>
-                    <div class="flexAndItemsCenter orderDivBottomBorder" style="border-top: 1px solid rgb(198, 191, 191);">
+                    <div class="flexAndItemsCenter orderDivBottomBorder fontSize" style="border-top: 1px solid rgb(198, 191, 191);">
                         <div>商品&nbsp;x @Model.TotalQty</div>
                         <div class="orderAbsolteForRight">$&nbsp;@Model.TotalAmount</div>
                     </div>
                     <!-- 優惠券輸入完成並確認有此券後折扣顯示於此 -->
-                     <div class="flexAndItemsCenter orderDivBottomBorder">
+                    <div class="flexAndItemsCenter orderDivBottomBorder fontSize">
                          <div >優惠券</div>
                          <div id="offerPrice" class="orderAbsolteForRight">-$&nbsp;金額</div>
                     </div>
@@ -517,7 +520,7 @@
                                 <h5><label for="plastic">是否加購塑膠袋</label></h5>
                             </div>
                             <div>
-                                <span id="plasticPrice" class="spanFont">您未加購塑膠袋</span>
+                                <span id="plasticPrice" class="spanFont fontSize">您未加購塑膠袋</span>
                             </div>
                         </div>
                     </div>
@@ -572,22 +575,22 @@
                 </div>
                 <div class="flexAndItemsCenter radioDiv">
                     <div class="margin"><input type="radio" id="cash" name="PayTermCatId" value="1" checked></div>
-                    <div class="margin"><label for="cash"><span class="spanFont">現金</span></label></div>
+                    <div class="margin"><label for="cash"><span class="spanFont fontSize">現金</span></label></div>
                 </div>
                 <div class="flexAndItemsCenter radioDiv">
                     <div class="margin"><input type="radio" id="cardit" name="PayTermCatId" value="2"></div>
-                    <div class="margin"><label for="cardit"><span class="spanFont">信用卡</span></label></div>
+                    <div class="margin"><label for="cardit"><span class="spanFont fontSize">信用卡</span></label></div>
                 </div>
 
             </div>
             <!-- 開立發票 -->
             <div class="divMargin cardBackgroundColor">
                 <h4>開立發票</h4>
-                <div class="flexAndItemsCenter radioDiv">
+                <div class="flexAndItemsCenter radioDiv ">
                     <div class="margin"><input type="radio" id="paperInvoice" name="invoice" checked></div>
-                    <div class="margin"><label for="paperInvoice"><span class="spanFont">紙本發票</span></label></div>
+                    <div class="margin"><label for="paperInvoice"><span class="spanFont fontSize">紙本發票</span></label></div>
                     <div class="margin"><input type="radio" id="paperInvoice" name="invoice"></div>
-                    <div class="margin"><label for="paperInvoice"><span class="spanFont">電子發票</span></label></div>
+                    <div class="margin"><label for="paperInvoice"><span class="spanFont fontSize">電子發票</span></label></div>
                 </div>
                 <div>
                 </div>
@@ -611,33 +614,33 @@
                         取餐時間依據各門市狀況調整
                     </div>
                 </div>
-                <div class="divMargin topMargin">
+                <div class="divMargin topMargin ">
                     <h4>訂購資訊</h4>
-                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor fontSize">
                         <div class="marginright ">訂購店家</div>
                         <div>@Model.BMemberName</div>
                     </div>
-                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor fontSize">
                         <div class="marginright">取餐人</div>
                         <div id="changePickUpPerson2">@Model.PickUpPerson</div>
                     </div>
-                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor fontSize">
                         <div class="marginright">連絡電話</div>
                         <div id="changePickUpPersonPhone2">@Model.PickUpPersonPhone</div>
                     </div>
-                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor fontSize">
                         <div class="marginright">取餐方式</div>
                         <div>自取</div>
                     </div>
-                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor fontSize">
                         <div class="marginright">預計取餐時間</div>
                         <div id="changeDate2">@DateTime.Now.AddMinutes(15).ToString("s")</div>
                     </div>
-                    <div class="spanFont div flexAndItemsCenter cardBorderColor">
+                    <div class="spanFont div flexAndItemsCenter cardBorderColor fontSize">
                         <div class="marginright">付款方式</div>
                         <div id="CPayTermCatId">現金</div>
                     </div>
-                    <div class="spanFont div flexAndItemsCenter">
+                    <div class="spanFont div flexAndItemsCenter fontSize">
                         <div class="marginright">應付金額</div>
                         <div id="TotalAmount2">$@Model.TotalAmount</div>
                     </div>
