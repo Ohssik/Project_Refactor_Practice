@@ -120,14 +120,14 @@
 
 .serviceMsg {
     word-wrap: break-word;
-    font-size: 13px;
+    font-size: 15px;
     padding:5px 0;
     box-sizing:border-box;
 }
 
     .serviceMsg p {
         color: sienna;
-        font-size: 20px;
+        font-size: 23px;
         margin: 2px;
     }
 
@@ -176,4 +176,5 @@
     }
     tr{
         cursor:pointer;
+        font-size:15px;
     }

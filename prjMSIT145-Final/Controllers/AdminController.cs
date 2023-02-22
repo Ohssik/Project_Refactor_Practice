@@ -230,7 +230,7 @@ namespace prjMSIT145_Final.Controllers
                 {
                     CANormalMemberOrderDetailViewModel detail = new CANormalMemberOrderDetailViewModel();
                     detail.productName = vsf.ProductName;
-                    detail.Options = vsf.Options + "/" + "$" + vsf.SubTotal + "/" + vsf.Qty + "份";
+                    detail.Options = vsf.Options + "/" + "$" + ((decimal)vsf.SubTotal).ToString("###,###") + "/" + vsf.Qty + "份";
                     items.Add(detail);
                 }
                 n.details = items;
@@ -382,7 +382,7 @@ namespace prjMSIT145_Final.Controllers
                 {
                     CANormalMemberOrderDetailViewModel detail = new CANormalMemberOrderDetailViewModel();
                     detail.productName = vsf.ProductName;
-                    detail.Options = vsf.Options + "/" + "$" + vsf.SubTotal + "/" + vsf.Qty + "份";
+                    detail.Options = vsf.Options + "/" + "$" + ((decimal)vsf.SubTotal).ToString("###,###") + "/" + vsf.Qty + "份";
                     items.Add(detail);
                 }
                 n.details = items;

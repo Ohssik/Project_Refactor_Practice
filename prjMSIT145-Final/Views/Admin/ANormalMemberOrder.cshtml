@@ -57,7 +57,11 @@
                     <tr>
                         <td>@Html.DisplayNameFor(model => model.TotalAmount)</td>
                         <td>
-                            @Model.TotalAmount
+                            @{
+                                string price = "";
+                                price = ((decimal)Model.TotalAmount).ToString("###,###");
+                            }
+                            @price
                         </td>
                     </tr>
                     <tr>

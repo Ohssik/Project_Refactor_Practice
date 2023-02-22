@@ -47,7 +47,7 @@ btnSubmitProblem.addEventListener("click", async function () {
                     </div>`;
 
     //Customer/Member
-    //判斷使用者有無頭像
+    //判斷使用者有無頭像 style='width:70px;height:70px'
     if (img.userImg !== "") {
         fragForUser = `<div class="displayProblem userDiv">
                                     <div class="userMsg">${txt.value}</div>
@@ -57,7 +57,7 @@ btnSubmitProblem.addEventListener("click", async function () {
     else {
         fragForUser = `<div class="displayProblem userDiv">
                                     <div class="userMsg">${txt.value}</div>
-                                        <div class="imgDiv" id='userImg'><img src="../images/Problem/user.png" alt="UserImg" /></div>
+                                        <div class="imgDiv" id='userImg' style='width:80px;height:75px'><img src="../images/Problem/chicken.jpg" alt="UserImg"/></div>
                                     </div > `;
     }
     resultDiv.innerHTML += fragForUser;

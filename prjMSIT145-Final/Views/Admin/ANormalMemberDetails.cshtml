@@ -24,8 +24,8 @@
 
                 </div>
                 <div id="btnBar">
-                    <div class="conBtn">個人資訊</div>
-                    <div class="conBtn">權限與密碼</div>
+                    <div class="conBtn"><label>商家資訊</label></div>
+                    <div class="conBtn"><label>權限與密碼</label></div>
                 </div>
                 <div class="table-responsive" name="infoDiv">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -176,14 +176,16 @@
                             </thead>
                             <tbody>
                                 @{
+                                    string price = "";
                                     foreach (Order od in Model.orders)
                                     {
+                                        price = ((decimal)od.TotalAmount).ToString("###,###");
                                                         <tr>
                                                             <td>
                                                             @Html.ActionLink(od.OrderISerialId, "ANormalMemberOrder", new { id=od.Fid })
                                                             </td>
                                                             <td>@od.OrderTime</td>
-                                                            <td>@od.TotalAmount</td>
+                                                            <td>@price</td>
                                                             <td>
                                                             @{
                                                     if (od.OrderState=="0")
@@ -481,6 +483,9 @@
             text-align: center;
         }
 
+        .conBtn > label {
+            line-height: 30px;
+        }
         .clicked {
             /*background-color: rgb(65, 62, 245);*/
             background-color: #93580e;
