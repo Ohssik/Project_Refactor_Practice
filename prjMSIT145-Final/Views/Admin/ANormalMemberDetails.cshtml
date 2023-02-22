@@ -14,9 +14,9 @@
                     <figure id="norMemPhoto">
                         @{
                             if(string.IsNullOrEmpty(Model.MemberPhotoFile)){
-                                <img src="~/images/Customer/Member/NMember_Icon.png" alt="">
+                                            <img src="~/images/Customer/Member/NMember_Icon.png" alt="">
                             }else{
-                                <img src="~/images/Customer/Member/@Model.MemberPhotoFile" alt="">
+                                            <img src="~/images/Customer/Member/@Model.MemberPhotoFile" alt="">
                             }
                         }
                         
@@ -54,11 +54,11 @@
                                 @{
                                     if (Model.Gender == "1")
                                     {
-                                              @:男                                            
+                                                          @:男                                            
                                     }
                                     else if (Model.Gender == "0")
                                     {                                            
-                                             @:女
+                                                         @:女
                                     }
                                 }                                
                             </td>
@@ -111,11 +111,11 @@
                                 <div id="stopAuthBar">
                                     @{
                                         if(Model.IsSuspensed>0){
-                                                <button class="authBtn clicked2" data-bs-target="#sendMail" disabled>是</button>
-                                                <button class="authBtn" data-bs-target="#sendMail">否</button>
+                                                            <button class="authBtn clicked2" data-bs-target="#sendMail" disabled>是</button>
+                                                            <button class="authBtn" data-bs-target="#sendMail">否</button>
                                     }else{
-                                                <button class="authBtn" data-bs-target="#sendMail">是</button>
-                                                <button class="authBtn clicked2" data-bs-target="#sendMail" disabled>否</button>
+                                                            <button class="authBtn" data-bs-target="#sendMail">是</button>
+                                                            <button class="authBtn clicked2" data-bs-target="#sendMail" disabled>否</button>
                                         }
                                     }
                                     <input type="hidden" value=@Model.IsSuspensed name="IsSuspensed" />
@@ -178,46 +178,46 @@
                                 @{
                                     foreach (Order od in Model.orders)
                                     {
-                                            <tr>
-                                                <td>
-                                                @Html.ActionLink(od.OrderISerialId, "ANormalMemberOrder", new { id=od.Fid })
-                                                </td>
-                                                <td>@od.OrderTime</td>
-                                                <td>@od.TotalAmount</td>
-                                                <td>
-                                                @{
+                                                        <tr>
+                                                            <td>
+                                                            @Html.ActionLink(od.OrderISerialId, "ANormalMemberOrder", new { id=od.Fid })
+                                                            </td>
+                                                            <td>@od.OrderTime</td>
+                                                            <td>@od.TotalAmount</td>
+                                                            <td>
+                                                            @{
                                                     if (od.OrderState=="0")
                                                     {
-                                                                @:購物車中
+                                                                                        @:購物車中
                                                     }
                                                     else if (od.OrderState=="1")
                                                     {
-                                                                 @:未接單
+                                                                                         @:未接單
                                                     }
                                                     else if (od.OrderState=="2")
                                                     {
-                                                                 @:已接單
+                                                                                         @:已接單
                                                     }
                                                     else if (od.OrderState=="3")
                                                     {
-                                                                  @:商家準備中
+                                                                                          @:商家準備中
                                                     }
                                                     else if (od.OrderState=="4")
                                                     {
-                                                                  @:訂單已完成
+                                                                                          @:訂單已完成
                                                     }
                                                     else if (od.OrderState=="5")
                                                     {
-                                                                  @:商家退單
+                                                                                          @:商家退單
                                                     }
                                                     else if (od.OrderState=="6")
                                                     {
-                                                                  @:揪團失敗
+                                                                                          @:揪團失敗
                                                     }
-                                                }
-                                                </td>
-                                                <td>@od.BFid</td>
-                                            </tr>
+                                                            }
+                                                            </td>
+                                                            <td>@od.BFid</td>
+                                                        </tr>
                                     }
                                 }
                             </tbody>
@@ -252,6 +252,7 @@
 
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="btnDemo">demo</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancel">取消</button>
                 <button type="button" class="btn btn-primary" id="btnSend">寄出</button>
             </div>
@@ -269,6 +270,9 @@
         let authBtnIsClicked, isSus;
         let sendMail = new bootstrap.Modal(document.getElementById('sendMail'), {
             keyboard: false
+        });
+        $('#btnDemo').click(function(){
+            $('[name="txtMessage"]').val('您好，已恢復您的帳號登入權限!');
         });
         $('#btnCancel').click(function () {
             $('#btnSend').removeAttr('disabled');
