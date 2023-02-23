@@ -8,7 +8,7 @@
 <section class="shopinfocard" style="" >
     <div class="shopinfoarea p-0 m-0" style="height:365px;width:480px">
         <div class="shopinfo" style="height:280px;width:480px">
-            <img class="Shoplogo p-0 m-0" src="/images/@Model.LogoImgFileName" onerror="@Url.Content("~/images/Customer/Mainpage/shibaLogo_row2.png")" id="LogoImgFile">
+            <img class="Shoplogo p-0 m-0" src="/images/@Model.LogoImgFileName" onerror="this.src='@Url.Content("~/images/Customer/Mainpage/shibaLogo_row2.png")'" id="LogoImgFile">
             <div>
                 <div class="shoptitle"id="showShopName" ></div>
                 <div class="infoblock">
@@ -46,7 +46,7 @@
         </div>
     </div>
     <section class="ADarea">
-        <img class="Shopcardcover" src="~/images/@Model.SighImgFileName" id="SighImgFile" onerror="@Url.Content("~/images/Customer/Mainpage/shibaLogo_row2.png")">
+        <img class="Shopcardcover" src="~/images/@Model.SighImgFileName" id="SighImgFile" onerror="this.src='@Url.Content("~/images/Customer/Mainpage/shibaLogo_row2.png")'">
         
     </section>
 </section>

@@ -18,6 +18,7 @@ connection.start().then(function () {
     console.log("Hub 連線完成");
    
     document.getElementById("showChatRoomBtn").setAttribute("style", "right:10px;bottom:0px;width:90px")
+    //測試
     
         
     
@@ -118,7 +119,9 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message
     //console.log(ListChatMessageil);
     if (document.getElementById("showChatRoomBtn").getAttribute("style") == "right:10px;bottom:0px;width:90px") {
         document.getElementById("newMessageAlarm").setAttribute("class", "position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2");
+        
     }
+    
     if (document.getElementById(`chatroomitem${ChatroomUserid}`) == null) {
         const li = document.createElement("li");
         li.innerHTML = `
@@ -137,11 +140,18 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message
                                             </div>
                                         </div>
                                         <div class="pt-1">
-                                            <span class="badge bg-danger float-end"id="${"span" + item.chatroomUserid}">1</span>
+                                            <span class="badge bg-danger float-end"id="${"span" + ChatroomUserid}">1</span>
                                             <p class="small text-muted mb-1"></p>
                                         </div>
                                     </a>
                                 `;
+        li.addEventListener("click", function () {
+            ChatNowUserName.innerHTML = otherName;
+            ChatNowUserid.value = Fid;
+            ChatNowUserChatid.value = ChatroomUserid;
+            document.getElementById("ChatNowUserimg").value = img;
+            ChangeChatroom(ChatroomUserid);
+        });
         ChatroomItemul.insertBefore(li, ChatroomItemul.firstChild);
     }
     else {
@@ -168,7 +178,7 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message
     }
     }
 
-    document.getElementById(`${"Lastmessage" + ChatroomUserid.value}`).innerHTML = message
+    document.getElementById(`${"Lastmessage" + ChatroomUserid}`).innerHTML = message
    
    
 });
@@ -289,7 +299,7 @@ function clickChatroomBtn()
     if (document.getElementById("showChatRoomBtn").getAttribute("style") == "right:10px;bottom:0px;width:90px") {
         document.getElementById("newMessageAlarm").setAttribute("class", "position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2 d-none")
         document.getElementById("showChatRoomBtn").setAttribute("style", "right:10px;bottom:530px;width:90px");
-       
+        ChatroomItem.innerHTML = "";
     connection.invoke("ReNewChatRoom").catch(function (err) {
             return console.error(err.toString());
         }); 
