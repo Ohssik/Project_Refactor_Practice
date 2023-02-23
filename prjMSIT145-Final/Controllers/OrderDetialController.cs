@@ -36,6 +36,7 @@ namespace prjMSIT145_Final.Controllers
                              join BI in _context.BusinessImgs
                              on O.BFid equals BI.BFid
                              where O.NFid == NFid
+                             where O.OrderState != "0"
                              select new
                              {
                                  O.Fid,
@@ -169,7 +170,7 @@ namespace prjMSIT145_Final.Controllers
                             vm.OrderState = "揪團失敗";
                             break;
                     }
-
+                
                     vm.OrderTime = c.OrderTime;
                     vm.TotalAmount = Convert.ToInt32(c.TotalAmount);
                     vm.PickUpPerson = c.PickUpPerson;
