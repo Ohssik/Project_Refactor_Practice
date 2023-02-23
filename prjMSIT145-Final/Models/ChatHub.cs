@@ -110,7 +110,7 @@ namespace prjMSIT145_Final.Models
                 vm.Memberfid = User.Memberfid;
                 vm.MemberName = User.MemberName;
                 vm.UserType = User.Membertype;
-                vm.MemberImg = "../images/"+User.MemberImg;
+                vm.MemberImg = "/images/"+User.MemberImg;
                 vm.LastOnlineTime = User.LastOnlineTime;
                 var lastmessageitem = _context.ChatMessages.Where(m => m.Chatid == User.chatroomid).ToList();
                 vm.LastMessage = lastmessageitem[lastmessageitem.Count()-1].Message;
@@ -127,7 +127,7 @@ namespace prjMSIT145_Final.Models
                 vm.Memberfid = User.Memberfid;
                 vm.MemberName = User.MemberName;
                 vm.UserType = User.Membertype;
-                vm.MemberImg ="../images/Customer/Member/"+ User.MemberImg;
+                vm.MemberImg ="/images/Customer/Member/"+ User.MemberImg;
                 vm.LastOnlineTime = User.LastOnlineTime;
                 var lastmessageitem = _context.ChatMessages.Where(m => m.Chatid == User.chatroomid).ToList();
                 vm.LastMessage = lastmessageitem[lastmessageitem.Count() - 1].Message;
@@ -215,7 +215,7 @@ namespace prjMSIT145_Final.Models
                 var LOGO = _context.BusinessImgs.FirstOrDefault(l => l.BFid == member.Fid);
                 if (LOGO == null)
                     return;
-                string img = "../images/"+LOGO.LogoImgFileName;
+                string img = "/images/"+LOGO.LogoImgFileName;
             if (user != null)
             {
                 //對對方發出訊息
@@ -269,7 +269,7 @@ namespace prjMSIT145_Final.Models
                 await Clients.Client(Context.ConnectionId).SendAsync("LocalMessage", message);
                 //找出要發給的那個人的資料
                 var user = users.FirstOrDefault(u => u.ChatroomUserid == _otheruserid);
-                string img = "../images/Customer/Member/"+ member.MemberPhotoFile;
+                string img = "/images/Customer/Member/"+ member.MemberPhotoFile;
                 if (user != null)
                 {
                     //對對方發出訊息

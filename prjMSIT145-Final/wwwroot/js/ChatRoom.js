@@ -42,7 +42,7 @@ connection.on("ReNewChatRoom", function (data) {
         li.innerHTML =`
                                     <a href="#!" class="d-flex justify-content-between">
                                         <div class="d-flex flex-row" id="chatroomitem${item.chatroomUserid}">
-                                            <img src="${item.MemberImg}"
+                                            <img src="${location.protocol + "//" + location.hostname + ":" + location.port+item.MemberImg}"
                                                  alt="avatar"
                                                  class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
                                                  width="30" />
@@ -124,7 +124,7 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message
         li.innerHTML = `
                                     <a href="#!" class="d-flex justify-content-between">
                                         <div class="d-flex flex-row" id="chatroomitem${ChatroomUserid}">
-                                            <img src="${img}"
+                                            <img src="${location.protocol + "//" + location.hostname + ":" + location.port + img}"
                                                  alt="avatar"
                                                  class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
                                                  width="30" />
@@ -180,7 +180,7 @@ connection.on("LocalMessage", function (message) {
         li.innerHTML = `
                                     <a href="#!" class="d-flex justify-content-between">
                                         <div class="d-flex flex-row" id="chatroomitem${ChatNowUserChatid.value}">
-                                            <img src="${ChatNowUserimg.value}"
+                                            <img src="${location.protocol + "//" + location.hostname + ":" + location.port+ChatNowUserimg.value}"
                                                  alt="avatar"
                                                  class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
                                                  width="30" />
@@ -220,7 +220,7 @@ function remotemessageShow(message) {
     li.setAttribute("class", "d-flex mb-2 mt-2");
     if (ListChatMessageil == null) {
       
-        li.innerHTML = ` <img src="${ChatNowUserimg.value}"
+        li.innerHTML = ` <img src="${location.protocol + "//" + location.hostname + ":" + location.port+ChatNowUserimg.value}"
                                      alt="#"
                                      class="rounded-circle d-flex align-self-start me-3 shadow-1-strong mt-2"
                                      width="35"
@@ -249,7 +249,7 @@ function remotemessageShow(message) {
                               `
         }
         else {
-            li.innerHTML = `<img src="${ChatNowUserimg.value}"
+            li.innerHTML = `<img src="${location.protocol + "//" + location.hostname + ":" + location.port+ChatNowUserimg.value}"
                                      alt="#"
                                      class="rounded-circle d-flex align-self-start me-3 shadow-1-strong mt-2"
                                      width="35"
@@ -297,4 +297,5 @@ function clickChatroomBtn()
         document.getElementById("showChatRoomBtn").setAttribute("style", "right:10px;bottom:0px;width:90px");
         ChatroomItem.innerHTML = "";
     }
+    console.log(location.protocol +"//"+ location.hostname + ":" + location.port)
 }
