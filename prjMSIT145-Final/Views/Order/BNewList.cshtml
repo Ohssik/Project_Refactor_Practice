@@ -178,10 +178,13 @@
                 ChatNowUserName.innerHTML = data.memberName;
                 ChatNowUserid.value = data.fid;
                 ChatNowUserChatid.value =data.chatroomUserid;
+                ChatNowUserimg.value = "/images/Customer/Member/" + data.memberPhotoFile;
+
+
                 ChangeChatroom(data.chatroomUserid);
                 //document.getElementById("ChatNowUserimg").value = "../ images / Customer / Member / "+dtat.MemberPhotoFile;
-                document.getElementById("ChatNowUserimg").value = "../images/Customer/Member/" + data.memberPhotoFile;
-               
+              
+                console.log(document.getElementById("ChatNowUserimg").value + "123")
 
                 
             } )

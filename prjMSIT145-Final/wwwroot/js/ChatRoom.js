@@ -102,7 +102,7 @@ document.getElementById("chatMessagebtn").addEventListener("click", function (ev
 
     var otheruserid = document.getElementById("ChatNowUserChatid").value;
     var message = document.getElementById("chatMessageInput").value;
-    console.log("Hub 傳訊息");
+    console.log(document.getElementById(`chatroomitem${ChatNowUserChatid.value}`));
     connection.invoke("SendMessage", otheruserid, message).catch(function (err) {
         return console.error(err.toString());
     });
@@ -119,7 +119,7 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message
     if (document.getElementById("showChatRoomBtn").getAttribute("style") == "right:10px;bottom:0px;width:90px") {
         document.getElementById("newMessageAlarm").setAttribute("class", "position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2");
     }
-    if (document.getElementById(`chatroomitem${ChatroomUserid}`) == "") {
+    if (document.getElementById(`chatroomitem${ChatroomUserid}`) == null) {
         const li = document.createElement("li");
         li.innerHTML = `
                                     <a href="#!" class="d-flex justify-content-between">
@@ -168,36 +168,37 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message
     }
     }
 
-    document.getElementById(`${"Lastmessage" + ChatNowUserChatid.value}`).innerHTML = message
+    document.getElementById(`${"Lastmessage" + ChatroomUserid.value}`).innerHTML = message
    
    
 });
 /*回傳自己說的*/
 connection.on("LocalMessage", function (message) {
-
-    if (document.getElementById(`chatroomitem${ChatNowUserChatid.value}`) == "") {
+    
+    if (document.getElementById(`chatroomitem${ChatNowUserChatid.value}`) == null) {
         const li = document.createElement("li");
         li.innerHTML = `
                                     <a href="#!" class="d-flex justify-content-between">
                                         <div class="d-flex flex-row" id="chatroomitem${ChatNowUserChatid.value}">
-                                            <img src="${location.protocol + "//" + location.hostname + ":" + location.port+ChatNowUserimg.value}"
+                                            <img src="${location.protocol + "//" + location.hostname + ":" + location.port + ChatNowUserimg.value}"
                                                  alt="avatar"
                                                  class="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
                                                  width="30" />
                                             <div class="pt-1" style="max-width: 150px">
-                                                <p class="fw-bold mb-0 small">${ChatNowUserName.value}</p>
+                                                <p class="fw-bold mb-0 small">${ChatNowUserName.innerHTML}</p>
                                               
-                                                <p class="small m-0 text-truncate" id="${"Lastmessage" + ChatNowUserChatid}">
+                                                <p class="small m-0 text-truncate" id="${"Lastmessage" + ChatNowUserChatid.value}">
                                                   ${message}
                                                 </p>
                                             </div>
                                         </div>
                                         <div class="pt-1">
-                                            <span class="badge bg-danger float-end"id=""></span>
+                                            <span class="badge bg-danger float-end"id="${ "span" + ChatNowUserChatid}" ></span>
                                             <p class="small text-muted mb-1"></p>
                                         </div>
                                     </a>
                                 `;
+        
         ChatroomItemul.insertBefore(li, ChatroomItemul.firstChild);
     }
     else
