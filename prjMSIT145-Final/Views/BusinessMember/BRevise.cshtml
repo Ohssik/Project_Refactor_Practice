@@ -8,13 +8,13 @@
 <section class="shopinfocard" style="" >
     <div class="shopinfoarea p-0 m-0" style="height:365px;width:480px">
         <div class="shopinfo" style="height:280px;width:480px">
-            <img class="Shoplogo p-0 m-0" src="/images/@Model.LogoImgFileName" alt=" @Url.Content("~/images/Customer/Mainpage/shibaLogo_row2.png")" id="LogoImgFile">
+            <img class="Shoplogo p-0 m-0" src="/images/@Model.LogoImgFileName" onerror="@Url.Content("~/images/Customer/Mainpage/shibaLogo_row2.png")" id="LogoImgFile">
             <div>
                 <div class="shoptitle"id="showShopName" ></div>
                 <div class="infoblock">
                     <div class="InfoArea">店家資訊</div>
                     <div class="InfoArea">
-                        
+
                         <p class="p-0 m-0"></p>
                     </div>
                     <div class="InfoArea"><img src="/images/Customer/ShowProduct/opentime 20x20.png"><p id="showopentime" class="p-0 m-0">@Model.OpenTime</p> <p class ="p-0 m-0">~</p> <p id="showclosetime" class="p-0 m-0">@Model.CloseTime</p> </div>
@@ -27,7 +27,7 @@
         <div class="btnbar"style="height:85px;width:480px" >
             <div class="iconwrap">
                 <div class="icon">
-                   <img src="~/images/Customer/ShowProduct/service 24X24.png" />
+                    <img src="~/images/Customer/ShowProduct/service 24X24.png" />
                 </div>
                 <div class="btntext">問店家</div>
             </div>
@@ -46,7 +46,8 @@
         </div>
     </div>
     <section class="ADarea">
-        <img class="Shopcardcover" src="/images/@Model.SighImgFileName" alt=" @Url.Content("~/images/Customer/Mainpage/shibaLogo_row2.png")" id="SighImgFile">
+        <img class="Shopcardcover" src="~/images/@Model.SighImgFileName" id="SighImgFile" onerror="@Url.Content("~/images/Customer/Mainpage/shibaLogo_row2.png")">
+        
     </section>
 </section>
 <div class="p-3 m-3"></div>
