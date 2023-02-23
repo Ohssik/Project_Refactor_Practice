@@ -116,6 +116,9 @@ connection.on("RemoteMessage", function (otherName, ChatroomUserid, Fid, message
     //ChatNowUserid.value = `${Fid}`;
     //ChatNowUserChatid.value = `${ChatroomUserid}`;
     //console.log(ListChatMessageil);
+    if (document.getElementById("showChatRoomBtn").getAttribute("style") == "right:10px;bottom:0px;width:90px") {
+        document.getElementById("newMessageAlarm").setAttribute("class", "position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2");
+    }
     if (document.getElementById(`chatroomitem${ChatroomUserid}`) == "") {
         const li = document.createElement("li");
         li.innerHTML = `
@@ -262,6 +265,7 @@ function remotemessageShow(message) {
         }
     }
     document.getElementById("ChatMessageul").appendChild(li);
+    document.getElementById("ChatMessageul").lastElementChild.scrollIntoView({ behavior: "smooth" })
 }
 //自己說的話
 function localmessageShow(message)
@@ -276,11 +280,13 @@ function localmessageShow(message)
                                     </div>
                                 </div>`
     document.getElementById("ChatMessageul").appendChild(li);
+    document.getElementById("ChatMessageul").lastElementChild.scrollIntoView({ behavior: "smooth" })
 }
 //按下聊天室
 function clickChatroomBtn()
 {
     if (document.getElementById("showChatRoomBtn").getAttribute("style") == "right:10px;bottom:0px;width:90px") {
+        document.getElementById("newMessageAlarm").setAttribute("class", "position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2 d-none")
         document.getElementById("showChatRoomBtn").setAttribute("style", "right:10px;bottom:530px;width:90px");
        
     connection.invoke("ReNewChatRoom").catch(function (err) {
