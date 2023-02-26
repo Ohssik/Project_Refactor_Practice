@@ -5,7 +5,6 @@
 @section Styles{
 	<link rel="stylesheet" href="@Url.Content("~/css/ProductCreate.css")">
 	<link rel="stylesheet" href="@Url.Content("~/css/ProductList.css")">
-	@*<link href="@Url.Content("~/vendor/datatables/dataTables.bootstrap4.min.css")" rel="stylesheet">*@
 
 	<style>
 		.btnDeleteCheck {
@@ -82,7 +81,6 @@
 			<a href="@Url.Content("~/Type/BMaterialTypeAddnEdit")"><input style="width:150px; margin-left:5px;" class="insertbutton" type="button" value="新增/編輯類別"/></a>
 		</div>
 	</div>
-	@*<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />*@
 	<table id="table_id" class="table table-hover stripe">
 		<thead>
 		<th>配料名稱</th>
@@ -100,15 +98,11 @@
 	
 	<script>
 		const tbody = document.querySelector("#tbody");
-		//const txt = document.querySelector("#txtKeyword");  //關鍵字
 		const btnDelete = document.getElementsByName("btnDelete") //點擊刪除配料
 		const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
 		const linkDelete = document.querySelector("#linkDelete"); //確定刪除配料
 		const selType = document.querySelector("#selType"); //配料類別
 		const txtPrice = document.querySelector("#txtPrice");
-
-		//關鍵字查詢(類別與商品)
-		//txt.addEventListener("input", () => list());
 
 		list();
 		async function list() {
@@ -167,13 +161,6 @@
 				})
 			})
 			////套用bootstrap,dataTable功能
-			//$(document).ready(function () {
-			
-			//});
-			window.addEventListener("load",function(){
-				
-
-			})
 			$("#table_id").DataTable();
 		}
 		

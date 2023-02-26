@@ -85,7 +85,7 @@ namespace prjMSIT145_Final.Service
                 //{ "OrderResultURL",$"{Config.GetSection("HostURL").Value}/CreditPay/CallbackReturn"},
                 { "OrderResultURL",$"{_url}/CreditPay/CallbackReturn"},
 
-                //特店編號， 2000132 測試綠界編號  3002599   3003008
+                //特店編號
                 { "MerchantID",  "3003008"},
 
                 //忽略付款方式
@@ -100,12 +100,6 @@ namespace prjMSIT145_Final.Service
                 //CheckMacValue 加密類型 固定填入 1 (SHA256)
                 { "EncryptType",  "1"},
 			};
-			//int count = 0;
-			//foreach(var pro in inModel.ItemName)
-			//{
-			//	order[$"ItemName[{count}]"] = pro;
-			//	count++;
-			//}
 			//檢查碼
 			order["CheckMacValue"] = GetCheckMacValue(order);
 
@@ -133,10 +127,10 @@ namespace prjMSIT145_Final.Service
 
 			var checkValue = string.Join("&", param);
 
-			//測試用的 HashKey  spPjZn66i0OhqJsQ    特約:5294y06JbISpM5x9   平台:FCnGLNS7P3xQ2q3E
+			//測試用的 HashKey
 			var hashKey = "FCnGLNS7P3xQ2q3E";
 
-			//測試用的 HashIV   hT5OJckN45isQTTs   特約:v77hoKGq4kWxNNIS   平台:awL5GRWRhyaybq13
+			//測試用的 HashIV  
 			var HashIV = "awL5GRWRhyaybq13";
 
 			checkValue = $"HashKey={hashKey}" + "&" + checkValue + $"&HashIV={HashIV}";
@@ -396,7 +390,5 @@ namespace prjMSIT145_Final.Service
 			}
 			return result;
 		}
-
 	}
-
 }

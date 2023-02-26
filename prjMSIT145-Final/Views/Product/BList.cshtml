@@ -89,8 +89,7 @@
                         </div>
                         <input type="hidden" id="materialCheck" />
                         <div id="chooseMaterial">
-                            @*  <label for="" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="" name="chooseMaterial" style="font-size:20px" />&ensp;單點</label>*@
-                        </div>
+                            </div>
 
                         @*產品價格*@
                         <hr />
@@ -125,8 +124,6 @@
             <a href="@Url.Content("~/Type/BItemTypeAddnEdit")" style="margin-left:20px;"><input class="insertbutton" type="button" value="新增/編輯類別" /></a>
         </div>
     </div>
-    @*<input class="inserselecttext" type="text" placeholder="搜尋...." id="txtKeyword" />*@
-
     <table id="table_id" class="table table-hover stripe" style="width:100%;">
         <thead>
         <th>相片</th>
@@ -145,7 +142,6 @@
 @section Scripts{
 
     <script>
-        //const txt = document.querySelector("#txtKeyword");
         const tbody = document.querySelector("#tbody");
         const btnEdit = document.getElementsByName("btnEdit"); //編輯按鈕
         const btnDelete = document.getElementsByName("btnDelete"); //刪除按鈕
@@ -158,18 +154,13 @@
 
         list();
 
-        //關鍵字查詢(類別與商品)
-        //txt.addEventListener("input", () => search());?keyword=${txt.value}
-
         async function list() {
             let response = await fetch(`@Url.Content("~/Product/BItemList")`);
             const datas = await response.json();
             let result = document.createDocumentFragment();
             result = "";
             datas.forEach(function (item, index) {
-                //console.log(datas);
-                //		<input type="hidden" name="${item.bFid}" value="${item.bFid}"/>
-                //		<input type="hidden" name="${item.categoryFid}" value="${item.categoryFid}"/>
+
                 if (item.photo == null)  //沒有產品圖片就使用預設圖片
                 {
                     item.photo = "Business/upload.png";
@@ -277,15 +268,13 @@
             chooseMaterial.innerHTML = materialFrag;
 
         }
-        //上傳照片<input type='hidden' id='Fid' value='Fid'>
+        //上傳照片
         file.addEventListener("change", function () {
             const file = this.files[0];
             const reader = new FileReader();
             reader.onload = function (e) {
                 imgShow.setAttribute("src", e.target.result);
                 imgShow.setAttribute("style", "width:150px;height:100px;");
-                //imgShow.innerHTML = `<img src="${e.target.result}" style="width:150px;height:100px;"/>`
-
             };
             reader.readAsDataURL(file);
         })

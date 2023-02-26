@@ -43,8 +43,6 @@ namespace prjMSIT145_Final.Controllers
 									 proC.OptionGroupName,
 									 proC.Memo
 								 }).Where(p => p.BFid == member.Fid).OrderBy(b => b.OptionGroupName);
-					//if (keyword != null)
-					//	datas = datas.Where(k => k.OptionName.Contains(keyword) || k.OptionGroupName.Contains(keyword)).OrderBy(o => o.OptionGroupName);
 
 					List<CProductOptionViewModel> materialList = new List<CProductOptionViewModel>();
 					foreach (var data in datas)
@@ -96,10 +94,6 @@ namespace prjMSIT145_Final.Controllers
 		{
 			if (HttpContext.Session.Keys.Contains(CDictionary.SK_LOGINED_Business))
 			{
-				if (_context.ProductOptions.Any(op => op.OptionName == vm.OptionName && op.BFid == vm.BFid))
-					return RedirectToAction("BList");
-				else
-				{
 					ProductOptionGroup optGp = _context.ProductOptionGroups.FirstOrDefault(o => o.OptionGroupName == vm.OptionGroupName && o.BFid == vm.BFid);
 					ProductOption opt = _context.ProductOptions.FirstOrDefault(o => o.Fid == vm.Fid);
 					if (optGp != null && opt != null)
@@ -110,7 +104,6 @@ namespace prjMSIT145_Final.Controllers
 						_context.SaveChanges();
 					}
 					return RedirectToAction("BList");
-				}
 			}
 			else
 				return RedirectToAction("Blogin", "BusinessMember");

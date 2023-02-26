@@ -16,6 +16,7 @@ namespace prjMSIT145_Final.Controllers
             _context = context;
             _host = host;
         }
+        //商品列表
         public IActionResult BList()
         {
             try
@@ -79,6 +80,7 @@ namespace prjMSIT145_Final.Controllers
             catch
             {
                 return Json("清單資料有誤");
+                return Console.
             }
         }
         public ActionResult BCreate()

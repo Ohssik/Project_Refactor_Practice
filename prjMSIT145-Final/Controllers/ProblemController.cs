@@ -41,10 +41,5 @@ namespace prjMSIT145_Final.Controllers
 
             return Json(img);
 		}
-		public IActionResult PQuestion()
-		{
-			return View();
-		}
-
 	}
 }

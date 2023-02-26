@@ -28,14 +28,12 @@
     @keyframes step{
         from {
             height:20px;
-            /*transform: rotateX(70deg);*/
              opacity: 10%;
             bottom: 90px;
             filter: drop-shadow(5px 10px 5px rgba(0,0,0,0.5));
         }
         to {
             height: 40px;
-            /*transform: rotateX(70deg);*/
            opacity: 90%;
             bottom: 30px;
             filter: drop-shadow(5px 10px 5px rgba(0,0,0,2));
@@ -56,7 +54,6 @@
     left: 150px;
     bottom: 5% ;
     transition: 0.2s;
-    /*filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.3))*/
 }
 
     .logoDiv img {
@@ -99,8 +96,6 @@
 }
 /* 對話框 */
 .msgDivProblem {
-    /* min-height: 500px;
-    max-height: 700px;*/
     height: 95%;
     max-width: 380px;
     min-width: 380px;

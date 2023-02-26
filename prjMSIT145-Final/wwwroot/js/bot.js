@@ -12,12 +12,8 @@ let msgProblem = "";
 // 點選常見問題
 tr.forEach(function (msg) {
     msg.addEventListener("click", function () {
-        //console.log(this.firstElementChild.innerHTML);
-
         msgProblem = this.firstElementChild.innerHTML;
-        //console.log("msg" + msgProblem)
         txt.value = msgProblem;
-        //console.log($("#txtProblem").val())
     });
 });
 
@@ -46,8 +42,7 @@ btnSubmitProblem.addEventListener("click", async function () {
                     </div>
                     </div>`;
 
-    //Customer/Member
-    //判斷使用者有無頭像 style='width:70px;height:70px'
+    //判斷使用者有無頭像
     if (img.userImg !== "") {
         fragForUser = `<div class="displayProblem userDiv">
                                     <div class="userMsg">${txt.value}</div>
@@ -91,14 +86,7 @@ document.addEventListener("scroll", function () {
         }, 500)
     }
 
-    //console.log("top:" + top);
-    console.log("hight:" + hight);
-    console.log("hight-top:" + hight-top);
-    //console.log(hight-top)
-    //console.log(document.body.scrollHeight);
-    //console.log("clientHeight: "+document.documentElement.clientHeight);
     //接近頁面最底時修改定位
-
     if ((hight - top) <= 1100 ) {
          azureLogo.setAttribute("style", "bottom:8%;");
         logoDiv.setAttribute("style", "bottom:8%");
@@ -113,7 +101,6 @@ document.addEventListener("scroll", function () {
     }
 })
 
-/*document.documentElement.clientHeight  目前瀏覽器顯示得高度*/
 if (hight <= document.documentElement.clientHeight) {
     azureLogo.setAttribute("style", "bottom:8%;");
     logoDiv.setAttribute("style", "bottom:8%;");

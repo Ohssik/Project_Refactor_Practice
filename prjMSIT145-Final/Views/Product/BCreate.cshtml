@@ -1,5 +1,4 @@
 ﻿@model prjMSIT145_Final.ViewModel.CProductsViewModel
-@*@model List<prjMSIT145_Final.ViewModel.CProductsViewModel>*@
 @{
     Layout = "_BusinessLayout";
     ViewData["Title"] = "BCreate";
@@ -55,7 +54,6 @@
         </div>
         <input type="hidden" id="materialCheck" />
         <div id="chooseMaterial">
-            @*  <label for="" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="" name="chooseMaterial" style="font-size:20px" />&ensp;單點</label>*@
         </div>
 
         @*產品價格*@
@@ -159,8 +157,6 @@
             const material = await requestMaterial.json();
             let materialFrag = document.createDocumentFragment();
             materialFrag = "";
-
-            //console.log(material)
             material.forEach(function (item, index) {
                 materialFrag += ` <label for="${item.fid}" style="font-size:18px;margin-right:10px; height:20px; "><input type="checkbox" value="${item.fid}" id="${item.fid}" name="productOp" style="font-size:20px" />&ensp;${item.optionGroupName}</label>`
             })
@@ -174,9 +170,6 @@
             const reader = new FileReader();
 
             reader.onload = function (e) {
-                //imgShow.setAttribute("src", e.target.result);
-                //console.log(e.target.result);
-                //imgShow.setAttribute("style","width:130px;height:90px;")
                 imgShow.innerHTML = `<img src="${e.target.result}" style="width:150px;height:100px;"/>`
             };
             reader.readAsDataURL(file);
@@ -184,8 +177,6 @@
 
         //移除照片
         btnImgDelete.addEventListener("click", function () {
-            //file.outerHTML = file.outerHTML;
-            //imgShow.setAttribute("src", "../images/Business/photo.png");
             imgShow.innerHTML = `<img src="../images/Business/photo.png" style="width:90px;height:70px;"/>`
         })
         //商品是否上架
@@ -254,7 +245,7 @@
         //驗證有無輸入名稱
         txtProductName.addEventListener("focusout", function () {
             if (txtProductName.value === "")
-                checkName.innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:20px;" />請輸入名稱`;
+                checkName.innerHTML = `<img src="@Url.Content("~/images/Business/warning.png")" style="width:20px;"/>請輸入名稱`;
             else
                 checkName.innerHTML = "";
         })
