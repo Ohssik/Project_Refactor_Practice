@@ -80,7 +80,7 @@ namespace prjMSIT145_Final.Controllers
             catch
             {
                 return Json("清單資料有誤");
-                return Console.
+                
             }
         }
         public ActionResult BCreate()
