@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using prjMSIT145_Final.Models
+@{
+
+    if (Context.Session.Keys.Contains(CDictionary.SK_LOGINED_ADMIN))
+    {
+        Context.Response.Redirect(Url.Content("~/admin/ANormalMemberList"));
+    }
+
+}
+<!DOCTYPE html>
 
 <html>
 <head>
