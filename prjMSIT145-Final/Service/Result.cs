@@ -1,4 +1,4 @@
-﻿namespace prjMSIT145_Final.Service
+﻿namespace prjMSIT145Final.Web.Service
 {
 	public class Result
 	{

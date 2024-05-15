@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using prjMSIT145_Final.Models;
-using prjMSIT145_Final.ViewModel;
+using prjMSIT145Final.Infrastructure.Models;
+using prjMSIT145Final.Web.ViewModel;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text.Json;
 
 
-namespace prjMSIT145_Final.Controllers
+namespace prjMSIT145Final.Web.Controllers
 {
     public class BusinessMemberController : Controller
     {

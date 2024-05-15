@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json;
 using NuGet.Common;
 using NuGet.Protocol;
-using prjMSIT145_Final.Models;
-using prjMSIT145_Final.ViewModels;
+using prjMSIT145Final.Infrastructure.Models;
+using prjMSIT145Final.Web.ViewModels;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Composition;
@@ -21,7 +21,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace prjMSIT145_Final.Controllers
+namespace prjMSIT145Final.Web.Controllers
 {
     public class CustomerMemberController : Controller
     {

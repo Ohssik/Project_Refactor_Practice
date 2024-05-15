@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace prjMSIT145Final.Infrastructure.Models
+{
+    public partial class OptionsToProduct
+    {
+        public int? ProductFid { get; set; }
+        public int? OptionGroupFid { get; set; }
+        public int Fid { get; set; }
+    }
+}

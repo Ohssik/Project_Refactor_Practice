@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using prjMSIT145_Final.Models;
-using prjMSIT145_Final.ViewModel;
+using prjMSIT145Final.Infrastructure.Models;
+using prjMSIT145Final.Web.ViewModel;
 using System.Text.Json;
 
-namespace prjMSIT145_Final.Controllers
+namespace prjMSIT145Final.Web.Controllers
 {
     public class AddMaterialController : Controller
 	{

@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using prjMSIT145_Final.Models;
+using prjMSIT145Final.Infrastructure.Models;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using prjMSIT145_Final.ViewModel;
+using prjMSIT145Final.Web.ViewModel;
 using System.Linq;
 using System.Diagnostics.Metrics;
 using System.Security.Cryptography;
 using System.Reflection.Metadata;
 using System.Collections.Generic;
-using prjMSIT145_Final.ViewModels;
+using prjMSIT145Final.Web.ViewModels;
 using System.Data;
 
-namespace prjMSIT145_Final.Controllers
+namespace prjMSIT145Final.Web.Controllers
 {
     public class ChatRoomController : Controller
     {

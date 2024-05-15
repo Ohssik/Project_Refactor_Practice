@@ -1,7 +1,7 @@
-﻿using prjMSIT145_Final.Models;
+﻿using prjMSIT145Final.Infrastructure.Models;
 using System.ComponentModel;
 
-namespace prjMSIT145_Final.ViewModels
+namespace prjMSIT145Final.Web.ViewModels
 {
     public class CACouponViewModel
     {

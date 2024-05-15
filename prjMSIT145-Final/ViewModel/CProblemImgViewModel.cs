@@ -1,6 +1,6 @@
-﻿using prjMSIT145_Final.Models;
+﻿using prjMSIT145Final.Infrastructure.Models;
 
-namespace prjMSIT145_Final.ViewModel
+namespace prjMSIT145Final.Web.ViewModel
 {
     public class CProblemImgViewModel
     {

@@ -1,25 +1,27 @@
-﻿using prjMSIT145_Final.Models;
+﻿using prjMSIT145Final.Infrastructure.Models;
+using prjMSIT145Final.ViewModels.NormalMember;
+using prjMSIT145Final.ViewModels.Order;
 using System.ComponentModel;
 
-namespace prjMSIT145_Final.ViewModels
+namespace prjMSIT145Final.Web.ViewModels
 {
     public class CANormalMemberViewModel
     {
-        private NormalMember _normalMember;
-        private IEnumerable<Order> _orders;
+        private NormalMemberViewModel _normalMember;
+        private IEnumerable<OrderViewModel> _orders;
         
         public CANormalMemberViewModel()
         {
-            _normalMember = new NormalMember();
-            _orders = new List<Order>();
+            _normalMember = new NormalMemberViewModel();
+            _orders = new List<OrderViewModel>();
             
         }
-        public NormalMember normalMember
+        public NormalMemberViewModel normalMember
         {
             get { return _normalMember; }
             set { _normalMember = value; }
         }
-        public IEnumerable<Order> orders
+        public IEnumerable<OrderViewModel> orders
         {
             get { return _orders; }
             set { _orders = value; }

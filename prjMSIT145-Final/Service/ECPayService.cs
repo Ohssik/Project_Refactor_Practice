@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using prjMSIT145_Final.Models;
+using prjMSIT145Final.Infrastructure.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.SignalR;
 
 
-namespace prjMSIT145_Final.Service
+namespace prjMSIT145Final.Web.Service
 {
 	public class ECPayService : ICommerce
 	{

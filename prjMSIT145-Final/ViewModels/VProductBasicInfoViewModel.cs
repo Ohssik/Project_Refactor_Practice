@@ -1,4 +1,4 @@
-﻿namespace prjMSIT145_Final.ViewModels
+﻿namespace prjMSIT145Final.Web.ViewModels
 {
     public class VProductBasicInfoViewModel
     {

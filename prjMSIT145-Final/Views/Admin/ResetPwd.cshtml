@@ -1,4 +1,4 @@
-﻿@model prjMSIT145_Final.ViewModels.CResetPwdViewModel
+﻿@model prjMSIT145Final.Web.ViewModels.CResetPwdViewModel
 
 @{
     ViewData["Title"] = "忘記密碼/修改密碼";
@@ -109,7 +109,7 @@
                     }
 
                     let formData = new FormData(document.ResetPwdForm);
-                    let f = await fetch(`@Url.Content("~/Admin/submitResetPwd")`, {
+                    let f = await fetch(`@Url.Content("~/Admin/SubmitResetPwd")`, {
                         body: formData,
                         method: "post",                        
                     });

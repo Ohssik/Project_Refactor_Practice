@@ -1,8 +1,8 @@
 ﻿using Microsoft.Build.Framework;
-using prjMSIT145_Final.Models;
+using prjMSIT145Final.Infrastructure.Models;
 
 
-namespace prjMSIT145_Final.ViewModels
+namespace prjMSIT145Final.Web.ViewModels
 {
     public class CNormalMemberViewModel
     {

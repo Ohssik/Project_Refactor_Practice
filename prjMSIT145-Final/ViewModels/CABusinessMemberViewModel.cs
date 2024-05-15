@@ -1,24 +1,26 @@
-﻿using prjMSIT145_Final.Models;
+﻿using prjMSIT145Final.Infrastructure.Models;
+using prjMSIT145Final.ViewModels.BusinessMember;
+using prjMSIT145Final.ViewModels.Order;
 using System.ComponentModel;
 
-namespace prjMSIT145_Final.ViewModels
+namespace prjMSIT145Final.Web.ViewModels
 {
     
     public class CABusinessMemberViewModel
     {
-        private BusinessMember _businessMember;
-        private IEnumerable<Order> _orders;
+        private BusinessMemberViewModel _businessMember;
+        private IEnumerable<OrderViewModel> _orders;
         public CABusinessMemberViewModel()
         {
-            _businessMember = new BusinessMember();
-            _orders = new List<Order>();
+            _businessMember = new BusinessMemberViewModel();
+            _orders = new List<OrderViewModel>();
         }
-        public BusinessMember businessMember
+        public BusinessMemberViewModel businessMember
         {
             get { return _businessMember; }
             set { _businessMember = value; }
         }
-        public IEnumerable<Order> orders
+        public IEnumerable<OrderViewModel> orders
         {
             get { return _orders; }
             set { _orders = value; }

@@ -1,11 +1,11 @@
-﻿using prjMSIT145_Final.Models;
+﻿using prjMSIT145Final.Infrastructure.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 
-namespace prjMSIT145_Final.ViewModels
+namespace prjMSIT145Final.Web.ViewModels
 {
     public class CAAdImg
     {

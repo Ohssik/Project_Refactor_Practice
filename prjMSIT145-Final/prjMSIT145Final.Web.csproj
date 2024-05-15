@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>prjMSIT145Final</RootNamespace>
+    <UserSecretsId>9e13e542-577f-4d3c-9157-edea4d764027</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\fontawesome-free-6.2.1-web\**" />
+    <Compile Remove="wwwroot\upload\**" />
+    <Content Remove="wwwroot\fontawesome-free-6.2.1-web\**" />
+    <Content Remove="wwwroot\upload\**" />
+    <EmbeddedResource Remove="wwwroot\fontawesome-free-6.2.1-web\**" />
+    <EmbeddedResource Remove="wwwroot\upload\**" />
+    <None Remove="wwwroot\fontawesome-free-6.2.1-web\**" />
+    <None Remove="wwwroot\upload\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\OrderDetial\_CartList.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Apis.Auth" Version="1.59.0" />
+    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="API\" />
+    <Folder Include="Views\Problem\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\prjMSIT145Final.Infrastructure\prjMSIT145Final.Infrastructure.csproj" />
+    <ProjectReference Include="..\prjMSIT145Final.Service\prjMSIT145Final.Service.csproj" />
+  </ItemGroup>
+
+</Project>

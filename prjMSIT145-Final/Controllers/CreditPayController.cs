@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
-using prjMSIT145_Final.Models;
+using prjMSIT145Final.Infrastructure.Models;
 using System.Text;
 using System.Web;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using prjMSIT145_Final.Service;
+using prjMSIT145Final.Web.Service;
 
-namespace prjMSIT145_Final.Controllers
+namespace prjMSIT145Final.Web.Controllers
 {
 	public class CreditPayController : Controller
 	{

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<prjMSIT145_Final.ViewModels.CAAdImg>
+﻿@model IEnumerable<prjMSIT145Final.Web.ViewModels.CAAdImg>
 @{
     ViewData["Title"] = "管理者控制台/首頁圖片管理";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
@@ -248,7 +248,7 @@
                         //console.log(ads);
 
                         $.ajax({
-                            url: `@Url.Content("~/Admin/changeAdOrderBy")`,
+                            url: `@Url.Content("~/Admin/ChangeAdOrderBy")`,
                             type: "post",
                             data:{ data:JSON.stringify(ads)},
                             dataType: "json",
@@ -270,7 +270,7 @@
                 $(this).css('border', '7px solid red').siblings().css('border', '0');
 
                 $.ajax({
-                    url: `@Url.Content("~/Admin/loadImgInfo")`,
+                    url: `@Url.Content("~/Admin/LoadImgInfo")`,
                     type: "post",
                     data: {
                         "fid": $(this).attr('data-id')
@@ -318,7 +318,7 @@
                 
 
                 $.ajax({
-                    url: `@Url.Content("~/Admin/saveAdInfo")`,
+                    url: `@Url.Content("~/Admin/SaveAdInfo")`,
                     type: "post",
                     data: { data: JSON.stringify(ad) },
                     dataType: "json",

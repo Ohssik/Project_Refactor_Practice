@@ -1,4 +1,4 @@
-﻿@model prjMSIT145_Final.ViewModels.CABusinessMemberViewModel
+﻿@model prjMSIT145Final.Web.ViewModels.CABusinessMemberViewModel
 @{
     ViewData["Title"] = "管理者控制台/商家會員管理";
     Layout = "~/Views/Shared/Admin/_AdminLayout.cshtml";
@@ -179,7 +179,7 @@
                         <tbody>
                             @{
                                     string price = "";
-                                foreach (Order od in Model.orders)
+                                foreach (var od in Model.orders)
                                 {
                                         price = ((decimal)od.TotalAmount).ToString("###,###");
                                             <tr>
@@ -304,12 +304,12 @@
             changeAuthBtnClicked(authBtnIsClicked, isSus);
 
             $.ajax({
-                url: `@Url.Content("~/Admin/sendAccountLockedNotice")`,
+                url: `@Url.Content("~/Admin/SendAccountLockedNotice")`,
                 type: "post",
                 data: {
                     data: JSON.stringify({
                         memberId: $('[name = "Fid"]').val(),
-                        IsSuspensed: isSus,
+                        isSuspensed: isSus,
                         txtRecipient: $('[name = txtRecipient]').val(),
                         txtMessage: $('[name = txtMessage]').val(),
                         memberType: 'B'

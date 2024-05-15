@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using prjMSIT145_Final.Models;
+using prjMSIT145Final.Infrastructure.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);

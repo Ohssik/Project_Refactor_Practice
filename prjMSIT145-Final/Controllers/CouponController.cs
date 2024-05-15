@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using prjMSIT145_Final.Models;
-using prjMSIT145_Final.ViewModels;
+using prjMSIT145Final.Infrastructure.Models;
+using prjMSIT145Final.Web.ViewModels;
 using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace prjMSIT145_Final.Controllers
+namespace prjMSIT145Final.Web.Controllers
 {
     public class CouponController : Controller
     {

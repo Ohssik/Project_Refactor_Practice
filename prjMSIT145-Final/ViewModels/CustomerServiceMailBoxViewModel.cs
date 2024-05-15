@@ -2,7 +2,7 @@
 
 using System.ComponentModel;
 
-namespace prjMSIT145_Final.ViewModels
+namespace prjMSIT145Final.Web.ViewModels
 {
     public class CustomerServiceMailBoxViewModel
     {

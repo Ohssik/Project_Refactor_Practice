@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using prjMSIT145_Final.Models;
-using prjMSIT145_Final.ViewModels;
+using prjMSIT145Final.Infrastructure.Models;
+using prjMSIT145Final.Web.ViewModels;
 using System.Text.Json;
 using System.Collections.Concurrent;
 using System.Net;
-using prjMSIT145_Final.ViewModel;
+using prjMSIT145Final.Web.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Collections.Generic;
 
-namespace prjMSIT145_Final.Controllers
+namespace prjMSIT145Final.Web.Controllers
 {
     public class OrderDetialController : Controller
     {

@@ -1,7 +1,7 @@
-﻿using prjMSIT145_Final.Models;
-using prjMSIT145_Final.ViewModel;
+﻿using prjMSIT145Final.Infrastructure.Models;
+using prjMSIT145Final.Web.ViewModel;
 
-namespace prjMSIT145_Final.ViewModels
+namespace prjMSIT145Final.Web.ViewModels
 {
     public class COrderDetialViewModel
     {

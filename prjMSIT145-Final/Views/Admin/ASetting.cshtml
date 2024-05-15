@@ -1,4 +1,4 @@
-﻿@model prjMSIT145_Final.ViewModels.CASettingViewModel
+﻿@model prjMSIT145Final.Web.ViewModels.CASettingViewModel
 
 @{
     ViewData["Title"] = "管理者控制台/修改密碼";
@@ -84,7 +84,7 @@
                 }
 
                 $.ajax({
-                    url:'@Url.Content("~/Admin/saveAdminPwd")',
+                    url:'@Url.Content("~/Admin/SaveAdminPwd")',
                     type:'post',
                     data:{
                         data:JSON.stringify({

@@ -1,4 +1,4 @@
-﻿namespace prjMSIT145_Final.ViewModel
+﻿namespace prjMSIT145Final.Web.ViewModel
 {
     public class CChatroomitemViewModel
     {
