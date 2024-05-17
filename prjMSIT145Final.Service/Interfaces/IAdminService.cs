@@ -1,5 +1,4 @@
 ﻿using prjMSIT145Final.Infrastructure.Models;
-using prjMSIT145Final.Repository.ParameterModels;
 using prjMSIT145Final.Service.Dtos;
 using prjMSIT145Final.Service.ParameterDtos;
 
@@ -9,7 +8,6 @@ namespace prjMSIT145Final.Service.Interfaces
     {
         Task SendAccountLockedNotice(SendEmailParameterDto parameter);
 
-        Task<bool> CheckPwd(CheckPwdParameterDto parameter);
         Task<bool> CheckAccountInfo(ForgetPwdParameterDto parameter);
 
         Task UpdatePwd(ModifyPwdParameterDto parameter);
@@ -27,8 +25,6 @@ namespace prjMSIT145Final.Service.Interfaces
         Task<AdImg> AddUploadAdInfo(AdImg ad);
 
         Task<AdImg> UpdateUploadAdInfo(AdImg ad);
-
-        Task<AdImg> GetAdByOrderBy(int orderBy);
 
         Task<AdImg> GetAdById(int id);
 

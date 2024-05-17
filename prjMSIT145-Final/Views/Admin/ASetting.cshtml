@@ -86,16 +86,14 @@
                 $.ajax({
                     url:'@Url.Content("~/Admin/SaveAdminPwd")',
                     type:'post',
-                    data:{
-                        data:JSON.stringify({
+                    data: JSON.stringify({
                             Fid:@Model.Fid,
                             Account: '@Model.Account',
                             Email: email,
                             txtPassword: txtPwd,
                             txtConfirmPwd: txtConPwd,
                             RoleLevel:@Model.RoleLevel,
-                        })
-                    },
+                        }),
                     dataType:'json',
                     success:function(msg){
                         if(msg==1){

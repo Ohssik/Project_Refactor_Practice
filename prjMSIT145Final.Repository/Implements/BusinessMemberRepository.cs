@@ -1,11 +1,7 @@
-﻿using prjMSIT145Final.Infrastructure.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using prjMSIT145Final.Infrastructure.Models;
 using prjMSIT145Final.Repository.Interfaces;
 using prjMSIT145Final.Repository.ParameterModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace prjMSIT145Final.Repository.Implements
 {
@@ -29,7 +25,8 @@ namespace prjMSIT145Final.Repository.Implements
 
         public async Task<BusinessMember> GetById(int id)
         {
-            throw new NotImplementedException();
+            var result = await _context.BusinessMembers.FirstOrDefaultAsync(member => member.Fid == id);
+            return result ?? new BusinessMember();
         }
 
         public async Task<BusinessImg> GetImgById(int id)

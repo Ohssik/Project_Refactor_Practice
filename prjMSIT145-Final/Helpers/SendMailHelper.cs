@@ -1,9 +1,6 @@
-﻿using NuGet.Common;
-using prjMSIT145Final.Infrastructure.Models;
+﻿using prjMSIT145Final.Models;
 using prjMSIT145Final.Web.ViewModels;
-using System;
 using System.Net.Mail;
-using System.Security.Policy;
 
 namespace prjMSIT145Final.Helpers
 {
@@ -67,14 +64,26 @@ namespace prjMSIT145Final.Helpers
 
         }
 
-
-        public class MailContentModel
+        public async Task<MailContentModel> SetAccountLockedNoticeContent(SendEmailParameter parameter)
         {
-            public string MailBody { get; set; }
-            public string MailSubject { get; set; }
-            public string MailAddress { get; set; }
-            public string MailServer { get; set; }
-            public string Token { get; set; }
+            string changeType = (int)parameter.IsSuspensed == 1 ? "停權" : "復權";
+            string mailBody = $"您好：<br>您的帳戶已被{changeType}，若有問題請洽詢網站管理員。" +
+                "<br><br>" +
+                $"{changeType}原因：<br>" +
+                parameter.TxtMessage +
+                "<br><br><hr><br>" +
+                "<br>此為系統通知，請勿直接回信，謝謝";
+
+            string mailSubject = $"帳號{changeType}通知";
+
+            return new MailContentModel
+            {
+                MailAddress = parameter?.TxtRecipient,
+                MailBody = mailBody,
+                MailSubject = mailSubject,
+                MailServer = /*_config["DemoMailServer:pwd"].ToString()*/""
+            };
+
         }
     }
 }

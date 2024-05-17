@@ -2,8 +2,6 @@
 using prjMSIT145Final.Infrastructure.Models;
 using prjMSIT145Final.Repository.Interfaces;
 using prjMSIT145Final.Repository.ParameterModels;
-using System.Xml.Linq;
-using static prjMSIT145Final.Infrastructure.Models.GoogleGeocodingAPI;
 
 namespace prjMSIT145Final.Repository.Implements
 {
@@ -16,14 +14,6 @@ namespace prjMSIT145Final.Repository.Implements
             )
         {
             _context = context;
-        }
-
-        public async Task<bool> CheckPwd(CheckPwdParameterModel parameter)
-        {
-            var member = await _context.AdminMembers.FirstOrDefaultAsync(
-                                u => u.Account == parameter.Account && u.Password == parameter.Password);
-
-            return member != null;
         }
 
         public async Task DeleteAd(int id)
@@ -47,7 +37,8 @@ namespace prjMSIT145Final.Repository.Implements
 
         public async Task<IEnumerable<AdImg>> GetAllAd()
         {
-            throw new NotImplementedException();
+            var result = await Task.Run(() =>_context.AdImgs.Select(img => img));
+            return result ?? Enumerable.Empty<AdImg>();
         }
 
         public async Task ModifyAdInfo(AdImg ad)
@@ -79,8 +70,6 @@ namespace prjMSIT145Final.Repository.Implements
         {
             if (parameter != null)
             {
-                var DemoMailServer = _config["DemoMailServer:pwd"];
-
                 if (parameter.MemberType == "B")
                 {
                     var user = await _context.BusinessMembers
@@ -104,18 +93,6 @@ namespace prjMSIT145Final.Repository.Implements
 
                 await _context.SaveChangesAsync();
 
-                string changeType = (int)parameter.IsSuspensed == 1 ? "停權" : "復權";
-                string mailBody = $"您好：<br>您的帳戶已被{changeType}，若有問題請洽詢網站管理員。" +
-                    "<br><br>" +
-                    $"{changeType}原因：<br>" +
-                    parameter.TxtMessage +
-                    "<br><br><hr><br>" +
-                    "<br>此為系統通知，請勿直接回信，謝謝";
-
-                string mailSubject = $"帳號{changeType}通知";
-
-                //string result = sendMail(mail.txtRecipient, mailBody, mailSubject);
-                string result = (new CSendMail()).sendMail(parameter.TxtRecipient, mailBody, mailSubject, _config["DemoMailServer:pwd"].ToString());
             }
         }
 

@@ -306,15 +306,14 @@
             $.ajax({
                 url: `@Url.Content("~/Admin/SendAccountLockedNotice")`,
                 type: "post",
-                data: {
-                    data: JSON.stringify({
+                data: JSON.stringify({
                         memberId: $('[name = "Fid"]').val(),
                         isSuspensed: isSus,
                         txtRecipient: $('[name = txtRecipient]').val(),
                         txtMessage: $('[name = txtMessage]').val(),
                         memberType: 'B'
                     }),
-                },
+                
                 dataType: "json",
                 success: function (msg) {
                     //console.log(msg);                    

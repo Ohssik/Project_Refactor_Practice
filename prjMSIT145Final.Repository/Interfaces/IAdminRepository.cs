@@ -7,7 +7,6 @@ namespace prjMSIT145Final.Repository.Interfaces
     {
         Task SendAccountLockedNotice(SendEmailParameterModel parameter);
 
-        Task<bool> CheckPwd(CheckPwdParameterModel parameter);
         Task<bool> CheckAccountInfo(ForgetPwdParameterModel parameter);
 
         Task UpdatePwd(ModifyPwdParameterModel parameter);

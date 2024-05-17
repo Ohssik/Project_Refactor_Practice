@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using prjMSIT145Final.Infrastructure.Models;
 using prjMSIT145Final.Web.ViewModels;
 using System.Net.Mail;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace prjMSIT145Final.Web.Controllers

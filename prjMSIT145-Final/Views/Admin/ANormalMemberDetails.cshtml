@@ -177,7 +177,7 @@
                             <tbody>
                                 @{
                                     string price = "";
-                                    foreach (Order od in Model.orders)
+                                    foreach (var od in Model.orders)
                                     {
                                         price = ((decimal)od.TotalAmount).ToString("###,###");
                                                         <tr>
@@ -286,17 +286,15 @@
             changeAuthBtnClicked(authBtnIsClicked, isSus);
 
             $.ajax({
-                url: `@Url.Content("~/Admin/sendAccountLockedNotice")`,
+                url: `@Url.Content("~/Admin/SendAccountLockedNotice")`,
                 type: "post",
-                data: {
-                    data: JSON.stringify({
+                data: JSON.stringify({
                         memberId: $('[name = "Fid"]').val(),
                         IsSuspensed: isSus,
                         txtRecipient: $('[name = txtRecipient]').val(),
                         txtMessage: $('[name = txtMessage]').val(),
                         memberType: 'N'
-                    }),
-                },
+                    }),                
                 dataType: "json",
                 success: function (msg) {
                     console.log(`msg=${msg}`);

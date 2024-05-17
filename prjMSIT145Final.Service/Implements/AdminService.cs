@@ -1,59 +1,62 @@
-﻿using prjMSIT145Final.Infrastructure.Models;
+﻿using MapsterMapper;
+using prjMSIT145Final.Infrastructure.Models;
 using prjMSIT145Final.Repository.Interfaces;
+using prjMSIT145Final.Repository.ParameterModels;
 using prjMSIT145Final.Service.Dtos;
 using prjMSIT145Final.Service.Interfaces;
 using prjMSIT145Final.Service.ParameterDtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace prjMSIT145Final.Service.Implements
 {
     public class AdminService : IAdminService
     {
         private readonly IAdminRepository _adminRepo;
+        private readonly IMapper _mapper;
 
         public AdminService(IAdminRepository adminRepository
-        )
+            ,IMapper mapper)
         { 
             _adminRepo = adminRepository;
+            _mapper = mapper;
         }
 
-        public Task<bool> CheckPwd(CheckPwdParameterDto parameter)
+        public async Task DeleteAd(int id)
         {
-            throw new NotImplementedException();
+            await _adminRepo.DeleteAd(id);
         }
 
-        public Task DeleteAd(int id)
+        public async Task<AdminMemberDto> Get(CheckPwdParameterDto parameter)
         {
-            throw new NotImplementedException();
+            var model = await _adminRepo.Get(_mapper.Map<CheckPwdParameterModel>(parameter));
+            var result = _mapper.Map<AdminMemberDto>(model);
+            return result;
         }
 
-        public Task<AdminMemberDto> Get(CheckPwdParameterDto parameter)
+        public async Task<IEnumerable<AdImg>> GetAllAd()
         {
-            throw new NotImplementedException();
+            return await _adminRepo.GetAllAd();
         }
 
-        public Task<IEnumerable<AdImg>> GetAllAd()
+        public async Task ModifyAdInfo(AdImg ad)
         {
-            throw new NotImplementedException();
+            await _adminRepo.ModifyAdInfo(ad);
         }
 
-        public Task ModifyAdInfo(AdImg ad)
+        public async Task ModifyAdsOrderBy(IEnumerable<AdImg> ads)
         {
-            throw new NotImplementedException();
+            foreach(var ad in ads)
+            {
+                if (ad.OrderBy.HasValue)
+                {
+                    await _adminRepo.ModifyAdOrderBy(ad.Fid, ad.OrderBy.GetValueOrDefault());
+                }
+            }
         }
 
-        public Task ModifyAdsOrderBy(IEnumerable<AdImg> ads)
+        public async Task SendAccountLockedNotice(SendEmailParameterDto parameter)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task SendAccountLockedNotice(SendEmailParameterDto parameter)
-        {
-            throw new NotImplementedException();
+            var parameterModel = _mapper.Map<SendEmailParameterModel>(parameter);
+            await _adminRepo.SendAccountLockedNotice(parameterModel);
         }
 
         public async Task<AdImg> AddUploadAdInfo(AdImg ad)
@@ -61,14 +64,9 @@ namespace prjMSIT145Final.Service.Implements
             return await _adminRepo.AddUploadAdInfo(ad);
         }
 
-        public Task<AdImg> UpdateUploadAdInfo(AdImg ad)
+        public async Task<AdImg> UpdateUploadAdInfo(AdImg ad)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<AdImg> GetAdByOrderBy(int orderBy)
-        {
-            throw new NotImplementedException();
+            return await _adminRepo.UpdateUploadAdInfo(ad);
         }
 
         public async Task<AdImg> GetAdById(int id)
@@ -76,14 +74,16 @@ namespace prjMSIT145Final.Service.Implements
             return await _adminRepo.GetAdById(id);
         }
 
-        public Task<bool> CheckAccountInfo(ForgetPwdParameterDto parameter)
+        public async Task<bool> CheckAccountInfo(ForgetPwdParameterDto parameter)
         {
-            throw new NotImplementedException();
+            var parameterModel = _mapper.Map<ForgetPwdParameterModel>(parameter);
+            return await _adminRepo.CheckAccountInfo(parameterModel);
         }
 
-        public Task UpdatePwd(ModifyPwdParameterDto parameter)
+        public async Task UpdatePwd(ModifyPwdParameterDto parameter)
         {
-            throw new NotImplementedException();
+            var parameterModel = _mapper.Map<ModifyPwdParameterModel>(parameter);
+            await _adminRepo.UpdatePwd(parameterModel);
         }
 
         public async Task<string> AddChangePasswordRequest(ChangeRequestPassword resquest)
@@ -104,9 +104,9 @@ namespace prjMSIT145Final.Service.Implements
             return await _adminRepo.CheckTokenIsExpired(token);
         }
 
-        public Task<string> DeleteChangePwdRequest(ChangeRequestPassword resquest)
+        public async Task<string> DeleteChangePwdRequest(ChangeRequestPassword resquest)
         {
-            throw new NotImplementedException();
+            return await _adminRepo.DeleteChangePwdRequest(resquest);
         }
     }
 }

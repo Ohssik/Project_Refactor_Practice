@@ -109,6 +109,7 @@
             $('[name=txtAccount]').val('');
             $('[name=txtEmail]').val('');
         });
+
         $('#btnSend').click(function () {
             
             if ($('[name=txtAccount]').val()=='' || $('[name=txtEmail]').val()=='')
@@ -119,13 +120,11 @@
             $.ajax({
                 url: `@Url.Content("~/Admin/AForgotAdminPwd")`,
                 type: "post",
-                data: {
-                    data: JSON.stringify({
+                data: JSON.stringify({
                         txtAccount: $('[name = txtAccount]').val(),
                         txtEmail: $('[name = txtEmail]').val(),
                         memberType: 'A'
-                    }),
-                },
+                    }),                
                 dataType: "json",
                 success: function (msg) {
                     console.log(`msg=${msg}`);
@@ -144,6 +143,7 @@
                 }
             });
         });
+
         $('#forgotPwd').click(function(){            
             sendMail.show();
             $('#btnSend').removeAttr('disabled');
@@ -153,10 +153,12 @@
             $('[name=txtEmail]').val('');
             
         });
+
         $('#btnDemo').click(function(){
             $('input[name=Account]').val('admin');
             $('input[name=Password]').val('aDmin145');
         });
+
         $('#btnDemo2').click(function () {
             $('[name=txtAccount]').val('admin');
             $('[name=txtEmail]').val('rmtorh@hotmail.com');

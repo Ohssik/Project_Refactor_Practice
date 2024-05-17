@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Http;
-using System.Linq;
 using System.Text.Json;
-using System;
-using System.Reflection.Metadata;
-using System.Diagnostics.Metrics;
 using prjMSIT145Final.Web.ViewModel;
 
 namespace prjMSIT145Final.Infrastructure.Models

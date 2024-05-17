@@ -8,14 +8,11 @@ using prjMSIT145Final.Service.Interfaces;
 using MapsterMapper;
 using prjMSIT145Final.Service.ParameterDtos;
 using prjMSIT145Final.ViewModels.Admin;
-using static NuGet.Packaging.PackagingConstants;
 using prjMSIT145Final.ViewModels.NormalMember;
 using prjMSIT145Final.ViewModels.Order;
 using prjMSIT145Final.ViewModels.BusinessMember;
-using System.Diagnostics.Metrics;
 using iProcurementWebApi.Infrastructure.Extensions;
 using prjMSIT145Final.Parameters;
-using System.Xml.Linq;
 using prjMSIT145Final.Helpers;
 
 namespace prjMSIT145Final.Web.Controllers
@@ -31,8 +28,6 @@ namespace prjMSIT145Final.Web.Controllers
         private readonly IUploadImgHelper _uploadImgHelper;
         private readonly ISendMailHelper _sendMailHelper;
 
-
-        //private readonly IWebHostEnvironment _host;
         //private readonly IConfiguration _config;
 
         public AdminController(ispanMsit145shibaContext context
@@ -43,7 +38,6 @@ namespace prjMSIT145Final.Web.Controllers
             ,IBusinessMemberService businessMemberService
             ,IUploadImgHelper uploadImgHelper
             ,ISendMailHelper sendMailHelper
-            //,IWebHostEnvironment host
             //,IConfiguration config
             )
         {
@@ -55,7 +49,6 @@ namespace prjMSIT145Final.Web.Controllers
             _uploadImgHelper = uploadImgHelper;
             _sendMailHelper = sendMailHelper;
             _context = context;
-            //_host = host;
             //_config = config;
         }
 
@@ -70,28 +63,11 @@ namespace prjMSIT145Final.Web.Controllers
             if (parameter != null)
             {                
                 await _adminService.SendAccountLockedNotice(_mapper.Map<SendEmailParameterDto>(parameter));
+                var mail = await _sendMailHelper.SetAccountLockedNoticeContent(parameter);
+                await _sendMailHelper.SendMail(mail);
             }
 
             return NoContent();
-        }
-
-        /// <summary>
-        /// 檢查帳密
-        /// </summary>
-        /// <param name="parameter"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> CheckPwd([FromBody]CheckPwdParameter parameter)
-        {
-            if (string.IsNullOrEmpty(parameter.Account) || string.IsNullOrEmpty(parameter.Password))
-            {
-                return Content("請輸入完整的帳號和密碼");
-            }
-
-            var checkResult = await _adminService.CheckPwd(_mapper.Map<CheckPwdParameterDto>(parameter));
-            var result = checkResult ? "1":"0";
-
-            return Content(result);
         }
 
         /// <summary>
@@ -229,44 +205,44 @@ namespace prjMSIT145Final.Web.Controllers
                 return RedirectToAction("ANormalMemberDetails");
             }
 
-            var orderDatas = await _orderService.Get(id.GetValueOrDefault());
+            //var orderDatas = await _orderService.Get(id.GetValueOrDefault());
 
-            //var orderDatas = from order in _context.Orders
-            //                 join f in _context.ViewShowFullOrders on order.Fid equals f.OrderFid
-            //                 into group7
-            //                 from g7 in group7.DefaultIfEmpty()
-            //                 join bm in _context.BusinessImgs on g7.BFid equals bm.Fid
-            //                 into group2
-            //                 from g2 in group2.DefaultIfEmpty()
-            //                 join b in _context.BusinessMembers on order.BFid equals b.Fid
-            //                 into group3
-            //                 from g3 in group3.DefaultIfEmpty()
-            //                 join pay in _context.PaymentTermCategories on order.PayTermCatId equals pay.Fid
-            //                 into group4
-            //                 from g4 in group4.DefaultIfEmpty()
-            //                 where order.Fid == (int)id
-            //                 select new
-            //                 {
-            //                     g7.BMemberPhone,
-            //                     g7.BMemberName,
-            //                     order.OrderISerialId,
-            //                     order.PickUpDate,
-            //                     order.PickUpPerson,
-            //                     order.PickUpPersonPhone,
-            //                     order.PickUpTime,
-            //                     order.PickUpType,
-            //                     order.PayTermCatId,
-            //                     order.Memo,
-            //                     order.TotalAmount,
-            //                     g7.ProductName,
-            //                     order.OrderState,
-            //                     g7.Options,
-            //                     g7.Qty,
-            //                     g7.SubTotal,
-            //                     g2.LogoImgFileName,
-            //                     g3.Address,
-            //                     g4.PaymentType
-            //                 };
+            var orderDatas = from order in _context.Orders
+                             join f in _context.ViewShowFullOrders on order.Fid equals f.OrderFid
+                             into group7
+                             from g7 in group7.DefaultIfEmpty()
+                             join bm in _context.BusinessImgs on g7.BFid equals bm.Fid
+                             into group2
+                             from g2 in group2.DefaultIfEmpty()
+                             join b in _context.BusinessMembers on order.BFid equals b.Fid
+                             into group3
+                             from g3 in group3.DefaultIfEmpty()
+                             join pay in _context.PaymentTermCategories on order.PayTermCatId equals pay.Fid
+                             into group4
+                             from g4 in group4.DefaultIfEmpty()
+                             where order.Fid == (int)id
+                             select new
+                             {
+                                 g7.BMemberPhone,
+                                 g7.BMemberName,
+                                 order.OrderISerialId,
+                                 order.PickUpDate,
+                                 order.PickUpPerson,
+                                 order.PickUpPersonPhone,
+                                 order.PickUpTime,
+                                 order.PickUpType,
+                                 order.PayTermCatId,
+                                 order.Memo,
+                                 order.TotalAmount,
+                                 g7.ProductName,
+                                 order.OrderState,
+                                 g7.Options,
+                                 g7.Qty,
+                                 g7.SubTotal,
+                                 g2.LogoImgFileName,
+                                 g3.Address,
+                                 g4.PaymentType
+                             };
 
             if (orderDatas != null)
             {
@@ -283,11 +259,6 @@ namespace prjMSIT145Final.Web.Controllers
                     });
                 }
                 member.details = items;
-
-                //orderDatas.Distinct().Select(item => new CANormalMemberOrderViewModel
-                //{
-                //    BMemberName = item.BMemberName,
-                //});
 
                 member.BMemberName = orderDatas.Distinct().ToList()[0].BMemberName;
                 member.BMemberPhone = orderDatas.Distinct().ToList()[0].BMemberPhone;
@@ -509,10 +480,6 @@ namespace prjMSIT145Final.Web.Controllers
         /// <returns></returns>
         public async Task<IActionResult> ADisplayImgManage()
         {
-            //var datas = from img in _context.AdImgs
-            //            orderby img.OrderBy
-            //            select img;
-
             var imgs = await _adminService.GetAllAd();
 
             List<CAAdImg> list = new List<CAAdImg>();
@@ -525,7 +492,6 @@ namespace prjMSIT145Final.Web.Controllers
             }
             if (list.Count > 0)
             {
-                //var ader = _context.BusinessMembers.FirstOrDefault(a => a.Fid == list[0].BFid);
                 var ader = await _businessMemberService.GetById(list[0].BFid.GetValueOrDefault());
                 if (ader != null)
                 {
@@ -533,7 +499,7 @@ namespace prjMSIT145Final.Web.Controllers
                 }
             }
 
-            return View(list);
+            return View(list.OrderBy(img=>img.OrderBy));
         }
 
         /// <summary>
@@ -558,10 +524,10 @@ namespace prjMSIT145Final.Web.Controllers
         /// <summary>
         /// 移動廣告圖片時儲存圖片排序
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="ads"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> ChangeAdOrderBy([FromBody]IEnumerable<CAAdImg> ads)
+        public async Task<IActionResult> ChangeAdOrderBy(IEnumerable<CAAdImg> ads)
         {
             string result = "0";
 
@@ -573,7 +539,7 @@ namespace prjMSIT145Final.Web.Controllers
                     OrderBy = ad.OrderBy
                 });
 
-                await _adminService.ModifyAdsOrderBy(parameters);                
+                await _adminService.ModifyAdsOrderBy(parameters);
 
                 result = "1";
             }
@@ -616,7 +582,7 @@ namespace prjMSIT145Final.Web.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> DeleteAd([FromBody]string data)
+        public async Task<IActionResult> DeleteAd([FromForm]string data)
         {
             string result = "0";
 
@@ -635,12 +601,14 @@ namespace prjMSIT145Final.Web.Controllers
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> AaddAdImg([FromBody] UploadImgParameter parameter)
+        public async Task<IActionResult> AaddAdImg(string data)
         {
             AdImg returnAd = null;
 
-            if (parameter != null)
+            if (!string.IsNullOrEmpty(data))
             {
+                var parameter = JsonConvert.DeserializeObject<UploadImgParameter>(data);
+
                 var fName = await _uploadImgHelper.UploadAdImg(parameter);
                 returnAd = await _adminService.AddUploadAdInfo(new AdImg
                 {
@@ -656,15 +624,17 @@ namespace prjMSIT145Final.Web.Controllers
         /// <summary>
         /// 上傳並儲存新小圖片
         /// </summary>
-        /// <param name="parameter"></param>
+        /// <param name="data"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> SaveSmallImgData([FromBody] UploadImgParameter parameter)
+        public async Task<IActionResult> SaveSmallImgData(string data)
         {
             AdImg returnAd = null;
 
-            if (parameter != null)
+            if (!string.IsNullOrEmpty(data))
             {
+                var parameter = JsonConvert.DeserializeObject<UploadImgParameter>(data);
+
                 var fName = await _uploadImgHelper.UploadAdImg(parameter);
                 returnAd = await _adminService.UpdateUploadAdInfo(new AdImg
                 {
@@ -728,7 +698,8 @@ namespace prjMSIT145Final.Web.Controllers
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public async Task<IActionResult> AForgotAdminPwd(ForgetPwdParameter parameter)
+        [HttpPost]
+        public async Task<IActionResult> AForgotAdminPwd([FromBody]ForgetPwdParameter parameter)
         {
             var checkResult = false;
 
@@ -773,40 +744,6 @@ namespace prjMSIT145Final.Web.Controllers
         }
 
         
-        //private async Task<string> SetForgetPwdMail(ForgetPwdParameter fm)
-        //{
-        //    string emailUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}";
-        //    string token = Guid.NewGuid().ToString();
-        //    //string url = $"https://localhost:7266/Admin/ResetPwd?token={token}&acc={fm.txtAccount}&tp={fm.memberType}";
-        //    string url = $"{emailUrl}/Admin/ResetPwd?token={token}&acc={fm?.txtAccount}&tp={fm?.memberType}";
-
-        //    var result = await _adminService.AddChangePasswordRequest(new ChangeRequestPassword
-        //    {
-        //        Token = token,
-        //        Account = fm?.txtAccount,
-        //        Email = fm?.txtEmail,
-        //        Expire = DateTime.Now.AddMinutes(10)
-        //    });
-
-        //    string mailBody = $"您好：<br>我們收到了您發送的忘記密碼通知。<br>" +
-        //                        $"請確認是您本人發出的請求後，請在<label style='color:red'><b>10分鐘內</b></label>點擊以下網址連結到修改密碼的頁面後輸入新密碼。" +
-        //                        "<br>如果您沒有發出請求，則可忽略此信。<br><br>" +
-        //                        $"<a href='{url}' target='_blank'>★★★修改密碼★★★</a><br><br>" +
-        //                        "<hr>" +
-        //                        "<br><br>此為系統通知，請勿直接回信，謝謝";
-
-        //    string mailSubject = $"修改密碼通知";
-
-        //    result += await Task.Run(()=> " " + (new CSendMail()).sendMail(
-        //        fm?.txtEmail, 
-        //        mailBody, 
-        //        mailSubject, 
-        //        _config["DemoMailServer:pwd"].ToString()));
-
-        //    return result;
-        //}
-
-
         /// <summary>
         /// 忘記密碼的重設密碼頁
         /// </summary>
@@ -943,41 +880,6 @@ namespace prjMSIT145Final.Web.Controllers
         //    }
 
         //    return result;
-        //}
-
-        //private string sendMail(string email, string mailBody, string mailSubject)//發信
-        //{
-        //    var DemoMailServer = _config["DemoMailServer:pwd"];
-        //    MailMessage MyMail = new MailMessage();
-        //    MyMail.From = new MailAddress("ShibaAdmin@msit145shiba.com.tw", "日柴", System.Text.Encoding.UTF8);
-        //    MyMail.To.Add(email);
-
-        //    MyMail.Subject = mailSubject;
-        //    MyMail.Body = mailBody; //設定信件內容
-        //    MyMail.IsBodyHtml = true; //是否使用html格式
-
-        //    SmtpClient MySMTP = new SmtpClient();
-        //    //MySMTP.UseDefaultCredentials = true;
-        //    MySMTP.Credentials = new System.Net.NetworkCredential("b9809004@gapps.ntust.edu.tw", DemoMailServer); //這裡要填正確的帳號跟密碼
-        //    MySMTP.Host = "smtp.gmail.com"; //設定smtp Server
-        //    MySMTP.Port = 587;
-        //    MySMTP.EnableSsl = true; //gmail預設開啟驗證
-
-
-        //    try
-        //    {
-        //        MySMTP.Send(MyMail);
-        //        return "success";
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return $"Mail error:{ex.ToString()}";
-        //    }
-        //    finally
-        //    {
-        //        MyMail.Dispose(); //釋放資源
-        //    }
-
         //}
 
         /// <summary>

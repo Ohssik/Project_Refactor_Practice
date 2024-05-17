@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore;
+using Mapster;
+using prjMSIT145Final.DI;
 using prjMSIT145Final.Infrastructure.Models;
-
+using prjMSIT145Final.MappingProfile;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 
 // Add services to the container.
@@ -11,11 +11,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 builder.Services.AddMemoryCache();
 //builder.Services.AddMvc();
-
-builder.Services.AddDbContext<ispanMsit145shibaContext>(
- options => options.UseSqlServer(
- builder.Configuration.GetConnectionString("ispanMsit145shibaconnection" /*"localconnection"*/)
-));
 
 
 builder.Services.AddDistributedMemoryCache();
@@ -26,11 +21,21 @@ builder.Services.AddSession(op =>
     op.Cookie.IsEssential = true;
 });
 
-//var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDependencyInjection(builder.Configuration);
+var config = TypeAdapterConfig.GlobalSettings;
+config.Scan(typeof(MapperConfig).Assembly);
+builder.Services.AddSingleton(config);
 
-//builder.Services.AddControllersWithViews();
+
+//Session
+builder.Services.AddSession(op =>
+{
+    op.IdleTimeout = TimeSpan.FromMinutes(20);
+    op.Cookie.HttpOnly = true;
+    op.Cookie.IsEssential = true;
+});
+
 //builder.Services.AddHttpContextAccessor();
-//builder.Services.AddTransient<IUserRepository, UserRepository>();
 
 //builder.Services.AddDbContext<ispanMsit145shibaContext>(
 // options => options.UseSqlServer(
@@ -48,8 +53,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseSession();//�ҥ�Session
-app.MapHub<ChatHub>("/chatHub");
+app.UseSession();
+//app.MapHub<ChatHub>("/chatHub");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
@@ -63,7 +68,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
 
-pattern: "{controller=Home}/{action=CIndex}/{id?}");
+pattern: "{controller=Admin}/{action=ALogin}/{id?}");
 
 
 app.Run();
