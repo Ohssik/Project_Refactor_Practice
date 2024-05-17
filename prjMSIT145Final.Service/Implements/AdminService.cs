@@ -20,11 +20,6 @@ namespace prjMSIT145Final.Service.Implements
             _mapper = mapper;
         }
 
-        public async Task DeleteAd(int id)
-        {
-            await _adminRepo.DeleteAd(id);
-        }
-
         public async Task<AdminMemberDto> Get(CheckPwdParameterDto parameter)
         {
             var model = await _adminRepo.Get(_mapper.Map<CheckPwdParameterModel>(parameter));
@@ -32,46 +27,10 @@ namespace prjMSIT145Final.Service.Implements
             return result;
         }
 
-        public async Task<IEnumerable<AdImg>> GetAllAd()
-        {
-            return await _adminRepo.GetAllAd();
-        }
-
-        public async Task ModifyAdInfo(AdImg ad)
-        {
-            await _adminRepo.ModifyAdInfo(ad);
-        }
-
-        public async Task ModifyAdsOrderBy(IEnumerable<AdImg> ads)
-        {
-            foreach(var ad in ads)
-            {
-                if (ad.OrderBy.HasValue)
-                {
-                    await _adminRepo.ModifyAdOrderBy(ad.Fid, ad.OrderBy.GetValueOrDefault());
-                }
-            }
-        }
-
         public async Task SendAccountLockedNotice(SendEmailParameterDto parameter)
         {
             var parameterModel = _mapper.Map<SendEmailParameterModel>(parameter);
             await _adminRepo.SendAccountLockedNotice(parameterModel);
-        }
-
-        public async Task<AdImg> AddUploadAdInfo(AdImg ad)
-        {
-            return await _adminRepo.AddUploadAdInfo(ad);
-        }
-
-        public async Task<AdImg> UpdateUploadAdInfo(AdImg ad)
-        {
-            return await _adminRepo.UpdateUploadAdInfo(ad);
-        }
-
-        public async Task<AdImg> GetAdById(int id)
-        {
-            return await _adminRepo.GetAdById(id);
         }
 
         public async Task<bool> CheckAccountInfo(ForgetPwdParameterDto parameter)

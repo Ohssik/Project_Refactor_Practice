@@ -27,6 +27,7 @@ namespace prjMSIT145Final.Web.Controllers
         private readonly IBusinessMemberService _businessMemberService;
         private readonly IUploadImgHelper _uploadImgHelper;
         private readonly ISendMailHelper _sendMailHelper;
+        private readonly IAdImgService _adImgService;
 
         //private readonly IConfiguration _config;
 
@@ -38,6 +39,7 @@ namespace prjMSIT145Final.Web.Controllers
             ,IBusinessMemberService businessMemberService
             ,IUploadImgHelper uploadImgHelper
             ,ISendMailHelper sendMailHelper
+            ,IAdImgService adImgService
             //,IConfiguration config
             )
         {
@@ -48,6 +50,7 @@ namespace prjMSIT145Final.Web.Controllers
             _businessMemberService = businessMemberService;
             _uploadImgHelper = uploadImgHelper;
             _sendMailHelper = sendMailHelper;
+            _adImgService = adImgService;
             _context = context;
             //_config = config;
         }
@@ -480,7 +483,7 @@ namespace prjMSIT145Final.Web.Controllers
         /// <returns></returns>
         public async Task<IActionResult> ADisplayImgManage()
         {
-            var imgs = await _adminService.GetAllAd();
+            var imgs = await _adImgService.GetAllAd();
 
             List<CAAdImg> list = new List<CAAdImg>();
             foreach (var img in imgs)
@@ -509,7 +512,7 @@ namespace prjMSIT145Final.Web.Controllers
         /// <returns></returns>
         public async Task<IActionResult> LoadImgInfo(string fid)
         {
-            var img = await _adminService.GetAdById(Convert.ToInt32(fid));
+            var img = await _adImgService.GetAdById(Convert.ToInt32(fid));
             var ader = await _businessMemberService.GetById(img.BFid.GetValueOrDefault());
 
             var cAAdImg = new CAAdImg
@@ -539,7 +542,7 @@ namespace prjMSIT145Final.Web.Controllers
                     OrderBy = ad.OrderBy
                 });
 
-                await _adminService.ModifyAdsOrderBy(parameters);
+                await _adImgService.ModifyAdsOrderBy(parameters);
 
                 result = "1";
             }
@@ -569,7 +572,7 @@ namespace prjMSIT145Final.Web.Controllers
                     OrderBy = adImg.OrderBy
                 };
 
-                await _adminService.ModifyAdInfo(ad);
+                await _adImgService.ModifyAdInfo(ad);
                 result = "1";
             }
 
@@ -588,7 +591,7 @@ namespace prjMSIT145Final.Web.Controllers
 
             if (!string.IsNullOrEmpty(data))
             {
-                await _adminService.DeleteAd(Convert.ToInt32(data));
+                await _adImgService.DeleteAd(Convert.ToInt32(data));
                 result = "1";
             }
 
@@ -610,7 +613,7 @@ namespace prjMSIT145Final.Web.Controllers
                 var parameter = JsonConvert.DeserializeObject<UploadImgParameter>(data);
 
                 var fName = await _uploadImgHelper.UploadAdImg(parameter);
-                returnAd = await _adminService.AddUploadAdInfo(new AdImg
+                returnAd = await _adImgService.AddUploadAdInfo(new AdImg
                 {
                     ImgName = fName,
                     EndTime = DateTime.Now.AddYears(3)
@@ -636,7 +639,7 @@ namespace prjMSIT145Final.Web.Controllers
                 var parameter = JsonConvert.DeserializeObject<UploadImgParameter>(data);
 
                 var fName = await _uploadImgHelper.UploadAdImg(parameter);
-                returnAd = await _adminService.UpdateUploadAdInfo(new AdImg
+                returnAd = await _adImgService.UpdateUploadAdInfo(new AdImg
                 {
                     Fid = parameter.Fid.GetValueOrDefault(),
                     Hyperlink = parameter.Hyperlink,

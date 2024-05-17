@@ -14,20 +14,6 @@ namespace prjMSIT145Final.Service.Interfaces
 
         Task<AdminMemberDto> Get(CheckPwdParameterDto parameter);
 
-        Task<IEnumerable<AdImg>> GetAllAd();
-
-        Task ModifyAdsOrderBy(IEnumerable<AdImg> ads);
-
-        Task ModifyAdInfo(AdImg ad);
-
-        Task DeleteAd(int id);
-
-        Task<AdImg> AddUploadAdInfo(AdImg ad);
-
-        Task<AdImg> UpdateUploadAdInfo(AdImg ad);
-
-        Task<AdImg> GetAdById(int id);
-
         Task<string> AddChangePasswordRequest(ChangeRequestPassword resquest);
         Task<string> DeleteChangePwdRequest(ChangeRequestPassword resquest);
 

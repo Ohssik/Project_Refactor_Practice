@@ -26,6 +26,7 @@ namespace prjMSIT145Final.DI
             services.AddScoped<IBusinessMemberService, BusinessMemberService>();
             services.AddScoped<INormalMemberService, NormalMemberService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IAdImgService, AdImgService>();
             #endregion
 
             #region Repositories
@@ -33,6 +34,7 @@ namespace prjMSIT145Final.DI
             services.AddScoped<IBusinessMemberRepository, BusinessMemberRepository>();
             services.AddScoped<INormalMemberRepository, NormalMemberRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IAdImgRepository, AdImgRepository>();
             #endregion
         }
     }
