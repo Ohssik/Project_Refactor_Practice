@@ -75,7 +75,7 @@
                 $('#ReceivedTime').val(ReceivedTime);
 
                 $.ajax({
-                    url: `@Url.Content("~/Admin/getServiceMailContext")`,
+                    url: `@Url.Content("~/Admin/GetServiceMailContent")`,
                     type: 'post',
                     data: { data: Fid },
                     dataType: 'json',
@@ -103,16 +103,14 @@
                 if (id) {
                     //資料修改
                     $.ajax({
-                        url: `@Url.Content("~/Admin/submitServiceMailReply")`,
+                        url: `@Url.Content("~/Admin/SubmitServiceMailReply")`,
                         type: 'POST',
                         data: {
-                            data: JSON.stringify({
                                 Fid: id,
                                 Email: $('#Email').val(),
                                 Reply: $('#Reply').val(),
                                 ReadTime: (new Date())
-                            })
-                        },
+                            },                        
                         dataType: "json",
                         success: function (msg) {
                             //console.log(`msg=${msg}`);

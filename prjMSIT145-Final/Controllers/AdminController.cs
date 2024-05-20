@@ -28,6 +28,7 @@ namespace prjMSIT145Final.Web.Controllers
         private readonly IUploadImgHelper _uploadImgHelper;
         private readonly ISendMailHelper _sendMailHelper;
         private readonly IAdImgService _adImgService;
+        private readonly IServiceMailService _serviceMailService;
 
         //private readonly IConfiguration _config;
 
@@ -40,6 +41,7 @@ namespace prjMSIT145Final.Web.Controllers
             ,IUploadImgHelper uploadImgHelper
             ,ISendMailHelper sendMailHelper
             ,IAdImgService adImgService
+            ,IServiceMailService serviceMailService
             //,IConfiguration config
             )
         {
@@ -51,6 +53,7 @@ namespace prjMSIT145Final.Web.Controllers
             _uploadImgHelper = uploadImgHelper;
             _sendMailHelper = sendMailHelper;
             _adImgService = adImgService;
+            _serviceMailService = serviceMailService;
             _context = context;
             //_config = config;
         }
@@ -889,46 +892,47 @@ namespace prjMSIT145Final.Web.Controllers
         /// 客服信箱列表
         /// </summary>
         /// <returns></returns>
-        public IActionResult AServiceMailList()
+        public async Task<IActionResult> AServiceMailList()
         {
-            List<CgetServiceMailViewModel> mailList = new List<CgetServiceMailViewModel>();
-            
-            IEnumerable<ServiceMailBox> list = from s in _context.ServiceMailBoxes
-                                                select s;
-            if(list != null)
+            var mailList = new List<CgetServiceMailViewModel>();
+
+            var list = await _serviceMailService.GetAll();
+
+            if(list.IsAny())
             {
-                foreach(ServiceMailBox serviceMail in list)
+                foreach(var serviceMail in list)
                 {
-                    CgetServiceMailViewModel csm = new CgetServiceMailViewModel();
-                    csm.serviceMail = serviceMail;
-                    mailList.Add(csm);
-                }
+                    mailList.Add(new CgetServiceMailViewModel
+                    {
+                        serviceMail = serviceMail,
+                    });
+                }       
             }
            
             return View(mailList.AsEnumerable());
         }
 
         /// <summary>
-        /// 
+        /// 取得尚未回覆的客服信件
         /// </summary>
         /// <returns></returns>
-        public IActionResult getServiceMail()
+        public async Task<IActionResult> GetUnrepliedServiceMail()
         {
 
-            List<CgetServiceMailViewModel> mailList = new List<CgetServiceMailViewModel>();
+            var mailList = new List<CgetServiceMailViewModel>();
             
             try
             {
-                IEnumerable<ServiceMailBox> list = from s in _context.ServiceMailBoxes
-                                                   where string.IsNullOrEmpty(s.Reply)
-                                                   select s;
-                if (list != null)
+                var list = await _serviceMailService.GetUnreplied();
+
+                if (list.IsAny())
                 {
-                    foreach (ServiceMailBox serviceMail in list)
+                    foreach (var serviceMail in list)
                     {
-                        CgetServiceMailViewModel csm = new CgetServiceMailViewModel();
-                        csm.serviceMail = serviceMail;
-                        mailList.Add(csm);
+                        mailList.Add(new CgetServiceMailViewModel
+                        {
+                            serviceMail = serviceMail,
+                        });
                     }
                 }
             }
@@ -940,28 +944,33 @@ namespace prjMSIT145Final.Web.Controllers
             return Json(mailList);
         }
 
-        public IActionResult gotoMailDetail(int? id)
-        {
-            if (id == null)
-                RedirectToAction("AServiceMailList");
+        //public IActionResult gotoMailDetail(int? id)
+        //{
+        //    if (id == null)
+        //        RedirectToAction("AServiceMailList");
 
-            return View();
-        }
+        //    return View();
+        //}
 
-        public IActionResult getServiceMailContext(string data)
+        public async Task<IActionResult> GetServiceMailContent(string data)
         {
             if (string.IsNullOrEmpty(data))
+            {
                 return NoContent();
+            }
 
             int id = Convert.ToInt32(data);
+
             try
             {
-                CgetServiceMailViewModel model = new CgetServiceMailViewModel();
-                ServiceMailBox sm = _context.ServiceMailBoxes.FirstOrDefault(s => s.Fid == id);
+                var model = new CgetServiceMailViewModel();
+                var sm = await _serviceMailService.GetContentById(id);
                                                    
-                if (sm != null)                                                            
+                if (sm.Fid > 0)
+                {
                     model.serviceMail = sm;
-                                       
+                }
+
                 return Json(model);
             }
             catch (Exception err)
@@ -972,39 +981,33 @@ namespace prjMSIT145Final.Web.Controllers
         }
 
         /// <summary>
-        /// 回覆並送出客服信
+        /// 送出客服信回覆
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public IActionResult submitServiceMailReply(string data)
+        [HttpPost]
+        public async Task<IActionResult> SubmitServiceMailReply(CgetServiceMailViewModel mail)
         {
-            if (string.IsNullOrEmpty(data))
-                return NoContent();
-
-            CgetServiceMailViewModel mail = JsonConvert.DeserializeObject<CgetServiceMailViewModel>(data);
-            if (mail != null)
+            if (mail == null)
             {
-                try
-                {
-                    ServiceMailBox sm = _context.ServiceMailBoxes.FirstOrDefault(s => s.Fid == mail.Fid);
-
-                    if (sm != null)
-                    {
-                        sm.Reply = mail.Reply;
-                        sm.ReadTime = mail.ReadTime;
-                        _context.SaveChanges();
-                    }
-                        
-                    return Json("success");
-                }
-                catch (Exception err)
-                {
-                    return Json($"error:{err.Message}");
-                }
-                
+                return NoContent();
             }
-
-            return NoContent();
+            
+            try
+            {
+                await _serviceMailService.SubmitReply(new ServiceMailBox
+                {
+                    Fid = mail.Fid,
+                    Reply = mail.Reply,
+                    ReadTime = mail.ReadTime
+                });
+                        
+                return Json("success");
+            }
+            catch (Exception err)
+            {
+                return Json($"error:{err.Message}");
+            }                            
         }
     }
 }

@@ -393,7 +393,7 @@
 
             //取得客服信箱訊息
             $.ajax({
-                url:`@Url.Content("~/Admin/getServiceMail")`,
+                url: `@Url.Content("~/Admin/GetUnrepliedServiceMail")`,
                 type:'post',
                 data:{},
                 dataType:'json',
