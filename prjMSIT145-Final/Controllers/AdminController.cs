@@ -944,14 +944,6 @@ namespace prjMSIT145Final.Web.Controllers
             return Json(mailList);
         }
 
-        //public IActionResult gotoMailDetail(int? id)
-        //{
-        //    if (id == null)
-        //        RedirectToAction("AServiceMailList");
-
-        //    return View();
-        //}
-
         public async Task<IActionResult> GetServiceMailContent(string data)
         {
             if (string.IsNullOrEmpty(data))

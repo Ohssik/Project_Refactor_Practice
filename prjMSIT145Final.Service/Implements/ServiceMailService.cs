@@ -24,7 +24,7 @@ namespace prjMSIT145Final.Service.Implements
 
         public async Task<ServiceMailBox> GetContentById(int id)
         {
-            return await GetContentById(id);
+            return await _serviceMailRepo.GetContentById(id);
         }
 
         public async Task<IEnumerable<ServiceMailBox>> GetUnreplied()
