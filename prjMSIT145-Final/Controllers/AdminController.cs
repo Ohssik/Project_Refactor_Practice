@@ -973,7 +973,7 @@ namespace prjMSIT145Final.Web.Controllers
         }
 
         /// <summary>
-        /// 送出客服信回覆
+        /// 送出客服信回覆狀況
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
